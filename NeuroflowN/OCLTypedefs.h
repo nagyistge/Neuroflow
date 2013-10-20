@@ -6,20 +6,20 @@
 
 namespace cl
 {
-	class Context;
-	class Device;
-	class Buffer;
-	class Program;
+    class Context;
+    class Device;
+    class Buffer;
+    class Program;
 }
 
 namespace NeuroflowN
 {
-	struct OCLReduceSizes;
+    struct OCLReduceSizes;
 
     class OCLContextImpl;
-	class OCLIntCtx;
-	class OCLBuffer1;
-	class OCLBuffer2;
+    class OCLIntCtx;
+    class OCLBuffer1;
+    class OCLBuffer2;
     class OCLProgramBuilder;
     class OCLDataArray;
     class OCLDataArrayFactory;
@@ -28,7 +28,7 @@ namespace NeuroflowN
     class OCLMultilayerPerceptronAdapter;
     class OCLDeviceArrayManagement;
 
-	typedef std::shared_ptr<OCLIntCtx> OCLIntCtxSPtrT;
+    typedef std::shared_ptr<OCLIntCtx> OCLIntCtxSPtrT;
 
     typedef std::vector<OCLKernelToExecute> OCLKernelToExecuteVecT;
 

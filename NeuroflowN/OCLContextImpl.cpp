@@ -17,28 +17,28 @@ using namespace NeuroflowN;
 
 namespace NeuroflowN
 {
-	typedef vector<tuple<string, Context, Device>> clDeviceInfoVecT;
+    typedef vector<tuple<string, Context, Device>> clDeviceInfoVecT;
 
-	clDeviceInfoVecT GetAvailableDevices(cl_device_type type)
-	{
-		clDeviceInfoVecT all;
-		vector<Platform> platformList;
+    clDeviceInfoVecT GetAvailableDevices(cl_device_type type)
+    {
+        clDeviceInfoVecT all;
+        vector<Platform> platformList;
 
-		Platform::get(&platformList);
+        Platform::get(&platformList);
 
-		for (auto& p : platformList)
-		{
-			string platformName;
-			p.getInfo((cl_platform_info)CL_PLATFORM_NAME, &platformName);
-			trim(platformName);
+        for (auto& p : platformList)
+        {
+            string platformName;
+            p.getInfo((cl_platform_info)CL_PLATFORM_NAME, &platformName);
+            trim(platformName);
 
-			cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(p)(), 0 };
+            cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(p)(), 0 };
 
-			Context context(type, cprops, nullptr, nullptr, nullptr);
+            Context context(type, cprops, nullptr, nullptr, nullptr);
 
-			auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
+            auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
 
-			for (auto& d : devices) 
+            for (auto& d : devices) 
             {
                 auto v = d.getInfo<CL_DEVICE_OPENCL_C_VERSION>();
                 v.erase(v.begin(), find_if(v.begin(), v.end(), ptr_fun<int, int>(isspace)));
@@ -49,121 +49,121 @@ namespace NeuroflowN
                 ss >> oclv;
                 if (oclv >= 1.2) all.push_back(make_tuple(platformName, context, d));
             }
-		}
+        }
 
-		return move(all);
-	}
+        return move(all);
+    }
 
-	string GetDeviceName(const Device& device)
-	{
-		return trim(device.getInfo<CL_DEVICE_NAME>());
-	}
+    string GetDeviceName(const Device& device)
+    {
+        return trim(device.getInfo<CL_DEVICE_NAME>());
+    }
 
-	string CreateDeviceID(const string& platformName, const Device& device)
-	{
-		string devVersion = trim(device.getInfo<CL_DRIVER_VERSION>());
-		stringstream idBuilder;
-		idBuilder << platformName.c_str() << " / " << GetDeviceName(device) << " / " << devVersion.c_str();
-		return idBuilder.str();
-	}
+    string CreateDeviceID(const string& platformName, const Device& device)
+    {
+        string devVersion = trim(device.getInfo<CL_DRIVER_VERSION>());
+        stringstream idBuilder;
+        idBuilder << platformName.c_str() << " / " << GetDeviceName(device) << " / " << devVersion.c_str();
+        return idBuilder.str();
+    }
 }
 
 OCLContextImpl::OCLContextImpl(const std::string& deviceID, const std::string& version) :
-	dataArrayFactory(nullptr),
+    dataArrayFactory(nullptr),
     vectorUtils(nullptr),
-	ctx(nullptr),
+    ctx(nullptr),
     version(version)
 {
-	try
-	{
-		cl_device_type type = CL_DEVICE_TYPE_ALL;
-		string upper = deviceID;
-		transform(upper.begin(), upper.end(), upper.begin(), toupper);
-		if (upper == "GPU")
-		{
-			type = CL_DEVICE_TYPE_GPU;
-		}
-		else if (upper == "CPU")
-		{
-			type = CL_DEVICE_TYPE_CPU;
-		}
+    try
+    {
+        cl_device_type type = CL_DEVICE_TYPE_ALL;
+        string upper = deviceID;
+        transform(upper.begin(), upper.end(), upper.begin(), toupper);
+        if (upper == "GPU")
+        {
+            type = CL_DEVICE_TYPE_GPU;
+        }
+        else if (upper == "CPU")
+        {
+            type = CL_DEVICE_TYPE_CPU;
+        }
 
-		auto deviceInfos = NeuroflowN::GetAvailableDevices(type);
+        auto deviceInfos = NeuroflowN::GetAvailableDevices(type);
 
-		if (type == CL_DEVICE_TYPE_ALL)
-		{
-			// Find exact device by ID:
-			for (auto& di : deviceInfos)
-			{
-				string platformName = get<0>(di);
-				auto context = get<1>(di);
-				auto device = get<2>(di);
-				auto id = CreateDeviceID(platformName, device);
+        if (type == CL_DEVICE_TYPE_ALL)
+        {
+            // Find exact device by ID:
+            for (auto& di : deviceInfos)
+            {
+                string platformName = get<0>(di);
+                auto context = get<1>(di);
+                auto device = get<2>(di);
+                auto id = CreateDeviceID(platformName, device);
 
-				if (id == deviceID)
-				{
-					// Found!
-					Initialize(DeviceInfo(id, GetDeviceName(device), platformName), device);
-					return;
-				}
-			}
+                if (id == deviceID)
+                {
+                    // Found!
+                    Initialize(DeviceInfo(id, GetDeviceName(device), platformName), device);
+                    return;
+                }
+            }
 
-			// Find by partial device id:
-			for (auto& di : deviceInfos)
-			{
-				string platformName = get<0>(di);
-				auto context = get<1>(di);
-				auto device = get<2>(di);
-				auto id = CreateDeviceID(platformName, device);
+            // Find by partial device id:
+            for (auto& di : deviceInfos)
+            {
+                string platformName = get<0>(di);
+                auto context = get<1>(di);
+                auto device = get<2>(di);
+                auto id = CreateDeviceID(platformName, device);
 
-				if (boost::find_first(id, deviceID))
-				{
-					// Found!
-					Initialize(DeviceInfo(id, GetDeviceName(device), platformName), device);
-					return;
-				}
-			}
-		}
-		else if (deviceInfos.size() > 0)
-		{
-			auto best = deviceInfos.cbegin();
-			unsigned bestCores = 0;
-			for (auto current = deviceInfos.cbegin(); current != deviceInfos.cend(); current++)
-			{
-				string platformName = get<0>(*current);
-				auto context = get<1>(*current);
-				auto device = get<2>(*current);
+                if (boost::find_first(id, deviceID))
+                {
+                    // Found!
+                    Initialize(DeviceInfo(id, GetDeviceName(device), platformName), device);
+                    return;
+                }
+            }
+        }
+        else if (deviceInfos.size() > 0)
+        {
+            auto best = deviceInfos.cbegin();
+            unsigned bestCores = 0;
+            for (auto current = deviceInfos.cbegin(); current != deviceInfos.cend(); current++)
+            {
+                string platformName = get<0>(*current);
+                auto context = get<1>(*current);
+                auto device = get<2>(*current);
 
-				auto cores = device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
-				
+                auto cores = device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
+                
                 if (cores > bestCores)
                 {
                     bestCores = cores;
                     best = current;
                 }
-			}
+            }
 
-			// Found!
-			string platformName = get<0>(*best);
-			auto device = get<2>(*best);
+            // Found!
+            string platformName = get<0>(*best);
+            auto device = get<2>(*best);
             Initialize(DeviceInfo(CreateDeviceID(platformName, device), GetDeviceName(device), platformName), device);
-			return;
-		}
+            return;
+        }
 
-		stringstream error;
-		error << "Device '";
-		error << string(deviceID.cbegin(), deviceID.cend()).c_str();
-		error << "' is not found.";
-		throw_logic_error(error.str().c_str());
-	}
-	catch (logic_error&)
-	{
-		throw;
-	}
-	catch (exception& ex)
-	{
-		throw as_ocl_error(ex);
-	}
+        stringstream error;
+        error << "Device '";
+        error << string(deviceID.cbegin(), deviceID.cend()).c_str();
+        error << "' is not found.";
+        throw_logic_error(error.str().c_str());
+    }
+    catch (logic_error&)
+    {
+        throw;
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
 }
 
 DataArrayFactory* OCLContextImpl::GetDataArrayFactoryPtr() const
@@ -197,7 +197,7 @@ void OCLContextImpl::Free()
     args.toDel = this;
 
     try
-	{
+    {
         ctx->GetQueue().enqueueNativeKernel(
             [](void* userData)
             {
@@ -217,70 +217,70 @@ void OCLContextImpl::Free()
         });
     }
     catch (exception& ex)
-	{
-		throw as_ocl_error(ex);
-	}
+    {
+        throw as_ocl_error(ex);
+    }
 }
 
 void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& device)
 {
-	try
-	{
-		auto context = Context(device);
+    try
+    {
+        auto context = Context(device);
         cl_command_queue_properties props = 0;
-		auto queue = CommandQueue(context, device, props);
-		auto prog = CreateProgram(context, device);
+        auto queue = CommandQueue(context, device, props);
+        auto prog = CreateProgram(context, device);
 
-		ctx = make_shared<OCLIntCtx>(context, device, prog, queue);
+        ctx = make_shared<OCLIntCtx>(context, device, prog, queue);
         
-		this->deviceInfo = deviceInfo;
+        this->deviceInfo = deviceInfo;
 
-		dataArrayFactory = make_shared<OCLDataArrayFactory>(ctx);
+        dataArrayFactory = make_shared<OCLDataArrayFactory>(ctx);
         vectorUtils = make_shared<OCLVectorUtils>(ctx);
         deviceArrayManagement = make_shared<OCLDeviceArrayManagement>(ctx);
         multilayerPerceptronAdapter = make_shared<OCLMultilayerPerceptronAdapter>(ctx, vectorUtils, deviceArrayManagement);
-	}
-	catch (exception& ex)
-	{
-		throw as_ocl_error(ex);
-	}
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
 }
 
 DeviceInfoVecT OCLContextImpl::GetAvailableDevices()
 {
-	DeviceInfoVecT all;
-	try
-	{
-		auto deviceInfos = NeuroflowN::GetAvailableDevices(CL_DEVICE_TYPE_ALL);
+    DeviceInfoVecT all;
+    try
+    {
+        auto deviceInfos = NeuroflowN::GetAvailableDevices(CL_DEVICE_TYPE_ALL);
 
-		for (auto& di : deviceInfos)
-		{
-			string platformName = get<0>(di);
-			auto device = get<2>(di);
+        for (auto& di : deviceInfos)
+        {
+            string platformName = get<0>(di);
+            auto device = get<2>(di);
 
-			all.push_back(DeviceInfo(CreateDeviceID(platformName, device), GetDeviceName(device), platformName));
-		}
+            all.push_back(DeviceInfo(CreateDeviceID(platformName, device), GetDeviceName(device), platformName));
+        }
 
-		return move(all);
-	}
-	catch (exception& ex)
-	{
-		throw as_ocl_error(ex);
-	}
+        return move(all);
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
 }
 
 const DeviceInfo& OCLContextImpl::GetDevice() const
 {
-	return deviceInfo;
+    return deviceInfo;
 }
 
 Program OCLContextImpl::CreateProgram(const cl::Context& context, const cl::Device& device)
 {
-	auto p = OCLProgramBuilder(context, device);
-	
-	OCLVectorUtils::Build(p);
+    auto p = OCLProgramBuilder(context, device);
+    
+    OCLVectorUtils::Build(p);
     OCLComputeActivation::Build(p, 4);
     OCLComputeGradientDescent::Build(p);
-	
-	return p.Compile();
+    
+    return p.Compile();
 }

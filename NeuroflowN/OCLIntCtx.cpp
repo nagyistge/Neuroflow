@@ -10,13 +10,13 @@ using namespace cl;
 using namespace NeuroflowN;
 
 OCLIntCtx::OCLIntCtx(cl::Context context, cl::Device device, cl::Program program, cl::CommandQueue queue) :
-	context(context),
-	device(device),
-	queue(queue),
-	program(program),
+    context(context),
+    device(device),
+    queue(queue),
+    program(program),
     isCPU((device.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),
-	//isCPU(false),
-	maxComputeUnits(device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()),
+    //isCPU(false),
+    maxComputeUnits(device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()),
     maxWorkGroupSize(device.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()),
     maxWorkItemSizes(cl::NullRange)
 {
@@ -46,10 +46,10 @@ const OCLBuffer2& OCLIntCtx::ToBuffer2(IDeviceArray* a)
 
 std::string OCLIntCtx::AsVectorKernelName(char* kernelName, unsigned vectorSize)
 {
-	stringstream ss;
-	ss << kernelName;
-	if (vectorSize > 1) ss << vectorSize;
-	return ss.str();
+    stringstream ss;
+    ss << kernelName;
+    if (vectorSize > 1) ss << vectorSize;
+    return ss.str();
 }
 
 std::pair<unsigned, unsigned> OCLIntCtx::GetIOReduceSizesInput(unsigned inputSize, unsigned vectorSize, unsigned outputSize)
@@ -80,6 +80,6 @@ std::pair<unsigned, unsigned> OCLIntCtx::GetIOReduceSizesOutput(unsigned inputSi
 
 unsigned OCLIntCtx::GetBestLocalSize(unsigned size)
 {
-	if (size < maxWorkItemSizes[0]) return size;
-	return maxWorkItemSizes[0];
+    if (size < maxWorkItemSizes[0]) return size;
+    return maxWorkItemSizes[0];
 }

@@ -28,19 +28,19 @@ OCLVectorKernelName::OCLVectorKernelName(const std::string& name)
 
 const std::string& OCLVectorKernelName::operator()(unsigned vectorSize) const
 {
-	switch (vectorSize)
-	{
-	case 1:
-		return names[0];
-	case 2:
-		return names[1];
-	case 4:
-		return names[2];
-	case 8:
-		return names[3];
-	case 16:
-		return names[4];
-	default:
-		throw_invalid_argument("Ivalid vectorSize argument!");
-	}
+    switch (vectorSize)
+    {
+    case 1:
+        return names[0];
+    case 2:
+        return names[1];
+    case 4:
+        return names[2];
+    case 8:
+        return names[3];
+    case 16:
+        return names[4];
+    default:
+        throw_invalid_argument("Ivalid vectorSize argument!");
+    }
 }

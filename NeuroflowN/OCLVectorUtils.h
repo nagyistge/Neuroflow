@@ -7,10 +7,10 @@
 
 namespace NeuroflowN
 {
-	class OCLVectorUtils : public IVectorUtils
-	{
-		static OCLVectorKernelName AddMSEName;
-		static OCLVectorKernelName DivName;
+    class OCLVectorUtils : public IVectorUtils
+    {
+        static OCLVectorKernelName AddMSEName;
+        static OCLVectorKernelName DivName;
         static OCLVectorKernelName ZeroFName;
 
         OCLIntCtxSPtrT ctx;
@@ -26,7 +26,7 @@ namespace NeuroflowN
         {
         }
 
-		static void Build(OCLProgramBuilder& program);
+        static void Build(OCLProgramBuilder& program);
 
         void CalculateMSE(const SupervisedBatchT& batch, DataArray* mseValues, unsigned valueIndex);
 
@@ -38,5 +38,5 @@ namespace NeuroflowN
         void AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex);
 
         void Div(const OCLBuffer1& values, unsigned valueIndex, float byValue);
-	};
+    };
 }

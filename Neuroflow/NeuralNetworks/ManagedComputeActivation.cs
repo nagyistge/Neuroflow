@@ -521,7 +521,7 @@ namespace Neuroflow.NeuralNetworks
                                     var inputsPtr = inputs.ToPtr(pInputs);
                                     sum += inputsPtr[data.JValueIndex];
                                 }
-                                else //if (kValueIndex == 0)
+                                else 
                                 {
                                     Debug.Assert(data.JValueIndex == -1);
 
@@ -538,8 +538,6 @@ namespace Neuroflow.NeuralNetworks
                                 var desiredOutputsPtr = desiredOutputs.ToPtr(pDesiredOutputs);
                                 gradient += (desiredOutputsPtr[kValueIndex] - outputsPtr[kValueIndex]) * p_i_j_k_ValuesPtr[kValueIndex];
                             }
-
-                            //p_i_j_k_ValuesPtr[kValueIndex] = netDeriv_k * sum;
                         }
                     }
                 }

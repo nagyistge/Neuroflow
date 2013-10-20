@@ -23,24 +23,24 @@ namespace Neuroflow.NeuralNetworks
             }
 
             foreach (var node in nodes)
-	        {
-		        var weights = node.Weights;
+            {
+                var weights = node.Weights;
                 var gradients = rule.WeightUpdateMode == WeigthUpdateMode.Online ? node.Gradients : node.GradientSums;
 
                 Debug.Assert(weights != null);
                 Debug.Assert(gradients != null);
 
-		        Debug.Assert(weights.Count > 0);
+                Debug.Assert(weights.Count > 0);
                 Debug.Assert(weights.Count == gradients.Count);
 
-		        for (int i = 0; i < weights.Count; i++)
-		        {
-			        var wa = (ManagedArray)weights[i];
-			        var ga = (ManagedArray)gradients[i];
+                for (int i = 0; i < weights.Count; i++)
+                {
+                    var wa = (ManagedArray)weights[i];
+                    var ga = (ManagedArray)gradients[i];
 
-			        Debug.Assert(wa.Size == ga.Size);
+                    Debug.Assert(wa.Size == ga.Size);
 
-			        var lua = new ManagedArray(wa.Size);
+                    var lua = new ManagedArray(wa.Size);
 
                     if (rule.WeightUpdateMode == WeigthUpdateMode.Online)
                     {
@@ -71,8 +71,8 @@ namespace Neuroflow.NeuralNetworks
                                     rule.Smoothing);
                             });
                     }
-		        }		
-	        }
+                }        
+            }
         }
 
         public override LearningAlgoIterationType IterationTypes

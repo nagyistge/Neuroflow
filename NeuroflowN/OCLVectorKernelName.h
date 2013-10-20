@@ -5,13 +5,13 @@
 
 namespace NeuroflowN
 {
-	class OCLVectorKernelName
-	{
-		std::vector<std::string> names;
+    class OCLVectorKernelName
+    {
+        std::vector<std::string> names;
 
-	public:
-		OCLVectorKernelName(const std::string& name);
+    public:
+        OCLVectorKernelName(const std::string& name);
 
-		const std::string& operator()(unsigned vectorSize) const;
-	};
+        const std::string& operator()(unsigned vectorSize) const;
+    };
 }

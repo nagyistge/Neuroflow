@@ -9,7 +9,7 @@ namespace Neuroflow
 {
     std::string GetVerison();
 
-	NeuroflowN::DataArray* ToNative(Data::DataArray^ dataArray, bool nullable = false);
+    NeuroflowN::DataArray* ToNative(Data::DataArray^ dataArray, bool nullable = false);
 
     NeuroflowN::SupervisedBatchT ToNative(Data::SupervisedBatch^ batch);
 

@@ -7,7 +7,7 @@ using namespace cl;
 using namespace NeuroflowN;
 
 OCLProgramBuilder::OCLProgramBuilder(const cl::Context& clContext, const cl::Device& clDevice) :
-	clContext(clContext), clDevice(clDevice)
+    clContext(clContext), clDevice(clDevice)
 {
     programBuilder << "#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable\n";
 }
@@ -22,25 +22,25 @@ void OCLProgramBuilder::Add(const std::string& programString)
     else
     {
         programBuilder << programString;
-    }	
+    }    
 }
 
 cl::Program OCLProgramBuilder::Compile()
 {
-	auto p = Program(clContext, programBuilder.str(), false);
+    auto p = Program(clContext, programBuilder.str(), false);
 
-	try
-	{
+    try
+    {
         p.build(vector<Device>(1, clDevice));
-	}
-	catch (Error&)
-	{
-		auto info = p.getBuildInfo<CL_PROGRAM_BUILD_LOG>(clDevice);
-		info = string("\nOPENCL BUILD FAILED:\n") + info;
-		throw_logic_error(info.c_str());
-	}
+    }
+    catch (Error&)
+    {
+        auto info = p.getBuildInfo<CL_PROGRAM_BUILD_LOG>(clDevice);
+        info = string("\nOPENCL BUILD FAILED:\n") + info;
+        throw_logic_error(info.c_str());
+    }
 
-	return p;
+    return p;
 }
 
 std::string OCLProgramBuilder::CreateNumberedVersions(const std::string& prg)
@@ -50,10 +50,10 @@ std::string OCLProgramBuilder::CreateNumberedVersions(const std::string& prg)
     do
     {
         string p = prg, vstr = to_string(v);
-		boost::replace_all(p, "$$", vstr);
+        boost::replace_all(p, "$$", vstr);
         if (v == 1)
         {
-			boost::replace_all(p, "$", "");
+            boost::replace_all(p, "$", "");
         }
         else
         {

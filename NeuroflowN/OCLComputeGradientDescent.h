@@ -7,14 +7,14 @@
 
 namespace NeuroflowN
 {
-	class OCLComputeGradientDescent
-	{
-		static OCLVectorKernelName GD_Online_Smooth;
-		static OCLVectorKernelName GD_Online;
+    class OCLComputeGradientDescent
+    {
+        static OCLVectorKernelName GD_Online_Smooth;
+        static OCLVectorKernelName GD_Online;
         static OCLVectorKernelName GD_Offline_Smooth;
         static OCLVectorKernelName GD_Offline;
-	public:
-		static void Build(OCLProgramBuilder& program);
+    public:
+        static void Build(OCLProgramBuilder& program);
 
         static void UpdateWeightsOnline(
             OCLKernelToExecute& exec,

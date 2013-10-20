@@ -9,20 +9,20 @@
 
 namespace NeuroflowN
 {
-	class OCLProgramBuilder : public NfObject
-	{
-		cl::Context clContext;
-		cl::Device clDevice;
-		std::stringstream programBuilder;
+    class OCLProgramBuilder : public NfObject
+    {
+        cl::Context clContext;
+        cl::Device clDevice;
+        std::stringstream programBuilder;
 
-	public:
-		OCLProgramBuilder(const cl::Context& clContext, const cl::Device& clDevice);
+    public:
+        OCLProgramBuilder(const cl::Context& clContext, const cl::Device& clDevice);
 
-		void Add(const std::string& programString);
+        void Add(const std::string& programString);
 
-		cl::Program Compile();
+        cl::Program Compile();
 
     private:
         std::string CreateNumberedVersions(const std::string& prg);
-	};
+    };
 }

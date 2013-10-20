@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Neuroflow.NeuralNetworks
 {
     public enum ActivationFunction
-	{
-		Sigmoid,
-		Linear
-	}
+    {
+        Sigmoid,
+        Linear
+    }
 }

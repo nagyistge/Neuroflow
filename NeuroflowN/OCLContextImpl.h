@@ -6,28 +6,28 @@
 
 namespace NeuroflowN
 {
-	class OCLIntCtx;
+    class OCLIntCtx;
 
-	class OCLContextImpl : public NfObject
-	{
-		std::shared_ptr<OCLDataArrayFactory> dataArrayFactory;
+    class OCLContextImpl : public NfObject
+    {
+        std::shared_ptr<OCLDataArrayFactory> dataArrayFactory;
         std::shared_ptr<OCLVectorUtils> vectorUtils;
         std::shared_ptr<OCLMultilayerPerceptronAdapter> multilayerPerceptronAdapter;
         std::shared_ptr<OCLDeviceArrayManagement> deviceArrayManagement;
         std::string version;
 
-		DeviceInfo deviceInfo;
+        DeviceInfo deviceInfo;
 
-		OCLIntCtxSPtrT ctx;
+        OCLIntCtxSPtrT ctx;
 
-	public:
-		OCLContextImpl(const std::string& deviceID, const std::string& version);
+    public:
+        OCLContextImpl(const std::string& deviceID, const std::string& version);
 
         void Free();
 
         static DeviceInfoVecT GetAvailableDevices();
 
-		const DeviceInfo& GetDevice() const;
+        const DeviceInfo& GetDevice() const;
 
         DataArrayFactory* GetDataArrayFactoryPtr() const;
 
@@ -37,9 +37,9 @@ namespace NeuroflowN
 
         IDeviceArrayManagement* GetDeviceArrayManagementPtr() const;
 
-	private:
-		void Initialize(const DeviceInfo& deviceInfo, const cl::Device& device);
+    private:
+        void Initialize(const DeviceInfo& deviceInfo, const cl::Device& device);
 
-		cl::Program CreateProgram(const cl::Context& context, const cl::Device& device);
-	};
+        cl::Program CreateProgram(const cl::Context& context, const cl::Device& device);
+    };
 }

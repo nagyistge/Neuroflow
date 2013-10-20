@@ -5,19 +5,19 @@
 
 namespace NeuroflowN
 {
-	struct DeviceInfo
-	{
-		DeviceInfo()
-		{
-		}
+    struct DeviceInfo
+    {
+        DeviceInfo()
+        {
+        }
 
-		DeviceInfo(const std::string& id, const std::string& name = "", const std::string& platform = "") :
-			ID(id),
-			Platform(platform),
-			Name(name)
-		{
-		}			
+        DeviceInfo(const std::string& id, const std::string& name = "", const std::string& platform = "") :
+            ID(id),
+            Platform(platform),
+            Name(name)
+        {
+        }            
 
-		std::string Platform, ID, Name;
-	};
+        std::string Platform, ID, Name;
+    };
 }

@@ -7,7 +7,7 @@ namespace Neuroflow
     namespace Data
     {
         public ref class NativeDataArrayFactory : public Neuroflow::Data::DataArrayFactory
-	    {
+        {
             NeuroflowN::DataArrayFactory* dataArrayFactory;
 
         public:
@@ -16,13 +16,13 @@ namespace Neuroflow
             {
                 assert(dataArrayFactory != nullptr);
             }
-			
-		protected:
+            
+        protected:
             virtual DataArray^ DoCreate(int size, float fill) override;
 
             virtual DataArray^ DoCreate(array<float>^ array, int beginPos, int length) override;
 
             virtual DataArray^ DoCreateConst(array<float>^ array, int beginPos, int length) override;
-	    };
+        };
     }
 }

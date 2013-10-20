@@ -8,29 +8,29 @@
 
 namespace NeuroflowN
 {
-	class OCLDataArrayFactory : public DataArrayFactory
-	{
+    class OCLDataArrayFactory : public DataArrayFactory
+    {
         OCLIntCtxSPtrT ctx;
 
     public:
         OCLDataArrayFactory(const OCLIntCtxSPtrT& ctx) :
-			ctx(ctx)
-		{
-		}
+            ctx(ctx)
+        {
+        }
 
         DataArray* Create(unsigned size, float fill)
-		{
-			return new OCLDataArray(ctx, size, fill);
-		}
+        {
+            return new OCLDataArray(ctx, size, fill);
+        }
 
         DataArray* Create(float* values, unsigned beginPos, unsigned length)
-		{
-			return new OCLDataArray(ctx, length, values + beginPos, false);
-		}
+        {
+            return new OCLDataArray(ctx, length, values + beginPos, false);
+        }
 
         DataArray* CreateConst(float* values, unsigned beginPos, unsigned length)
-		{
-			return new OCLDataArray(ctx, length, values + beginPos, true);
-		}
-	};
+        {
+            return new OCLDataArray(ctx, length, values + beginPos, true);
+        }
+    };
 }

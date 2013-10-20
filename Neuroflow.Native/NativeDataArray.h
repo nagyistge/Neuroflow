@@ -7,7 +7,7 @@ namespace Neuroflow
 {
     namespace Data
     {
-		ref class NativeDataArray : public Neuroflow::Data::DataArray
+        ref class NativeDataArray : public Neuroflow::Data::DataArray
         {
             NeuroflowN::DataArray* dataArray;
         
@@ -34,20 +34,20 @@ namespace Neuroflow
                 }
             }
 
-		internal:
-			property NeuroflowN::DataArray* PDataArray
-			{
-				NeuroflowN::DataArray* get()
-				{
-					return dataArray;
-				}
-			}
+        internal:
+            property NeuroflowN::DataArray* PDataArray
+            {
+                NeuroflowN::DataArray* get()
+                {
+                    return dataArray;
+                }
+            }
 
         protected:
 
-			virtual void ReadAsync(int sourceBeginIndex, int count, float* targetPtr, int targetBeginIndex, DataArrayCompletedCallback^ doneFunc) override;
+            virtual void ReadAsync(int sourceBeginIndex, int count, float* targetPtr, int targetBeginIndex, DataArrayCompletedCallback^ doneFunc) override;
 
-			virtual void WriteAsync(float* sourcePtr, int sourceBeginIndex, int count, int targetBeginIndex, DataArrayCompletedCallback^ doneFunc) override;
+            virtual void WriteAsync(float* sourcePtr, int sourceBeginIndex, int count, int targetBeginIndex, DataArrayCompletedCallback^ doneFunc) override;
 
             virtual void CleanupNativeResources() override
             {

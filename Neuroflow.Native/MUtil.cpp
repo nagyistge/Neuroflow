@@ -38,7 +38,7 @@ NeuroflowN::SupervisedBatchT Neuroflow::ToNative(Data::SupervisedBatch^ batch)
     for each (Data::SupervisedSample^ sample in batch)
     {
         NeuroflowN::SupervisedSampleT nsample;
-		for each (Data::SupervisedSampleEntry^ entry in sample)
+        for each (Data::SupervisedSampleEntry^ entry in sample)
         {
             nsample.emplace_back(make_tuple(ToNative(entry->Input), ToNative(entry->DesiredOutput, true), ToNative(entry->ActualOutput, true)));
         }

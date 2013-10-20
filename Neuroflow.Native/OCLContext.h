@@ -39,20 +39,20 @@ namespace Neuroflow
             }
         }
 
-		virtual property Neuroflow::Device Device
-		{
-			Neuroflow::Device get() override
-			{
-				return GetDevice();
-			}
-		}
+        virtual property Neuroflow::Device Device
+        {
+            Neuroflow::Device get() override
+            {
+                return GetDevice();
+            }
+        }
 
         static array<Neuroflow::Device>^ GetAvailableDevices();
 
-	protected:
+    protected:
         virtual void CleanupNativeResources() override;
 
-	private:
-		Neuroflow::Device GetDevice();
-	};
+    private:
+        Neuroflow::Device GetDevice();
+    };
 }

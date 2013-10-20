@@ -8,53 +8,53 @@
 
 namespace NeuroflowN
 {
-	class OCLIntCtx
-	{
-		cl::CommandQueue queue;
+    class OCLIntCtx
+    {
+        cl::CommandQueue queue;
         cl::Program program;
         cl::Device device;
         cl::Context context;
 
         bool isCPU;
         unsigned maxWorkGroupSize;
-		unsigned maxComputeUnits;
+        unsigned maxComputeUnits;
         cl::NDRange maxWorkItemSizes;
 
         Registry<std::pair<unsigned, unsigned>, std::pair<unsigned, unsigned>> ioReduceSizes;
 
         Registry<unsigned, std::pair<unsigned, unsigned>> reduceSizes;
 
-	public:
-		OCLIntCtx(cl::Context context, cl::Device device, cl::Program program, cl::CommandQueue queue);
+    public:
+        OCLIntCtx(cl::Context context, cl::Device device, cl::Program program, cl::CommandQueue queue);
 
-		const cl::Context& GetContext() const
-		{
-			return context;
-		}
+        const cl::Context& GetContext() const
+        {
+            return context;
+        }
 
-		const cl::Device& GetDevice() const
-		{
-			return device;
-		}
+        const cl::Device& GetDevice() const
+        {
+            return device;
+        }
 
-		cl::CommandQueue& GetQueue()
-		{
-			return queue;
-		}
+        cl::CommandQueue& GetQueue()
+        {
+            return queue;
+        }
 
-		const cl::Program& GetProgram() const
-		{
-			return program;
-		}
+        const cl::Program& GetProgram() const
+        {
+            return program;
+        }
 
         bool IsCPU() const
         {
             return isCPU;
         }
 
-		unsigned GetMaxComputeUnits() const
+        unsigned GetMaxComputeUnits() const
         {
-			return maxComputeUnits;
+            return maxComputeUnits;
         }
 
         unsigned GetMaxWorkGroupSize() const
@@ -76,18 +76,18 @@ namespace NeuroflowN
 
         const OCLBuffer2& ToBuffer2(IDeviceArray* a);
 
-		std::string AsVectorKernelName(char* kernelName, unsigned vectorSize);
+        std::string AsVectorKernelName(char* kernelName, unsigned vectorSize);
 
         std::pair<unsigned, unsigned> GetIOReduceSizesInput(unsigned inputSize, unsigned vectorSize, unsigned outputSize);
 
         std::pair<unsigned, unsigned> GetIOReduceSizesOutput(unsigned inputSize, unsigned outputSize, unsigned vectorSize);
 
     private:
-		inline unsigned GetBestLocalSize(unsigned size);
+        inline unsigned GetBestLocalSize(unsigned size);
 
         bool IsPowerOfTwo(unsigned value)
         {
             return (value != 0) && ((value & (value - 1)) == 0);
         }
-	};
+    };
 }
