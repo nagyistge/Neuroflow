@@ -449,9 +449,10 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        unsafe public void ComputeGradientsRTLR(Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
+        unsafe public void ComputeGradientsRTLR(Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
         {
             var data = dataM.Instance();
+            var inputLayerInfos = inputLayerInfosM.Instance();
 
             var outputs = outputsA != null ? outputsA.ToManaged() : null;
             var desiredOutputs = desiredOutputsA != null ? desiredOutputsA.ToManaged() : null;
@@ -485,7 +486,7 @@ namespace Neuroflow.NeuralNetworks
                             float netDeriv_k = layerNetValueDerivatesPtr[kValueIndex];
                             float sum = 0.0f;
 
-                            var upperInfos_k = data.InputLayerInfos[kLayerIndex];
+                            var upperInfos_k = inputLayerInfos[kLayerIndex];
                             foreach (var upperNonInputLayerInfo in upperInfos_k)
                             {
                                 Debug.Assert(upperNonInputLayerInfo.Weights != null);

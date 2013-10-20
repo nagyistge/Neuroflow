@@ -137,7 +137,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
 }
 
 
-void NativeComputeActivation::ComputeGradientsRTLR(Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs)
+void NativeComputeActivation::ComputeGradientsRTLR(Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs)
 {
     throw gcnew System::NotImplementedException();
 }

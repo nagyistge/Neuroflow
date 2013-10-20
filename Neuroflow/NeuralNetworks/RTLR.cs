@@ -19,6 +19,18 @@ namespace Neuroflow.NeuralNetworks
 
             this.mlp = mlp;
             this.netValueDerivates = mlp.NetValueDerivates.Values.ToArray();
+            this.inputLayerInfos = mlp.AsMarshaled(
+                (from lidx in Enumerable.Range(1, mlp.Layers.Count - 1)
+                 let layer = mlp.Layers[lidx].Layer
+                 select (from inputLayer in layer.GetInputLayers()
+                         where inputLayer != mlp.Layers[0].Layer
+                         let iidx = mlp.GetLayerIndex(inputLayer)
+                         select new RTLRLayerInfo
+                         {
+                             Index = iidx - 1,
+                             Size = inputLayer.Size,
+                             Weights = mlp.Weights[Tuple.Create(iidx, lidx)]
+                         }).ToArray()).ToArray());
 
             CreatePValues(mlp);
         }
@@ -28,6 +40,8 @@ namespace Neuroflow.NeuralNetworks
         List<Marshaled<IDeviceArray[]>[][]> pWeightValues = new List<Marshaled<IDeviceArray[]>[][]>();
 
         List<Action<Marshaled<IDeviceArray[]>, IDeviceArray, IDeviceArray>> codes = new List<Action<Marshaled<IDeviceArray[]>, IDeviceArray, IDeviceArray>>();
+
+        Marshaled<RTLRLayerInfo[][]> inputLayerInfos;
 
         IDeviceArray[] netValueDerivates;
 
@@ -185,20 +199,8 @@ namespace Neuroflow.NeuralNetworks
                 Debug.Assert(!(data.BiasGradients == null && data.BiasGradientSums == null && data.Gradients == null && data.GradientSums == null));
 
                 data.NetValueDerivates = netValueDerivates;
-                data.InputLayerInfos =
-                    (from lidx in Enumerable.Range(1, mlp.Layers.Count - 1)
-                     let layer = mlp.Layers[lidx].Layer
-                     select (from inputLayer in layer.GetInputLayers()
-                             where inputLayer != mlp.Layers[0].Layer
-                             let iidx = mlp.GetLayerIndex(inputLayer)
-                             select new RTLRLayerInfo
-                             {
-                                 Index = iidx - 1,
-                                 Size = inputLayer.Size,
-                                 Weights = mlp.Weights[Tuple.Create(iidx, lidx)]
-                             }).ToArray()).ToArray();
 
-                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(dataM, p, os, dos);
+                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(inputLayerInfos, dataM, p, os, dos);
 
                 codes[computationIndex] = code;
                 code(valueRelatedPBuffs, outputs, desiredOutputs);
