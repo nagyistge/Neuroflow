@@ -3,9 +3,9 @@ Neuroflow 0.0.1 (GPL v3)
 
 A Workflow Foundation based Machine Learning Algorithm Library by using GPGPU for computation backend.
 
-This is a very basic proof-of-concept implementation of the proposed library. There is a tiny example program for performance testing, and various unit test for showing and verifying the features.
-
 0.0.1 Features:
+
+This is a very basic proof-of-concept implementation of the proposed library. There is a tiny example program for performance testing, and various unit test for showing and verifying the features.
 
 - It supports OpenCL CPU and GPU modes, kernels are optimized for each
 - Architectures: 
@@ -15,8 +15,8 @@ This is a very basic proof-of-concept implementation of the proposed library. Th
 - Learning algorithms:
   - Online Gradient Descent
   - Offline Gradient Descent
-  - Alopex-B
-  - Cross Entropy Method
+  - Alopex-B (no OpenCL support yet)
+  - Cross Entropy Method (no OpenCL support yet)
 
 0.0.1 Requirements
 
