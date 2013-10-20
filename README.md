@@ -27,7 +27,11 @@ This is a very basic proof-of-concept implementation of the proposed library. Th
 0.0.1 Future Directions
 
 - RTLR by using OpenCL CPU and GPU modes
-- Sign Changes, Rprop, SCG
+- Multiple activation function support (Tanh, Bipolar Logistics)
+- Cross Entropy cost function support
+- Sign Changes, SuperSAB, Rprop (all variations), SCG, Oja
+- Weight Decay
 - Long Short Term Memory architecture
-- Workflow Foundation 4.5 Activities. I have proof-of-concept code for WF integration ideas in my private repository but there is nothing publish ready here yet, sorry.
+- Workflow Foundation 4.5 Activities. I have proof-of-concept code for WF integration ideas in my private repository but there is nothing publish-ready yet.
 - C++ AMP support
+- Double precision support

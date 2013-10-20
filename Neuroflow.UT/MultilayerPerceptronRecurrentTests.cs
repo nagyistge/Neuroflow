@@ -13,7 +13,35 @@ namespace Neuroflow.UT
     [TestClass]
     public class MultilayerPerceptronRecurrentTests
     {
-        #region BPTT
+        #region R AB
+
+        [TestMethod]
+        [TestCategory(TestCategories.Managed)]
+        [TestCategory(TestCategories.Global)]
+        [TestCategory(TestCategories.AlopexB)]
+        public async Task ManagedMLPTrainGlobalABOfflineTest()
+        {
+            using (var ctx = new ManagedContext())
+            {
+                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(WeigthUpdateMode.Offline, 0.01f, 0.01f, 0.85f));
+            }
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Managed)]
+        [TestCategory(TestCategories.Global)]
+        [TestCategory(TestCategories.AlopexB)]
+        public async Task ManagedMLPTrainGlobalABOnlineTest()
+        {
+            using (var ctx = new ManagedContext())
+            {
+                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(WeigthUpdateMode.Online, 0.005f, 0.005f, 0.85f));
+            }
+        }
+
+        #endregion
+
+        #region BPTT GD
 
         [TestMethod]
         [TestCategory(TestCategories.Managed)]
@@ -164,6 +192,21 @@ namespace Neuroflow.UT
         }
 
         #endregion
+
+        private LayerBehavior[] GetABRules(WeigthUpdateMode updateMode, float rate1, float rate2, float rate3)
+        {
+            var init = new UniformRandomizeWeights(0.3f);
+
+            var algo = new AlopexBLearningRule
+            {
+                StepSizeB = rate1,
+                StepSizeA = rate2,
+                ForgettingRate = rate3,
+                WeightUpdateMode = updateMode
+            };
+
+            return new LayerBehavior[] { init, algo };
+        }
 
         private LayerBehavior[] GetGDRules(WeigthUpdateMode updateMode, float rate)
         {
