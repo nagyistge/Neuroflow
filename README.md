@@ -15,8 +15,8 @@ This is a very basic proof-of-concept implementation of the proposed library. Th
 - Learning algorithms:
   - Online Gradient Descent
   - Offline Gradient Descent
-  - Alopex-B
-  - Cross Entropy Method
+  - Alopex-B (no OpenCL support yet)
+  - Cross Entropy Method (no OpenCL support yet)
 
 0.0.1 Requirements
 
