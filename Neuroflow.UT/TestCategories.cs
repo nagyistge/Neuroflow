@@ -16,5 +16,6 @@ namespace Neuroflow.UT
         internal const string FF = "FF";
         internal const string GradientDescent = "GradientDescent";
         internal const string AlopexB = "AlopexB";
+        internal const string CrossEntropy = "CrossEntropy";
     }
 }

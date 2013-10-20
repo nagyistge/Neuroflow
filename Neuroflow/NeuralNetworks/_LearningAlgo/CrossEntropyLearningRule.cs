@@ -10,15 +10,12 @@ namespace Neuroflow.NeuralNetworks
     {
         public CrossEntropyLearningRule()
         {
-            NarrowingRate = 0.95f;
             MutationChance = 0.05f;
             MeanMutationStrength = 0.05f;
             StdDevMutationStrength = 1.0f;
             PopulationSize = 10;
             WeightUpdateMode = WeigthUpdateMode.Offline;
         }
-
-        public float NarrowingRate { get; set; }
 
         public float MutationChance { get; set; }
 

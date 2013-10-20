@@ -18,17 +18,17 @@ namespace TestConsole
             {
                 //new Neuroflow.UT.MultilayerPerceptronRecurrentTests().OCLMLPTrainBPTTOfflineCPUTest().Wait();
 
-                //Console.WriteLine("Managed");
-                //ManagedMLPTrainBPOnlineCPUTest().Wait();
+                Console.WriteLine("Managed");
+                ManagedMLPTrainBPOnlineCPUTest().Wait();
+                Console.WriteLine();
+
+                //Console.WriteLine("OpenCL CPU");
+                //OCLMLPTrainBPOnlineCPUTest().Wait();
                 //Console.WriteLine();
 
-                Console.WriteLine("OpenCL CPU");
-                OCLMLPTrainBPOnlineCPUTest().Wait();
-                Console.WriteLine();
-
-                Console.WriteLine("OpenCL GPU");
-                OCLMLPTrainBPOnlineGPUTest().Wait();
-                Console.WriteLine();
+                //Console.WriteLine("OpenCL GPU");
+                //OCLMLPTrainBPOnlineGPUTest().Wait();
+                //Console.WriteLine();
             }
             catch (Exception ex)
             {
@@ -103,20 +103,6 @@ namespace TestConsole
                 WeightUpdateMode = WeigthUpdateMode.Online,
                 Smoothing = false
             };
-
-            //var algo = new CrossEntropyLearningRule
-            //{
-            //    NarrowingRate = 0.85f,
-            //    MutationChance = 0.001f,
-            //    MeanMutationStrength = 0.05f,
-            //    StdDevMutationStrength = 1.0f,
-            //    PopulationSize = 10
-            //};
-
-            //var algo = new AlopexBLearningRule();
-            //algo.StepSizeB = 0.001f;
-            //algo.StepSizeA = 0.0001f;
-            //algo.ForgettingRate = 0.35f;
 
             var layers = new[]
             {

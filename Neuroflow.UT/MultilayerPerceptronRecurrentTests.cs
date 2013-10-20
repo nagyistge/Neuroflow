@@ -19,23 +19,27 @@ namespace Neuroflow.UT
         [TestCategory(TestCategories.Managed)]
         [TestCategory(TestCategories.Global)]
         [TestCategory(TestCategories.AlopexB)]
-        public async Task ManagedMLPTrainGlobalABOfflineTest()
+        public async Task ManagedMLPTrainGlobalRecABTest()
         {
             using (var ctx = new ManagedContext())
             {
-                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(WeigthUpdateMode.Offline, 0.01f, 0.01f, 0.85f));
+                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(0.01f, 0.01f, 0.85f));
             }
         }
+
+        #endregion
+
+        #region R CE
 
         [TestMethod]
         [TestCategory(TestCategories.Managed)]
         [TestCategory(TestCategories.Global)]
-        [TestCategory(TestCategories.AlopexB)]
-        public async Task ManagedMLPTrainGlobalABOnlineTest()
+        [TestCategory(TestCategories.CrossEntropy)]
+        public async Task ManagedMLPTrainGlobalRecCETest()
         {
             using (var ctx = new ManagedContext())
             {
-                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(WeigthUpdateMode.Online, 0.005f, 0.005f, 0.85f));
+                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetCERules(0.025f, 0.05f, 0.5f, 10));
             }
         }
 
@@ -193,7 +197,20 @@ namespace Neuroflow.UT
 
         #endregion
 
-        private LayerBehavior[] GetABRules(WeigthUpdateMode updateMode, float rate1, float rate2, float rate3)
+        private LayerBehavior[] GetCERules(float mutChance, float meanMut, float stdMut, int popSize = 10)
+        {
+            var algo = new CrossEntropyLearningRule
+            {
+                MutationChance = mutChance,
+                MeanMutationStrength = meanMut,
+                StdDevMutationStrength = stdMut,
+                PopulationSize = popSize
+            };
+
+            return new LayerBehavior[] { algo };
+        }
+
+        private LayerBehavior[] GetABRules(float rate1, float rate2, float rate3)
         {
             var init = new UniformRandomizeWeights(0.3f);
 
@@ -201,8 +218,7 @@ namespace Neuroflow.UT
             {
                 StepSizeB = rate1,
                 StepSizeA = rate2,
-                ForgettingRate = rate3,
-                WeightUpdateMode = updateMode
+                ForgettingRate = rate3
             };
 
             return new LayerBehavior[] { init, algo };

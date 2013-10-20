@@ -105,8 +105,6 @@ namespace Neuroflow.NeuralNetworks
                     }
                     if (1 < n) stdDev = Math.Sqrt(sum / (n - 1));
 
-                    stdDev = stdDev * Rule.NarrowingRate;      
-
                     Mutate(ref mean, ref stdDev);
 
                     offspringWeightsPtr[widx] = Math.Max(Math.Min((float)Statistics.GenerateGauss(mean, stdDev), 1), -1);
