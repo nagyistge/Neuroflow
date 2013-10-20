@@ -835,7 +835,7 @@ namespace Neuroflow.NeuralNetworks
                                     if (innerIterationsCount.HasValue)
                                     {
                                         comp.ComputeGradientsBPTTPhase2(
-                                            state2,
+                                            state1,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
@@ -847,7 +847,7 @@ namespace Neuroflow.NeuralNetworks
                                     else
                                     {
                                         comp.ComputeGradientsBPTTPhase1(
-                                            state1,
+                                            state2,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
