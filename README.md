@@ -1,7 +1,7 @@
 Neuroflow 0.0.1 (LGPL v3)
 =========================
 
-Workflow Foundation based Machine Learning Algorithm Library by using GPGPU for computation backend.
+A Workflow Foundation based Machine Learning Algorithm Library by using GPGPU for computation backend.
 
 This is a very basic proof-of-concept implementation of the proposed library. There is a tiny example program for performance testing, and various unit test for showing and verifying the features.
 
