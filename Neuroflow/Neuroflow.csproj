@@ -75,7 +75,6 @@
     <Compile Include="Args.cs" />
     <Compile Include="CollectionsUtil.cs" />
     <Compile Include="ComputationContext.cs" />
-    <Compile Include="ComputationStateBag.cs" />
     <Compile Include="Data\DataArray.cs" />
     <Compile Include="Data\DataArrayCollection.cs" />
     <Compile Include="Data\DataArrayFactory.cs" />

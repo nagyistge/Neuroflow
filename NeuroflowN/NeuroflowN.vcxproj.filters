@@ -66,9 +66,6 @@
     <ClInclude Include="ILearningAlgoFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IMultilayerPerceptronAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

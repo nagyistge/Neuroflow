@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A1338E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!GIT", "!GIT", "{4722DFEF-F10F-43C4-80B8-EAA5B0BC73BB}"
 	ProjectSection(SolutionItems) = preProject
+		COPYRIGHT.md = COPYRIGHT.md
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection

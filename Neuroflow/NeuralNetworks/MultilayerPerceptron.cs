@@ -244,27 +244,6 @@ namespace Neuroflow.NeuralNetworks
             get { return bpttBackpropagateCode ?? (bpttBackpropagateCode = new List<Action<int, bool, int?>>()); }
         }
 
-        Dictionary<int, ComputationStateBag> bpttCompErrorStateBags;
-
-        Dictionary<int, ComputationStateBag> BPTTCompErrorStateBags
-        {
-            get { return bpttCompErrorStateBags ?? (bpttCompErrorStateBags = new Dictionary<int, ComputationStateBag>()); }
-        }
-
-        Dictionary<int, ComputationStateBag> bpttPhase1StateBags;
-
-        Dictionary<int, ComputationStateBag> BPTTPhase1StateBags
-        {
-            get { return bpttPhase1StateBags ?? (bpttPhase1StateBags = new Dictionary<int, ComputationStateBag>()); }
-        }
-
-        Dictionary<int, ComputationStateBag> bpttPhase2StateBags;
-
-        Dictionary<int, ComputationStateBag> BPTTPhase2StateBags
-        {
-            get { return bpttPhase2StateBags ?? (bpttPhase2StateBags = new Dictionary<int, ComputationStateBag>()); }
-        }
-
         List<ILearningAlgo> onlineSupervisedLearningAlgos;
 
         List<ILearningAlgo> OnlineSupervisedLearningAlgos
@@ -434,21 +413,6 @@ namespace Neuroflow.NeuralNetworks
             {
                 ResourceManager.Free(outputValueStacks.Values);
                 outputValueStacks = null;
-            }
-            if (bpttCompErrorStateBags != null)
-            {
-                ResourceManager.Free(bpttCompErrorStateBags.Values);
-                bpttCompErrorStateBags = null;
-            }
-            if (bpttPhase1StateBags != null)
-            {
-                ResourceManager.Free(bpttPhase1StateBags.Values);
-                bpttPhase1StateBags = null;
-            }
-            if (bpttPhase2StateBags != null)
-            {
-                ResourceManager.Free(bpttPhase2StateBags.Values);
-                bpttPhase2StateBags = null;
             }
             if (marshaledInstances != null)
             {
@@ -864,10 +828,10 @@ namespace Neuroflow.NeuralNetworks
                         }
                         else if (doBPTT)
                         {
-                            var phase1SB = new ComputationStateBag(Adapter.ComputeActivation);
-                            BPTTPhase1StateBags.Add(lidx, phase1SB);
-                            var phase2SB = new ComputationStateBag(Adapter.ComputeActivation);
-                            BPTTPhase2StateBags.Add(lidx, phase2SB);
+                            var state1 = comp.CreateComputationState();
+                            computationStates.AddLast(state1);
+                            var state2 = comp.CreateComputationState();
+                            computationStates.AddLast(state2);
 
                             BPTTBackpropagateCode.Add(
                                 (innerIterationIndex, isLastIteration, innerIterationsCount) =>
@@ -878,7 +842,7 @@ namespace Neuroflow.NeuralNetworks
                                     if (innerIterationsCount.HasValue)
                                     {
                                         comp.ComputeGradientsBPTTPhase2(
-                                            phase2SB[innerIterationIndex],
+                                            state2,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
@@ -891,7 +855,7 @@ namespace Neuroflow.NeuralNetworks
                                     else
                                     {
                                         comp.ComputeGradientsBPTTPhase1(
-                                            phase1SB[innerIterationIndex],
+                                            state1,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
@@ -939,12 +903,12 @@ namespace Neuroflow.NeuralNetworks
                         }
                         else if (doBPTT)
                         {
-                            var ceSB = new ComputationStateBag(Adapter.ComputeActivation);
-                            BPTTCompErrorStateBags.Add(lidx, ceSB);
-                            var phase1SB = new ComputationStateBag(Adapter.ComputeActivation);
-                            BPTTPhase1StateBags.Add(lidx, phase1SB);
-                            var phase2SB = new ComputationStateBag(Adapter.ComputeActivation);
-                            BPTTPhase2StateBags.Add(lidx, phase2SB);
+                            var state1 = comp.CreateComputationState();
+                            computationStates.AddLast(state1);
+                            var state2 = comp.CreateComputationState();
+                            computationStates.AddLast(state2);
+                            var state3 = comp.CreateComputationState();
+                            computationStates.AddLast(state3);
 
                             BPTTBackpropagateCode.Add(
                                 (innerIterationIndex, isLastIteration, innerIterationsCount) =>
@@ -953,7 +917,7 @@ namespace Neuroflow.NeuralNetworks
                                     gInnerIterationIndex = innerIterationIndex;
 
                                     comp.ComputeErrors(
-                                        ceSB[innerIterationIndex],
+                                        state1,
                                         outputs(),
                                         currentErrors,
                                         lowerWeightsA,
@@ -964,7 +928,7 @@ namespace Neuroflow.NeuralNetworks
                                     if (innerIterationsCount.HasValue)
                                     {
                                         comp.ComputeGradientsBPTTPhase2(
-                                            phase2SB[innerIterationIndex],
+                                            state2,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
@@ -977,7 +941,7 @@ namespace Neuroflow.NeuralNetworks
                                     else
                                     {
                                         comp.ComputeGradientsBPTTPhase1(
-                                            phase1SB[innerIterationIndex],
+                                            state3,
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
@@ -1318,19 +1282,10 @@ namespace Neuroflow.NeuralNetworks
 
                 var comp = Adapter.ComputeActivation;
 
-                ComputationStateBag setOutputStateBag;
-                if (setOutputState == null)
-                {
-                    setOutputState = setOutputStateBag = new ComputationStateBag(Adapter.ComputeActivation);
-                    BPTTCompErrorStateBags.Add(lidx, setOutputStateBag);
-                }
-                else
-                {
-                    setOutputStateBag = (ComputationStateBag)setOutputState;
-                }
+                if (setOutputState == null) computationStates.AddLast(setOutputState = comp.CreateComputationState());
 
                 comp.ComputeErrors(
-                    setOutputStateBag[innerIterationIndex],
+                    setOutputState,
                     actualOutputs,
                     outputErrors,
                     desiredOutputs,

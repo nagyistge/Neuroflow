@@ -54,9 +54,6 @@
     <ClInclude Include="NativeLearningAlgoFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NativeList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NativeMultilayerPerceptronAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

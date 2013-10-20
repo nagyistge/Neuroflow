@@ -4,7 +4,6 @@
 #include <memory>
 #include <functional>
 #include <list>
-#include "IList.h"
 
 #define null nullptr
 
@@ -45,7 +44,4 @@ namespace NeuroflowN
     typedef std::vector<IDeviceArray*> DeviceArrayVecT;
     typedef std::vector<IDeviceArray2*> DeviceArray2VecT;
     typedef std::vector<std::function<IDeviceArray*()>> DeviceArrayFVecT;
-
-    typedef std::shared_ptr<IList<IDeviceArray*>> DeviceArrayListSPtrT;
-    typedef std::shared_ptr<IList<IDeviceArray2*>> DeviceArray2ListSPtrT;
 }
