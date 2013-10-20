@@ -23,7 +23,7 @@ namespace NeuroflowN
 
         static void Build(OCLProgramBuilder& program, unsigned max);
 
-        void Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable);
+        void Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha);
     };
 }
 

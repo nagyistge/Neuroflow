@@ -14,7 +14,7 @@ namespace Neuroflow.NeuralNetworks
             return null;
         }
 
-        public void ComputeForward(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> weightsM, IDeviceArray biases, IDeviceArray outputs, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+        public void ComputeForward(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> weightsM, IDeviceArray biases, IDeviceArray outputs, ActivationFunction function, float alpha)
         {
             var inputs = inputsM.Instance();
             var weights = weightsM.Instance();
@@ -76,7 +76,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        public void ComputeForwardRTLR(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> weightsM, IDeviceArray biases, IDeviceArray outputs, IDeviceArray netValueDerivates, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+        public void ComputeForwardRTLR(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> weightsM, IDeviceArray biases, IDeviceArray outputs, IDeviceArray netValueDerivates, ActivationFunction function, float alpha)
         {
             var inputs = inputsM.Instance();
             var weights = weightsM.Instance();
@@ -231,7 +231,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        public void ComputeGradientsFF(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, Marshaled<IDeviceArray2[]> gradientSumsM, IDeviceArray biasGradientSums, IDeviceArray errors, bool isInputStable)
+        public void ComputeGradientsFF(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, Marshaled<IDeviceArray2[]> gradientSumsM, IDeviceArray biasGradientSums, IDeviceArray errors)
         {
             var gradients = gradientsM.Instance();
             var gradientSums = gradientSumsM.Instance();
@@ -294,7 +294,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        public void ComputeGradientsBPTTPhase1(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, IDeviceArray errors, bool isInputStable)
+        public void ComputeGradientsBPTTPhase1(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, IDeviceArray errors)
         {
             var gradients = gradientsM.Instance();
             var inputs = inputsM.Instance();
@@ -327,7 +327,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        public void ComputeGradientsBPTTPhase2(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, Marshaled<IDeviceArray2[]> gradientSumsM, IDeviceArray biasGradientSums, IDeviceArray errors, bool isInputStable, int intItCount)
+        public void ComputeGradientsBPTTPhase2(IDisposable state, Marshaled<DeviceArrayFactory[]> inputsM, Marshaled<IDeviceArray2[]> gradientsM, IDeviceArray biasGradients, Marshaled<IDeviceArray2[]> gradientSumsM, IDeviceArray biasGradientSums, IDeviceArray errors, int intItCount)
         {
             var gradients = gradientsM.Instance();
             var gradientSums = gradientSumsM.Instance();

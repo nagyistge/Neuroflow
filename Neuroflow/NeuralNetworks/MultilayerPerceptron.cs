@@ -606,9 +606,7 @@ namespace Neuroflow.NeuralNetworks
                                 currentBias,
                                 currentOutputs(),
                                 function,
-                                alpha,
-                                lidx != 1,
-                                lidx != Layers.Count - 1);
+                                alpha);
 
                             if (!isLastIteration)
                             {
@@ -635,9 +633,7 @@ namespace Neuroflow.NeuralNetworks
                                 currentOutputs(),
                                 netValueDerivates,
                                 function,
-                                alpha,
-                                lidx != 1,
-                                lidx != Layers.Count - 1);
+                                alpha);
                         });
                 }
                 else
@@ -652,9 +648,7 @@ namespace Neuroflow.NeuralNetworks
                                 currentBias,
                                 currentOutputs(),
                                 function,
-                                alpha,
-                                lidx != 1,
-                                lidx != Layers.Count - 1);
+                                alpha);
                         });
                 }
             }
@@ -822,8 +816,7 @@ namespace Neuroflow.NeuralNetworks
                                         biasGradients,
                                         gradientSumsA,
                                         biasGradientSums,
-                                        currentErrors,
-                                        lidx != 1);
+                                        currentErrors);
                                 });
                         }
                         else if (doBPTT)
@@ -849,7 +842,6 @@ namespace Neuroflow.NeuralNetworks
                                             gradientSumsA,
                                             biasGradientSums,
                                             currentErrors,
-                                            lidx != 1,
                                             innerIterationsCount.Value);
                                     }
                                     else
@@ -859,8 +851,7 @@ namespace Neuroflow.NeuralNetworks
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
-                                            currentErrors,
-                                            lidx != 1);
+                                            currentErrors);
                                     }
                                 });
                         }
@@ -897,8 +888,7 @@ namespace Neuroflow.NeuralNetworks
                                         biasGradients,
                                         gradientSumsA,
                                         biasGradientSums,
-                                        currentErrors,
-                                        lidx != 1);
+                                        currentErrors);
                                 });
                         }
                         else if (doBPTT)
@@ -935,7 +925,6 @@ namespace Neuroflow.NeuralNetworks
                                             gradientSumsA,
                                             biasGradientSums,
                                             currentErrors,
-                                            lidx != 1,
                                             innerIterationsCount.Value);
                                     }
                                     else
@@ -945,8 +934,7 @@ namespace Neuroflow.NeuralNetworks
                                             inputsA,
                                             gradientsA,
                                             biasGradients,
-                                            currentErrors,
-                                            lidx != 1);
+                                            currentErrors);
                                     }
                                 });
                         }                    

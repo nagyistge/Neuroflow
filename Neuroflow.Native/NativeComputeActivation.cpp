@@ -21,14 +21,14 @@ System::IDisposable^ NativeComputeActivation::CreateComputationState()
     }
 }
 
-void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ weights, IDeviceArray^ biases, IDeviceArray^ outputs, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ weights, IDeviceArray^ biases, IDeviceArray^ outputs, ActivationFunction function, float alpha)
 {
     try
     {
         auto inputsPtr = ToNative(inputs);
         auto weightsPtr = ToNative(weights);
 
-        computeActivation->ComputeForward(ToNative(state), inputsPtr, weightsPtr, ToNative(biases), ToNative(outputs), ToNative(function), alpha, isInputStable, isOutputStable);
+        computeActivation->ComputeForward(ToNative(state), inputsPtr, weightsPtr, ToNative(biases), ToNative(outputs), ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -36,7 +36,7 @@ void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshal
     }
 }
 
-void NativeComputeActivation::ComputeForwardRTLR(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ weights, IDeviceArray^ biases, IDeviceArray^ outputs, IDeviceArray^ netValueDerivates, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+void NativeComputeActivation::ComputeForwardRTLR(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ weights, IDeviceArray^ biases, IDeviceArray^ outputs, IDeviceArray^ netValueDerivates, ActivationFunction function, float alpha)
 {
     throw gcnew System::NotImplementedException();
 }
@@ -69,7 +69,7 @@ void NativeComputeActivation::ComputeErrors(System::IDisposable^ state, IDeviceA
     }
 }
 
-void NativeComputeActivation::ComputeGradientsFF(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, Marshaled<array<IDeviceArray2^>^>^ gradientSums, IDeviceArray^ biasGradientSums, IDeviceArray^ errors, bool isInputStable)
+void NativeComputeActivation::ComputeGradientsFF(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, Marshaled<array<IDeviceArray2^>^>^ gradientSums, IDeviceArray^ biasGradientSums, IDeviceArray^ errors)
 {
     try
     {
@@ -84,8 +84,7 @@ void NativeComputeActivation::ComputeGradientsFF(System::IDisposable^ state, Mar
             biasGradients != null ? ToNative(biasGradients) : null, 
             gradientSumsPtr,
             biasGradientSums != null ? ToNative(biasGradientSums) : null,
-            ToNative(errors), 
-            isInputStable);
+            ToNative(errors));
     }
     catch (exception& ex)
     {
@@ -93,7 +92,7 @@ void NativeComputeActivation::ComputeGradientsFF(System::IDisposable^ state, Mar
     }
 }
 
-void NativeComputeActivation::ComputeGradientsBPTTPhase1(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, IDeviceArray^ errors, bool isInputStable)
+void NativeComputeActivation::ComputeGradientsBPTTPhase1(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, IDeviceArray^ errors)
 {
     try
     {
@@ -105,8 +104,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase1(System::IDisposable^ st
             inputsPtr,
             gradientsPtr,
             biasGradients != null ? ToNative(biasGradients) : null,
-            ToNative(errors),
-            isInputStable);
+            ToNative(errors));
     }
     catch (exception& ex)
     {
@@ -114,7 +112,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase1(System::IDisposable^ st
     }
 }
 
-void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, Marshaled<array<IDeviceArray2^>^>^ gradientSums, IDeviceArray^ biasGradientSums, IDeviceArray^ errors, bool isInputStable, int intItCount)
+void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ gradients, IDeviceArray^ biasGradients, Marshaled<array<IDeviceArray2^>^>^ gradientSums, IDeviceArray^ biasGradientSums, IDeviceArray^ errors, int intItCount)
 {
     try
     {
@@ -130,7 +128,6 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
             gradientSumsPtr,
             biasGradientSums != null ? ToNative(biasGradientSums) : null,
             ToNative(errors),
-            isInputStable,
             intItCount);
     }
     catch (exception& ex)

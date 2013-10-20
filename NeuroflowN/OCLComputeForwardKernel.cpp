@@ -126,7 +126,7 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
     return code.str();
 }
 
-void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha)
 {
     unsigned size = (unsigned)inputs->size();
     assert(size == weights->size());

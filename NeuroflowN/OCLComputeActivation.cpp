@@ -79,11 +79,11 @@ NfObject* OCLComputeActivation::CreateComputationState()
     return new OCLKernelToExecute();
 }
 
-void OCLComputeActivation::ComputeForward(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha, bool isInputStable, bool isOutputStable)
+void OCLComputeActivation::ComputeForward(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha)
 {
     try
     {
-        computeForwardKernel.Exec(state, inputs, weights, pBiases, pOutputs, function, alpha, isInputStable, isOutputStable);
+        computeForwardKernel.Exec(state, inputs, weights, pBiases, pOutputs, function, alpha);
     }
     catch (logic_error&)
     {
@@ -119,11 +119,11 @@ void OCLComputeActivation::ComputeErrors(NfObject* state, IDeviceArray* pOutputs
     }
 }
 
-void OCLComputeActivation::ComputeGradientsFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, bool isInputStable)
+void OCLComputeActivation::ComputeGradientsFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors)
 {
     try
     {
-        computeGradientsKernel.ExecFF(state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, isInputStable);
+        computeGradientsKernel.ExecFF(state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors);
     }
     catch (exception& ex)
     {
@@ -131,11 +131,11 @@ void OCLComputeActivation::ComputeGradientsFF(NfObject* state, DeviceArrayFVecT*
     }
 }
 
-void OCLComputeActivation::ComputeGradientsBPTTPhase1(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, IDeviceArray* errors, bool isInputStable)
+void OCLComputeActivation::ComputeGradientsBPTTPhase1(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, IDeviceArray* errors)
 {
     try
     {
-        computeGradientsKernel.ExecBPTTPhase1(state, inputs, gradients, biasGradients, errors, isInputStable);
+        computeGradientsKernel.ExecBPTTPhase1(state, inputs, gradients, biasGradients, errors);
     }
     catch (exception& ex)
     {
@@ -143,11 +143,11 @@ void OCLComputeActivation::ComputeGradientsBPTTPhase1(NfObject* state, DeviceArr
     }
 }
 
-void OCLComputeActivation::ComputeGradientsBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, bool isInputStable, unsigned intItCount)
+void OCLComputeActivation::ComputeGradientsBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount)
 {
     try
     {
-        computeGradientsKernel.ExecBPTTPhase2(state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, isInputStable, intItCount);
+        computeGradientsKernel.ExecBPTTPhase2(state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, intItCount);
     }
     catch (exception& ex)
     {

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Neuroflow.NeuralNetworks
 {
     /// <summary>
+    /// See:
     /// http://www.willamette.edu/~gorr/classes/cs449/rtrl.html
     /// </summary>
     internal sealed class RTLR : DisposableObject
@@ -40,7 +41,7 @@ namespace Neuroflow.NeuralNetworks
 
                 var pWeightValues = new LinkedList<Marshaled<IDeviceArray[]>[]>();
 
-                //// Biases:
+                // Biases:
                 var pWeightValuesOfInput = new Marshaled<IDeviceArray[]>[biases.Size];
 
                 for (int weightIndex = 0; weightIndex < biases.Size; weightIndex++)

@@ -350,35 +350,35 @@ std::string OCLComputeGradientsKernel::CreateGPUKernelCode(GradientComputationFl
     return move(codeStr);
 }
 
-void OCLComputeGradientsKernel::ExecFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, bool isInputStable)
+void OCLComputeGradientsKernel::ExecFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors)
 {
     GradientComputationFlags flags = FF;
     if (gradients != null && biasGradients != null) flags = (GradientComputationFlags)(flags | Online);
     if (gradientSums != null && biasGradientSums != null) flags = (GradientComputationFlags)(flags | Offline);
 
-    Exec(flags, state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, isInputStable, 0);
+    Exec(flags, state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, 0);
 }
 
-void OCLComputeGradientsKernel::ExecBPTTPhase1(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, IDeviceArray* errors, bool isInputStable)
+void OCLComputeGradientsKernel::ExecBPTTPhase1(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, IDeviceArray* errors)
 {
     GradientComputationFlags flags = BPTTPhase1;
     assert(gradients != null);
     assert(biasGradients != null);
 
-    Exec(flags, state, inputs, gradients, biasGradients, null, null, errors, isInputStable, 0);
+    Exec(flags, state, inputs, gradients, biasGradients, null, null, errors, 0);
 }
 
-void OCLComputeGradientsKernel::ExecBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, bool isInputStable, unsigned intItCount)
+void OCLComputeGradientsKernel::ExecBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount)
 {
     GradientComputationFlags flags = BPTTPhase2;
     assert(gradients != null);
     assert(biasGradients != null);
     if (gradientSums != null && biasGradientSums != null) flags = (GradientComputationFlags)(flags | Offline);
 
-    Exec(flags, state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, isInputStable, intItCount);
+    Exec(flags, state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, intItCount);
 }
 
-void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputsV, DeviceArray2VecT* gradientsV, IDeviceArray* pBiasGradients, DeviceArray2VecT* gradientSumsV, IDeviceArray* pBiasGradientSums, IDeviceArray* pErrors, bool isInputStable, unsigned intItCount)
+void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputsV, DeviceArray2VecT* gradientsV, IDeviceArray* pBiasGradients, DeviceArray2VecT* gradientSumsV, IDeviceArray* pBiasGradientSums, IDeviceArray* pErrors, unsigned intItCount)
 {
     KernelPars pars;
     FillKernelPars(pars, flags, false);
