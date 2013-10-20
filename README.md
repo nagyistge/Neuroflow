@@ -1,4 +1,4 @@
-Neuroflow 0.0.1 (LGPL v3)
+Neuroflow 0.0.1 (GPL v3)
 =========================
 
 A Workflow Foundation based Machine Learning Algorithm Library by using GPGPU for computation backend.
