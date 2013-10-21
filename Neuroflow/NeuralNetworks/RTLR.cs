@@ -18,7 +18,7 @@ namespace Neuroflow.NeuralNetworks
             Debug.Assert(mlp != null);
 
             this.mlp = mlp;
-            this.netValueDerivates = mlp.NetValueDerivates.Values.ToArray();
+            this.netValueDerivates = mlp.AsMarshaled(mlp.NetValueDerivates.Values.ToArray());
             this.inputLayerInfos = mlp.AsMarshaled(
                 (from lidx in Enumerable.Range(1, mlp.Layers.Count - 1)
                  let layer = mlp.Layers[lidx].Layer
@@ -43,7 +43,7 @@ namespace Neuroflow.NeuralNetworks
 
         Marshaled<RTLRLayerInfo[][]> inputLayerInfos;
 
-        IDeviceArray[] netValueDerivates;
+        Marshaled<IDeviceArray[]> netValueDerivates;
 
         private void CreatePValues(MultilayerPerceptron mlp)
         {
@@ -198,9 +198,7 @@ namespace Neuroflow.NeuralNetworks
 
                 Debug.Assert(!(data.BiasGradients == null && data.BiasGradientSums == null && data.Gradients == null && data.GradientSums == null));
 
-                data.NetValueDerivates = netValueDerivates;
-
-                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(inputLayerInfos, dataM, p, os, dos);
+                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(inputLayerInfos, netValueDerivates, dataM, p, os, dos);
 
                 codes[computationIndex] = code;
                 code(valueRelatedPBuffs, outputs, desiredOutputs);

@@ -449,10 +449,11 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        unsafe public void ComputeGradientsRTLR(Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
+        unsafe public void ComputeGradientsRTLR(Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
         {
             var data = dataM.Instance();
             var inputLayerInfos = inputLayerInfosM.Instance();
+            var netValueDerivates = netValueDerivatesM.Instance();
 
             var outputs = outputsA != null ? outputsA.ToManaged() : null;
             var desiredOutputs = desiredOutputsA != null ? desiredOutputsA.ToManaged() : null;
@@ -467,7 +468,7 @@ namespace Neuroflow.NeuralNetworks
                 int outputLayerIndex = valueRelatedPBuffs.Length - 1;
                 for (int kLayerIndex = 0; kLayerIndex < valueRelatedPBuffs.Length; kLayerIndex++)
                 {
-                    var layerNetValueDerivates = data.NetValueDerivates[kLayerIndex].ToManaged();
+                    var layerNetValueDerivates = netValueDerivates[kLayerIndex].ToManaged();
                     var p_i_j_k_Values = valueRelatedPBuffs[kLayerIndex].ToManaged();
 
                     bool computeGradient = kLayerIndex == outputLayerIndex && pOutputs != null && pDesiredOutputs != null;

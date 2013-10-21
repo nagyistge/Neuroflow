@@ -17,6 +17,5 @@ namespace Neuroflow.NeuralNetworks
         public int IValueIndex { get; internal set; }
         public int JLayerIndex { get; internal set; }
         public int JValueIndex { get; internal set; }
-        public IDeviceArray[] NetValueDerivates { get; internal set; }
     }
 }
