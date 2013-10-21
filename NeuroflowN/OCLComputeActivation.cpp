@@ -95,6 +95,22 @@ void OCLComputeActivation::ComputeForward(NfObject* state, DeviceArrayFVecT* inp
     }
 }
 
+void OCLComputeActivation::ComputeForwardRTLR(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, IDeviceArray* pNetValueDerivates, ActivationFunction function, float alpha)
+{
+    try
+    {
+        //computeForwardKernel.ExecRTLR(state, inputs, weights, pBiases, pOutputs, function, alpha);
+    }
+    catch (logic_error&)
+    {
+        throw;
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
+}
+
 void OCLComputeActivation::ComputeErrors(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha)
 {
     try
@@ -148,6 +164,17 @@ void OCLComputeActivation::ComputeGradientsBPTTPhase2(NfObject* state, DeviceArr
     try
     {
         computeGradientsKernel.ExecBPTTPhase2(state, inputs, gradients, biasGradients, gradientSums, biasGradientSums, errors, intItCount);
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
+}
+
+void OCLComputeActivation::ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs)
+{
+    try
+    {
     }
     catch (exception& ex)
     {

@@ -197,3 +197,27 @@ NeuralNetworks::LearningAlgoIterationType Neuroflow::ToManaged(NeuroflowN::Learn
 {
     return (NeuralNetworks::LearningAlgoIterationType)((int) type);
 }
+
+NeuroflowN::RTLRLayerInfoVecVecT* Neuroflow::ToNative(Marshaled<array<array<NeuralNetworks::RTLRLayerInfo^>^>^>^ inputLayerInfosM)
+{
+    if (inputLayerInfosM == null || inputLayerInfosM->ManagedObject == null) return null;
+    if (inputLayerInfosM->NativeVersion != null)
+    {
+        return ((NativePtr<NeuroflowN::RTLRLayerInfoVecVecT>^)inputLayerInfosM->NativeVersion)->Ptr;
+    }
+
+    auto result = new NeuroflowN::RTLRLayerInfoVecVecT();
+    inputLayerInfosM->NativeVersion = gcnew NativePtr<NeuroflowN::RTLRLayerInfoVecVecT>(result);
+    
+    auto a = inputLayerInfosM->ManagedObject;
+    for each (auto inputs in a)
+    {
+        result->emplace_back();
+        for each (auto info in inputs)
+        {
+            result->back().emplace_back(info->Index, ToNative(info->Weights), info->Size, info->IsElementOfU);
+        }
+    }
+
+    return result;
+}

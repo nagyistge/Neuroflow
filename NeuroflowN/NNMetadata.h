@@ -87,7 +87,7 @@ namespace NeuroflowN
 
     struct TrainingNode
     {
-        TrainingNode(const DeviceArrayVecT& weights, const std::shared_ptr<DeviceArrayVecT>& gradients, const std::shared_ptr<DeviceArrayVecT>& gradientSums) :
+        TrainingNode(const DeviceArrayVecT& weights, const DeviceArrayVecSPtrT& gradients, const DeviceArrayVecSPtrT& gradientSums) :
             Weights(weights),
             Gradients(gradients),
             GradientSums(gradientSums)
@@ -97,9 +97,9 @@ namespace NeuroflowN
 
         DeviceArrayVecT Weights;
 
-        std::shared_ptr<DeviceArrayVecT> Gradients;
+        DeviceArrayVecSPtrT Gradients;
 
-        std::shared_ptr<DeviceArrayVecT> GradientSums;
+        DeviceArrayVecSPtrT GradientSums;
     };
 
     typedef std::vector<TrainingNode> TrainingNodeVecT;
@@ -115,5 +115,64 @@ namespace NeuroflowN
     };
     
 #pragma endregion
+
+#pragma region RTLR
+
+    struct RTLRLayerInfo
+    {
+        int Index;
+        IDeviceArray2* Weights;
+        int Size;
+        bool IsElementOfU;
+
+        RTLRLayerInfo(int index, IDeviceArray2* weights, int size, bool isElementOfU) :
+            Index(index),
+            Weights(weights),
+            Size(size),
+            IsElementOfU(isElementOfU)
+        {
+        }
+    };
+
+    typedef std::vector<RTLRLayerInfo> RTLRLayerInfoVecT;
+    typedef std::vector<RTLRLayerInfoVecT> RTLRLayerInfoVecVecT;
+
+    struct RTLRComputationData
+    {
+        DeviceArrayFVecT Inputs;
+        DeviceArray2VecSPtrT Gradients;
+        DeviceArray2VecSPtrT GradientSums;
+        DeviceArray2VecSPtrT BiasGradients;
+        DeviceArray2VecSPtrT BiasGradientSums;
+        int ILayerIndex;
+        int IValueIndex;
+        int JLayerIndex;
+        int JValueIndex;
+
+        RTLRComputationData(
+            const DeviceArrayFVecT& inputs,
+            const DeviceArray2VecSPtrT& gradients,
+            const DeviceArray2VecSPtrT& gradientSums,
+            const DeviceArray2VecSPtrT& biasGradients,
+            const DeviceArray2VecSPtrT& biasGradientSums,
+            int iLayerIndex,
+            int iValueIndex,
+            int jLayerIndex,
+            int jValueIndex) :
+            Inputs(inputs),
+            Gradients(gradients),
+            GradientSums(gradientSums),
+            BiasGradients(biasGradients),
+            BiasGradientSums(biasGradientSums),
+            ILayerIndex(iLayerIndex),
+            IValueIndex(iValueIndex),
+            JLayerIndex(jLayerIndex),
+            JValueIndex(jValueIndex)
+        {
+        }
+    };
+
+#pragma endregion
+
 
 }

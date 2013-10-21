@@ -11,5 +11,6 @@ namespace Neuroflow.NeuralNetworks
         public int Index { get; internal set; }
         public IDeviceArray2 Weights { get; internal set; }
         public int Size { get; internal set; }
+        public bool IsElementOfU { get; internal set; }
     }
 }

@@ -23,13 +23,13 @@ namespace Neuroflow.NeuralNetworks
                 (from lidx in Enumerable.Range(1, mlp.Layers.Count - 1)
                  let layer = mlp.Layers[lidx].Layer
                  select (from inputLayer in layer.GetInputLayers()
-                         where inputLayer != mlp.Layers[0].Layer
                          let iidx = mlp.GetLayerIndex(inputLayer)
                          select new RTLRLayerInfo
                          {
                              Index = iidx - 1,
                              Size = inputLayer.Size,
-                             Weights = mlp.Weights[Tuple.Create(iidx, lidx)]
+                             Weights = mlp.Weights[Tuple.Create(iidx, lidx)],
+                             IsElementOfU = inputLayer != mlp.Layers[0].Layer
                          }).ToArray()).ToArray());
 
             CreatePValues(mlp);

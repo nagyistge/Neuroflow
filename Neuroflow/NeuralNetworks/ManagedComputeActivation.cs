@@ -488,29 +488,32 @@ namespace Neuroflow.NeuralNetworks
                             float sum = 0.0f;
 
                             var upperInfos_k = inputLayerInfos[kLayerIndex];
-                            foreach (var upperNonInputLayerInfo in upperInfos_k)
+                            foreach (var upperInputLayerInfo in upperInfos_k)
                             {
-                                Debug.Assert(upperNonInputLayerInfo.Weights != null);
-                                int lLayerIndex = upperNonInputLayerInfo.Index;
-                                var p_i_j_l_Values = valueRelatedPBuffs[lLayerIndex].ToManaged();
-                                var weights = upperNonInputLayerInfo.Weights.ToManaged2();
-
-                                Debug.Assert(p_i_j_l_Values.Size == weights.Size1);
-                                Debug.Assert(weights.Size2 == p_i_j_k_Values.Size);
-
-                                fixed (float* pp_i_j_l = p_i_j_l_Values.InternalArray, pWeights = weights.InternalArray)
+                                if (upperInputLayerInfo.IsElementOfU)
                                 {
-                                    var p_i_j_l_ValuesPtr = p_i_j_l_Values.ToPtr(pp_i_j_l);
-                                    var weightsPtr = weights.ToPtr(pWeights);
+                                    Debug.Assert(upperInputLayerInfo.Weights != null);
+                                    int lLayerIndex = upperInputLayerInfo.Index;
+                                    var p_i_j_l_Values = valueRelatedPBuffs[lLayerIndex].ToManaged();
+                                    var weights = upperInputLayerInfo.Weights.ToManaged2();
 
-                                    for (int lValueIndex = 0; lValueIndex < p_i_j_l_Values.Size; lValueIndex++)
+                                    Debug.Assert(p_i_j_l_Values.Size == weights.Size1);
+                                    Debug.Assert(weights.Size2 == p_i_j_k_Values.Size);
+
+                                    fixed (float* pp_i_j_l = p_i_j_l_Values.InternalArray, pWeights = weights.InternalArray)
                                     {
-                                        // i: iLayerIndex, iValueIndex
-                                        // j: jLayerIndex, jValueIndex
-                                        // k: kLayerIndex, kValueIndex
-                                        // l: lLayerIndex, lValueIndex
+                                        var p_i_j_l_ValuesPtr = p_i_j_l_Values.ToPtr(pp_i_j_l);
+                                        var weightsPtr = weights.ToPtr(pWeights);
 
-                                        sum += weightsPtr[lValueIndex, kValueIndex] * p_i_j_l_ValuesPtr[lValueIndex];
+                                        for (int lValueIndex = 0; lValueIndex < p_i_j_l_Values.Size; lValueIndex++)
+                                        {
+                                            // i: iLayerIndex, iValueIndex
+                                            // j: jLayerIndex, jValueIndex
+                                            // k: kLayerIndex, kValueIndex
+                                            // l: lLayerIndex, lValueIndex
+
+                                            sum += weightsPtr[lValueIndex, kValueIndex] * p_i_j_l_ValuesPtr[lValueIndex];
+                                        }
                                     }
                                 }
                             }
