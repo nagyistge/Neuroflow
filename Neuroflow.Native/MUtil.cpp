@@ -221,3 +221,15 @@ NeuroflowN::RTLRLayerInfoVecVecT* Neuroflow::ToNative(Marshaled<array<array<Neur
 
     return result;
 }
+
+//NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data)
+//{
+//    if (data == null || data->ManagedObject == null) return null;
+//    if (data->NativeVersion != null)
+//    {
+//        return ((NativePtr<NeuroflowN::RTLRComputationData>^)data->NativeVersion)->Ptr;
+//    }
+//
+//    auto d = data->ManagedObject;
+//    auto result = new NeuroflowN::RTLRComputationData();
+//}

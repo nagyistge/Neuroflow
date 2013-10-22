@@ -40,4 +40,6 @@ namespace Neuroflow
     NeuralNetworks::LearningAlgoIterationType ToManaged(NeuroflowN::LearningAlgoIterationType type);
 
     NeuroflowN::RTLRLayerInfoVecVecT* ToNative(Marshaled<array<array<NeuralNetworks::RTLRLayerInfo^>^>^>^ inputLayerInfos);
+
+    /*NeuroflowN::RTLRComputationData* ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data)*/;
 }
