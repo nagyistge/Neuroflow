@@ -3,6 +3,8 @@ Neuroflow 0.0.1 (GPL v3)
 
 A Workflow Foundation based Machine Learning Algorithm Library by using GPGPU for computation backend.
 
+http://neuroflowblog.wordpress.com/
+
 0.0.1 Features:
 
 This is a very basic proof-of-concept implementation of the proposed library. There is a tiny example program for performance testing, and various unit tests for showing and verifying the features.
