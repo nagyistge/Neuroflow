@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "OCLComputeOutputErrorsKernel.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
 #include "OCLKernelToExecute.h"
+#include "OCLVault.h"
 
 using namespace NeuroflowN;
 using namespace std;
@@ -12,10 +13,14 @@ using namespace cl;
 OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Sigmoid = OCLVectorKernelName("ComputeErrors_Output_Sigmoid");
 OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Linear = OCLVectorKernelName("ComputeErrors_Output_Linear");
 
-void OCLComputeOutputErrorsKernel::Build(OCLProgramBuilder& program)
+void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault->GetCommonCode());
+	program->Using(vault->GetAFCode());
+
     // Compute Errors:
-    DEFINE_OCL_PROGRAM(program,
+	ADD_OCL_CODE(program,
 
     /*
     ComputeErrors Output Sigmoid
@@ -69,7 +74,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     if (function == ActivationFunction::Sigmoid)
     {
         exec->Execute(
-            ctx,
+            program,
             ComputeErrors_Output_Sigmoid(vectorSize),
             vectorSize,
             init,
@@ -78,7 +83,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     else
     {
         exec->Execute(
-            ctx,
+			program,
             ComputeErrors_Output_Linear(vectorSize),
             vectorSize,
             init,

@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "OCLComputeGradientsKernel.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
 #include "OCLKernelToExecute.h"
+#include "OCLVault.h"
 
 using namespace std;
 using namespace cl;
@@ -29,9 +30,12 @@ OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_GPU =
 OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offline_CPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_Offline_CPU");
 OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offline_GPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_Offline_GPU");
 
-void OCLComputeGradientsKernel::Build(OCLProgramBuilder& program)
+void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
 {
-    DEFINE_OCL_PROGRAM(program,
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault->GetNetCode());
+
+	ADD_OCL_CODE(program,
 
     inline void ComputeGradients_SetGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx)
     {
@@ -73,22 +77,22 @@ void OCLComputeGradientsKernel::Build(OCLProgramBuilder& program)
     );
 
     //ComputeGradients_FF_Online_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(FF | Online)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online)));
 
     //ComputeGradients_FF_Offline_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(FF | Offline)));
+	program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Offline)));
 
     //ComputeGradients_FF_OnlineOffline_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(FF | Online | Offline)));
+	program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online | Offline)));
 
     //ComputeGradients_BPTTPhase1_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(BPTTPhase1)));
+	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase1)));
 
     //ComputeGradients_BPTTPhase2_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(BPTTPhase2)));
+	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2)));
 
     //ComputeGradients_BPTTPhase2_Offline_*
-    program.Add(CreateKernelCode((GradientComputationFlags)(BPTTPhase2 | Offline)));
+	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2 | Offline)));
 }
 
 const OCLVectorKernelName& OCLComputeGradientsKernel::GetKernelName(GradientComputationFlags flags)
@@ -413,7 +417,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
         if (ctx->IsCPU())
         {
             exec->Execute(
-                ctx,
+                program,
                 GetKernelName((GradientComputationFlags)(flags | CPU))(vectorSize),
                 vectorSize,
                 init,
@@ -422,7 +426,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
         else
         {
             exec->Execute(
-                ctx,
+                program,
                 GetKernelName((GradientComputationFlags)(flags | GPU))(vectorSize),
                 vectorSize,
                 init,

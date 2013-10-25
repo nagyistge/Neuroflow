@@ -7,6 +7,8 @@ namespace NeuroflowN
 	{
 		OCLIntCtxSPtrT ctx;
 		OCLProgramUnitSPtrT commonCode;
+		OCLProgramUnitSPtrT netCode;
+		OCLProgramUnitSPtrT afCode;
 
 	public:
 		OCLVault(const OCLIntCtxSPtrT& ctx);
@@ -14,6 +16,16 @@ namespace NeuroflowN
 		const OCLProgramUnitSPtrT& GetCommonCode() const
 		{
 			return commonCode;
+		}
+
+		const OCLProgramUnitSPtrT& GetNetCode() const
+		{
+			return netCode;
+		}
+
+		const OCLProgramUnitSPtrT& GetAFCode() const
+		{
+			return afCode;
 		}
 	};
 }

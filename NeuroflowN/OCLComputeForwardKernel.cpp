@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "OCLComputeForwardKernel.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
 #include "OCLKernelToExecute.h"
 #include "OCL.h"
+#include "OCLVault.h"
 
 using namespace std;
 using namespace NeuroflowN;
@@ -14,9 +15,12 @@ using namespace cl;
 
 extern const char NeuroflowN::ComputeForwardTmpl [] = "ComputeForward_{0}_{1}_{2}";
 
-void OCLComputeForwardKernel::Build(OCLProgramBuilder& program, unsigned max)
+void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
 {
-    DEFINE_OCL_PROGRAM(program,
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault->GetCommonCode());
+
+	ADD_OCL_CODE(program,
 
     float ComputeForward_Sum$(__global float$* inputs, int inputsSize, __global float$* weights, int idx)
     {
@@ -27,13 +31,13 @@ void OCLComputeForwardKernel::Build(OCLProgramBuilder& program, unsigned max)
 
     );
 
-    for (unsigned size = 1; size <= max; size++)
+    for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
     {
         auto cpuCode = CreateCPUKernelCode(size);
         auto gpuCode = CreateGPUKernelCode(size);
 
-        program.Add(cpuCode);
-        program.Add(gpuCode);
+        program->AddCode(cpuCode);
+        program->AddCode(gpuCode);
     }
 }
 
@@ -161,7 +165,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         if (function == ActivationFunction::Sigmoid)
         {
             exec->Execute(
-                ctx,
+                program,
                 GetCPUNames(size).first(vectorSize),
                 vectorSize,
                 init,
@@ -170,7 +174,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         else
         {
             exec->Execute(
-                ctx,
+                program,
                 GetCPUNames(size).second(vectorSize),
                 vectorSize,
                 init,
@@ -184,7 +188,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         if (function == ActivationFunction::Sigmoid)
         {
             exec->Execute(
-                ctx,
+                program,
                 GetGPUNames(size).first(vectorSize),
                 vectorSize,
                 init,
@@ -194,7 +198,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         else
         {
             exec->Execute(
-                ctx,
+                program,
                 GetGPUNames(size).second(vectorSize),
                 vectorSize,
                 init,

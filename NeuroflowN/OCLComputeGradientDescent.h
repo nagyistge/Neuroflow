@@ -13,12 +13,20 @@ namespace NeuroflowN
         static OCLVectorKernelName GD_Online;
         static OCLVectorKernelName GD_Offline_Smooth;
         static OCLVectorKernelName GD_Offline;
-    public:
-        static void Build(OCLProgramBuilder& program);
 
-        static void UpdateWeightsOnline(
+		OCLIntCtxSPtrT ctx;
+		OCLProgramSPtrT program;
+
+    public:
+		OCLComputeGradientDescent(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) : ctx(ctx)
+		{
+			Build(vault);
+		}
+
+		void Build(const OCLVaultSPtrT& vault);
+
+        void UpdateWeightsOnline(
             OCLKernelToExecute& exec,
-            const OCLIntCtxSPtrT& ctx,
             const OCLBuffer1& lastUpdates,
             const OCLBuffer1& weights,
             const OCLBuffer1& gradients,
@@ -26,9 +34,8 @@ namespace NeuroflowN
             float momentum,
             bool smoothing);
 
-        static void UpdateWeightsOffline(
+        void UpdateWeightsOffline(
             OCLKernelToExecute& exec,
-            const OCLIntCtxSPtrT& ctx,
             const OCLBuffer1& lastUpdates,
             const OCLBuffer1& weights,
             const OCLBuffer1& gradientSums,

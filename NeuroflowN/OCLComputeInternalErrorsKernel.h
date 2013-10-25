@@ -13,18 +13,19 @@ namespace NeuroflowN
 
     class OCLComputeInternalErrorsKernel : public OCLActivationKernelBase<ComputeInternalErrorsTmpl>
     {
-        static std::string CreateCPUKernelCode(unsigned size);
+		OCLProgramSPtrT program;
 
+        static std::string CreateCPUKernelCode(unsigned size);
         static std::string CreateGPUKernelCode(unsigned size);
 
     public:
-        OCLComputeInternalErrorsKernel(const OCLIntCtxSPtrT& ctx) :
+		OCLComputeInternalErrorsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             OCLActivationKernelBase(ctx)
         {
+			Build(vault);
         };
 
-        static void Build(OCLProgramBuilder& program, unsigned max);
-
+		void Build(const OCLVaultSPtrT& vault);
         void Exec(NfObject* state, IDeviceArray* outputs, IDeviceArray* errors, DeviceArray2VecT* lowerWeights, DeviceArrayVecT* lowerErrors, ActivationFunction function, float alpha);
     };
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include "OCLTypedefs.h"
 #include "DeviceInfo.h"
+#include "OCLVault.h"
 
 namespace NeuroflowN
 {
@@ -15,10 +16,9 @@ namespace NeuroflowN
         std::shared_ptr<OCLMultilayerPerceptronAdapter> multilayerPerceptronAdapter;
         std::shared_ptr<OCLDeviceArrayManagement> deviceArrayManagement;
         std::string version;
-
         DeviceInfo deviceInfo;
-
         OCLIntCtxSPtrT ctx;
+		OCLVaultSPtrT vault;
 
     public:
         OCLContextImpl(const std::string& deviceID, const std::string& version);
@@ -44,7 +44,5 @@ namespace NeuroflowN
 
     private:
         void Initialize(const DeviceInfo& deviceInfo, const cl::Device& device);
-
-        cl::Program CreateProgram(const cl::Context& context, const cl::Device& device);
     };
 }

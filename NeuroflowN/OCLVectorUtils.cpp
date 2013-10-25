@@ -17,11 +17,10 @@ OCLVectorKernelName OCLVectorUtils::AddMSEName = OCLVectorKernelName("AddMSE");
 OCLVectorKernelName OCLVectorUtils::DivName = OCLVectorKernelName("Div");
 OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
-void OCLVectorUtils::Build(const OCLVault& vault)
+void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
 {
 	program = make_shared<OCLProgram>(ctx);
-	program->Using(vault.GetCommonCode());
-
+	program->Using(vault->GetCommonCode());
 
     // Zero
     ADD_OCL_CODE(program,

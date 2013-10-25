@@ -9,6 +9,8 @@ using namespace NeuroflowN;
 OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 	ctx(ctx)
 {
+	// Common:
+
 	commonCode = make_shared<OCLProgramUnit>(ctx);
 
 	commonCode->AddCode("\n#define D 100000000.0f\n");
@@ -134,6 +136,65 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 	inline int GetIndex2(int i1, int i2, int size1)
 	{
 		return i2 * size1 + i1;
+	}
+	);
+
+	// Net
+	ADD_OCL_CODE(netCode,
+
+	inline float$ Get2$(__global float$* values, int i1, int i2, int size1)
+	{
+		return values[GetIndex2(i1, i2, size1)];
+	}
+
+	inline void Set2$(__global float$* values, int i1, int i2, int size1, float$ value)
+	{
+		values[GetIndex2(i1, i2, size1)] = value;
+	}
+
+	inline void Add2$(__global float$* values, int i1, int i2, int size1, float$ value)
+	{
+		values[GetIndex2(i1, i2, size1)] += value;
+	}
+
+	inline void SetAdd2$(__global float$* values1, __global float$* values2, int i1, int i2, int size1, float$ value)
+	{
+		int index = GetIndex2(i1, i2, size1);
+		values1[index] = value;
+		values2[index] += value;
+	}
+
+	inline void AddDiv2$(__global float$* values, int i1, int i2, int size1, float$ value, float by)
+	{
+		int index = GetIndex2(i1, i2, size1);
+		values[index] += value;
+		values[index] /= by;
+	}
+
+	inline void AddDivAdd2$(__global float$* values1, __global float$* values2, int i1, int i2, int size1, float$ value, float by)
+	{
+		int index = GetIndex2(i1, i2, size1);
+		values1[index] += value;
+		values1[index] /= by;
+		values2[index] += values1[index];
+	}
+	);
+
+	netCode->Using(commonCode);
+
+	// AF
+	ADD_OCL_CODE(afCode,
+	inline float Sigmoid(float value, float alpha)
+	{
+		return (value * alpha) / (1.0f + fabs(value * alpha));
+	}
+	);
+
+	ADD_OCL_CODE(afCode,
+	inline float$ SigmoidD$(float$ value, float alpha)
+	{
+		float$ a = fabs(value * alpha);
+		return alpha * (1.0f / ((1.0f + a) * (1.0f + a)));
 	}
 	);
 }

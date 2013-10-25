@@ -35,6 +35,7 @@ namespace NeuroflowN
 
 	typedef std::shared_ptr<OCLProgramUnit> OCLProgramUnitSPtrT;
 	typedef std::shared_ptr<OCLProgram> OCLProgramSPtrT;
+	typedef std::shared_ptr<OCLVault> OCLVaultSPtrT;
 
     typedef std::vector<OCLKernelToExecute> OCLKernelToExecuteVecT;
 

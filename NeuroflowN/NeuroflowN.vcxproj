@@ -195,7 +195,6 @@
     <ClInclude Include="OCLLearningAlgoFactory.h" />
     <ClInclude Include="OCLMultilayerPerceptronAdapter.h" />
     <ClInclude Include="OCLProgram.h" />
-    <ClInclude Include="OCLProgramBuilder.h" />
     <ClInclude Include="OCLProgramUnit.h" />
     <ClInclude Include="OCLStructs.h" />
     <ClInclude Include="OCLTypedefs.h" />
@@ -224,7 +223,6 @@
     <ClCompile Include="OCLLearningAlgoFactory.cpp" />
     <ClCompile Include="OCLMultilayerPerceptronAdapter.cpp" />
     <ClCompile Include="OCLProgram.cpp" />
-    <ClCompile Include="OCLProgramBuilder.cpp" />
     <ClCompile Include="OCLProgramUnit.cpp" />
     <ClCompile Include="OCLVault.cpp" />
     <ClCompile Include="OCLVectorKernelName.cpp" />

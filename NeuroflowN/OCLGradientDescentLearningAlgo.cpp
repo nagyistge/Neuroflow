@@ -9,9 +9,10 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
-OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes) :
+OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes) :
     ctx(ctx),
-    LearningAlgo(rule, nodes)
+    LearningAlgo(rule, nodes),
+	compute(ctx, vault)
 {
     auto daMan = OCLDeviceArrayManagement(ctx);
     int eidx = 0;
@@ -43,9 +44,8 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
                     {
                         auto& exec = gdKernelExecs[eidx];
 
-                        OCLComputeGradientDescent::UpdateWeightsOnline(
+                        compute.UpdateWeightsOnline(
                             exec,
-                            ctx,
                             lua->GetCLBuffer(),
                             wa,
                             ga,
@@ -68,9 +68,8 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
                     {
                         auto& exec = gdKernelExecs[eidx];
 
-                        OCLComputeGradientDescent::UpdateWeightsOffline(
+                        compute.UpdateWeightsOffline(
                             exec,
-                            ctx,
                             lua->GetCLBuffer(),
                             wa,
                             ga,

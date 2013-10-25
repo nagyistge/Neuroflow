@@ -147,9 +147,6 @@
     <ClInclude Include="OCLMultilayerPerceptronAdapter.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
-    <ClInclude Include="OCLProgramBuilder.h">
-      <Filter>Header Files\OCL</Filter>
-    </ClInclude>
     <ClInclude Include="OCLStructs.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
@@ -175,7 +172,7 @@
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
     <ClInclude Include="OCLVault.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\OCL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,9 +222,6 @@
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
     <ClCompile Include="OCLMultilayerPerceptronAdapter.cpp">
-      <Filter>Source Files\OCL</Filter>
-    </ClCompile>
-    <ClCompile Include="OCLProgramBuilder.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
     <ClCompile Include="OCLVectorKernelName.cpp">

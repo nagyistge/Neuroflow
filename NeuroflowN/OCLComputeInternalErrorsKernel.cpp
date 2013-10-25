@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "OCLComputeInternalErrorsKernel.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
 #include "OCLKernelToExecute.h"
 #include "OCL.h"
+#include "OCLVault.h"
 
 using namespace std;
 using namespace NeuroflowN;
@@ -14,9 +15,13 @@ using namespace cl;
 
 extern const char NeuroflowN::ComputeInternalErrorsTmpl [] = "ComputeInternalErrors_{0}_{1}_{2}";
 
-void OCLComputeInternalErrorsKernel::Build(OCLProgramBuilder& program, unsigned max)
+void OCLComputeInternalErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
-    DEFINE_OCL_PROGRAM(program,
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault->GetCommonCode());
+	program->Using(vault->GetAFCode());
+
+	ADD_OCL_CODE(program,
 
     float$ ComputeErrors_LowerErrorSum$(__global float* lowerErrors, int lowerErrorsSize, __global float$* lowerWeights, int idx, int currentOutputsSize)
     {
@@ -27,13 +32,13 @@ void OCLComputeInternalErrorsKernel::Build(OCLProgramBuilder& program, unsigned 
 
     );
 
-    for (unsigned size = 1; size <= max; size++)
+    for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
     {
         auto cpuCode = CreateCPUKernelCode(size);
         auto gpuCode = CreateGPUKernelCode(size);
 
-        program.Add(cpuCode);
-        program.Add(gpuCode);
+        program->AddCode(cpuCode);
+		program->AddCode(gpuCode);
     }
 }
 
@@ -166,7 +171,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         if (function == ActivationFunction::Sigmoid)
         {
             exec->Execute(
-                ctx,
+                program,
                 GetCPUNames(size).first(vectorSize),
                 vectorSize,
                 initSig,
@@ -175,7 +180,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         else
         {
             exec->Execute(
-                ctx,
+                program,
                 GetCPUNames(size).second(vectorSize),
                 vectorSize,
                 initLin,
@@ -189,7 +194,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         if (function == ActivationFunction::Sigmoid)
         {
             exec->Execute(
-                ctx,
+                program,
                 GetGPUNames(size).first(vectorSize),
                 vectorSize,
                 initSig,
@@ -199,7 +204,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         else
         {
             exec->Execute(
-                ctx,
+                program,
                 GetGPUNames(size).second(vectorSize),
                 vectorSize,
                 initLin,

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OCLComputeGradientDescent.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
+#include "OCLVault.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
@@ -16,9 +17,12 @@ OCLVectorKernelName OCLComputeGradientDescent::GD_Online = OCLVectorKernelName("
 OCLVectorKernelName OCLComputeGradientDescent::GD_Offline_Smooth = OCLVectorKernelName("GD_Offline_Smooth");
 OCLVectorKernelName OCLComputeGradientDescent::GD_Offline = OCLVectorKernelName("GD_Offline");
 
-void OCLComputeGradientDescent::Build(OCLProgramBuilder& program)
+void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
 {
-    DEFINE_OCL_PROGRAM(program,
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault->GetCommonCode());
+
+	ADD_OCL_CODE(program,
 
     // Online
     __kernel void GD_Online_Smooth$(
@@ -89,7 +93,6 @@ void OCLComputeGradientDescent::Build(OCLProgramBuilder& program)
 
 void OCLComputeGradientDescent::UpdateWeightsOnline(
     OCLKernelToExecute& exec,
-    const OCLIntCtxSPtrT& ctx,
     const OCLBuffer1& lastUpdates,
     const OCLBuffer1& weights,
     const OCLBuffer1& gradients,
@@ -103,7 +106,7 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
         if (smoothing)
         {
             exec.Execute(
-                ctx,
+                program,
                 GD_Online_Smooth(vectorSize),
                 vectorSize,
                 [=](Kernel& kernel)
@@ -120,7 +123,7 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
         else
         {
             exec.Execute(
-                ctx,
+                program,
                 GD_Online(vectorSize),
                 vectorSize,
                 [=](Kernel& kernel)
@@ -143,7 +146,6 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
 
 void OCLComputeGradientDescent::UpdateWeightsOffline(
     OCLKernelToExecute& exec,
-    const OCLIntCtxSPtrT& ctx,
     const OCLBuffer1& lastUpdates,
     const OCLBuffer1& weights,
     const OCLBuffer1& gradientSums,
@@ -159,7 +161,7 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
         if (smoothing)
         {
             exec.Execute(
-                ctx,
+                program,
                 GD_Offline_Smooth(vectorSize),
                 vectorSize,
                 [=](Kernel& kernel)
@@ -177,7 +179,7 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
         else
         {
             exec.Execute(
-                ctx,
+                program,
                 GD_Offline(vectorSize),
                 vectorSize,
                 [=](Kernel& kernel)

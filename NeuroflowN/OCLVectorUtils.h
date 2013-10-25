@@ -19,14 +19,14 @@ namespace NeuroflowN
         OCLKernelToExecute addExec, divExec, zeroFExec;
 
     public:
-        OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVault& vault) :
+        OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             ctx(ctx),
             generator((std::random_device()() << 16) | std::random_device()())
         {
 			Build(vault);
         }
 
-		void Build(const OCLVault& vault);
+		void Build(const OCLVaultSPtrT& vault);
 
         void CalculateMSE(const SupervisedBatchT& batch, DataArray* mseValues, unsigned valueIndex);
 

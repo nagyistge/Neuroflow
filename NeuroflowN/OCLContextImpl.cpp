@@ -2,7 +2,6 @@
 #include "OCLContextImpl.h"
 #include "NUtils.h"
 #include "OCLError.h"
-#include "OCLProgramBuilder.h"
 #include "OCLVectorUtils.h"
 #include "OCLIntCtx.h"
 #include "OCLDataArrayFactory.h"
@@ -229,16 +228,15 @@ void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& 
         auto context = Context(device);
         cl_command_queue_properties props = 0;
         auto queue = CommandQueue(context, device, props);
-        auto prog = CreateProgram(context, device);
 
-        ctx = make_shared<OCLIntCtx>(context, device, prog, queue, deviceInfo, version);
+        ctx = make_shared<OCLIntCtx>(context, device, queue, deviceInfo, version);
         
         this->deviceInfo = deviceInfo;
-
+		vault = make_shared<OCLVault>(ctx);
         dataArrayFactory = make_shared<OCLDataArrayFactory>(ctx);
-        vectorUtils = make_shared<OCLVectorUtils>(ctx);
+        vectorUtils = make_shared<OCLVectorUtils>(ctx, vault);
         deviceArrayManagement = make_shared<OCLDeviceArrayManagement>(ctx);
-        multilayerPerceptronAdapter = make_shared<OCLMultilayerPerceptronAdapter>(ctx, vectorUtils, deviceArrayManagement);
+        multilayerPerceptronAdapter = make_shared<OCLMultilayerPerceptronAdapter>(ctx, vault, vectorUtils, deviceArrayManagement);
     }
     catch (exception& ex)
     {
@@ -272,16 +270,4 @@ DeviceInfoVecT OCLContextImpl::GetAvailableDevices()
 const DeviceInfo& OCLContextImpl::GetDevice() const
 {
     return deviceInfo;
-}
-
-Program OCLContextImpl::CreateProgram(const cl::Context& context, const cl::Device& device)
-{
-    /*auto p = OCLProgramBuilder(context, device);
-    
-    OCLVectorUtils::Build(p);
-    OCLComputeActivation::Build(p, 4);
-    OCLComputeGradientDescent::Build(p);
-    
-    return p.Compile();*/
-	return Program();
 }

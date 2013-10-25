@@ -21,18 +21,16 @@ namespace NeuroflowN
         OCLComputeGradientsKernel computeGradientsKernel;
 
     public:
-        OCLComputeActivation(const OCLIntCtxSPtrT& ctx) :
+		OCLComputeActivation(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             ctx(ctx),
-            computeForwardKernel(ctx),
-            computeInternalErrorsKernel(ctx),
-            computeOutputErrorsKernel(ctx),
-            computeGradientsKernel(ctx)
+            computeForwardKernel(ctx, vault),
+			computeInternalErrorsKernel(ctx, vault),
+			computeOutputErrorsKernel(ctx, vault),
+			computeGradientsKernel(ctx, vault)
         {
         }
 
         NfObject* CreateComputationState();
-
-        static void Build(OCLProgramBuilder& program, unsigned maxConnectionCount);
 
         void ComputeForward(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* biases, IDeviceArray* outputs, ActivationFunction function, float alpha);
 
