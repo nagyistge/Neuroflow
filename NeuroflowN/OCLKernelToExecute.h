@@ -8,6 +8,7 @@
 #include <array>
 #include "NfObject.h"
 #include "OCLError.h"
+#include "OCLProgram.h"
 
 namespace NeuroflowN
 {
@@ -57,49 +58,49 @@ namespace NeuroflowN
             return GetData(vectorSize).kernelName;
         }
 
-        void Execute(const OCLIntCtxSPtrT& ctx, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, unsigned workItemSize = 1)
+        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, unsigned workItemSize = 1)
         {
-            EnsureKernel(ctx, kernelName, vectorSize, setupKernel);
-            DoExecute(ctx, vectorSize, cl::NullRange, workItemSize > 1 ? cl::NDRange(workItemSize) : cl::NullRange, cl::NullRange);
+            EnsureKernel(program, kernelName, vectorSize, setupKernel);
+            DoExecute(program, vectorSize, cl::NullRange, workItemSize > 1 ? cl::NDRange(workItemSize) : cl::NullRange, cl::NullRange);
         }
 
-        void Execute(const OCLIntCtxSPtrT& ctx, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const OCLBuffer1& extentBuffer)
+        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const OCLBuffer1& extentBuffer)
         {
-            EnsureKernel(ctx, kernelName, vectorSize, setupKernel);
-            DoExecute(ctx, vectorSize, cl::NullRange, cl::NDRange(extentBuffer.GetSize()), cl::NullRange);
+            EnsureKernel(program, kernelName, vectorSize, setupKernel);
+            DoExecute(program, vectorSize, cl::NullRange, cl::NDRange(extentBuffer.GetSize()), cl::NullRange);
         }
 
-        void Execute(const OCLIntCtxSPtrT& ctx, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
         {
-            EnsureKernel(ctx, kernelName, vectorSize, setupKernel);
-            DoExecute(ctx, vectorSize, cl::NullRange, workItemSizes, localSizes);
+            EnsureKernel(program, kernelName, vectorSize, setupKernel);
+            DoExecute(program, vectorSize, cl::NullRange, workItemSizes, localSizes);
         }
 
-        void Execute(const OCLIntCtxSPtrT& ctx, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
         {
-            EnsureKernel(ctx, kernelName, vectorSize, setupKernel);
-            DoExecute(ctx, vectorSize, workItemOffsets, workItemSizes, localSizes);
+            EnsureKernel(program, kernelName, vectorSize, setupKernel);
+            DoExecute(program, vectorSize, workItemOffsets, workItemSizes, localSizes);
         }
 
     private:
-        inline void EnsureKernel(const OCLIntCtxSPtrT& ctx, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel)
+        inline void EnsureKernel(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel)
         {
             auto& data = GetData(vectorSize);
             if (data.kernelName.size() == 0) data.kernelName = kernelName;
-            if (data.kernel() == nullptr) data.kernel = cl::Kernel(ctx->GetProgram(), kernelName.c_str());
+            if (data.kernel() == nullptr) data.kernel = cl::Kernel(program->GetProgram(), kernelName.c_str());
             setupKernel(data.kernel);
         }
 
-        inline void DoExecute(const OCLIntCtxSPtrT& ctx, unsigned vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+        inline void DoExecute(const OCLProgramSPtrT& program, unsigned vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
         {
             auto& data = GetData(vectorSize);
             if (workItemSizes.dimensions() == 0)
             {
-                ctx->GetQueue().enqueueTask(data.kernel);
+                program->GetIntCtx()->GetQueue().enqueueTask(data.kernel);
             }
             else
             {
-                ctx->GetQueue().enqueueNDRangeKernel(
+				program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
                     data.kernel,
                     workItemOffsets,
                     workItemSizes,

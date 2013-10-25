@@ -23,11 +23,11 @@ void OCLProgramUnit::AddCode(const std::string code)
 	if (find(code.cbegin(), code.cend(), '$') != code.cend())
 	{
 		auto prg = CreateNumberedVersions(code);
-		codeBuilder << prg;
+		codeBuilder << prg << endl;
 	}
 	else
 	{
-		codeBuilder << code;
+		codeBuilder << code << endl;
 	}
 }
 
@@ -37,6 +37,7 @@ std::string OCLProgramUnit::CreateNumberedVersions(const std::string& prg)
 	unsigned v = 1;
 	do
 	{
+		if (v != 1) result << endl;
 		string p = prg, vstr = to_string(v);
 		boost::replace_all(p, "$$", vstr);
 		if (v == 1)

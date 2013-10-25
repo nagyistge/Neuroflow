@@ -11,13 +11,18 @@ namespace NeuroflowN
 	class OCLProgramUnit
 	{
 		std::stringstream codeBuilder;
-		std::list<std::shared_ptr<OCLProgramUnit>> baseUnits;
+		std::list<OCLProgramUnitSPtrT> baseUnits;
 
 	public:
 		OCLProgramUnit(const OCLIntCtxSPtrT& ctx);
 		void Using(const std::shared_ptr<OCLProgramUnit>& baseUnit);
 		void AddCode(const std::string code);
 		std::string GetCode();
+
+		const OCLIntCtxSPtrT& GetIntCtx() const
+		{
+			return ctx;
+		}
 
 	protected:
 		OCLIntCtxSPtrT ctx;

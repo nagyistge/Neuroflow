@@ -12,7 +12,6 @@ namespace NeuroflowN
     class OCLIntCtx
     {
         cl::CommandQueue queue;
-        cl::Program program;
         cl::Device device;
         cl::Context context;
 		DeviceInfo deviceInfo;
@@ -28,7 +27,7 @@ namespace NeuroflowN
         Registry<unsigned, std::pair<unsigned, unsigned>> reduceSizes;
 
     public:
-		OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::Program& program, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
+		OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
 
         const cl::Context& GetContext() const
         {
@@ -43,11 +42,6 @@ namespace NeuroflowN
         cl::CommandQueue& GetQueue()
         {
             return queue;
-        }
-
-        const cl::Program& GetProgram() const
-        {
-            return program;
         }
 
 		const DeviceInfo& GetDeviceInfo() const

@@ -199,6 +199,7 @@
     <ClInclude Include="OCLProgramUnit.h" />
     <ClInclude Include="OCLStructs.h" />
     <ClInclude Include="OCLTypedefs.h" />
+    <ClInclude Include="OCLVault.h" />
     <ClInclude Include="OCLVectorKernelName.h" />
     <ClInclude Include="OCLVectorUtils.h" />
     <ClInclude Include="Registry.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="OCLProgram.cpp" />
     <ClCompile Include="OCLProgramBuilder.cpp" />
     <ClCompile Include="OCLProgramUnit.cpp" />
+    <ClCompile Include="OCLVault.cpp" />
     <ClCompile Include="OCLVectorKernelName.cpp" />
     <ClCompile Include="OCLVectorUtils.cpp" />
     <ClCompile Include="stdafx.cpp">

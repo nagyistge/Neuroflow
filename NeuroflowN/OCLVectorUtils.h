@@ -14,19 +14,19 @@ namespace NeuroflowN
         static OCLVectorKernelName ZeroFName;
 
         OCLIntCtxSPtrT ctx;
-
         std::mt19937 generator;
-
+		OCLProgramSPtrT program;
         OCLKernelToExecute addExec, divExec, zeroFExec;
 
     public:
-        OCLVectorUtils(const OCLIntCtxSPtrT& ctx) :
+        OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVault& vault) :
             ctx(ctx),
             generator((std::random_device()() << 16) | std::random_device()())
         {
+			Build(vault);
         }
 
-        static void Build(OCLProgramBuilder& program);
+		void Build(const OCLVault& vault);
 
         void CalculateMSE(const SupervisedBatchT& batch, DataArray* mseValues, unsigned valueIndex);
 

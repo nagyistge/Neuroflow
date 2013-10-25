@@ -276,11 +276,12 @@ const DeviceInfo& OCLContextImpl::GetDevice() const
 
 Program OCLContextImpl::CreateProgram(const cl::Context& context, const cl::Device& device)
 {
-    auto p = OCLProgramBuilder(context, device);
+    /*auto p = OCLProgramBuilder(context, device);
     
     OCLVectorUtils::Build(p);
     OCLComputeActivation::Build(p, 4);
     OCLComputeGradientDescent::Build(p);
     
-    return p.Compile();
+    return p.Compile();*/
+	return Program();
 }

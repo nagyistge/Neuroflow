@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "OCLVectorUtils.h"
-#include "OCLProgramBuilder.h"
+#include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
 #include "OCLDataArray.h"
 #include "GetVectorSize.h"
 #include "OCLError.h"
+#include "OCLVault.h"
 
 using namespace std;
 using namespace cl;
@@ -16,142 +17,16 @@ OCLVectorKernelName OCLVectorUtils::AddMSEName = OCLVectorKernelName("AddMSE");
 OCLVectorKernelName OCLVectorUtils::DivName = OCLVectorKernelName("Div");
 OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
-void OCLVectorUtils::Build(OCLProgramBuilder& program)
+void OCLVectorUtils::Build(const OCLVault& vault)
 {
-    // Defines
-    program.Add("\n#define D 100000000.0f\n");
-
-    // Common:
-    DEFINE_OCL_PROGRAM(program,
-
-    inline void AtomAdd(__local int* ptr, int v)
-    {
-        atom_add(ptr, v);
-    }
-
-    typedef struct
-    {
-        union
-        {
-            int2 vecInt;
-            int ints[2];
-        };
-    } Int2CastType;
-    
-    inline void AtomAdd2(__local int2* ptr, int2 v)
-    {
-        __local int* array = ((__local Int2CastType*)ptr)->ints;
-        atom_add(&(array[0]), v.s0);
-        atom_add(&(array[1]), v.s1);
-    }
-    
-    typedef struct
-    {
-        union
-        {
-            int4 vecInt;
-            int ints[4];
-        };
-    } Int4CastType;
-    
-    inline void AtomAdd4(__local int4* ptr, int4 v)
-    {
-        __local int* array = ((__local Int4CastType*)ptr)->ints;
-        atom_add(&(array[0]), v.s0);
-        atom_add(&(array[1]), v.s1);
-        atom_add(&(array[2]), v.s2);
-        atom_add(&(array[3]), v.s3);
-    }
-    
-    typedef struct
-    {
-        union
-        {
-            int8 vecInt;
-            int ints[8];
-        };
-    } Int8CastType;
-    
-    inline void AtomAdd8(__local int8* ptr, int8 v)
-    {
-        __local int* array = ((__local Int8CastType*)ptr)->ints;
-        atom_add(&(array[0]), v.s0);
-        atom_add(&(array[1]), v.s1);
-        atom_add(&(array[2]), v.s2);
-        atom_add(&(array[3]), v.s3);
-        atom_add(&(array[4]), v.s4);
-        atom_add(&(array[5]), v.s5);
-        atom_add(&(array[6]), v.s6);
-        atom_add(&(array[7]), v.s7);
-    }
-    
-    typedef struct
-    {
-        union
-        {
-            int16 vecInt;
-            int ints[16];
-        };
-    } Int16CastType;
-    
-    inline void AtomAdd16(__local int16* ptr, int16 v)
-    {
-        __local int* array = ((__local Int16CastType*)ptr)->ints;
-        atom_add(&(array[0]), v.s0);
-        atom_add(&(array[1]), v.s1);
-        atom_add(&(array[2]), v.s2);
-        atom_add(&(array[3]), v.s3);
-        atom_add(&(array[4]), v.s4);
-        atom_add(&(array[5]), v.s5);
-        atom_add(&(array[6]), v.s6);
-        atom_add(&(array[7]), v.s7);
-        atom_add(&(array[8]), v.s8);
-        atom_add(&(array[9]), v.s9);
-        atom_add(&(array[10]), v.sa);
-        atom_add(&(array[11]), v.sb);
-        atom_add(&(array[12]), v.sc);
-        atom_add(&(array[13]), v.sd);
-        atom_add(&(array[14]), v.se);
-        atom_add(&(array[15]), v.sf);
-    }
-
-    inline float SumComponents(float value)
-    {
-        return value;
-    }
-
-    inline float SumComponents2(float2 value)
-    {
-        return value.x + value.y;
-    }
-
-    inline float SumComponents4(float4 value)
-    {
-        return value.s0 + value.s1 + value.s2 + value.s3;
-    }
-
-    inline float SumComponents8(float8 value)
-    {
-        return SumComponents4(value.lo) + SumComponents4(value.hi);
-    }
-
-    inline float SumComponents16(float16 value)
-    {
-        return SumComponents8(value.lo) + SumComponents8(value.hi);
-    }
-
-    inline int GetIndex2(int i1, int i2, int size1)
-    {
-        return i2 * size1 + i1;
-    }
-
-    );
+	program = make_shared<OCLProgram>(ctx);
+	program->Using(vault.GetCommonCode());
 
 
     // Zero
-    DEFINE_OCL_PROGRAM(program,
+    ADD_OCL_CODE(program,
 
-    __kernel void ZeroF$(__global float$* buffer)
+    kernel void ZeroF$(global float$* buffer)
     {
         buffer[get_global_id(0)] = (float$)(0.0f);
     }
@@ -159,9 +34,9 @@ void OCLVectorUtils::Build(OCLProgramBuilder& program)
     );
 
     // Auto Vec Functions:
-    DEFINE_OCL_PROGRAM(program,
+	ADD_OCL_CODE(program,
 
-    __kernel void AddMSE$(__global float$* desiredValues, __global float$* currentValues, unsigned valueCount, __global float* mseValues, unsigned mseValueIndex)
+    kernel void AddMSE$(global float$* desiredValues, global float$* currentValues, unsigned valueCount, global float* mseValues, unsigned mseValueIndex)
     {
         float$ mse = 0.0f;
         for (int x = 0; x < valueCount; x++)
@@ -172,7 +47,7 @@ void OCLVectorUtils::Build(OCLProgramBuilder& program)
         mseValues[mseValueIndex] += SumComponents$(mse) / (float)(valueCount * $$);
     }
 
-    __kernel void Div$(__global float$* values, float byValue)
+    kernel void Div$(global float$* values, float byValue)
     {
         values[get_global_id(0)] /= byValue;
     }
@@ -188,7 +63,7 @@ void OCLVectorUtils::AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& c
     unsigned vectorSize = GetVectorSize(cref(desiredValues));
 
     addExec.Execute(
-        ctx,
+        program,
         AddMSEName(vectorSize),
         vectorSize,
         [&, vectorSize, mseValueIndex](Kernel& kernel)
@@ -207,7 +82,7 @@ void OCLVectorUtils::Div(const OCLBuffer1& values, unsigned valueIndex, float by
     assert(valueIndex < values.GetSize());
 
     divExec.Execute(
-        ctx,
+        program,
         DivName(1),
         1,
         [&, valueIndex, byValue](Kernel& kernel)
@@ -306,7 +181,7 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
             sizeof(float) * buff.GetSize());*/
         auto vectorSize = GetVectorSize(cref(buff));
         zeroFExec.Execute(
-            ctx,
+            program,
             ZeroFName(vectorSize),
             vectorSize,
             [&](Kernel& kernel)

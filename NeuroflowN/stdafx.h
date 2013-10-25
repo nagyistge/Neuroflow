@@ -20,6 +20,8 @@
 #include <tuple>
 #include <memory>
 #include <iostream>
+#include <fstream>
+#include <array>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/algorithm/string/find.hpp>

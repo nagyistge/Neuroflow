@@ -27,8 +27,14 @@ namespace NeuroflowN
     class OCLVectorUtils;
     class OCLMultilayerPerceptronAdapter;
     class OCLDeviceArrayManagement;
+	class OCLProgramUnit;
+	class OCLProgram;
+	class OCLVault;
 
     typedef std::shared_ptr<OCLIntCtx> OCLIntCtxSPtrT;
+
+	typedef std::shared_ptr<OCLProgramUnit> OCLProgramUnitSPtrT;
+	typedef std::shared_ptr<OCLProgram> OCLProgramSPtrT;
 
     typedef std::vector<OCLKernelToExecute> OCLKernelToExecuteVecT;
 
