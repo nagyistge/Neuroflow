@@ -23,7 +23,7 @@ namespace Neuroflow.UT
         {
             using (var ctx = new ManagedContext())
             {
-                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(0.01f, 0.01f, 0.85f));
+                await MLPTrainRecTest(ctx, GradientComputationMethod.None, GetABRules(0.01f, 0.01f, 0.95f));
             }
         }
 
