@@ -5,6 +5,7 @@
 #include "OCLTypedefs.h"
 #include "OCLStructs.h"
 #include "NfObject.h"
+#include "DeviceInfo.h"
 
 namespace NeuroflowN
 {
@@ -14,6 +15,8 @@ namespace NeuroflowN
         cl::Program program;
         cl::Device device;
         cl::Context context;
+		DeviceInfo deviceInfo;
+		std::string version;
 
         bool isCPU;
         unsigned maxWorkGroupSize;
@@ -25,7 +28,7 @@ namespace NeuroflowN
         Registry<unsigned, std::pair<unsigned, unsigned>> reduceSizes;
 
     public:
-        OCLIntCtx(cl::Context context, cl::Device device, cl::Program program, cl::CommandQueue queue);
+		OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::Program& program, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
 
         const cl::Context& GetContext() const
         {
@@ -46,6 +49,16 @@ namespace NeuroflowN
         {
             return program;
         }
+
+		const DeviceInfo& GetDeviceInfo() const
+		{
+			return deviceInfo;
+		}
+
+		const std::string& GetVersion() const
+		{
+			return version;
+		}
 
         bool IsCPU() const
         {

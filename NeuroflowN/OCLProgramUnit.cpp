@@ -23,11 +23,11 @@ void OCLProgramUnit::AddCode(const std::string code)
 	if (find(code.cbegin(), code.cend(), '$') != code.cend())
 	{
 		auto prg = CreateNumberedVersions(code);
-		programBuilder << prg;
+		codeBuilder << prg;
 	}
 	else
 	{
-		programBuilder << code;
+		codeBuilder << code;
 	}
 }
 
@@ -51,4 +51,30 @@ std::string OCLProgramUnit::CreateNumberedVersions(const std::string& prg)
 		v <<= 1;
 	} while (v <= 16);
 	return result.str();
+}
+
+std::string OCLProgramUnit::GetCode()
+{
+	list<stringstream*> codeBuilders;
+	GetBuilders(codeBuilders);
+
+	unordered_set<string> guard;
+	stringstream code;
+	for (auto& b : codeBuilders)
+	{
+		auto c = b->str();
+		if (guard.find(c) == guard.end())
+		{
+			guard.insert(c);
+			code << c;
+		}
+	}
+
+	return code.str();
+}
+
+void OCLProgramUnit::GetBuilders(std::list<std::stringstream*>& to)
+{
+	for (auto& u : baseUnits) u->GetBuilders(to);
+	to.push_back(&codeBuilder);
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,40 +19,40 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6417A480-6C0D-4F73-8447-CE864B378204}</ProjectGuid>
-    <SccProjectName />
-    <SccAuxPath />
-    <SccLocalPath />
-    <SccProvider />
+    <ProjectGuid>{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>NeuroflowN</RootNamespace>
+    <RootNamespace>NeuroflowNUT</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -70,42 +70,47 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OCLINC);$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OCLINC);..\NeuroflowN;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx86)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OCLINC);$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OCLINC);..\NeuroflowN;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -114,20 +119,17 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OCLINC);$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OCLINC);..\NeuroflowN;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx86)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -136,103 +138,35 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OCLINC);$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OCLINC);..\NeuroflowN;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DataArray.h" />
-    <ClInclude Include="DataArrayFactory.h" />
-    <ClInclude Include="DeviceInfo.h" />
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="GetSize.h" />
-    <ClInclude Include="GetVectorSize.h" />
-    <ClInclude Include="IComputeActivation.h" />
-    <ClInclude Include="IDeviceArray.h" />
-    <ClInclude Include="IDeviceArray2.h" />
-    <ClInclude Include="IDeviceArrayManagement.h" />
-    <ClInclude Include="ILearningAlgo.h" />
-    <ClInclude Include="ILearningAlgoFactory.h" />
-    <ClInclude Include="IMultilayerPerceptronAdapter.h" />
-    <ClInclude Include="IVectorUtils.h" />
-    <ClInclude Include="LearningAlgo.h" />
-    <ClInclude Include="NfObject.h" />
-    <ClInclude Include="NNMetadata.h" />
-    <ClInclude Include="NUtils.h" />
-    <ClInclude Include="OCL.h" />
-    <ClInclude Include="OCLActivationKernelBase.h" />
-    <ClInclude Include="OCLBuffer1.h" />
-    <ClInclude Include="OCLBuffer2.h" />
-    <ClInclude Include="OCLComputeActivation.h" />
-    <ClInclude Include="OCLComputeForwardKernel.h" />
-    <ClInclude Include="OCLComputeGradientDescent.h" />
-    <ClInclude Include="OCLComputeGradientsKernel.h" />
-    <ClInclude Include="OCLComputeInternalErrorsKernel.h" />
-    <ClInclude Include="OCLComputeOutputErrorsKernel.h" />
-    <ClInclude Include="OCLContextImpl.h" />
-    <ClInclude Include="OCLDataArray.h" />
-    <ClInclude Include="OCLDataArrayFactory.h" />
-    <ClInclude Include="OCLDeviceArrayManagement.h" />
-    <ClInclude Include="OCLError.h" />
-    <ClInclude Include="OCLGradientDescentLearningAlgo.h" />
-    <ClInclude Include="OCLIntCtx.h" />
-    <ClInclude Include="OCLKernelBase.h" />
-    <ClInclude Include="OCLKernelToExecute.h" />
-    <ClInclude Include="OCLLearningAlgoFactory.h" />
-    <ClInclude Include="OCLMultilayerPerceptronAdapter.h" />
-    <ClInclude Include="OCLProgram.h" />
-    <ClInclude Include="OCLProgramBuilder.h" />
-    <ClInclude Include="OCLProgramUnit.h" />
-    <ClInclude Include="OCLStructs.h" />
-    <ClInclude Include="OCLTypedefs.h" />
-    <ClInclude Include="OCLVectorKernelName.h" />
-    <ClInclude Include="OCLVectorUtils.h" />
-    <ClInclude Include="Registry.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Typedefs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OCLBuffer1.cpp" />
-    <ClCompile Include="OCLComputeActivation.cpp" />
-    <ClCompile Include="OCLComputeForwardKernel.cpp" />
-    <ClCompile Include="OCLComputeGradientDescent.cpp" />
-    <ClCompile Include="OCLComputeGradientsKernel.cpp" />
-    <ClCompile Include="OCLComputeInternalErrorsKernel.cpp" />
-    <ClCompile Include="OCLComputeOutputErrorsKernel.cpp" />
-    <ClCompile Include="OCLContextImpl.cpp" />
-    <ClCompile Include="OCLDataArray.cpp" />
-    <ClCompile Include="OCLDeviceArrayManagement.cpp" />
-    <ClCompile Include="OCLGradientDescentLearningAlgo.cpp" />
-    <ClCompile Include="OCLIntCtx.cpp" />
-    <ClCompile Include="OCLKernelBase.cpp" />
-    <ClCompile Include="OCLLearningAlgoFactory.cpp" />
-    <ClCompile Include="OCLMultilayerPerceptronAdapter.cpp" />
-    <ClCompile Include="OCLProgram.cpp" />
-    <ClCompile Include="OCLProgramBuilder.cpp" />
-    <ClCompile Include="OCLProgramUnit.cpp" />
-    <ClCompile Include="OCLVectorKernelName.cpp" />
-    <ClCompile Include="OCLVectorUtils.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="OCLProgramTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NeuroflowN\NeuroflowN.vcxproj">
+      <Project>{6417a480-6c0d-4f73-8447-ce864b378204}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

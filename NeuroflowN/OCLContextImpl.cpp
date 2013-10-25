@@ -231,7 +231,7 @@ void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& 
         auto queue = CommandQueue(context, device, props);
         auto prog = CreateProgram(context, device);
 
-        ctx = make_shared<OCLIntCtx>(context, device, prog, queue);
+        ctx = make_shared<OCLIntCtx>(context, device, prog, queue, deviceInfo, version);
         
         this->deviceInfo = deviceInfo;
 

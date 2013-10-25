@@ -27,6 +27,11 @@ namespace NeuroflowN
 
         static DeviceInfoVecT GetAvailableDevices();
 
+		const OCLIntCtxSPtrT& GetIntCtx() const 
+		{
+			return ctx;
+		}
+
         const DeviceInfo& GetDevice() const;
 
         DataArrayFactory* GetDataArrayFactoryPtr() const;

@@ -9,11 +9,13 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
-OCLIntCtx::OCLIntCtx(cl::Context context, cl::Device device, cl::Program program, cl::CommandQueue queue) :
+OCLIntCtx::OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::Program& program, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version) :
     context(context),
     device(device),
     queue(queue),
     program(program),
+	deviceInfo(deviceInfo),
+	version(version),
     isCPU((device.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),
     //isCPU(false),
     maxComputeUnits(device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()),

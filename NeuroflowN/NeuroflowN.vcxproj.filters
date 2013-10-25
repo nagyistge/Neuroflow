@@ -168,8 +168,11 @@
     <ClInclude Include="Registry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OCLProgram.h">
+      <Filter>Header Files\OCL</Filter>
+    </ClInclude>
     <ClInclude Include="OCLProgramUnit.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\OCL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -230,8 +233,11 @@
     <ClCompile Include="OCLVectorUtils.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
+    <ClCompile Include="OCLProgram.cpp">
+      <Filter>Source Files\OCL</Filter>
+    </ClCompile>
     <ClCompile Include="OCLProgramUnit.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\OCL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
