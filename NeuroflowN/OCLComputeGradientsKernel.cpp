@@ -32,7 +32,7 @@ OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offli
 
 void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx);
+	program = make_shared<OCLProgram>(ctx, "ComputeGradientsPrg");
 	program->Using(vault->GetNetCode());
 
 	ADD_OCL_CODE(program,

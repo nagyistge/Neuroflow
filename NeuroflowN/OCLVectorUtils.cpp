@@ -19,7 +19,7 @@ OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
 void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx);
+	program = make_shared<OCLProgram>(ctx, "VectorUtilsPrg");
 	program->Using(vault->GetCommonCode());
 
     // Zero

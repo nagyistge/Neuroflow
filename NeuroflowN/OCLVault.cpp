@@ -12,7 +12,7 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 	// Common:
 
 	commonCode = make_shared<OCLProgramUnit>(ctx);
-
+	commonCode->AddCode("\n#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable\n");
 	commonCode->AddCode("\n#define D 100000000.0f\n");
 
 	ADD_OCL_CODE(commonCode,
@@ -140,6 +140,9 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 	);
 
 	// Net
+
+	netCode = make_shared<OCLProgramUnit>(ctx);
+
 	ADD_OCL_CODE(netCode,
 
 	inline float$ Get2$(__global float$* values, int i1, int i2, int size1)
@@ -183,6 +186,9 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 	netCode->Using(commonCode);
 
 	// AF
+
+	afCode = make_shared<OCLProgramUnit>(ctx);
+
 	ADD_OCL_CODE(afCode,
 	inline float Sigmoid(float value, float alpha)
 	{

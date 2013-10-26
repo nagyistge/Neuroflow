@@ -114,6 +114,8 @@ cl::Program OCLProgram::CreateProgramAndBinary(std::vector<char>& bin)
 		throw;
 	}
 	delete[] b[0];
+
+	return p;
 }
 
 cl::Program OCLProgram::CreateProgram(const std::vector<char>& bin)

@@ -237,7 +237,7 @@
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
     <ClCompile Include="OCLVault.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\OCL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@ namespace NeuroflowN
         OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             OCLActivationKernelBase(ctx)
         {
+			Build(vault);
         };
 
 		void Build(const OCLVaultSPtrT& vault);

@@ -15,8 +15,8 @@ OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Linear = 
 
 void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx);
-	program->Using(vault->GetCommonCode());
+	program = make_shared<OCLProgram>(ctx, "ComputeOutputErrorsPrg");
+	program->Using(vault->GetNetCode());
 	program->Using(vault->GetAFCode());
 
     // Compute Errors:

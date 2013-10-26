@@ -17,8 +17,8 @@ extern const char NeuroflowN::ComputeInternalErrorsTmpl [] = "ComputeInternalErr
 
 void OCLComputeInternalErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx);
-	program->Using(vault->GetCommonCode());
+	program = make_shared<OCLProgram>(ctx, "ComputeInternalErrorsPrg");
+	program->Using(vault->GetNetCode());
 	program->Using(vault->GetAFCode());
 
 	ADD_OCL_CODE(program,
