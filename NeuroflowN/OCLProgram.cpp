@@ -33,54 +33,38 @@ cl::Program OCLProgram::Compile()
 	TCHAR exePath[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, exePath);
 
+    auto ver = toAlphanumeric(ctx->GetVersion());
+
 	wstringstream fns;
 	fns << wstring(exePath);
 	fns << "\\";
 	fns << "kernels\\";
+    fns << ver;
+    fns << "\\";
 
 	CreateDirectory(fns.str().c_str(), null);
 
 	fns << toAlphanumeric(name);
 	fns << '_';
 	fns << toAlphanumeric(ctx->GetDeviceInfo().ID);
-	fns << '_';
-	fns << ctx->GetVersion().c_str();
 	fns << ".bin";
 	wstring fn = fns.str();
 
 	vector<char> bin;
 	
 	auto fi = ifstream(fn.c_str(), ios::binary);
-	try
-	{
-		if (fi.good())
-		{
-			bin = vector<char>(istreambuf_iterator<char>(fi), istreambuf_iterator<char>());
-		}
-		else
-		{
-			auto prog = CreateProgramAndBinary(bin);
-			auto fo = ofstream(fn.c_str(), ios::binary);
-			try
-			{
-				fo.write((char*)&bin[0], bin.size());
-				fo.flush();
-			}
-			catch (...)
-			{
-				fo.close();
-				throw;
-			}
-			fo.close();
-			return prog;
-		}
-	}
-	catch (...)
-	{
-		fi.close();
-		throw;
-	}
-	fi.close();
+    if (fi.good())
+    {
+        bin = vector<char>(istreambuf_iterator<char>(fi), istreambuf_iterator<char>());
+    }
+    else
+    {
+        auto prog = CreateProgramAndBinary(bin);
+        auto fo = ofstream(fn.c_str(), ios::binary);
+        fo.write((char*)&bin[0], bin.size());
+        fo.flush();
+        return prog;
+    }
 
 	return CreateProgram(bin);
 }
@@ -88,16 +72,7 @@ cl::Program OCLProgram::Compile()
 cl::Program OCLProgram::CreateProgramAndBinary(std::vector<char>& bin)
 {
 	auto p = Program(ctx->GetContext(), GetCode().c_str(), false);
-	try
-	{
-		p.build(vector<Device>(1, ctx->GetDevice()));
-	}
-	catch (Error&)
-	{
-		auto info = p.getBuildInfo<CL_PROGRAM_BUILD_LOG>(ctx->GetDevice());
-		info = string("\nOPENCL BUILD FAILED:\n") + info;
-		throw_logic_error(info.c_str());
-	}
+    Build(p);
 
 	auto s = p.getInfo<CL_PROGRAM_BINARY_SIZES>();
 	assert(s.size() == 1);
@@ -122,5 +97,21 @@ cl::Program OCLProgram::CreateProgram(const std::vector<char>& bin)
 {
 	Program::Binaries bins;
 	bins.emplace_back(&bin[0], bin.size());
-	return Program(ctx->GetContext(), vector<Device>(1, ctx->GetDevice()), bins);
+	auto p = Program(ctx->GetContext(), vector<Device>(1, ctx->GetDevice()), bins);
+    Build(p);
+    return p;
+}
+
+void OCLProgram::Build(cl::Program& p)
+{
+    try
+    {
+        p.build(vector<Device>(1, ctx->GetDevice()));
+    }
+    catch (Error&)
+    {
+        auto info = p.getBuildInfo<CL_PROGRAM_BUILD_LOG>(ctx->GetDevice());
+        info = string("\nOPENCL BUILD FAILED:\n") + info;
+        throw_logic_error(info.c_str());
+    }
 }

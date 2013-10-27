@@ -17,5 +17,6 @@ namespace NeuroflowN
 		cl::Program Compile();
 		cl::Program CreateProgramAndBinary(std::vector<char>& bin);
 		cl::Program CreateProgram(const std::vector<char>& bin);
+        void Build(cl::Program& program);
 	};
 }

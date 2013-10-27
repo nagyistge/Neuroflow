@@ -4,7 +4,7 @@
 #include <string>
 #include "OCLTypedefs.h"
 
-#define ADD_OCL_CODE(p,s) p->AddCode(#s);
+#define ADD_OCL_CODE(u,c) u->AddCode(#c);
 
 namespace NeuroflowN
 {
