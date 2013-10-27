@@ -17,7 +17,7 @@ namespace NeuroflowNUT
 		TEST_METHOD(OCLProgramCompileTest)
 		{
 			auto ctx = OCLContextImpl("CPU", "UT 1.0");
-			auto unit1 = make_shared<OCLProgramUnit>(ctx.GetIntCtx());
+			auto unit1 = make_shared<OCLProgramUnit>(ctx.GetIntCtx(), "unit.h");
 			auto prg = make_shared<OCLProgram>(ctx.GetIntCtx(), "OCLProgramCompileTest");
 
 			ADD_OCL_CODE(unit1,
@@ -37,11 +37,7 @@ namespace NeuroflowNUT
 
 			prg->Using(unit1);
 
-			auto code = prg->GetCode();
-
-			Logger::WriteMessage(code.c_str());
-
-			auto oprg = prg->GetProgram();
+            auto kernel = prg->CreateKernel("SumKernel2");
 
 			auto prg2 = make_shared<OCLProgram>(ctx.GetIntCtx(), "OCLProgramCompileTest2");
 
@@ -55,11 +51,7 @@ namespace NeuroflowNUT
 
 			prg2->Using(unit1);
 
-			auto code2 = prg2->GetCode();
-
-			Logger::WriteMessage(code2.c_str());
-
-			auto oprg2 = prg2->GetProgram();
+            auto kernel2 = prg2->CreateKernel("SumKernel28");
 		}
 
 	};

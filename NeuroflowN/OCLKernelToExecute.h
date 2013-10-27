@@ -87,7 +87,7 @@ namespace NeuroflowN
         {
             auto& data = GetData(vectorSize);
             if (data.kernelName.size() == 0) data.kernelName = kernelName;
-            if (data.kernel() == nullptr) data.kernel = cl::Kernel(program->GetProgram(), kernelName.c_str());
+            if (data.kernel() == nullptr) data.kernel = program->CreateKernel(kernelName);
             setupKernel(data.kernel);
         }
 
