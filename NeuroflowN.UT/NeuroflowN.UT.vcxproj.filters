@@ -29,5 +29,8 @@
     <ClCompile Include="OCLProgramTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OCLVectorUtilsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

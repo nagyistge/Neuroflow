@@ -8,5 +8,8 @@
 #include "targetver.h"
 
 // Headers for CppUnitTest
+#include "CppUnitTest.h"
+#include <ppltasks.h>
+#include <boost\chrono.hpp>
 
 // TODO: reference additional headers your program requires here
