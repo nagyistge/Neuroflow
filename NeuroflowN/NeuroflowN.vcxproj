@@ -103,7 +103,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOSTLIBx64)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencl.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -147,7 +147,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOST)\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OCLLIBx64)\;$(BOOSTLIBx64)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencl.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
