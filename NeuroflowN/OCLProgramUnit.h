@@ -8,42 +8,35 @@
 
 namespace NeuroflowN
 {
-	class OCLProgramUnit
-	{
-		std::stringstream codeBuilder;
-		std::list<OCLProgramUnitSPtrT> baseUnits;
+    class OCLProgramUnit
+    {
         std::string name;
-        cl::Program program;
+        std::stringstream codeBuilder;
+        std::list<OCLProgramUnitSPtrT> baseUnits;
 
-	public:
+    public:
         OCLProgramUnit(const OCLProgramUnit&) = delete;
         OCLProgramUnit(const OCLIntCtxSPtrT& ctx, const std::string& name);
-		void Using(const std::shared_ptr<OCLProgramUnit>& baseUnit);
-		void AddCode(const std::string code);
+        void Using(const std::shared_ptr<OCLProgramUnit>& baseUnit);
+        void AddCode(const std::string code);
+        std::string GetCode();
 
-		const OCLIntCtxSPtrT& GetIntCtx() const
-		{
-			return ctx;
-		}
+        const OCLIntCtxSPtrT& GetIntCtx() const
+        {
+            return ctx;
+        }
 
         const std::string& GetName() const
         {
             return name;
         }
 
-	protected:
-		OCLIntCtxSPtrT ctx;
+    protected:
+        OCLIntCtxSPtrT ctx;
 
-        std::string GetCode();
-        cl::Program GetProgram();
+        void GetBuilders(std::list<std::stringstream*>& to);
 
-	private:
-		std::string CreateNumberedVersions(const std::string& prg);
-        std::vector<std::string> GetBaseHeaderNames();
-        std::vector<cl::Program> GetBasePrograms();
-        cl::Program Compile();
-        cl::Program CreateProgramAndBinary(std::vector<char>& bin);
-        cl::Program CreateProgram(const std::vector<char>& bin);
-        void Build(cl::Program& program, bool fromBin);
-	};
+    private:
+        std::string CreateNumberedVersions(const std::string& prg);
+    };
 }
