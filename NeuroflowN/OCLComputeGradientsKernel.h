@@ -51,11 +51,11 @@ namespace NeuroflowN
 
 		OCLProgramSPtrT program;
 
-        static std::string CreateKernelCode(GradientComputationFlags flags);
+        std::string CreateKernelCode(GradientComputationFlags flags);
 
-        static std::string CreateCPUKernelCode(GradientComputationFlags flags);
+        std::string CreateCPUKernelCode(GradientComputationFlags flags);
 
-        static std::string CreateGPUKernelCode(GradientComputationFlags flags);
+        std::string CreateGPUKernelCode(GradientComputationFlags flags);
 
         static const OCLVectorKernelName& GetKernelName(GradientComputationFlags flags);
 

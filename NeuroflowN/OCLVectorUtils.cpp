@@ -173,11 +173,6 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
     try
     {
         auto& buff = ctx->ToBuffer1(deviceArray);
-        /*ctx->GetQueue().enqueueFillBuffer(
-            buff.GetCLBuffer(),
-            0.0f,
-            0,
-            sizeof(float) * buff.GetSize());*/
         auto vectorSize = GetVectorSize(cref(buff));
         zeroFExec.Execute(
             program,

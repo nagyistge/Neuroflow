@@ -33,48 +33,52 @@ OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offli
 void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
 {
 	program = make_shared<OCLProgram>(ctx, "ComputeGradientsPrg");
-	program->Using(vault->GetNetCode());
-
-	ADD_OCL_CODE(program,
-
-    inline void ComputeGradients_SetGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx)
+    if (ctx->IsCPU())
     {
-        for (int x = 0; x < inputsSize; x++) Set2$(gradients, x, idx, inputsSize, inputs[x] * errors[idx]);
-    }
+        program->Using(vault->GetNetCode());
+        ADD_OCL_CODE(program,
 
-    inline void ComputeGradients_AddGradients$(__global float$* inputs, int inputsSize, __global float$* gradientSums, __global float* errors, int idx)
-    {
-        for (int x = 0; x < inputsSize; x++) Add2$(gradientSums, x, idx, inputsSize, inputs[x] * errors[idx]);
-    }
-
-    inline void ComputeGradients_SetAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx)
-    {
-        for (int x = 0; x < inputsSize; x++)
+        inline void ComputeGradients_SetGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx)
         {
-            float$ value = inputs[x] * errors[idx];
-            SetAdd2$(gradients, gradientSums, x, idx, inputsSize, value);
+            for (int x = 0; x < inputsSize; x++) Set2$(gradients, x, idx, inputsSize, inputs[x] * errors[idx]);
         }
-    }
 
-    inline void ComputeGradients_AddDivGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx, float by)
-    {
-        for (int x = 0; x < inputsSize; x++)
+        inline void ComputeGradients_AddGradients$(__global float$* inputs, int inputsSize, __global float$* gradientSums, __global float* errors, int idx)
         {
-            float$ value = inputs[x] * errors[idx];
-            AddDiv2$(gradients, x, idx, inputsSize, value, by);
+            for (int x = 0; x < inputsSize; x++) Add2$(gradientSums, x, idx, inputsSize, inputs[x] * errors[idx]);
         }
-    }
 
-    inline void ComputeGradients_AddDivAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx, float by)
-    {
-        for (int x = 0; x < inputsSize; x++)
+        inline void ComputeGradients_SetAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx)
         {
-            float$ value = inputs[x] * errors[idx];
-            AddDivAdd2$(gradients, gradientSums, x, idx, inputsSize, value, by);
+            for (int x = 0; x < inputsSize; x++)
+            {
+                float$ value = inputs[x] * errors[idx];
+                SetAdd2$(gradients, gradientSums, x, idx, inputsSize, value);
+            }
         }
-    }
 
-    );
+        inline void ComputeGradients_AddDivGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx, float by)
+        {
+            for (int x = 0; x < inputsSize; x++)
+            {
+                float$ value = inputs[x] * errors[idx];
+                AddDiv2$(gradients, x, idx, inputsSize, value, by);
+            }
+        }
+
+        inline void ComputeGradients_AddDivAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx, float by)
+        {
+            for (int x = 0; x < inputsSize; x++)
+            {
+                float$ value = inputs[x] * errors[idx];
+                AddDivAdd2$(gradients, gradientSums, x, idx, inputsSize, value, by);
+            }
+        }
+
+        );
+    }
+    else 
+        program->Using(vault->GetCommonCode());
 
     //ComputeGradients_FF_Online_*
     program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online)));
@@ -186,8 +190,7 @@ const OCLVectorKernelName& OCLComputeGradientsKernel::GetKernelName(GradientComp
 std::string OCLComputeGradientsKernel::CreateKernelCode(GradientComputationFlags flags)
 {
     stringstream code;
-    code << CreateCPUKernelCode((GradientComputationFlags)(flags | CPU));
-    code << CreateGPUKernelCode((GradientComputationFlags)(flags | GPU));
+    if (ctx->IsCPU()) code << CreateCPUKernelCode((GradientComputationFlags)(flags | CPU)); else code << CreateGPUKernelCode((GradientComputationFlags)(flags | GPU));
     return code.str();
 }
 

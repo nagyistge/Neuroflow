@@ -18,27 +18,35 @@ extern const char NeuroflowN::ComputeForwardTmpl [] = "ComputeForward_{0}_{1}_{2
 void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
 {
 	program = make_shared<OCLProgram>(ctx, "ComputeForwardPrg");
-	program->Using(vault->GetNetCode());
+    if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetCommonCode());
 	program->Using(vault->GetAFCode());
 
-	ADD_OCL_CODE(program,
-
-    float ComputeForward_Sum$(__global float$* inputs, int inputsSize, __global float$* weights, int idx)
+    if (ctx->IsCPU())
     {
-        float$ sum = 0.0f;
-        for (int x = 0; x < inputsSize; x++) sum += inputs[x] * Get2$(weights, x, idx, inputsSize);
-        return SumComponents$(sum);
-    }
+        ADD_OCL_CODE(program,
 
-    );
+        float ComputeForward_Sum$(__global float$* inputs, int inputsSize, __global float$* weights, int idx)
+        {
+            float$ sum = 0.0f;
+            for (int x = 0; x < inputsSize; x++) sum += inputs[x] * Get2$(weights, x, idx, inputsSize);
+            return SumComponents$(sum);
+        }
+
+        );
+    }
 
     for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
     {
-        auto cpuCode = CreateCPUKernelCode(size);
-        auto gpuCode = CreateGPUKernelCode(size);
-
-        program->AddCode(cpuCode);
-        program->AddCode(gpuCode);
+        if (ctx->IsCPU())
+        {
+            auto cpuCode = CreateCPUKernelCode(size);
+            program->AddCode(cpuCode);
+        }
+        else
+        {
+            auto gpuCode = CreateGPUKernelCode(size);
+            program->AddCode(gpuCode);
+        }
     }
 }
 

@@ -18,27 +18,35 @@ extern const char NeuroflowN::ComputeInternalErrorsTmpl [] = "ComputeInternalErr
 void OCLComputeInternalErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
 	program = make_shared<OCLProgram>(ctx, "ComputeInternalErrorsPrg");
-	program->Using(vault->GetNetCode());
+    if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetCommonCode());
 	program->Using(vault->GetAFCode());
 
-	ADD_OCL_CODE(program,
-
-    float$ ComputeErrors_LowerErrorSum$(__global float* lowerErrors, int lowerErrorsSize, __global float$* lowerWeights, int idx, int currentOutputsSize)
+    if (ctx->IsCPU())
     {
-        float$ sum = 0.0f;
-        for (int x = 0; x < lowerErrorsSize; x++) sum += lowerErrors[x] * Get2$(lowerWeights, idx, x, currentOutputsSize);
-        return sum;
-    }
+        ADD_OCL_CODE(program,
 
-    );
+        float$ ComputeErrors_LowerErrorSum$(__global float* lowerErrors, int lowerErrorsSize, __global float$* lowerWeights, int idx, int currentOutputsSize)
+        {
+            float$ sum = 0.0f;
+            for (int x = 0; x < lowerErrorsSize; x++) sum += lowerErrors[x] * Get2$(lowerWeights, idx, x, currentOutputsSize);
+            return sum;
+        }
+
+        );
+    }
 
     for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
     {
-        auto cpuCode = CreateCPUKernelCode(size);
-        auto gpuCode = CreateGPUKernelCode(size);
-
-        program->AddCode(cpuCode);
-		program->AddCode(gpuCode);
+        if (ctx->IsCPU())
+        {
+            auto cpuCode = CreateCPUKernelCode(size);
+            program->AddCode(cpuCode);
+        }
+        else
+        {
+            auto gpuCode = CreateGPUKernelCode(size);
+            program->AddCode(gpuCode);
+        }
     }
 }
 
