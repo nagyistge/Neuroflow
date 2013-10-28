@@ -11,16 +11,16 @@ namespace NeuroflowN
         static OCLVectorKernelName ComputeErrors_Output_Sigmoid;
         static OCLVectorKernelName ComputeErrors_Output_Linear;
 
-		OCLProgramSPtrT program;
+        OCLProgramSPtrT program;
 
     public:
-		OCLComputeOutputErrorsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+        OCLComputeOutputErrorsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             OCLKernelBase(ctx)
         {
-			Build(vault);
+            Build(vault);
         }
 
-		void Build(const OCLVaultSPtrT& vault);
+        void Build(const OCLVaultSPtrT& vault);
         void Exec(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha);
     };
 }

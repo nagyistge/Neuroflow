@@ -15,7 +15,7 @@ namespace NeuroflowN
         std::shared_ptr<ILearningAlgoFactory> learningAlgoFactory;
 
     public:
-		OCLMultilayerPerceptronAdapter(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<IVectorUtils>& vectorUtils, const std::shared_ptr<IDeviceArrayManagement>& deviceArrayManagement);
+        OCLMultilayerPerceptronAdapter(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<IVectorUtils>& vectorUtils, const std::shared_ptr<IDeviceArrayManagement>& deviceArrayManagement);
 
         IVectorUtils* GetVectorUtilsPtr() const
         {

@@ -19,10 +19,10 @@ OCLVectorKernelName OCLComputeGradientDescent::GD_Offline = OCLVectorKernelName(
 
 void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx, "ComputeGradientDescentPrg");
-	program->Using(vault->GetCommonCode());
+    program = make_shared<OCLProgram>(ctx, "ComputeGradientDescentPrg");
+    program->Using(vault->GetCommonCode());
 
-	ADD_OCL_CODE(program,
+    ADD_OCL_CODE(program,
 
     // Online
     __kernel void GD_Online_Smooth$(

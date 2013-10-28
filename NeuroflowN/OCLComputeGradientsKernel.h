@@ -49,7 +49,7 @@ namespace NeuroflowN
         static OCLVectorKernelName ComputeGradients_BPTTPhase2_Offline_CPU;
         static OCLVectorKernelName ComputeGradients_BPTTPhase2_Offline_GPU;
 
-		OCLProgramSPtrT program;
+        OCLProgramSPtrT program;
 
         std::string CreateKernelCode(GradientComputationFlags flags);
 
@@ -75,13 +75,13 @@ namespace NeuroflowN
         void Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
 
     public:
-		OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+        OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             OCLKernelBase(ctx)
         {
-			Build(vault);
+            Build(vault);
         };
 
-		void Build(const OCLVaultSPtrT& vault);
+        void Build(const OCLVaultSPtrT& vault);
 
         void ExecFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors);
         

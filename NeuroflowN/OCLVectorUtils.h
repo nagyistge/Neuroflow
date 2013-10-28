@@ -9,13 +9,15 @@ namespace NeuroflowN
 {
     class OCLVectorUtils : public IVectorUtils
     {
+        friend class OCLContextImpl;
+
         static OCLVectorKernelName AddMSEName;
         static OCLVectorKernelName DivName;
         static OCLVectorKernelName ZeroFName;
 
         OCLIntCtxSPtrT ctx;
         std::mt19937 generator;
-		OCLProgramSPtrT program;
+        OCLProgramSPtrT program;
         OCLKernelToExecute addExec, divExec, zeroFExec;
 
     public:
@@ -23,10 +25,10 @@ namespace NeuroflowN
             ctx(ctx),
             generator((std::random_device()() << 16) | std::random_device()())
         {
-			Build(vault);
+            Build(vault);
         }
 
-		void Build(const OCLVaultSPtrT& vault);
+        void Build(const OCLVaultSPtrT& vault);
 
         void CalculateMSE(const SupervisedBatchT& batch, DataArray* mseValues, unsigned valueIndex);
 
@@ -35,6 +37,8 @@ namespace NeuroflowN
         void Zero(IDeviceArray* deviceArray);
 
     private:
+        unsigned GetPreferredWorkgroupSizeMul();
+
         void AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex);
 
         void Div(const OCLBuffer1& values, unsigned valueIndex, float byValue);

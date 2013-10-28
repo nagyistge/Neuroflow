@@ -18,7 +18,7 @@ namespace NeuroflowN
         std::string version;
         DeviceInfo deviceInfo;
         OCLIntCtxSPtrT ctx;
-		OCLVaultSPtrT vault;
+        OCLVaultSPtrT vault;
 
     public:
         OCLContextImpl(const std::string& deviceID, const std::string& version);
@@ -27,10 +27,10 @@ namespace NeuroflowN
 
         static DeviceInfoVecT GetAvailableDevices();
 
-		const OCLIntCtxSPtrT& GetIntCtx() const 
-		{
-			return ctx;
-		}
+        const OCLIntCtxSPtrT& GetIntCtx() const 
+        {
+            return ctx;
+        }
 
         const DeviceInfo& GetDevice() const;
 

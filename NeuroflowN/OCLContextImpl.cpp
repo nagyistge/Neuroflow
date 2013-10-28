@@ -232,11 +232,13 @@ void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& 
         ctx = make_shared<OCLIntCtx>(context, device, queue, deviceInfo, version);
         
         this->deviceInfo = deviceInfo;
-		vault = make_shared<OCLVault>(ctx);
+        vault = make_shared<OCLVault>(ctx);
         dataArrayFactory = make_shared<OCLDataArrayFactory>(ctx);
         vectorUtils = make_shared<OCLVectorUtils>(ctx, vault);
         deviceArrayManagement = make_shared<OCLDeviceArrayManagement>(ctx);
         multilayerPerceptronAdapter = make_shared<OCLMultilayerPerceptronAdapter>(ctx, vault, vectorUtils, deviceArrayManagement);
+
+        ctx->preferredWorkgroupSizeMul = vectorUtils->GetPreferredWorkgroupSizeMul();
     }
     catch (exception& ex)
     {

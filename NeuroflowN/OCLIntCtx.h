@@ -11,15 +11,18 @@ namespace NeuroflowN
 {
     class OCLIntCtx
     {
+        friend class OCLContextImpl;
+
         cl::CommandQueue queue;
         cl::Device device;
         cl::Context context;
-		DeviceInfo deviceInfo;
-		std::string version;
+        DeviceInfo deviceInfo;
+        std::string version;
 
         bool isCPU;
         unsigned maxWorkGroupSize;
         unsigned maxComputeUnits;
+        unsigned preferredWorkgroupSizeMul;
         cl::NDRange maxWorkItemSizes;
 
         Registry<std::pair<unsigned, unsigned>, std::pair<unsigned, unsigned>> ioReduceSizes;
@@ -27,7 +30,7 @@ namespace NeuroflowN
         Registry<unsigned, std::pair<unsigned, unsigned>> reduceSizes;
 
     public:
-		OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
+        OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
 
         const cl::Context& GetContext() const
         {
@@ -44,15 +47,15 @@ namespace NeuroflowN
             return queue;
         }
 
-		const DeviceInfo& GetDeviceInfo() const
-		{
-			return deviceInfo;
-		}
+        const DeviceInfo& GetDeviceInfo() const
+        {
+            return deviceInfo;
+        }
 
-		const std::string& GetVersion() const
-		{
-			return version;
-		}
+        const std::string& GetVersion() const
+        {
+            return version;
+        }
 
         bool IsCPU() const
         {
@@ -72,6 +75,11 @@ namespace NeuroflowN
         unsigned GetMaxConnectionCount() const
         {
             return 4;
+        }
+
+        unsigned GetPreferredWorkgroupSizeMul() const
+        {
+            return preferredWorkgroupSizeMul;
         }
 
         void Flush()

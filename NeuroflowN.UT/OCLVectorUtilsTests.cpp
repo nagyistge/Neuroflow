@@ -13,16 +13,16 @@ using namespace boost::chrono;
 
 namespace NeuroflowNUT
 {
-	TEST_CLASS(OCLVectorUtilsTests)
-	{
-	public:
-		
-		TEST_METHOD(ZeroTest)
-		{
+    TEST_CLASS(OCLVectorUtilsTests)
+    {
+    public:
+        
+        TEST_METHOD(ZeroTest)
+        {
             const unsigned size = 2048;
             const unsigned count = 100000;
 
-            auto ctx = OCLContextImpl("GPU", "UT 1.0");
+            auto ctx = OCLContextImpl("cpu", "UT 1.0");
             auto daF = ctx.GetDataArrayFactoryPtr();
             auto vu = ctx.GetVectorUtilsPtr();
             auto a = daF->Create(size, 0.0f);
@@ -51,7 +51,7 @@ namespace NeuroflowNUT
             auto dur = duration_cast<duration<double, boost::milli>>(high_resolution_clock::now() - startOn);
 
             Logger::WriteMessage(to_string(dur).c_str());
-		}
+        }
 
-	};
+    };
 }

@@ -100,7 +100,7 @@ namespace NeuroflowN
             }
             else
             {
-				program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
+                program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
                     data.kernel,
                     workItemOffsets,
                     workItemSizes,

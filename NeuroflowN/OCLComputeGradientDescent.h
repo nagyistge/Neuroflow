@@ -14,16 +14,16 @@ namespace NeuroflowN
         static OCLVectorKernelName GD_Offline_Smooth;
         static OCLVectorKernelName GD_Offline;
 
-		OCLIntCtxSPtrT ctx;
-		OCLProgramSPtrT program;
+        OCLIntCtxSPtrT ctx;
+        OCLProgramSPtrT program;
 
     public:
-		OCLComputeGradientDescent(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) : ctx(ctx)
-		{
-			Build(vault);
-		}
+        OCLComputeGradientDescent(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) : ctx(ctx)
+        {
+            Build(vault);
+        }
 
-		void Build(const OCLVaultSPtrT& vault);
+        void Build(const OCLVaultSPtrT& vault);
 
         void UpdateWeightsOnline(
             OCLKernelToExecute& exec,

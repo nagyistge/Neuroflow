@@ -14,10 +14,10 @@ namespace NeuroflowN
         codeVecT gdOnlineCode;
         std::vector<std::function<void(int)>> gdOfflineCode;
         OCLKernelToExecuteVecT gdKernelExecs;
-		OCLComputeGradientDescent compute;
+        OCLComputeGradientDescent compute;
 
     public:
-		OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes);
+        OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes);
 
         LearningAlgoIterationType GetIterationTypes();
 

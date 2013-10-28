@@ -17,9 +17,9 @@ extern const char NeuroflowN::ComputeForwardTmpl [] = "ComputeForward_{0}_{1}_{2
 
 void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx, "ComputeForwardPrg");
+    program = make_shared<OCLProgram>(ctx, "ComputeForwardPrg");
     if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetCommonCode());
-	program->Using(vault->GetAFCode());
+    program->Using(vault->GetAFCode());
 
     if (ctx->IsCPU())
     {

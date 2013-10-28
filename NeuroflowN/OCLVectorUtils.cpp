@@ -19,8 +19,8 @@ OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
 void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx, "VectorUtilsPrg");
-	program->Using(vault->GetCommonCode());
+    program = make_shared<OCLProgram>(ctx, "VectorUtilsPrg");
+    program->Using(vault->GetCommonCode());
 
     // Zero
     ADD_OCL_CODE(program,
@@ -33,7 +33,7 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
     );
 
     // Auto Vec Functions:
-	ADD_OCL_CODE(program,
+    ADD_OCL_CODE(program,
 
     kernel void AddMSE$(global float$* desiredValues, global float$* currentValues, unsigned valueCount, global float* mseValues, unsigned mseValueIndex)
     {
@@ -52,6 +52,12 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
     }
 
     );
+}
+
+unsigned OCLVectorUtils::GetPreferredWorkgroupSizeMul()
+{
+    auto k = program->CreateKernel(ZeroFName(1));
+    auto inf = k.getWorkGroupInfo<CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE>(ctx->GetDevice());
 }
 
 void OCLVectorUtils::AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex)
@@ -174,6 +180,7 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
     {
         auto& buff = ctx->ToBuffer1(deviceArray);
         auto vectorSize = GetVectorSize(cref(buff));
+
         zeroFExec.Execute(
             program,
             ZeroFName(vectorSize),

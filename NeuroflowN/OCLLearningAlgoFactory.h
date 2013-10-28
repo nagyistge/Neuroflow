@@ -9,7 +9,7 @@ namespace NeuroflowN
     class OCLLearningAlgoFactory : public ILearningAlgoFactory
     {
         OCLIntCtxSPtrT ctx;
-		OCLVaultSPtrT vault;
+        OCLVaultSPtrT vault;
 
         template<typename TRule, typename TAlgo>
         ILearningAlgo* DoCreateLearningAlgo(const LearningBehaviorSPtrT& learningBehavior, const TrainingNodeVecT& nodes)
@@ -20,7 +20,7 @@ namespace NeuroflowN
     public:
         OCLLearningAlgoFactory(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             ctx(ctx),
-			vault(vault)
+            vault(vault)
         {
         }
 

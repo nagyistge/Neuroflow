@@ -11,7 +11,7 @@ namespace NeuroflowN
 
     class OCLComputeForwardKernel : public OCLActivationKernelBase<ComputeForwardTmpl>
     {
-		OCLProgramSPtrT program;
+        OCLProgramSPtrT program;
 
         static std::string CreateCPUKernelCode(unsigned size);
         static std::string CreateGPUKernelCode(unsigned size);
@@ -20,10 +20,10 @@ namespace NeuroflowN
         OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
             OCLActivationKernelBase(ctx)
         {
-			Build(vault);
+            Build(vault);
         };
 
-		void Build(const OCLVaultSPtrT& vault);
+        void Build(const OCLVaultSPtrT& vault);
         void Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha);
     };
 }

@@ -15,12 +15,12 @@ OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Linear = 
 
 void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx, "ComputeOutputErrorsPrg");
+    program = make_shared<OCLProgram>(ctx, "ComputeOutputErrorsPrg");
     program->Using(vault->GetCommonCode());
-	program->Using(vault->GetAFCode());
+    program->Using(vault->GetAFCode());
 
     // Compute Errors:
-	ADD_OCL_CODE(program,
+    ADD_OCL_CODE(program,
 
     /*
     ComputeErrors Output Sigmoid
@@ -83,7 +83,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     else
     {
         exec->Execute(
-			program,
+            program,
             ComputeErrors_Output_Linear(vectorSize),
             vectorSize,
             init,

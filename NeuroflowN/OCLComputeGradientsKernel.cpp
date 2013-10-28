@@ -32,7 +32,7 @@ OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offli
 
 void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
 {
-	program = make_shared<OCLProgram>(ctx, "ComputeGradientsPrg");
+    program = make_shared<OCLProgram>(ctx, "ComputeGradientsPrg");
     if (ctx->IsCPU())
     {
         program->Using(vault->GetNetCode());
@@ -84,19 +84,19 @@ void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
     program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online)));
 
     //ComputeGradients_FF_Offline_*
-	program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Offline)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Offline)));
 
     //ComputeGradients_FF_OnlineOffline_*
-	program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online | Offline)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(FF | Online | Offline)));
 
     //ComputeGradients_BPTTPhase1_*
-	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase1)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase1)));
 
     //ComputeGradients_BPTTPhase2_*
-	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2)));
 
     //ComputeGradients_BPTTPhase2_Offline_*
-	program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2 | Offline)));
+    program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2 | Offline)));
 }
 
 const OCLVectorKernelName& OCLComputeGradientsKernel::GetKernelName(GradientComputationFlags flags)
