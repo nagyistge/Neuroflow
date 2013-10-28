@@ -225,11 +225,7 @@ void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& 
 {
     try
     {
-        auto context = Context(device);
-        cl_command_queue_properties props = 0;
-        auto queue = CommandQueue(context, device, props);
-
-        ctx = make_shared<OCLIntCtx>(context, device, queue, deviceInfo, version);
+        ctx = make_shared<OCLIntCtx>(device, deviceInfo, version);
         
         this->deviceInfo = deviceInfo;
         vault = make_shared<OCLVault>(ctx);

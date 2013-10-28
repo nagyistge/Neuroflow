@@ -5,7 +5,7 @@
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
-#include "OCLKernelToExecute.h"
+#include "OCLComputationState.h"
 #include "OCL.h"
 #include "OCLVault.h"
 
@@ -144,7 +144,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
     unsigned size = (unsigned)inputs->size();
     assert(size == weights->size());
 
-    auto exec = (OCLKernelToExecute*) state;
+    auto& exec = ((OCLComputationState*)state)->GetExec(0);
     auto& biases = ctx->ToBuffer1(pBiases);
     auto& outputs = ctx->ToBuffer1(pOutputs);
 
@@ -173,7 +173,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
     {
         if (function == ActivationFunction::Sigmoid)
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetCPUNames(size).first(vectorSize),
                 vectorSize,
@@ -182,7 +182,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         else
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetCPUNames(size).second(vectorSize),
                 vectorSize,
@@ -196,7 +196,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
 
         if (function == ActivationFunction::Sigmoid)
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetGPUNames(size).first(vectorSize),
                 vectorSize,
@@ -206,7 +206,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         else
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetGPUNames(size).second(vectorSize),
                 vectorSize,

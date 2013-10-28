@@ -5,7 +5,7 @@
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
-#include "OCLKernelToExecute.h"
+#include "OCLComputationState.h"
 #include "OCLVault.h"
 
 using namespace std;
@@ -394,7 +394,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
     assert(!pars.calcGradients || gradientsV->size() == size);
     assert(!pars.calcGradientSums || gradientSumsV->size() == size);
 
-    auto exec = (OCLKernelToExecute*)state;
+    auto& exec = ((OCLComputationState*)state)->GetExec(0);
     auto& errors = ctx->ToBuffer1(pErrors);
 
     unsigned vectorSize = CalculateVectorSize(inputsV);
@@ -419,7 +419,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
 
         if (ctx->IsCPU())
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetKernelName((GradientComputationFlags)(flags | CPU))(vectorSize),
                 vectorSize,
@@ -428,7 +428,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
         }
         else
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetKernelName((GradientComputationFlags)(flags | GPU))(vectorSize),
                 vectorSize,

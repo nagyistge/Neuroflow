@@ -177,6 +177,7 @@
     <ClInclude Include="OCLActivationKernelBase.h" />
     <ClInclude Include="OCLBuffer1.h" />
     <ClInclude Include="OCLBuffer2.h" />
+    <ClInclude Include="OCLComputationState.h" />
     <ClInclude Include="OCLComputeActivation.h" />
     <ClInclude Include="OCLComputeForwardKernel.h" />
     <ClInclude Include="OCLComputeGradientDescent.h" />
@@ -208,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OCLBuffer1.cpp" />
+    <ClCompile Include="OCLComputationState.cpp" />
     <ClCompile Include="OCLComputeActivation.cpp" />
     <ClCompile Include="OCLComputeForwardKernel.cpp" />
     <ClCompile Include="OCLComputeGradientDescent.cpp" />

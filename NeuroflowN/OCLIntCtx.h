@@ -13,7 +13,7 @@ namespace NeuroflowN
     {
         friend class OCLContextImpl;
 
-        cl::CommandQueue queue;
+        cl::CommandQueue queue, secondaryQueue;
         cl::Device device;
         cl::Context context;
         DeviceInfo deviceInfo;
@@ -30,7 +30,7 @@ namespace NeuroflowN
         Registry<unsigned, std::pair<unsigned, unsigned>> reduceSizes;
 
     public:
-        OCLIntCtx(const cl::Context& context, const cl::Device& device, const cl::CommandQueue& queue, const DeviceInfo& deviceInfo, const std::string version);
+        OCLIntCtx(const cl::Device& device, const DeviceInfo& deviceInfo, const std::string version);
 
         const cl::Context& GetContext() const
         {

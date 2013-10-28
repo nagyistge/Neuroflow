@@ -12,7 +12,7 @@
 
 namespace NeuroflowN
 {
-    class OCLKernelToExecute : public NfObject
+    class OCLKernelToExecute
     {
         struct Data
         {
@@ -49,9 +49,6 @@ namespace NeuroflowN
         }
 
     public:
-        OCLKernelToExecute()
-        {
-        }
 
         const std::string& GetKernelName(unsigned vectorSize)
         {

@@ -4,7 +4,7 @@
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
-#include "OCLKernelToExecute.h"
+#include "OCLComputationState.h"
 #include "OCLError.h"
 
 using namespace std;
@@ -13,7 +13,7 @@ using namespace NeuroflowN;
 
 NfObject* OCLComputeActivation::CreateComputationState()
 {
-    return new OCLKernelToExecute();
+    return new OCLComputationState();
 }
 
 void OCLComputeActivation::ComputeForward(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha)

@@ -3,7 +3,7 @@
 #include "OCLProgram.h"
 #include "OCLIntCtx.h"
 #include "GetVectorSize.h"
-#include "OCLKernelToExecute.h"
+#include "OCLComputationState.h"
 #include "OCLVault.h"
 
 using namespace NeuroflowN;
@@ -55,7 +55,7 @@ void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 
 void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha)
 {
-    auto exec = (OCLKernelToExecute*) state;
+    auto& exec = ((OCLComputationState*)state)->GetExec(0);
     auto& outputs = ctx->ToBuffer1(pOutputs);
     auto& errors = ctx->ToBuffer1(pErrors);
     auto& desiredOutputs = ctx->ToBuffer1(pDesiredOutputs);
@@ -73,7 +73,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
 
     if (function == ActivationFunction::Sigmoid)
     {
-        exec->Execute(
+        exec.Execute(
             program,
             ComputeErrors_Output_Sigmoid(vectorSize),
             vectorSize,
@@ -82,7 +82,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     }
     else
     {
-        exec->Execute(
+        exec.Execute(
             program,
             ComputeErrors_Output_Linear(vectorSize),
             vectorSize,

@@ -57,7 +57,7 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
 unsigned OCLVectorUtils::GetPreferredWorkgroupSizeMul()
 {
     auto k = program->CreateKernel(ZeroFName(1));
-    auto inf = k.getWorkGroupInfo<CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE>(ctx->GetDevice());
+    return (unsigned)k.getWorkGroupInfo<CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE>(ctx->GetDevice());
 }
 
 void OCLVectorUtils::AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex)

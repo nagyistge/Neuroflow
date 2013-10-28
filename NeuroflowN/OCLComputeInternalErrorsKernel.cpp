@@ -5,7 +5,7 @@
 #include "GetVectorSize.h"
 #include "OCLBuffer1.h"
 #include "OCLBuffer2.h"
-#include "OCLKernelToExecute.h"
+#include "OCLComputationState.h"
 #include "OCL.h"
 #include "OCLVault.h"
 
@@ -145,7 +145,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
     unsigned size = lowerErrors->size();
     assert(lowerWeights->size() == size);
 
-    auto exec = (OCLKernelToExecute*) state;
+    auto& exec = ((OCLComputationState*)state)->GetExec(0);
     auto& outputs = ctx->ToBuffer1(pOutputs);
     auto& errors = ctx->ToBuffer1(pErrors);
 
@@ -178,7 +178,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
     {
         if (function == ActivationFunction::Sigmoid)
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetCPUNames(size).first(vectorSize),
                 vectorSize,
@@ -187,7 +187,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         }
         else
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetCPUNames(size).second(vectorSize),
                 vectorSize,
@@ -201,7 +201,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
 
         if (function == ActivationFunction::Sigmoid)
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetGPUNames(size).first(vectorSize),
                 vectorSize,
@@ -211,7 +211,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         }
         else
         {
-            exec->Execute(
+            exec.Execute(
                 program,
                 GetGPUNames(size).second(vectorSize),
                 vectorSize,
