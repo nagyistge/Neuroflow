@@ -11,5 +11,6 @@
 #include "CppUnitTest.h"
 #include <ppltasks.h>
 #include <boost\chrono.hpp>
+#include <exception>
 
 // TODO: reference additional headers your program requires here

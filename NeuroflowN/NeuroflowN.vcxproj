@@ -222,6 +222,7 @@
     <ClCompile Include="OCLGradientDescentLearningAlgo.cpp" />
     <ClCompile Include="OCLIntCtx.cpp" />
     <ClCompile Include="OCLKernelBase.cpp" />
+    <ClCompile Include="OCLKernelToExecute.cpp" />
     <ClCompile Include="OCLLearningAlgoFactory.cpp" />
     <ClCompile Include="OCLMultilayerPerceptronAdapter.cpp" />
     <ClCompile Include="OCLProgram.cpp" />

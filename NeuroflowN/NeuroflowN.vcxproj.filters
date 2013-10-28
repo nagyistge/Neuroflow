@@ -245,5 +245,8 @@
     <ClCompile Include="OCLComputationState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OCLKernelToExecute.cpp">
+      <Filter>Source Files\OCL</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

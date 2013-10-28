@@ -15,8 +15,6 @@ OCLIntCtx::OCLIntCtx(
     const std::string version) :
     context(device),
     device(device),
-    queue(context, device),
-    secondaryQueue(context, device),
     deviceInfo(deviceInfo),
     version(version),
     isCPU((device.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),
@@ -24,6 +22,9 @@ OCLIntCtx::OCLIntCtx(
     maxWorkGroupSize(device.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()),
     maxWorkItemSizes(cl::NullRange)
 {
+    queue = CommandQueue(context, device);
+    secondaryQueue = CommandQueue(context, device);
+
     auto sizes = device.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>();
     maxWorkItemSizes = cl::NDRange(sizes[0], sizes[1], sizes[2]);
 }
