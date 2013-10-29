@@ -17,25 +17,16 @@ void OCLKernelToExecute::EnsureKernel(const OCLProgramSPtrT& program, const std:
 void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
     auto& data = GetData(vectorSize);
-    if (workItemSizes.dimensions() == 0)
+    if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {
         program->GetIntCtx()->GetQueue().enqueueTask(data.kernel);
     }
-    else if (localSizes.dimensions() != 0) // AKA: not NullRange
+    else 
     {
-        EnqueueNDRangeKernel(program, data.kernel, workItemOffsets, workItemSizes, localSizes);
+        program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
+            data.kernel,
+            workItemOffsets,
+            workItemSizes,
+            localSizes);
     }
-    else
-    {
-        EnqueueNDRangeKernel(program, data.kernel, workItemOffsets, workItemSizes, localSizes); // TODO: Optimize this path
-    }
-}
-
-void OCLKernelToExecute::EnqueueNDRangeKernel(const OCLProgramSPtrT& program, const cl::Kernel& kernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
-{
-    program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
-        kernel,
-        workItemOffsets,
-        workItemSizes,
-        localSizes);
 }

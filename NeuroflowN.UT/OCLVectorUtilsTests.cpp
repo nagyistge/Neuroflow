@@ -21,13 +21,13 @@ namespace NeuroflowNUT
         {
             try
             {
-                const unsigned size = 2048;
-                const unsigned count = 100000;
+                const unsigned size = 4099;
+                const unsigned count = 1000000;
 
                 auto ctx = OCLContextImpl("cpu", "UT 1.0");
                 auto daF = ctx.GetDataArrayFactoryPtr();
                 auto vu = ctx.GetVectorUtilsPtr();
-                auto a = daF->Create(size, 0.0f);
+                auto a = daF->Create(size, 1.1f);
                 vector<float> r;
                 r.resize(size);
 
@@ -49,6 +49,8 @@ namespace NeuroflowNUT
                 });
 
                 t.wait();
+
+                for (auto rv : r) Assert::AreEqual(0.0f, rv);
 
                 auto dur = duration_cast<duration<double, boost::milli>>(high_resolution_clock::now() - startOn);
 

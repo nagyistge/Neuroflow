@@ -13,7 +13,7 @@ namespace NeuroflowN
     {
         friend class OCLContextImpl;
 
-        cl::CommandQueue queue, secondaryQueue;
+        cl::CommandQueue queue;
         cl::Device device;
         cl::Context context;
         DeviceInfo deviceInfo;
@@ -80,6 +80,11 @@ namespace NeuroflowN
         unsigned GetPreferredWorkgroupSizeMul() const
         {
             return preferredWorkgroupSizeMul;
+        }
+
+        const cl::NDRange GetMaxWorkItemSizes() const
+        {
+            return maxWorkItemSizes;
         }
 
         void Flush()

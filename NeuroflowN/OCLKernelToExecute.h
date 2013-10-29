@@ -82,6 +82,5 @@ namespace NeuroflowN
     private:
         void EnsureKernel(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel);
         void DoExecute(const OCLProgramSPtrT& program, unsigned vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes);
-        void EnqueueNDRangeKernel(const OCLProgramSPtrT& program, const cl::Kernel& kernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes);
     };
 }

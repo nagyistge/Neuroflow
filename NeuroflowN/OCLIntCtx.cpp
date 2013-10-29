@@ -23,7 +23,6 @@ OCLIntCtx::OCLIntCtx(
     maxWorkItemSizes(cl::NullRange)
 {
     queue = CommandQueue(context, device);
-    secondaryQueue = CommandQueue(context, device);
 
     auto sizes = device.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>();
     maxWorkItemSizes = cl::NDRange(sizes[0], sizes[1], sizes[2]);
@@ -85,6 +84,10 @@ std::pair<unsigned, unsigned> OCLIntCtx::GetIOReduceSizesOutput(unsigned inputSi
 
 unsigned OCLIntCtx::GetBestLocalSize(unsigned size)
 {
-    if (size < maxWorkItemSizes[0]) return size;
+    if (size < maxWorkItemSizes[0])
+    {
+        if (size < preferredWorkgroupSizeMul) return size;
+        return preferredWorkgroupSizeMul;
+    }
     return maxWorkItemSizes[0];
 }

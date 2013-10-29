@@ -18,17 +18,17 @@ namespace TestConsole
             {
                 //new Neuroflow.UT.MultilayerPerceptronRecurrentTests().OCLMLPTrainBPTTOfflineCPUTest().Wait();
 
-                Console.WriteLine("Managed");
-                ManagedMLPTrainBPOnlineCPUTest().Wait();
+                //Console.WriteLine("Managed");
+                //ManagedMLPTrainBPOnlineCPUTest().Wait();
+                //Console.WriteLine();
+
+                Console.WriteLine("OpenCL CPU");
+                OCLMLPTrainBPOnlineCPUTest().Wait();
                 Console.WriteLine();
 
-                //Console.WriteLine("OpenCL CPU");
-                //OCLMLPTrainBPOnlineCPUTest().Wait();
-                //Console.WriteLine();
-
-                //Console.WriteLine("OpenCL GPU");
-                //OCLMLPTrainBPOnlineGPUTest().Wait();
-                //Console.WriteLine();
+                Console.WriteLine("OpenCL GPU");
+                OCLMLPTrainBPOnlineGPUTest().Wait();
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
@@ -88,8 +88,8 @@ namespace TestConsole
             const float minOutput = 0.0f;
 
             const int inputSize = 1;
-            const int hidden1Size = 512;
-            const int hidden2Size = 256;
+            const int hidden1Size = 500;
+            const int hidden2Size = 200;
             const int outputSize = 1;
 
             const int maxIterations = 1000;
