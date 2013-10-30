@@ -84,10 +84,9 @@ std::pair<unsigned, unsigned> OCLIntCtx::GetIOReduceSizesOutput(unsigned inputSi
 
 unsigned OCLIntCtx::GetBestLocalSize(unsigned size)
 {
-    if (size < maxWorkItemSizes[0])
-    {
-        if (size < preferredWorkgroupSizeMul) return size;
-        return preferredWorkgroupSizeMul;
-    }
-    return maxWorkItemSizes[0];
+    if (size < preferredWorkgroupSizeMul) return size;
+    unsigned rem = size % preferredWorkgroupSizeMul;
+    size -= rem;
+    if (size > maxWorkItemSizes[0]) return maxWorkItemSizes[0];
+    return size;
 }
