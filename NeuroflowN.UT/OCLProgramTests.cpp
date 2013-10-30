@@ -14,6 +14,9 @@ namespace NeuroflowNUT
     {
     public:
         
+        BEGIN_TEST_METHOD_ATTRIBUTE(OCLProgramCompileTest)
+            TEST_METHOD_ATTRIBUTE(L"Native", L"OCL")
+        END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(OCLProgramCompileTest)
         {
             auto ctx = OCLContextImpl("CPU", "UT 1.0");

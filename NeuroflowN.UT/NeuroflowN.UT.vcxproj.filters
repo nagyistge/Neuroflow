@@ -32,5 +32,8 @@
     <ClCompile Include="OCLVectorUtilsTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OCLComputeGradientTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

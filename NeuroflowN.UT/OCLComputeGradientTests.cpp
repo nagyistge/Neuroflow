@@ -14,26 +14,30 @@ using namespace boost::chrono;
 
 namespace NeuroflowNUT
 {
-    TEST_CLASS(OCLVectorUtilsTests)
-    {
-    public:
+	TEST_CLASS(OCLComputeGradientTests)
+	{
+	public:
         
-        BEGIN_TEST_METHOD_ATTRIBUTE(ZeroTest)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ComputeGradientsOnlineTest)
             TEST_METHOD_ATTRIBUTE(L"Native", L"OCL")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(ZeroTest)
+        TEST_METHOD(ComputeGradientsOnlineTest)
         {
             try
             {
                 const unsigned size = 4099;
-                const unsigned count = 1000000;
+                const unsigned count = 10000;
 
                 auto ctx = OCLContextImpl("cpu", "UT 1.0");
                 auto daF = ctx.GetDataArrayFactoryPtr();
-                auto vu = ctx.GetVectorUtilsPtr();
-                auto a = daF->Create(size, 1.1f);
-                vector<float> r;
-                r.resize(size);
+                auto comp = OCLComputeGradientDescent(ctx.GetIntCtx(), ctx.GetVault());
+
+                auto lastUpdates = daF->Create(size, 1.1f);
+                auto weights = daF->Create(size, 1.1f);
+                auto gradients = daF->Create(size, 1.1f);
+
+                vector<float> r(size);
+                auto exec = OCLKernelToExecute();
 
                 task_completion_event<void> e;
                 task<void> t(e);
@@ -42,10 +46,10 @@ namespace NeuroflowNUT
 
                 for (unsigned i = 0; i < count; i++)
                 {
-                    vu->Zero(a);
+                    comp.UpdateWeightsOnline(exec, ctx.GetIntCtx()->ToBuffer1(lastUpdates), ctx.GetIntCtx()->ToBuffer1(weights), ctx.GetIntCtx()->ToBuffer1(gradients), 0.01f, 0.01f, false);
                 }
 
-                a->Read(0, size, &r[0], 0,
+                weights->Read(0, size, &r[0], 0,
                     [&](exception* ex)
                 {
                     if (ex) e.set_exception(ex);
@@ -53,8 +57,6 @@ namespace NeuroflowNUT
                 });
 
                 t.wait();
-
-                for (auto rv : r) Assert::AreEqual(0.0f, rv);
 
                 auto dur = duration_cast<duration<double, boost::milli>>(high_resolution_clock::now() - startOn);
 
@@ -66,5 +68,6 @@ namespace NeuroflowNUT
                 throw;
             }
         }
-    };
+
+	};
 }
