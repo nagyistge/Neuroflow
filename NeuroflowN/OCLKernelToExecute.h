@@ -14,6 +14,8 @@ namespace NeuroflowN
 {
     class OCLKernelToExecute
     {
+        friend class OCLComputationState;
+
         struct Data
         {
             cl::Kernel kernel;
@@ -21,6 +23,8 @@ namespace NeuroflowN
         };
 
         std::vector<Data> dataValues;
+
+        bool noSizeOpt = false;
 
         unsigned VectorSizeToIndex(unsigned vectorSize)
         {
@@ -49,6 +53,8 @@ namespace NeuroflowN
         }
 
     public:
+        OCLKernelToExecute() { }
+        OCLKernelToExecute(bool noSizeOpt) : noSizeOpt(noSizeOpt) { }
 
         const std::string& GetKernelName(unsigned vectorSize)
         {

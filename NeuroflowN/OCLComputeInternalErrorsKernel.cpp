@@ -70,9 +70,13 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
         }
         if (hasOutputVector) code << "__global float$* outputs,";
         code << "int outputsSize,";
-        code << "float alpha)";
+        code << "float alpha,";
+        code << "unsigned limit)";
         code << "{";
         code << "int idx = get_global_id(0);";
+        code << "int gs = get_global_size(0);";
+        code << "while (idx < limit)";
+        code << "{";
         code << "float$ sum =";
         for (unsigned i = 0; i < size; i++)
         {
@@ -81,6 +85,8 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
         }
         code << ";";
         code << "errors[idx] = sum * " << calcCode << ";";
+        code << "idx += gs;";
+        code << "}";
         code << "}";
         return move(code.str());
     };
@@ -150,6 +156,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
     auto& errors = ctx->ToBuffer1(pErrors);
 
     unsigned vectorSize = GetVectorSize(cref(outputs));
+    unsigned runSize = errors.GetSize() / vectorSize;
 
     auto init = [=](Kernel& kernel, bool hasOutputVector)
     {
@@ -169,6 +176,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         if (hasOutputVector) kernel.setArg(aidx++, outputs.GetCLBuffer());
         kernel.setArg(aidx++, outputs.GetSize() / vectorSize);
         kernel.setArg(aidx++, alpha);
+        if (ctx->IsCPU()) kernel.setArg(aidx++, runSize);
     };
 
     auto initSig = bind(init, _1, true);
@@ -183,7 +191,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
                 GetCPUNames(size).first(vectorSize),
                 vectorSize,
                 initSig,
-                errors.GetSize() / vectorSize);
+                runSize);
         }
         else
         {
@@ -192,7 +200,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
                 GetCPUNames(size).second(vectorSize),
                 vectorSize,
                 initLin,
-                errors.GetSize() / vectorSize);
+                runSize);
         }
     }
     else

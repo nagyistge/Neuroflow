@@ -17,13 +17,54 @@ void OCLKernelToExecute::EnsureKernel(const OCLProgramSPtrT& program, const std:
 void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
     auto& data = GetData(vectorSize);
+    auto& ctx = program->GetIntCtx();
+    unsigned preferredSizeMul = ctx->GetPreferredWorkgroupSizeMul();
+
     if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {
-        program->GetIntCtx()->GetQueue().enqueueTask(data.kernel);
+        ctx->GetQueue().enqueueTask(data.kernel);
+    }
+    else if (!noSizeOpt && localSizes.dimensions() == 0 && workItemSizes.dimensions() == 1 && workItemSizes[0] > preferredSizeMul)
+    {
+        unsigned size = workItemSizes[0];
+        if (ctx->IsCPU())
+        {
+            unsigned numberOfCores = ctx->GetMaxComputeUnits() * 2;
+            if (size > numberOfCores)
+            {
+                unsigned itemPerCore = size / numberOfCores;
+                if (itemPerCore > ctx->GetMaxWorkGroupSize()) itemPerCore = ctx->GetMaxWorkGroupSize();
+                size = itemPerCore * numberOfCores;
+                ctx->GetQueue().enqueueNDRangeKernel(
+                    data.kernel,
+                    workItemOffsets,
+                    NDRange(size),
+                    NDRange(itemPerCore));
+            }
+            else
+            {
+                ctx->GetQueue().enqueueNDRangeKernel(
+                    data.kernel,
+                    workItemOffsets,
+                    workItemSizes,
+                    localSizes);
+            }
+        }
+        else 
+        {
+            unsigned rem = size % preferredSizeMul;
+            size -= rem;
+
+            ctx->GetQueue().enqueueNDRangeKernel(
+                data.kernel,
+                workItemOffsets,
+                NDRange(size),
+                NullRange);
+        }
     }
     else 
     {
-        program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
+        ctx->GetQueue().enqueueNDRangeKernel(
             data.kernel,
             workItemOffsets,
             workItemSizes,

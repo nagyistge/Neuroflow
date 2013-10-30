@@ -26,7 +26,7 @@ namespace NeuroflowNUT
             try
             {
                 const unsigned size = 4099;
-                const unsigned count = 10000;
+                const unsigned count = 100000;
 
                 auto ctx = OCLContextImpl("cpu", "UT 1.0");
                 auto daF = ctx.GetDataArrayFactoryPtr();

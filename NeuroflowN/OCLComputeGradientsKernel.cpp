@@ -223,6 +223,7 @@ std::string OCLComputeGradientsKernel::CreateKernelHeader(const KernelPars& pars
         code << "__global float$* gradientSums";
     }
     if (pars.bpttp2) code << ",float intItCount";
+    code << ",unsigned limit";
     code << ")";
 
     string hdr = code.str();
@@ -240,6 +241,9 @@ std::string OCLComputeGradientsKernel::CreateCPUKernelCode(GradientComputationFl
 
     code << "{";
     code << "int idx = get_global_id(0);";
+    code << "int gs = get_global_size(0);";
+    code << "while (idx < limit)";
+    code << "{";
     if (pars.ff)
     {
         if (pars.calcGradients) code << "biasGradients[idx] = errors[idx];";
@@ -281,6 +285,8 @@ std::string OCLComputeGradientsKernel::CreateCPUKernelCode(GradientComputationFl
             code << "ComputeGradients_AddDivGradients$(inputs, inputsSize, gradients, errors, idx, intItCount);";
         }
     }
+    code << "idx += gs;";
+    code << "}";
     code << "}";
 
     string codeStr = code.str();
@@ -297,7 +303,11 @@ std::string OCLComputeGradientsKernel::CreateGPUKernelCode(GradientComputationFl
     code << CreateKernelHeader(pars);
 
     code << "{";
-    code << "int widx = get_global_id(0); int oidx = widx / inputsSize; int iidx = widx % inputsSize;";
+    code << "int idx = get_global_id(0);";
+    code << "int gs = get_global_size(0);";
+    code << "while (idx < limit)";
+    code << "{";
+    code << "int widx = idx; int oidx = widx / inputsSize; int iidx = widx % inputsSize;";
     code << "if (iidx == 0)";
     code << "{";
     if (pars.ff)
@@ -350,6 +360,8 @@ std::string OCLComputeGradientsKernel::CreateGPUKernelCode(GradientComputationFl
             code << "gradients[widx] /= intItCount;";
         }
     }
+    code << "idx += gs;";
+    code << "}";
     code << "}";
 
     auto codeStr = code.str();
@@ -402,6 +414,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
     for (unsigned i = 0; i < size; i++)
     {
         auto& inputs = ctx->ToBuffer1((*inputsV)[i]());
+        unsigned runSize = ctx->IsCPU() ? errors.GetSize() : (inputs.GetSize() / vectorSize) * errors.GetSize();
         float fiic = (float)intItCount;
 
         auto init = [=](Kernel& kernel)
@@ -415,6 +428,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
             if (pars.calcGradients) kernel.setArg(aidx++, (ctx->ToBuffer2((*gradientsV)[i])).GetCLBuffer());
             if (pars.calcGradientSums) kernel.setArg(aidx++, (ctx->ToBuffer2((*gradientSumsV)[i])).GetCLBuffer());
             if (pars.bpttp2) kernel.setArg(aidx++, fiic);
+            kernel.setArg(aidx++, runSize);
         };
 
         if (ctx->IsCPU())
@@ -424,7 +438,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
                 GetKernelName((GradientComputationFlags)(flags | CPU))(vectorSize),
                 vectorSize,
                 init,
-                errors.GetSize());
+                runSize);
         }
         else
         {
@@ -433,7 +447,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
                 GetKernelName((GradientComputationFlags)(flags | GPU))(vectorSize),
                 vectorSize,
                 init,
-                (inputs.GetSize() / vectorSize) * errors.GetSize());
+                runSize);
         }
     }
 }

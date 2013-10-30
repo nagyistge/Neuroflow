@@ -16,14 +16,15 @@ namespace NeuroflowN
         static OCLVectorKernelName ZeroFName;
 
         OCLIntCtxSPtrT ctx;
-        std::mt19937 generator;
+        std::mt19937 generator = std::mt19937((std::random_device()() << 16) | std::random_device()());
         OCLProgramSPtrT program;
-        OCLKernelToExecute addExec, divExec, zeroFExec;
+        OCLKernelToExecute addExec = OCLKernelToExecute(true);
+        OCLKernelToExecute divExec = OCLKernelToExecute(true);
+        OCLKernelToExecute zeroFExec;
 
     public:
         OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-            ctx(ctx),
-            generator((std::random_device()() << 16) | std::random_device()())
+            ctx(ctx)
         {
             Build(vault);
         }

@@ -11,6 +11,6 @@ namespace NeuroflowN
     {
         std::vector<OCLKernelToExecute> execs;
     public:
-        OCLKernelToExecute& GetExec(unsigned index);
+        OCLKernelToExecute& GetExec(unsigned index, bool noSizeOpt = false);
     };
 }

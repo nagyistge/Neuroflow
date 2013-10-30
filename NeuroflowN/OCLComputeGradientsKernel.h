@@ -70,7 +70,7 @@ namespace NeuroflowN
 
         inline static void FillKernelPars(KernelPars& pars, GradientComputationFlags flags, bool fillName);
 
-        inline static std::string CreateKernelHeader(const KernelPars& pars);
+        static std::string CreateKernelHeader(const KernelPars& pars);
 
         void Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
 

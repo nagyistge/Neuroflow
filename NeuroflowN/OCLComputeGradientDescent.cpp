@@ -26,33 +26,49 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
 
     // Online
     __kernel void GD_Online_Smooth$(
-    __global float$* weights,
-    __global float$* gradients,
-    __global float$* lastUpdates,
-    float rate,
-    float momentum)
+        __global float$* weights,
+        __global float$* gradients,
+        __global float$* lastUpdates,
+        float rate,
+        float momentum,
+        unsigned limit)
     {
         int idx = get_global_id(0);
-        float$ update = gradients[idx] * rate;
-        float$ lastUpdate = lastUpdates[idx];
-        update = lastUpdate * momentum + (update * (1.0f - momentum));
-        weights[idx] += update;
-        lastUpdates[idx] = update;
-        }
+        int gs = get_global_size(0);
+
+        while (idx < limit)
+        {
+            float$ update = gradients[idx] * rate;
+            float$ lastUpdate = lastUpdates[idx];
+            update = lastUpdate * momentum + (update * (1.0f - momentum));
+            weights[idx] += update;
+            lastUpdates[idx] = update;
+
+            idx += gs;
+        }        
+    }
 
     __kernel void GD_Online$(
         __global float$* weights,
         __global float$* gradients,
         __global float$* lastUpdates,
         float rate,
-        float momentum)
+        float momentum,
+        unsigned limit)
     {
         int idx = get_global_id(0);
-        float$ update = gradients[idx] * rate;
-        float$ lastUpdate = lastUpdates[idx];
-        update = lastUpdate * momentum + update;
-        weights[idx] += update;
-        lastUpdates[idx] = update;
+        int gs = get_global_size(0);
+
+        while (idx < limit)
+        {
+            float$ update = gradients[idx] * rate;
+            float$ lastUpdate = lastUpdates[idx];
+            update = lastUpdate * momentum + update;
+            weights[idx] += update;
+            lastUpdates[idx] = update;
+
+            idx += gs;
+        }
     }
 
     // Offline
@@ -62,14 +78,22 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
         __global float$* lastUpdates,
         float iterationCount,
         float rate,
-        float momentum)
+        float momentum,
+        unsigned limit)
     {
         int idx = get_global_id(0);
-        float$ update = (gradientSums[idx] / iterationCount) * rate;
-        float$ lastUpdate = lastUpdates[idx];
-        update = lastUpdate * momentum + (update * (1.0f - momentum));
-        weights[idx] += update;
-        lastUpdates[idx] = update;
+        int gs = get_global_size(0);
+
+        while (idx < limit)
+        {
+            float$ update = (gradientSums[idx] / iterationCount) * rate;
+            float$ lastUpdate = lastUpdates[idx];
+            update = lastUpdate * momentum + (update * (1.0f - momentum));
+            weights[idx] += update;
+            lastUpdates[idx] = update;
+
+            idx += gs;
+        }        
     }
 
     __kernel void GD_Offline$(
@@ -78,14 +102,22 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
         __global float$* lastUpdates,
         float iterationCount,
         float rate,
-        float momentum)
+        float momentum,
+        unsigned limit)
     {
         int idx = get_global_id(0);
-        float$ update = (gradientSums[idx] / iterationCount) * rate;
-        float$ lastUpdate = lastUpdates[idx];
-        update = lastUpdate * momentum + update;
-        weights[idx] += update;
-        lastUpdates[idx] = update;
+        int gs = get_global_size(0);
+
+        while (idx < limit)
+        {
+            float$ update = (gradientSums[idx] / iterationCount) * rate;
+            float$ lastUpdate = lastUpdates[idx];
+            update = lastUpdate * momentum + update;
+            weights[idx] += update;
+            lastUpdates[idx] = update;
+
+            idx += gs;
+        }        
     }
 
     );
@@ -103,6 +135,7 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
     try
     {
         unsigned vectorSize = GetVectorSize(cref(weights));
+        unsigned size = weights.GetSize() / vectorSize;
         if (smoothing)
         {
             exec.Execute(
@@ -117,8 +150,9 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
                     kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
+                    kernel.setArg(aidx++, size);
                 },
-                weights.GetSize() / vectorSize);
+                size);
         }
         else
         {
@@ -134,6 +168,7 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
                     kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
+                    kernel.setArg(aidx++, size);
                 },
                 weights.GetSize() / vectorSize);
         }
@@ -158,6 +193,7 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
     try
     {
         unsigned vectorSize = GetVectorSize(cref(weights));
+        unsigned size = weights.GetSize() / vectorSize;
         if (smoothing)
         {
             exec.Execute(
@@ -173,8 +209,9 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
                     kernel.setArg(aidx++, fitc);
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
+                    kernel.setArg(aidx++, size);
                 },
-                weights.GetSize() / vectorSize);
+                size);
         }
         else
         {
@@ -191,8 +228,9 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
                     kernel.setArg(aidx++, fitc);
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
+                    kernel.setArg(aidx++, size);
                 },
-                weights.GetSize() / vectorSize);
+                size);
         }
     }
     catch (exception& ex)

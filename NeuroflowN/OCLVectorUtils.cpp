@@ -25,9 +25,17 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
     // Zero
     ADD_OCL_CODE(program,
 
-    kernel void ZeroF$(global float$* buffer)
+    kernel void ZeroF$(global float$* buffer, unsigned limit)
     {
-        buffer[get_global_id(0)] = (float$)(0.0f);
+        int idx = get_global_id(0);
+        int gs = get_global_size(0);
+
+        while (idx < limit)
+        {
+            buffer[idx] = (float$)(0.0f);
+
+            idx += gs;
+        }
     }
 
     );
@@ -180,7 +188,7 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
     {
         auto& buff = ctx->ToBuffer1(deviceArray);
         auto vectorSize = GetVectorSize(cref(buff));
-
+        auto size = buff.GetSize() / vectorSize;
         zeroFExec.Execute(
             program,
             ZeroFName(vectorSize),
@@ -188,8 +196,9 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
             [&](Kernel& kernel)
             {
                 kernel.setArg(0, buff.GetCLBuffer());
+                kernel.setArg(1, size);
             },
-            buff.GetSize() / vectorSize);
+            size);
     }
     catch (exception& ex)
     {

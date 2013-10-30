@@ -69,9 +69,13 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
             code << "__global float$* weights" << i << ",";
         }
         code << "__global float* outputs,";
-        code << "float alpha)";
+        code << "float alpha,";
+        code << "unsigned limit)";
         code << "{";
         code << "int idx = get_global_id(0);";
+        code << "int gs = get_global_size(0);";
+        code << "while (idx < limit)"; 
+        code << "{";
         code << "float sum = biases[idx]";
         for (unsigned i = 0; i < size; i++)
         {
@@ -80,6 +84,8 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
         }
         code << ";";
         code << "outputs[idx] = " << calcCode << ";";
+        code << "idx += gs;"; 
+        code << "}";
         code << "}";
         return move(code.str());
     };
@@ -167,6 +173,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         kernel.setArg(aidx++, outputs.GetCLBuffer());
         kernel.setArg(aidx++, alpha);
+        if (ctx->IsCPU()) kernel.setArg(aidx++, outputs.GetSize());
     };
 
     if (ctx->IsCPU())
