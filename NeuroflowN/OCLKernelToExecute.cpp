@@ -19,6 +19,7 @@ void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vect
     auto& data = GetData(vectorSize);
     auto& ctx = program->GetIntCtx();
     unsigned preferredSizeMul = ctx->GetPreferredWorkgroupSizeMul();
+    if (preferredSizeMul == 1) preferredSizeMul = 64;
 
     if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {
@@ -27,40 +28,14 @@ void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vect
     else if (!noSizeOpt && localSizes.dimensions() == 0 && workItemSizes.dimensions() == 1 && workItemSizes[0] > preferredSizeMul)
     {
         unsigned size = workItemSizes[0];
-        if (ctx->IsCPU())
-        {
-            unsigned numberOfCores = ctx->GetMaxComputeUnits() * 2;
-            if (size > numberOfCores)
-            {
-                unsigned itemPerCore = size / numberOfCores;
-                if (itemPerCore > ctx->GetMaxWorkGroupSize()) itemPerCore = ctx->GetMaxWorkGroupSize();
-                size = itemPerCore * numberOfCores;
-                ctx->GetQueue().enqueueNDRangeKernel(
-                    data.kernel,
-                    workItemOffsets,
-                    NDRange(size),
-                    NDRange(itemPerCore));
-            }
-            else
-            {
-                ctx->GetQueue().enqueueNDRangeKernel(
-                    data.kernel,
-                    workItemOffsets,
-                    workItemSizes,
-                    localSizes);
-            }
-        }
-        else 
-        {
-            unsigned rem = size % preferredSizeMul;
-            size -= rem;
+        unsigned rem = size % preferredSizeMul;
+        size -= rem;
 
-            ctx->GetQueue().enqueueNDRangeKernel(
-                data.kernel,
-                workItemOffsets,
-                NDRange(size),
-                NullRange);
-        }
+        ctx->GetQueue().enqueueNDRangeKernel(
+            data.kernel,
+            workItemOffsets,
+            NDRange(size),
+            NullRange);
     }
     else 
     {

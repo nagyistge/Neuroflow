@@ -50,8 +50,8 @@ namespace TestConsole
 
         static async Task OCLMLPTrainBPOnlineCPUTest()
         {
-            using (var ctx = new OCLContext("CPU"))
-            //using (var ctx = new OCLContext("(sse2,avx)"))
+            //using (var ctx = new OCLContext("CPU"))
+            using (var ctx = new OCLContext("(sse2,avx)"))
             {
                 await MLPTrainBPOnlineTest(ctx);
             }
@@ -89,7 +89,7 @@ namespace TestConsole
 
             const int inputSize = 1;
             const int hidden1Size = 511;
-            const int hidden2Size = 253;
+            const int hidden2Size = 255;
             const int outputSize = 1;
 
             const int maxIterations = 1000;
