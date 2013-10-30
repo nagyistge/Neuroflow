@@ -18,8 +18,7 @@ void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vect
 {
     auto& data = GetData(vectorSize);
     auto& ctx = program->GetIntCtx();
-    unsigned preferredSizeMul = ctx->GetPreferredWorkgroupSizeMul();
-    if (preferredSizeMul == 1) preferredSizeMul = 64;
+    unsigned preferredSizeMul = (ctx->IsCPU() ? 32 : ctx->GetPreferredWorkgroupSizeMul());
 
     if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {

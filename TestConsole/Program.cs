@@ -88,8 +88,8 @@ namespace TestConsole
             const float minOutput = 0.0f;
 
             const int inputSize = 1;
-            const int hidden1Size = 511;
-            const int hidden2Size = 255;
+            const int hidden1Size = 512;
+            const int hidden2Size = 256;
             const int outputSize = 1;
 
             const int maxIterations = 1000;
