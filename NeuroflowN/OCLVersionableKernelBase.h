@@ -35,9 +35,9 @@ namespace NeuroflowN
         {
         }
         
-        const T& GetVersion(::size_t version) const
+        T* GetVersion(::size_t version) const
         {
-            return *(values[version].get());
+            return values[version].get();
         }
     };
 
@@ -84,6 +84,11 @@ namespace NeuroflowN
             return result;
         }
 
+        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetNames(unsigned size = 1) const
+        {
+            return GetCPUNames(size);
+        }
+
         inline const OCLKernelVersionBag<OCLVectorKernelName>& GetCPUNames(unsigned size = 1) const
         {
             return cpuNames[size - 1];
@@ -95,23 +100,30 @@ namespace NeuroflowN
         }
 
     public:
-        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount = 1) :
+        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount = 1, bool differentForUnits = true) :
             OCLKernelBase(ctx),
             namePrefix(namePrefix)
         {
             for (unsigned size = 1; size <= maxConnectionCount; size++)
             {
                 auto cpu = CreateNames(versions, ComputingUnit::CPU, size);
-                auto gpu = CreateNames(versions, ComputingUnit::GPU, size);
                 cpuNames.emplace_back();
-                gpuNames.emplace_back();
-
                 for (auto i : versions)
                 {
-                    auto& cpuN = cpu.GetVersion(i);
-                    cpuNames.back().EmplaceVersion(i, cpuN);
-                    auto& gpuN = gpu.GetVersion(i);
-                    gpuNames.back().EmplaceVersion(i, gpuN);
+                    auto cpuN = cpu.GetVersion(i);
+                    cpuNames.back().EmplaceVersion(i, *cpuN);
+                }
+
+                if (differentForUnits)
+                {
+                    auto gpu = CreateNames(versions, ComputingUnit::GPU, size);
+                    gpuNames.emplace_back();
+
+                    for (auto i : versions)
+                    {
+                        auto gpuN = gpu.GetVersion(i);
+                        gpuNames.back().EmplaceVersion(i, *gpuN);
+                    }
                 }
             }
         }

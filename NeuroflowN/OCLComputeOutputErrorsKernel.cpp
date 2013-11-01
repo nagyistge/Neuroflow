@@ -10,8 +10,11 @@ using namespace NeuroflowN;
 using namespace std;
 using namespace cl;
 
-OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Sigmoid = OCLVectorKernelName("ComputeErrors_Output_Sigmoid");
-OCLVectorKernelName OCLComputeOutputErrorsKernel::ComputeErrors_Output_Linear = OCLVectorKernelName("ComputeErrors_Output_Linear");
+OCLComputeOutputErrorsKernel::OCLComputeOutputErrorsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+    OCLVersionableKernelBase(ctx, "ComputeOutputErrors", { SigmoidCOKV, LinearCOKV }, 1, false)
+{
+    Build(vault);
+}
 
 void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 {
@@ -19,38 +22,24 @@ void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
     program->Using(vault->GetCommonCode());
     program->Using(vault->GetAFCode());
 
-    // Compute Errors:
-    ADD_OCL_CODE(program,
-
-    /*
-    ComputeErrors Output Sigmoid
-    */
-
-    __kernel void ComputeErrors_Output_Sigmoid$(
-    __global float$* errors,
-    __global float$* desiredOutputs,
-    __global float$* outputs,
-    float alpha)
+    auto getCode = [=](const std::string& name, const char* calcCode)
     {
-        int idx = get_global_id(0);
-        errors[idx] = (desiredOutputs[idx] - outputs[idx]) * SigmoidD$(outputs[idx], alpha);
-    }
+        stringstream code;
+        code << "__kernel void " << name << "$(";
+        code << "__global float$* errors,";
+        code << "__global float$* desiredOutputs,";
+        code << "__global float$* outputs,";
+        code << "float alpha)";
+        code << "{";
+        code << "int idx = get_global_id(0);";
+        code << "errors[idx] = (desiredOutputs[idx] - outputs[idx]) * " << calcCode << ";";
+        code << "}";
 
-    /*
-    ComputeErrors Output Linear
-    */
+        return code.str();
+    };
 
-    __kernel void ComputeErrors_Output_Linear$(
-        __global float$* errors,
-        __global float$* desiredOutputs,
-        __global float$* outputs,
-        float alpha)
-    {
-        int idx = get_global_id(0);
-        errors[idx] = (desiredOutputs[idx] - outputs[idx]) * alpha;
-    }
-
-    );
+    program->AddCode(getCode(GetNames().GetVersion(SigmoidCOKV)->GetName(), "SigmoidD$(outputs[idx], alpha)"));
+    program->AddCode(getCode(GetNames().GetVersion(LinearCOKV)->GetName(), "alpha"));
 }
 
 void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha)
@@ -75,7 +64,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     {
         exec.Execute(
             program,
-            ComputeErrors_Output_Sigmoid(vectorSize),
+            (*GetNames().GetVersion(SigmoidCOKV))(vectorSize),
             vectorSize,
             init,
             errors.GetSize() / vectorSize);
@@ -84,7 +73,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     {
         exec.Execute(
             program,
-            ComputeErrors_Output_Linear(vectorSize),
+            (*GetNames().GetVersion(LinearCOKV))(vectorSize),
             vectorSize,
             init,
             errors.GetSize() / vectorSize);

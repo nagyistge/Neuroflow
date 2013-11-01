@@ -22,7 +22,7 @@ namespace NeuroflowN
 
         struct KernelPars
         {
-            const OCLVectorKernelName* name;
+            OCLVectorKernelName* name;
             bool calcGradients;
             bool calcGradientSums;
             bool ff;

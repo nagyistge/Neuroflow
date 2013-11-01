@@ -13,7 +13,7 @@ using namespace cl;
 using namespace NeuroflowN;
 
 OCLComputeGradientsKernel::OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    OCLVersionableKernelBase(ctx, "ComputeGradients", { CGKVFFOnline, CGKVFFOffline, CGKVFFOnlineOffline, CGKVBPTTPhase1, CGKVBPTTPhase2, CGKVBPTTPhase2Offline })
+    OCLVersionableKernelBase(ctx, "ComputeGradients", { FFOnlineCGKV, FFOfflineCGKV, FFOnlineOfflineCGKV, BPTTPhase1CGKV, BPTTPhase2CGKV, BPTTPhase2OfflineCGKV })
 {
     Build(vault);
 };
@@ -26,12 +26,12 @@ ComputeGradientKernelVersion OCLComputeGradientsKernel::GradientComputationFlags
         {
             if (flags & Offline)
             {
-                return CGKVFFOnlineOffline;
+                return FFOnlineOfflineCGKV;
             }
             else
             {
                 // Online && !Offline
-                return CGKVFFOnline;
+                return FFOnlineCGKV;
             }
         }
         else
@@ -39,23 +39,23 @@ ComputeGradientKernelVersion OCLComputeGradientsKernel::GradientComputationFlags
             // !Online
             if (flags & Offline)
             {
-                return CGKVFFOffline;
+                return FFOfflineCGKV;
             }
         }
     }
     else if (flags & BPTTPhase1)
     {
-        return CGKVBPTTPhase1;
+        return BPTTPhase1CGKV;
     }
     else if (flags & BPTTPhase2)
     {
         if (flags & Offline)
         {
-            return CGKVBPTTPhase2Offline;
+            return BPTTPhase2OfflineCGKV;
         }
         else
         {
-            return CGKVBPTTPhase2;
+            return BPTTPhase2CGKV;
         }
     }
 
@@ -143,8 +143,8 @@ std::string OCLComputeGradientsKernel::CreateKernelCode(GradientComputationFlags
 void OCLComputeGradientsKernel::FillKernelPars(KernelPars& pars, GradientComputationFlags flags)
 {
     pars.name = (flags & CPU) ?
-        &GetCPUNames().GetVersion(GradientComputationFlagsToVersion(flags)) :
-        &GetGPUNames().GetVersion(GradientComputationFlagsToVersion(flags));
+        GetCPUNames().GetVersion(GradientComputationFlagsToVersion(flags)) :
+        GetGPUNames().GetVersion(GradientComputationFlagsToVersion(flags));
     pars.calcGradients = (flags & Online | flags & BPTTPhase1 | flags & BPTTPhase2) != 0;
     pars.calcGradientSums = (flags & Offline) != 0;
     pars.ff = (flags & FF) != 0;

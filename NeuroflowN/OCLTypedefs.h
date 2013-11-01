@@ -16,19 +16,25 @@ namespace NeuroflowN
 {
     enum ActivationKernelVersion
     {
-        AKVSigmoid = 1 << 1,
-        AKVLinear = 1 << 2,
-        AKVRTLR = 1 << 3
+        SigmoidAKV = 1 << 1,
+        LinearAKV = 1 << 2,
+        RTLRAKV = 1 << 3
     };
 
     enum ComputeGradientKernelVersion
     {
-        CGKVFFOnline,
-        CGKVFFOffline,
-        CGKVFFOnlineOffline,
-        CGKVBPTTPhase1,
-        CGKVBPTTPhase2,
-        CGKVBPTTPhase2Offline
+        FFOnlineCGKV,
+        FFOfflineCGKV,
+        FFOnlineOfflineCGKV,
+        BPTTPhase1CGKV,
+        BPTTPhase2CGKV,
+        BPTTPhase2OfflineCGKV
+    };
+
+    enum ComputeOutputErrorKernelVersion
+    {
+        SigmoidCOKV = 1 << 1,
+        LinearCOKV = 1 << 2
     };
 
     struct OCLReduceSizes;
