@@ -13,8 +13,8 @@ namespace NeuroflowN
     {
         OCLProgramSPtrT program;
 
-        static std::string CreateCPUKernelCode(unsigned size);
-        static std::string CreateGPUKernelCode(unsigned size);
+        std::string CreateCPUKernelCode(unsigned size);
+        std::string CreateGPUKernelCode(unsigned size);
 
     public:
         OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :

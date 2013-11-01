@@ -44,3 +44,8 @@ const std::string& OCLVectorKernelName::operator()(unsigned vectorSize) const
         throw_invalid_argument("Ivalid vectorSize argument!");
     }
 }
+
+const std::string& OCLVectorKernelName::GetName() const
+{
+    return names.at(0);
+}

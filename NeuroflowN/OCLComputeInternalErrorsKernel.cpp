@@ -52,7 +52,7 @@ void OCLComputeInternalErrorsKernel::Build(const OCLVaultSPtrT& vault)
 
 std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
 {
-    auto names = CreateNames(ComputingUnit::CPU, size);
+    auto names = GetCPUNames(size);
 
     auto factory = [size](const string& name, const char* calcCode, bool hasOutputVector)
     {
@@ -86,15 +86,15 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first, "SigmoidD$(outputs[idx], alpha)", true);
-    code << factory(names.second, "alpha", false);
+    code << factory(names.first.GetName(), "SigmoidD$(outputs[idx], alpha)", true);
+    code << factory(names.second.GetName(), "alpha", false);
 
     return code.str();
 }
 
 std::string OCLComputeInternalErrorsKernel::CreateGPUKernelCode(unsigned size)
 {
-    auto names = CreateNames(ComputingUnit::GPU, size);
+    auto names = GetGPUNames(size);
 
     auto factory = [size](const string& name, const char* calcCode, bool hasOutputVector)
     {
@@ -132,8 +132,8 @@ std::string OCLComputeInternalErrorsKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first, "SigmoidD$(outputs[oidx], alpha)", true);
-    code << factory(names.second, "alpha", false);
+    code << factory(names.first.GetName(), "SigmoidD$(outputs[oidx], alpha)", true);
+    code << factory(names.second.GetName(), "alpha", false);
 
     return code.str();
 }

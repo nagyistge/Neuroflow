@@ -52,7 +52,7 @@ void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
 
 std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
 {
-    auto names = CreateNames(ComputingUnit::CPU, size);
+    auto names = GetCPUNames(size);
 
     auto factory = [size](const string& name, const char* calcCode)
     {
@@ -85,15 +85,15 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first, "Sigmoid(sum, alpha)");
-    code << factory(names.second, "fmax(fmin(sum * alpha, alpha), -alpha)");
+    code << factory(names.first.GetName(), "Sigmoid(sum, alpha)");
+    code << factory(names.second.GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
 
     return code.str();
 }
 
 std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
 {
-    auto names = CreateNames(ComputingUnit::GPU, size);
+    auto names = GetGPUNames(size);
 
     auto factory = [size](const string& name, const char* calcCode)
     {
@@ -133,8 +133,8 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first, "Sigmoid(biases[oidx] + sumf1, alpha)");
-    code << factory(names.second, "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
+    code << factory(names.first.GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
+    code << factory(names.second.GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
 
     return code.str();
 }
