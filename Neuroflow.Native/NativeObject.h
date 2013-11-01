@@ -1,27 +1,18 @@
 #pragma once
 
 #include "Typedefs.h"
+#include "NativePtr.h"
 #include <assert.h>
 
 namespace Neuroflow
 {
-    ref class NativeObject : DisposableObject
+    ref class NativeObject : NativePtr<NeuroflowN::NfObject>
     {
-        NeuroflowN::NfObject* obj;
-
     public:
         NativeObject(NeuroflowN::NfObject* obj) :
-            obj(obj)
+            NativePtr(obj)
         {
             assert(obj != null);
-        }
-
-        property NeuroflowN::NfObject* PObj
-        {
-            NeuroflowN::NfObject * get()
-            {
-                return obj;
-            }
         }
     };
 }

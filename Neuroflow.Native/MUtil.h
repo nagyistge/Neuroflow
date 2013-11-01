@@ -13,7 +13,7 @@ namespace Neuroflow
 
     NeuroflowN::SupervisedBatchT ToNative(Data::SupervisedBatch^ batch);
 
-    std::function<NeuroflowN::IDeviceArray*()> ToNative(DeviceArrayFactory^ deviceArrayF);
+    NeuroflowN::DeviceArrayFactoryT ToNative(DeviceArrayFactory^ deviceArrayF);
 
     NeuroflowN::IDeviceArray* ToNative(IDeviceArray^ deviceArray);
 
@@ -41,5 +41,5 @@ namespace Neuroflow
 
     NeuroflowN::RTLRLayerInfoVecVecT* ToNative(Marshaled<array<array<NeuralNetworks::RTLRLayerInfo^>^>^>^ inputLayerInfos);
 
-    /*NeuroflowN::RTLRComputationData* ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data)*/;
+    NeuroflowN::RTLRComputationData* ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data);
 }

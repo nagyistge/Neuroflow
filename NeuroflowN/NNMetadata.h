@@ -124,14 +124,6 @@ namespace NeuroflowN
         IDeviceArray2* Weights;
         int Size;
         bool IsElementOfU;
-
-        RTLRLayerInfo(int index, IDeviceArray2* weights, int size, bool isElementOfU) :
-            Index(index),
-            Weights(weights),
-            Size(size),
-            IsElementOfU(isElementOfU)
-        {
-        }
     };
 
     typedef std::vector<RTLRLayerInfo> RTLRLayerInfoVecT;
@@ -139,37 +131,15 @@ namespace NeuroflowN
 
     struct RTLRComputationData
     {
-        DeviceArrayFVecT Inputs;
-        DeviceArray2VecSPtrT Gradients;
-        DeviceArray2VecSPtrT GradientSums;
-        DeviceArray2VecSPtrT BiasGradients;
-        DeviceArray2VecSPtrT BiasGradientSums;
+        DeviceArrayFactoryT Inputs;
+        IDeviceArray2* Gradients;
+        IDeviceArray2* GradientSums;
+        IDeviceArray* BiasGradients;
+        IDeviceArray* BiasGradientSums;
         int ILayerIndex;
         int IValueIndex;
         int JLayerIndex;
         int JValueIndex;
-
-        RTLRComputationData(
-            const DeviceArrayFVecT& inputs,
-            const DeviceArray2VecSPtrT& gradients,
-            const DeviceArray2VecSPtrT& gradientSums,
-            const DeviceArray2VecSPtrT& biasGradients,
-            const DeviceArray2VecSPtrT& biasGradientSums,
-            int iLayerIndex,
-            int iValueIndex,
-            int jLayerIndex,
-            int jValueIndex) :
-            Inputs(inputs),
-            Gradients(gradients),
-            GradientSums(gradientSums),
-            BiasGradients(biasGradients),
-            BiasGradientSums(biasGradientSums),
-            ILayerIndex(iLayerIndex),
-            IValueIndex(iValueIndex),
-            JLayerIndex(jLayerIndex),
-            JValueIndex(jValueIndex)
-        {
-        }
     };
 
 #pragma endregion

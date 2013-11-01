@@ -25,10 +25,7 @@ void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshal
 {
     try
     {
-        auto inputsPtr = ToNative(inputs);
-        auto weightsPtr = ToNative(weights);
-
-        computeActivation->ComputeForward(ToNative(state), inputsPtr, weightsPtr, ToNative(biases), ToNative(outputs), ToNative(function), alpha);
+        computeActivation->ComputeForward(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -38,7 +35,14 @@ void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshal
 
 void NativeComputeActivation::ComputeForwardRTLR(System::IDisposable^ state, Marshaled<array<DeviceArrayFactory^>^>^ inputs, Marshaled<array<IDeviceArray2^>^>^ weights, IDeviceArray^ biases, IDeviceArray^ outputs, IDeviceArray^ netValueDerivates, ActivationFunction function, float alpha)
 {
-    throw gcnew System::NotImplementedException();
+    try
+    {
+        computeActivation->ComputeForwardRTLR(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(netValueDerivates), ToNative(function), alpha);
+    }
+    catch (exception& ex)
+    {
+        throw gcnew NativeException(ex);
+    }
 }
 
 void NativeComputeActivation::ComputeErrors(System::IDisposable^ state, IDeviceArray^ outputs, IDeviceArray^ errors, Marshaled<array<IDeviceArray2^>^>^ lowerWeights, Marshaled<array<IDeviceArray^>^>^ lowerErrors, ActivationFunction function, float alpha)
@@ -137,9 +141,28 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
 }
 
 
-void NativeComputeActivation::ComputeGradientsRTLR(Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs)
+void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs)
 {
-    throw gcnew System::NotImplementedException();
+    try
+    {
+        auto nOutputs = outputs != null ? ToNative(outputs) : null;
+        auto nDOutputs = desiredOutputs != null ? ToNative(desiredOutputs) : null;
+
+        assert(nOutputs == null && nDOutputs == null || nOutputs != null && nDOutputs != null);
+
+        computeActivation->ComputeGradientsRTLR(
+            ToNative(state),
+            ToNative(inputLayerInfos),
+            ToNative(netValueDerivates),
+            ToNative(data),
+            ToNative(valueRelatedPBuffs),
+            nOutputs,
+            nDOutputs);
+    }
+    catch (exception& ex)
+    {
+        throw gcnew NativeException(ex);
+    }
 }
 
 void NativeComputeActivation::CalculateGlobalError(System::IDisposable^ state, IDeviceArray^ desiredOutputs, IDeviceArray^ actualOutputs, IDeviceArray^ errorValue, IDeviceArray^ errorSumValue)
