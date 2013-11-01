@@ -5,13 +5,11 @@
 #include "OCLTypedefs.h"
 #include "OCLVectorKernelName.h"
 #include "NNMetadata.h"
-#include "OCLActivationKernelBase.h"
+#include "OCLVersionableKernelBase.h"
 
 namespace NeuroflowN
 {
-    extern const char ComputeInternalErrorsTmpl [];
-
-    class OCLComputeInternalErrorsKernel : public OCLActivationKernelBase<ComputeInternalErrorsTmpl>
+    class OCLComputeInternalErrorsKernel : public OCLVersionableKernelBase
     {
         OCLProgramSPtrT program;
 

@@ -21,6 +21,16 @@ namespace NeuroflowN
         AKVRTLR = 1 << 3
     };
 
+    enum ComputeGradientKernelVersion
+    {
+        CGKVFF_Online,
+        CGKVFF_Offline,
+        CGKVFF_OnlineOffline,
+        CGKVBPTTPhase1,
+        CGKVBPTTPhase2,
+        CGKVBPTTPhase2_Offline
+    };
+
     struct OCLReduceSizes;
 
     class OCLContextImpl;

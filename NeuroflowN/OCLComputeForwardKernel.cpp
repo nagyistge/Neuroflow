@@ -13,10 +13,8 @@ using namespace std;
 using namespace NeuroflowN;
 using namespace cl;
 
-extern const char NeuroflowN::ComputeForwardTmpl [] = "ComputeForward_{0}_{1}_{2}";
-
 OCLComputeForwardKernel::OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    OCLActivationKernelBase(ctx, { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
+OCLVersionableKernelBase(ctx, "ComputeForward", { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };

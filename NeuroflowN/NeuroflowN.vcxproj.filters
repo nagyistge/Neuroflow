@@ -87,9 +87,6 @@
     <ClInclude Include="OCL.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
-    <ClInclude Include="OCLActivationKernelBase.h">
-      <Filter>Header Files\OCL</Filter>
-    </ClInclude>
     <ClInclude Include="OCLBuffer1.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
@@ -176,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="OCLComputationState.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OCLVersionableKernelBase.h">
+      <Filter>Header Files\OCL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

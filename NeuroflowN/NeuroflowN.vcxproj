@@ -174,7 +174,7 @@
     <ClInclude Include="NNMetadata.h" />
     <ClInclude Include="NUtils.h" />
     <ClInclude Include="OCL.h" />
-    <ClInclude Include="OCLActivationKernelBase.h" />
+    <ClInclude Include="OCLVersionableKernelBase.h" />
     <ClInclude Include="OCLBuffer1.h" />
     <ClInclude Include="OCLBuffer2.h" />
     <ClInclude Include="OCLComputationState.h" />
