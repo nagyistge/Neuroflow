@@ -449,7 +449,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        unsafe public void ComputeGradientsRTLR(Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
+        unsafe public void ComputeGradientsRTLR(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData> dataM, Marshaled<IDeviceArray[]> valueRelatedPBuffsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA)
         {
             var data = dataM.Instance();
             var inputLayerInfos = inputLayerInfosM.Instance();
