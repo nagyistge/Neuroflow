@@ -13,41 +13,40 @@ namespace NeuroflowN
         CPU, GPU
     };
 
-    template <typename T, ::size_t NameCount>
-    class OCLActivationKernelName
+    template <typename T>
+    class OCLActivationKernelVersion
     {
-        template<const char* NameTemplate, ::size_t NameCount>
+        template<const char* NameTemplate>
         friend class OCLActivationKernelBase;
 
-        std::vector<T> values;
+        std::vector<std::unique_ptr<T>> values;
 
-        void PushName(T&& value)
+        template <typename... Args>
+        void EmplaceVersion(::size_t version, Args... args)
         {
-            values.emplace_back(value);
+            values.resize(version + 1);
+            if (values[version] == null) values.emplace(values.cbegin() + version, std::make_unique<T>(args...));
         }
 
     public:
-        OCLActivationKernelName() { }
-        OCLActivationKernelName(const OCLActivationKernelName& other) :
-            values(other.values)
+        OCLActivationKernelVersion() { }
+        OCLActivationKernelVersion(const OCLActivationKernelVersion& other) = delete;
+        OCLActivationKernelVersion(OCLActivationKernelVersion&& other) :
+            values(move(other.values))
         {
         }
-        OCLActivationKernelName(OCLActivationKernelName&& other) :
-            values(other.values)
+        
+        const T& GetVersion(::size_t version) const
         {
-        }
-
-        const T& GetName(::size_t index) const
-        {
-            return values[index];
+            return *(values[version].get());
         }
     };
 
-    template<const char* NameTemplate, ::size_t NameCount>
+    template<const char* NameTemplate>
     class OCLActivationKernelBase : public OCLKernelBase
     {
-        std::vector<OCLActivationKernelName<OCLVectorKernelName, NameCount>> cpuNames;
-        std::vector<OCLActivationKernelName<OCLVectorKernelName, NameCount>> gpuNames;
+        std::vector<OCLActivationKernelVersion<OCLVectorKernelName>> cpuNames;
+        std::vector<OCLActivationKernelVersion<OCLVectorKernelName>> gpuNames;
 
         static std::string CreateName(const char* type, const char* unit, unsigned size)
         {
@@ -62,49 +61,49 @@ namespace NeuroflowN
 
     protected:
 
-        static OCLActivationKernelName<std::string, NameCount> CreateNames(ComputingUnit unit, unsigned size)
+        OCLActivationKernelVersion<std::string> CreateNames(const std::initializer_list<::size_t>& versions, ComputingUnit unit, unsigned size)
         {
             using namespace std;
 
             const char* unitStr = unit == ComputingUnit::CPU ? "CPU" : "GPU";
-            OCLActivationKernelName<std::string, NameCount> result;
-            for (::size_t i = 0; i < NameCount; i++)
+            OCLActivationKernelVersion<std::string> result;
+            for (auto i : versions)
             {
                 stringstream n;
                 n << "Version";
                 n << i;
-                result.PushName(CreateName(n.str().c_str(), unitStr, size));
+                result.EmplaceVersion(i, CreateName(n.str().c_str(), unitStr, size));
             }
             return result;
         }
 
-        inline const OCLActivationKernelName<OCLVectorKernelName, NameCount>& GetCPUNames(unsigned size) const
+        inline const OCLActivationKernelVersion<OCLVectorKernelName>& GetCPUNames(unsigned size) const
         {
             return cpuNames[size - 1];
         }
 
-        inline const OCLActivationKernelName<OCLVectorKernelName, NameCount>& GetGPUNames(unsigned size) const
+        inline const OCLActivationKernelVersion<OCLVectorKernelName>& GetGPUNames(unsigned size) const
         {
             return gpuNames[size - 1];
         }
 
     public:
-        OCLActivationKernelBase(const OCLIntCtxSPtrT& ctx) :
+        OCLActivationKernelBase(const OCLIntCtxSPtrT& ctx, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount) :
             OCLKernelBase(ctx)
         {
-            for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
+            for (unsigned size = 1; size <= maxConnectionCount; size++)
             {
-                auto cpu = CreateNames(ComputingUnit::CPU, size);
-                auto gpu = CreateNames(ComputingUnit::GPU, size);
+                auto cpu = CreateNames(versions, ComputingUnit::CPU, size);
+                auto gpu = CreateNames(versions, ComputingUnit::GPU, size);
                 cpuNames.emplace_back();
                 gpuNames.emplace_back();
 
-                for (::size_t i = 0; i < NameCount; i++)
+                for (auto i : versions)
                 {
-                    auto& cpuN = cpu.GetName(i);
-                    cpuNames.back().PushName(OCLVectorKernelName(cpuN));
-                    auto& gpuN = gpu.GetName(i);
-                    gpuNames.back().PushName(OCLVectorKernelName(gpuN));
+                    auto& cpuN = cpu.GetVersion(i);
+                    cpuNames.back().EmplaceVersion(i, cpuN);
+                    auto& gpuN = gpu.GetVersion(i);
+                    gpuNames.back().EmplaceVersion(i, gpuN);
                 }
             }
         }
