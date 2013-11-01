@@ -23,12 +23,12 @@ namespace NeuroflowN
 
     enum ComputeGradientKernelVersion
     {
-        CGKVFF_Online,
-        CGKVFF_Offline,
-        CGKVFF_OnlineOffline,
+        CGKVFFOnline,
+        CGKVFFOffline,
+        CGKVFFOnlineOffline,
         CGKVBPTTPhase1,
         CGKVBPTTPhase2,
-        CGKVBPTTPhase2_Offline
+        CGKVBPTTPhase2Offline
     };
 
     struct OCLReduceSizes;

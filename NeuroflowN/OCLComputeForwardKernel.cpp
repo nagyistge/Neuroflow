@@ -14,7 +14,7 @@ using namespace NeuroflowN;
 using namespace cl;
 
 OCLComputeForwardKernel::OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-OCLVersionableKernelBase(ctx, "ComputeForward", { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
+    OCLVersionableKernelBase(ctx, "ComputeForward", { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };

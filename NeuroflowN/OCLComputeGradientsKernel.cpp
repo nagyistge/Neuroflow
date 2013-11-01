@@ -12,23 +12,57 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_Online_CPU = OCLVectorKernelName("ComputeGradients_FF_Online_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_Online_GPU = OCLVectorKernelName("ComputeGradients_FF_Online_GPU");
+OCLComputeGradientsKernel::OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+    OCLVersionableKernelBase(ctx, "ComputeGradients", { CGKVFFOnline, CGKVFFOffline, CGKVFFOnlineOffline, CGKVBPTTPhase1, CGKVBPTTPhase2, CGKVBPTTPhase2Offline })
+{
+    Build(vault);
+};
 
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_Offline_CPU = OCLVectorKernelName("ComputeGradients_FF_Offline_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_Offline_GPU = OCLVectorKernelName("ComputeGradients_FF_Offline_GPU");
+ComputeGradientKernelVersion OCLComputeGradientsKernel::GradientComputationFlagsToVersion(GradientComputationFlags flags)
+{
+    if (flags & FF)
+    {
+        if (flags & Online)
+        {
+            if (flags & Offline)
+            {
+                return CGKVFFOnlineOffline;
+            }
+            else
+            {
+                // Online && !Offline
+                return CGKVFFOnline;
+            }
+        }
+        else
+        {
+            // !Online
+            if (flags & Offline)
+            {
+                return CGKVFFOffline;
+            }
+        }
+    }
+    else if (flags & BPTTPhase1)
+    {
+        return CGKVBPTTPhase1;
+    }
+    else if (flags & BPTTPhase2)
+    {
+        if (flags & Offline)
+        {
+            return CGKVBPTTPhase2Offline;
+        }
+        else
+        {
+            return CGKVBPTTPhase2;
+        }
+    }
 
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_OnlineOffline_CPU = OCLVectorKernelName("ComputeGradients_FF_OnlineOffline_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_FF_OnlineOffline_GPU = OCLVectorKernelName("ComputeGradients_FF_OnlineOffline_GPU");
+    ThrowUnknownFlagsEx(flags);
 
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase1_CPU = OCLVectorKernelName("ComputeGradients_BPTTPhase1_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase1_GPU = OCLVectorKernelName("ComputeGradients_BPTTPhase1_GPU");
-
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_CPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_GPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_GPU");
-
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offline_CPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_Offline_CPU");
-OCLVectorKernelName OCLComputeGradientsKernel::ComputeGradients_BPTTPhase2_Offline_GPU = OCLVectorKernelName("ComputeGradients_BPTTPhase2_Offline_GPU");
+    throw_logic_error("This ain't gonna happen.");
+}
 
 void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
 {
@@ -99,94 +133,6 @@ void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
     program->AddCode(CreateKernelCode((GradientComputationFlags)(BPTTPhase2 | Offline)));
 }
 
-const OCLVectorKernelName& OCLComputeGradientsKernel::GetKernelName(GradientComputationFlags flags)
-{
-    if (flags & FF)
-    {
-        if (flags & Online)
-        {
-            if (flags & Offline)
-            {
-                if (flags & CPU)
-                {
-                    return ComputeGradients_FF_OnlineOffline_CPU;
-                }
-                else if (flags & GPU)
-                {
-                    return ComputeGradients_FF_OnlineOffline_GPU;
-                }
-            }
-            else
-            {
-                // Online && !Offline
-                if (flags & CPU)
-                {
-                    return ComputeGradients_FF_Online_CPU;
-                }
-                else if (flags & GPU)
-                {
-                    return ComputeGradients_FF_Online_GPU;
-                }
-            }
-        }
-        else
-        {
-            // !Online
-            if (flags & Offline)
-            {
-                if (flags & CPU)
-                {
-                    return ComputeGradients_FF_Offline_CPU;
-                }
-                else if (flags & GPU)
-                {
-                    return ComputeGradients_FF_Offline_GPU;
-                }
-            }
-        }
-    }
-    else if (flags & BPTTPhase1)
-    {
-        if (flags & CPU)
-        {
-            return ComputeGradients_BPTTPhase1_CPU;
-        }
-        else if (flags & GPU)
-        {
-            return ComputeGradients_BPTTPhase1_GPU;
-        }
-    }
-    else if (flags & BPTTPhase2)
-    {
-        if (flags & Offline)
-        {
-            if (flags & CPU)
-            {
-                return ComputeGradients_BPTTPhase2_Offline_CPU;
-            }
-            else if (flags & GPU)
-            {
-                return ComputeGradients_BPTTPhase2_Offline_GPU;
-            }
-        }
-        else
-        {
-            if (flags & CPU)
-            {
-                return ComputeGradients_BPTTPhase2_CPU;
-            }
-            else if (flags & GPU)
-            {
-                return ComputeGradients_BPTTPhase2_GPU;
-            }
-        }
-    }
-
-    ThrowUnknownFlagsEx(flags);
-
-    throw_logic_error("This ain't gonna happen.");
-}
-
 std::string OCLComputeGradientsKernel::CreateKernelCode(GradientComputationFlags flags)
 {
     stringstream code;
@@ -194,9 +140,11 @@ std::string OCLComputeGradientsKernel::CreateKernelCode(GradientComputationFlags
     return code.str();
 }
 
-void OCLComputeGradientsKernel::FillKernelPars(KernelPars& pars, GradientComputationFlags flags, bool fillName)
+void OCLComputeGradientsKernel::FillKernelPars(KernelPars& pars, GradientComputationFlags flags)
 {
-    if (fillName) pars.name = make_shared<string>(GetKernelName(flags)(1));
+    pars.name = (flags & CPU) ?
+        &GetCPUNames().GetVersion(GradientComputationFlagsToVersion(flags)) :
+        &GetGPUNames().GetVersion(GradientComputationFlagsToVersion(flags));
     pars.calcGradients = (flags & Online | flags & BPTTPhase1 | flags & BPTTPhase2) != 0;
     pars.calcGradientSums = (flags & Offline) != 0;
     pars.ff = (flags & FF) != 0;
@@ -210,7 +158,7 @@ void OCLComputeGradientsKernel::FillKernelPars(KernelPars& pars, GradientComputa
 std::string OCLComputeGradientsKernel::CreateKernelHeader(const KernelPars& pars)
 {
     stringstream code;
-    code << "__kernel void " << *pars.name << "$(";
+    code << "__kernel void " << pars.name->GetName() << "$(";
     code << "__global float* errors,";
     if (pars.calcGradients) code << "__global float* biasGradients,";
     if (pars.calcGradientSums) code << "__global float* biasGradientSums,";
@@ -233,7 +181,7 @@ std::string OCLComputeGradientsKernel::CreateKernelHeader(const KernelPars& pars
 std::string OCLComputeGradientsKernel::CreateCPUKernelCode(GradientComputationFlags flags)
 {
     KernelPars pars;
-    FillKernelPars(pars, flags, true);
+    FillKernelPars(pars, flags);
 
     stringstream code;
     code << CreateKernelHeader(pars);
@@ -291,7 +239,7 @@ std::string OCLComputeGradientsKernel::CreateCPUKernelCode(GradientComputationFl
 std::string OCLComputeGradientsKernel::CreateGPUKernelCode(GradientComputationFlags flags)
 {
     KernelPars pars;
-    FillKernelPars(pars, flags, true);
+    FillKernelPars(pars, flags);
 
     stringstream code;
     code << CreateKernelHeader(pars);
@@ -387,8 +335,9 @@ void OCLComputeGradientsKernel::ExecBPTTPhase2(NfObject* state, DeviceArrayFVecT
 
 void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputsV, DeviceArray2VecT* gradientsV, IDeviceArray* pBiasGradients, DeviceArray2VecT* gradientSumsV, IDeviceArray* pBiasGradientSums, IDeviceArray* pErrors, unsigned intItCount)
 {
+    flags = ctx->IsCPU() ? (GradientComputationFlags)(flags | CPU) : (GradientComputationFlags)(flags | GPU);
     KernelPars pars;
-    FillKernelPars(pars, flags, false);
+    FillKernelPars(pars, flags);
 
     unsigned size = inputsV->size();
     assert(!pars.calcGradients || gradientsV->size() == size);
@@ -417,11 +366,11 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
             if (pars.bpttp2) kernel.setArg(aidx++, fiic);
         };
 
-        if (ctx->IsCPU())
+        if (flags & CPU)
         {
             exec.Execute(
                 program,
-                GetKernelName((GradientComputationFlags)(flags | CPU))(vectorSize),
+                (*pars.name)(vectorSize),
                 vectorSize,
                 init,
                 errors.GetSize());
@@ -430,7 +379,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
         {
             exec.Execute(
                 program,
-                GetKernelName((GradientComputationFlags)(flags | GPU))(vectorSize),
+                (*pars.name)(vectorSize),
                 vectorSize,
                 init,
                 (inputs.GetSize() / vectorSize) * errors.GetSize());
