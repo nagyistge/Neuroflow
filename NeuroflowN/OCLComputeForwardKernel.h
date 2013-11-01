@@ -3,13 +3,11 @@
 #include "OCLTypedefs.h"
 #include "OCLVectorKernelName.h"
 #include "NNMetadata.h"
-#include "OCLActivationKernelBase.h"
+#include "OCLVersionableKernelBase.h"
 
 namespace NeuroflowN
 {
-    extern const char ComputeForwardTmpl [];
-
-    class OCLComputeForwardKernel : public OCLActivationKernelBase<ComputeForwardTmpl>
+    class OCLComputeForwardKernel : public OCLVersionableKernelBase
     {
         OCLProgramSPtrT program;
 

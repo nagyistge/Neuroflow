@@ -14,10 +14,9 @@ namespace NeuroflowN
     };
 
     template <typename T>
-    class OCLActivationKernelVersion
+    class OCLKernelVersionBag
     {
-        template<const char* NameTemplate>
-        friend class OCLActivationKernelBase;
+        friend class OCLVersionableKernelBase;
 
         std::vector<std::unique_ptr<T>> values;
 
@@ -29,9 +28,9 @@ namespace NeuroflowN
         }
 
     public:
-        OCLActivationKernelVersion() { }
-        OCLActivationKernelVersion(const OCLActivationKernelVersion& other) = delete;
-        OCLActivationKernelVersion(OCLActivationKernelVersion&& other) :
+        OCLKernelVersionBag() { }
+        OCLKernelVersionBag(const OCLKernelVersionBag& other) = delete;
+        OCLKernelVersionBag(OCLKernelVersionBag&& other) :
             values(move(other.values))
         {
         }
@@ -42,54 +41,63 @@ namespace NeuroflowN
         }
     };
 
-    template<const char* NameTemplate>
-    class OCLActivationKernelBase : public OCLKernelBase
+    class OCLVersionableKernelBase : public OCLKernelBase
     {
-        std::vector<OCLActivationKernelVersion<OCLVectorKernelName>> cpuNames;
-        std::vector<OCLActivationKernelVersion<OCLVectorKernelName>> gpuNames;
+        std::string namePrefix;
+        std::vector<OCLKernelVersionBag<OCLVectorKernelName>> cpuNames;
+        std::vector<OCLKernelVersionBag<OCLVectorKernelName>> gpuNames;
 
-        static std::string CreateName(const char* type, const char* unit, unsigned size)
+        std::string CreateName(const char* ver, const char* unit, unsigned size)
         {
             using namespace std;
 
-            string result = string(NameTemplate);
-            boost::replace_all(result, "{0}", type);
-            boost::replace_all(result, "{1}", to_string(size));
-            boost::replace_all(result, "{2}", unit);
-            return move(result);
+            stringstream name;
+            name << namePrefix;
+            name << "_";
+            name << ver;
+            name << "_";
+            if (size > 1)
+            {
+                name << size;
+                name << "_";
+            }
+            name << unit;
+
+            return name.str();
         }
 
     protected:
 
-        OCLActivationKernelVersion<std::string> CreateNames(const std::initializer_list<::size_t>& versions, ComputingUnit unit, unsigned size)
+        OCLKernelVersionBag<std::string> CreateNames(const std::initializer_list<::size_t>& versions, ComputingUnit unit, unsigned size)
         {
             using namespace std;
 
             const char* unitStr = unit == ComputingUnit::CPU ? "CPU" : "GPU";
-            OCLActivationKernelVersion<std::string> result;
+            OCLKernelVersionBag<std::string> result;
             for (auto i : versions)
             {
                 stringstream n;
-                n << "Version";
+                n << "V";
                 n << i;
                 result.EmplaceVersion(i, CreateName(n.str().c_str(), unitStr, size));
             }
             return result;
         }
 
-        inline const OCLActivationKernelVersion<OCLVectorKernelName>& GetCPUNames(unsigned size) const
+        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetCPUNames(unsigned size) const
         {
             return cpuNames[size - 1];
         }
 
-        inline const OCLActivationKernelVersion<OCLVectorKernelName>& GetGPUNames(unsigned size) const
+        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetGPUNames(unsigned size) const
         {
             return gpuNames[size - 1];
         }
 
     public:
-        OCLActivationKernelBase(const OCLIntCtxSPtrT& ctx, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount) :
-            OCLKernelBase(ctx)
+        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount) :
+            OCLKernelBase(ctx),
+            namePrefix(namePrefix)
         {
             for (unsigned size = 1; size <= maxConnectionCount; size++)
             {
