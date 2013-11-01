@@ -86,8 +86,8 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first.GetName(), "SigmoidD$(outputs[idx], alpha)", true);
-    code << factory(names.second.GetName(), "alpha", false);
+    code << factory(names.GetName(0).GetName(), "SigmoidD$(outputs[idx], alpha)", true);
+    code << factory(names.GetName(1).GetName(), "alpha", false);
 
     return code.str();
 }
@@ -132,8 +132,8 @@ std::string OCLComputeInternalErrorsKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first.GetName(), "SigmoidD$(outputs[oidx], alpha)", true);
-    code << factory(names.second.GetName(), "alpha", false);
+    code << factory(names.GetName(0).GetName(), "SigmoidD$(outputs[oidx], alpha)", true);
+    code << factory(names.GetName(1).GetName(), "alpha", false);
 
     return code.str();
 }
@@ -180,7 +180,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).first(vectorSize),
+                GetCPUNames(size).GetName(0)(vectorSize),
                 vectorSize,
                 initSig,
                 errors.GetSize() / vectorSize);
@@ -189,7 +189,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).second(vectorSize),
+                GetCPUNames(size).GetName(1)(vectorSize),
                 vectorSize,
                 initLin,
                 errors.GetSize() / vectorSize);
@@ -203,7 +203,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).first(vectorSize),
+                GetGPUNames(size).GetName(0)(vectorSize),
                 vectorSize,
                 initSig,
                 NDRange(sizes.first),
@@ -213,7 +213,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).second(vectorSize),
+                GetGPUNames(size).GetName(1)(vectorSize),
                 vectorSize,
                 initLin,
                 NDRange(sizes.first),

@@ -9,7 +9,7 @@ namespace NeuroflowN
 {
     extern const char ComputeForwardTmpl [];
 
-    class OCLComputeForwardKernel : public OCLActivationKernelBase<ComputeForwardTmpl>
+    class OCLComputeForwardKernel : public OCLActivationKernelBase<ComputeForwardTmpl, 2>
     {
         OCLProgramSPtrT program;
 
