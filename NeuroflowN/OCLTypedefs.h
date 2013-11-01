@@ -14,6 +14,13 @@ namespace cl
 
 namespace NeuroflowN
 {
+    enum ActivationKernelVersion
+    {
+        AKVSigmoid = 1 << 1,
+        AKVLinear = 1 << 2,
+        AKVRTLR = 1 << 3
+    };
+
     struct OCLReduceSizes;
 
     class OCLContextImpl;
