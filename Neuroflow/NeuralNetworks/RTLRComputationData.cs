@@ -8,7 +8,7 @@ namespace Neuroflow.NeuralNetworks
 {
     public sealed class RTLRComputationData
     {
-        public Func<IDeviceArray> Inputs { get; internal set; }
+        public DeviceArrayFactory Inputs { get; internal set; }
         public IDeviceArray2 Gradients { get; internal set; }
         public IDeviceArray2 GradientSums { get; internal set; }
         public IDeviceArray BiasGradients { get; internal set; }

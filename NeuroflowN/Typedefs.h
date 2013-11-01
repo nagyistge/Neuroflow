@@ -43,7 +43,8 @@ namespace NeuroflowN
 
     typedef std::vector<IDeviceArray*> DeviceArrayVecT;
     typedef std::vector<IDeviceArray2*> DeviceArray2VecT;
-    typedef std::vector<std::function<IDeviceArray*()>> DeviceArrayFVecT;
+    typedef std::function<IDeviceArray*()> DeviceArrayFactoryT;
+    typedef std::vector<DeviceArrayFactoryT> DeviceArrayFVecT;
 
     typedef std::shared_ptr<DeviceArrayVecT> DeviceArrayVecSPtrT;
     typedef std::shared_ptr<DeviceArray2VecT> DeviceArray2VecSPtrT;

@@ -72,7 +72,7 @@ NeuroflowN::IDeviceArray2* Neuroflow::ToNative(IDeviceArray2^ deviceArray)
     return ((NativeDeviceArray2^)deviceArray)->PDeviceArray2;
 }
 
-std::function<NeuroflowN::IDeviceArray*()> Neuroflow::ToNative(DeviceArrayFactory^ deviceArrayF)
+NeuroflowN::DeviceArrayFactoryT Neuroflow::ToNative(DeviceArrayFactory^ deviceArrayF)
 {
     if (deviceArrayF == null) throw gcnew ArgumentNullException("deviceArrayF");
 
@@ -190,7 +190,7 @@ NeuroflowN::NfObject* Neuroflow::ToNative(System::IDisposable^ obj)
 {
     if (obj == null) throw gcnew ArgumentNullException("obj");
 
-    return ((NativeObject^)obj)->PObj;
+    return ((NativeObject^)obj)->Ptr;
 }
 
 NeuralNetworks::LearningAlgoIterationType Neuroflow::ToManaged(NeuroflowN::LearningAlgoIterationType type)
@@ -215,21 +215,39 @@ NeuroflowN::RTLRLayerInfoVecVecT* Neuroflow::ToNative(Marshaled<array<array<Neur
         result->emplace_back();
         for each (auto info in inputs)
         {
-            result->back().emplace_back(info->Index, ToNative(info->Weights), info->Size, info->IsElementOfU);
+            result->back().emplace_back();
+            auto& i = result->back().back();
+            i.Index = info->Index;
+            i.Weights = ToNative(info->Weights);
+            i.Size = info->Size;
+            i.IsElementOfU = info->IsElementOfU;
         }
     }
 
     return result;
 }
 
-//NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data)
-//{
-//    if (data == null || data->ManagedObject == null) return null;
-//    if (data->NativeVersion != null)
-//    {
-//        return ((NativePtr<NeuroflowN::RTLRComputationData>^)data->NativeVersion)->Ptr;
-//    }
-//
-//    auto d = data->ManagedObject;
-//    auto result = new NeuroflowN::RTLRComputationData();
-//}
+NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data)
+{
+    if (data == null || data->ManagedObject == null) return null;
+    if (data->NativeVersion != null)
+    {
+        return ((NativePtr<NeuroflowN::RTLRComputationData>^)data->NativeVersion)->Ptr;
+    }
+
+    auto d = data->ManagedObject;
+    auto result = new NeuroflowN::RTLRComputationData();
+    data->NativeVersion = gcnew NativePtr<NeuroflowN::RTLRComputationData>(result);
+
+    result->Inputs = ToNative(data->ManagedObject->Inputs);
+    result->Gradients = ToNative(data->ManagedObject->Gradients);
+    result->GradientSums = ToNative(data->ManagedObject->GradientSums);
+    result->BiasGradients = ToNative(data->ManagedObject->BiasGradients);
+    result->BiasGradientSums = ToNative(data->ManagedObject->BiasGradientSums);
+    result->ILayerIndex = data->ManagedObject->ILayerIndex;
+    result->IValueIndex = data->ManagedObject->IValueIndex;
+    result->JLayerIndex = data->ManagedObject->JLayerIndex;
+    result->JValueIndex = data->ManagedObject->JValueIndex;
+
+    return result;
+}
