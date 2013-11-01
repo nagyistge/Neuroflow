@@ -4,6 +4,7 @@
 #include "OCLVectorKernelName.h"
 #include "NNMetadata.h"
 #include "OCLKernelBase.h"
+#include <tuple>
 
 namespace NeuroflowN
 {
@@ -12,11 +13,41 @@ namespace NeuroflowN
         CPU, GPU
     };
 
-    template<const char* NameTemplate>
+    template <typename T, ::size_t NameCount>
+    class OCLActivationKernelName
+    {
+        template<const char* NameTemplate, ::size_t NameCount>
+        friend class OCLActivationKernelBase;
+
+        std::vector<T> values;
+
+        void PushName(T&& value)
+        {
+            values.emplace_back(value);
+        }
+
+    public:
+        OCLActivationKernelName() { }
+        OCLActivationKernelName(const OCLActivationKernelName& other) :
+            values(other.values)
+        {
+        }
+        OCLActivationKernelName(OCLActivationKernelName&& other) :
+            values(other.values)
+        {
+        }
+
+        const T& GetName(::size_t index) const
+        {
+            return values[index];
+        }
+    };
+
+    template<const char* NameTemplate, ::size_t NameCount>
     class OCLActivationKernelBase : public OCLKernelBase
     {
-        std::vector<std::pair<OCLVectorKernelName, OCLVectorKernelName>> cpuNames;
-        std::vector<std::pair<OCLVectorKernelName, OCLVectorKernelName>> gpuNames;
+        std::vector<OCLActivationKernelName<OCLVectorKernelName, NameCount>> cpuNames;
+        std::vector<OCLActivationKernelName<OCLVectorKernelName, NameCount>> gpuNames;
 
         static std::string CreateName(const char* type, const char* unit, unsigned size)
         {
@@ -31,20 +62,28 @@ namespace NeuroflowN
 
     protected:
 
-        static std::pair<std::string, std::string> CreateNames(ComputingUnit unit, unsigned size)
+        static OCLActivationKernelName<std::string, NameCount> CreateNames(ComputingUnit unit, unsigned size)
         {
             using namespace std;
 
             const char* unitStr = unit == ComputingUnit::CPU ? "CPU" : "GPU";
-            return move(make_pair(CreateName("Sigmoid", unitStr, size), CreateName("Linear", unitStr, size)));
+            OCLActivationKernelName<std::string, NameCount> result;
+            for (::size_t i = 0; i < NameCount; i++)
+            {
+                stringstream n;
+                n << "Version";
+                n << i;
+                result.PushName(CreateName(n.str().c_str(), unitStr, size));
+            }
+            return result;
         }
 
-        inline const std::pair<OCLVectorKernelName, OCLVectorKernelName>& GetCPUNames(unsigned size) const
+        inline const OCLActivationKernelName<OCLVectorKernelName, NameCount>& GetCPUNames(unsigned size) const
         {
             return cpuNames[size - 1];
         }
 
-        inline const std::pair<OCLVectorKernelName, OCLVectorKernelName>& GetGPUNames(unsigned size) const
+        inline const OCLActivationKernelName<OCLVectorKernelName, NameCount>& GetGPUNames(unsigned size) const
         {
             return gpuNames[size - 1];
         }
@@ -57,9 +96,16 @@ namespace NeuroflowN
             {
                 auto cpu = CreateNames(ComputingUnit::CPU, size);
                 auto gpu = CreateNames(ComputingUnit::GPU, size);
+                cpuNames.emplace_back();
+                gpuNames.emplace_back();
 
-                cpuNames.emplace_back(OCLVectorKernelName(cpu.first), OCLVectorKernelName(cpu.second));
-                gpuNames.emplace_back(OCLVectorKernelName(gpu.first), OCLVectorKernelName(gpu.second));
+                for (::size_t i = 0; i < NameCount; i++)
+                {
+                    auto& cpuN = cpu.GetName(i);
+                    cpuNames.back().PushName(OCLVectorKernelName(cpuN));
+                    auto& gpuN = gpu.GetName(i);
+                    gpuNames.back().PushName(OCLVectorKernelName(gpuN));
+                }
             }
         }
     };

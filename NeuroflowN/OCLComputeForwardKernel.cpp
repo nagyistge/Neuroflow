@@ -85,8 +85,8 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first.GetName(), "Sigmoid(sum, alpha)");
-    code << factory(names.second.GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
+    code << factory(names.GetName(0).GetName(), "Sigmoid(sum, alpha)");
+    code << factory(names.GetName(1).GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
 
     return code.str();
 }
@@ -133,8 +133,8 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.first.GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
-    code << factory(names.second.GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
+    code << factory(names.GetName(0).GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
+    code << factory(names.GetName(1).GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
 
     return code.str();
 }
@@ -175,7 +175,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).first(vectorSize),
+                GetCPUNames(size).GetName(0)(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -184,7 +184,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).second(vectorSize),
+                GetCPUNames(size).GetName(1)(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -198,7 +198,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).first(vectorSize),
+                GetGPUNames(size).GetName(0)(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),
@@ -208,7 +208,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).second(vectorSize),
+                GetGPUNames(size).GetName(1)(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),

@@ -11,7 +11,7 @@ namespace NeuroflowN
 {
     extern const char ComputeInternalErrorsTmpl [];
 
-    class OCLComputeInternalErrorsKernel : public OCLActivationKernelBase<ComputeInternalErrorsTmpl>
+    class OCLComputeInternalErrorsKernel : public OCLActivationKernelBase<ComputeInternalErrorsTmpl, 2>
     {
         OCLProgramSPtrT program;
 
