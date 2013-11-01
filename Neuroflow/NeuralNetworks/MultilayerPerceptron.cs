@@ -429,11 +429,6 @@ namespace Neuroflow.NeuralNetworks
                 ResourceManager.Free(globalOnlineError);
                 globalOnlineError = null;
             }
-            if (calculateGlobalErrorState != null)
-            {
-                ResourceManager.Free(calculateGlobalErrorState);
-                calculateGlobalErrorState = null;
-            }
         }
 
         private void CreateStructure(Dictionary<int, LearningInfo> learningInfos)
@@ -587,8 +582,7 @@ namespace Neuroflow.NeuralNetworks
 
                 var fComps = Adapter.ComputeActivation;
 
-                var state = fComps.CreateComputationState();
-                computationStates.AddLast(state);
+                var state = CreateComputationState();
 
                 // Create code:
 
@@ -803,8 +797,7 @@ namespace Neuroflow.NeuralNetworks
                         // Errors are computed:
                         if (doFFBP)
                         {
-                            var state = comp.CreateComputationState();
-                            computationStates.AddLast(state);
+                            var state = CreateComputationState();
 
                             FFBackpropagateCode.Add(
                                 () =>
@@ -821,10 +814,8 @@ namespace Neuroflow.NeuralNetworks
                         }
                         else if (doBPTT)
                         {
-                            var state1 = comp.CreateComputationState();
-                            computationStates.AddLast(state1);
-                            var state2 = comp.CreateComputationState();
-                            computationStates.AddLast(state2);
+                            var state1 = CreateComputationState();
+                            var state2 = CreateComputationState();
 
                             BPTTBackpropagateCode.Add(
                                 (innerIterationIndex, isLastIteration, innerIterationsCount) =>
@@ -864,10 +855,8 @@ namespace Neuroflow.NeuralNetworks
                     {
                         if (doFFBP)
                         {
-                            var state1 = comp.CreateComputationState();
-                            var state2 = comp.CreateComputationState();
-                            computationStates.AddLast(state1);
-                            computationStates.AddLast(state2);
+                            var state1 = CreateComputationState();
+                            var state2 = CreateComputationState();
 
                             FFBackpropagateCode.Add(
                                 () =>
@@ -893,12 +882,9 @@ namespace Neuroflow.NeuralNetworks
                         }
                         else if (doBPTT)
                         {
-                            var state1 = comp.CreateComputationState();
-                            computationStates.AddLast(state1);
-                            var state2 = comp.CreateComputationState();
-                            computationStates.AddLast(state2);
-                            var state3 = comp.CreateComputationState();
-                            computationStates.AddLast(state3);
+                            var state1 = CreateComputationState();
+                            var state2 = CreateComputationState();
+                            var state3 = CreateComputationState();
 
                             BPTTBackpropagateCode.Add(
                                 (innerIterationIndex, isLastIteration, innerIterationsCount) =>
@@ -950,7 +936,7 @@ namespace Neuroflow.NeuralNetworks
             {
                 if (calculateGlobalOnlineError) globalOnlineError = Adapter.DeviceArrayManagement.CreateArray(false, OutputSize);
                 if (calculateGlobalOfflineError) globalOfflineError = Adapter.DeviceArrayManagement.CreateArray(false, OutputSize);
-                calculateGlobalErrorState = Adapter.ComputeActivation.CreateComputationState();
+                calculateGlobalErrorState = CreateComputationState();
             }
 
             // Initialize Learning:
@@ -1233,8 +1219,7 @@ namespace Neuroflow.NeuralNetworks
 
             if (setOutputState == null)
             {
-                setOutputState = comp.CreateComputationState();
-                computationStates.AddLast(setOutputState);
+                setOutputState = CreateComputationState();
             }
 
             comp.ComputeErrors(
@@ -1270,7 +1255,7 @@ namespace Neuroflow.NeuralNetworks
 
                 var comp = Adapter.ComputeActivation;
 
-                if (setOutputState == null) computationStates.AddLast(setOutputState = comp.CreateComputationState());
+                if (setOutputState == null) setOutputState = CreateComputationState();
 
                 comp.ComputeErrors(
                     setOutputState,
@@ -1398,6 +1383,13 @@ namespace Neuroflow.NeuralNetworks
             IDeviceArray2 result = null;
             if (gradients != null) gradients.TryGetValue(weightKey, out result);
             return result;
+        }
+
+        internal IDisposable CreateComputationState()
+        {
+            var state = Adapter.ComputeActivation.CreateComputationState();
+            computationStates.AddLast(state);
+            return state;
         }
 
         internal IDeviceArray2 GetGradientSums(Tuple<int, int> weightKey)

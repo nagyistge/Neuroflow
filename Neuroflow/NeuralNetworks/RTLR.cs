@@ -198,7 +198,8 @@ namespace Neuroflow.NeuralNetworks
 
                 Debug.Assert(!(data.BiasGradients == null && data.BiasGradientSums == null && data.Gradients == null && data.GradientSums == null));
 
-                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(inputLayerInfos, netValueDerivates, dataM, p, os, dos);
+                var state = mlp.CreateComputationState();
+                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(state, inputLayerInfos, netValueDerivates, dataM, p, os, dos);
 
                 codes[computationIndex] = code;
                 code(valueRelatedPBuffs, outputs, desiredOutputs);
