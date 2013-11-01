@@ -1,13 +1,13 @@
 #pragma once
 
-#include "OCLKernelBase.h"
+#include "OCLVersionableKernelBase.h"
 #include "NNMetadata.h"
 #include "OCLVectorKernelName.h"
 #include "OCLError.h"
 
 namespace NeuroflowN
 {
-    class OCLComputeGradientsKernel : public OCLKernelBase
+    class OCLComputeGradientsKernel : public OCLVersionableKernelBase
     {
         enum GradientComputationFlags
         {
@@ -22,7 +22,7 @@ namespace NeuroflowN
 
         struct KernelPars
         {
-            std::shared_ptr<std::string> name;
+            const OCLVectorKernelName* name;
             bool calcGradients;
             bool calcGradientSums;
             bool ff;
@@ -31,33 +31,15 @@ namespace NeuroflowN
             bool bptt;
         };
 
-        static OCLVectorKernelName ComputeGradients_FF_Online_CPU;
-        static OCLVectorKernelName ComputeGradients_FF_Online_GPU;
-
-        static OCLVectorKernelName ComputeGradients_FF_Offline_CPU;
-        static OCLVectorKernelName ComputeGradients_FF_Offline_GPU;
-
-        static OCLVectorKernelName ComputeGradients_FF_OnlineOffline_CPU;
-        static OCLVectorKernelName ComputeGradients_FF_OnlineOffline_GPU;
-
-        static OCLVectorKernelName ComputeGradients_BPTTPhase1_CPU;
-        static OCLVectorKernelName ComputeGradients_BPTTPhase1_GPU;
-
-        static OCLVectorKernelName ComputeGradients_BPTTPhase2_CPU;
-        static OCLVectorKernelName ComputeGradients_BPTTPhase2_GPU;
-
-        static OCLVectorKernelName ComputeGradients_BPTTPhase2_Offline_CPU;
-        static OCLVectorKernelName ComputeGradients_BPTTPhase2_Offline_GPU;
-
         OCLProgramSPtrT program;
+
+        ComputeGradientKernelVersion GradientComputationFlagsToVersion(GradientComputationFlags flags);
 
         std::string CreateKernelCode(GradientComputationFlags flags);
 
         std::string CreateCPUKernelCode(GradientComputationFlags flags);
 
         std::string CreateGPUKernelCode(GradientComputationFlags flags);
-
-        static const OCLVectorKernelName& GetKernelName(GradientComputationFlags flags);
 
         inline static void ThrowUnknownFlagsEx(GradientComputationFlags flags)
         {
@@ -68,18 +50,14 @@ namespace NeuroflowN
             throw_logic_error(e.str());
         }
 
-        inline static void FillKernelPars(KernelPars& pars, GradientComputationFlags flags, bool fillName);
+        inline void FillKernelPars(KernelPars& pars, GradientComputationFlags flags);
 
-        inline static std::string CreateKernelHeader(const KernelPars& pars);
+        inline std::string CreateKernelHeader(const KernelPars& pars);
 
         void Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
 
     public:
-        OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-            OCLKernelBase(ctx)
-        {
-            Build(vault);
-        };
+        OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
         void Build(const OCLVaultSPtrT& vault);
 

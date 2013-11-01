@@ -84,18 +84,18 @@ namespace NeuroflowN
             return result;
         }
 
-        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetCPUNames(unsigned size) const
+        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetCPUNames(unsigned size = 1) const
         {
             return cpuNames[size - 1];
         }
 
-        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetGPUNames(unsigned size) const
+        inline const OCLKernelVersionBag<OCLVectorKernelName>& GetGPUNames(unsigned size = 1) const
         {
             return gpuNames[size - 1];
         }
 
     public:
-        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount) :
+        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount = 1) :
             OCLKernelBase(ctx),
             namePrefix(namePrefix)
         {
