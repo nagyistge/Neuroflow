@@ -14,7 +14,7 @@ using namespace NeuroflowN;
 using namespace cl;
 
 OCLComputeInternalErrorsKernel::OCLComputeInternalErrorsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-OCLVersionableKernelBase(ctx, "ComputeInternalErrors", { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
+OCLVersionableKernelBase(ctx, "ComputeInternalErrors", { SigmoidAKV, LinearAKV }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };
@@ -90,8 +90,8 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.GetVersion(AKVSigmoid).GetName(), "SigmoidD$(outputs[idx], alpha)", true);
-    code << factory(names.GetVersion(AKVLinear).GetName(), "alpha", false);
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "SigmoidD$(outputs[idx], alpha)", true);
+    code << factory(names.GetVersion(LinearAKV)->GetName(), "alpha", false);
 
     return code.str();
 }
@@ -136,8 +136,8 @@ std::string OCLComputeInternalErrorsKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.GetVersion(AKVSigmoid).GetName(), "SigmoidD$(outputs[oidx], alpha)", true);
-    code << factory(names.GetVersion(AKVLinear).GetName(), "alpha", false);
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "SigmoidD$(outputs[oidx], alpha)", true);
+    code << factory(names.GetVersion(LinearAKV)->GetName(), "alpha", false);
 
     return code.str();
 }
@@ -184,7 +184,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).GetVersion(AKVSigmoid)(vectorSize),
+                (*GetCPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
                 vectorSize,
                 initSig,
                 errors.GetSize() / vectorSize);
@@ -193,7 +193,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).GetVersion(AKVLinear)(vectorSize),
+                (*GetCPUNames(size).GetVersion(LinearAKV))(vectorSize),
                 vectorSize,
                 initLin,
                 errors.GetSize() / vectorSize);
@@ -207,7 +207,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).GetVersion(AKVSigmoid)(vectorSize),
+                (*GetGPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
                 vectorSize,
                 initSig,
                 NDRange(sizes.first),
@@ -217,7 +217,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).GetVersion(AKVLinear)(vectorSize),
+                (*GetGPUNames(size).GetVersion(LinearAKV))(vectorSize),
                 vectorSize,
                 initLin,
                 NDRange(sizes.first),

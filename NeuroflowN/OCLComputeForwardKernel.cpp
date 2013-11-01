@@ -14,7 +14,7 @@ using namespace NeuroflowN;
 using namespace cl;
 
 OCLComputeForwardKernel::OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    OCLVersionableKernelBase(ctx, "ComputeForward", { AKVSigmoid, AKVLinear }, ctx->GetMaxConnectionCount())
+    OCLVersionableKernelBase(ctx, "ComputeForward", { SigmoidAKV, LinearAKV }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };
@@ -89,8 +89,8 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.GetVersion(AKVSigmoid).GetName(), "Sigmoid(sum, alpha)");
-    code << factory(names.GetVersion(AKVLinear).GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "Sigmoid(sum, alpha)");
+    code << factory(names.GetVersion(LinearAKV)->GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
 
     return code.str();
 }
@@ -137,8 +137,8 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.GetVersion(AKVSigmoid).GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
-    code << factory(names.GetVersion(AKVLinear).GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
+    code << factory(names.GetVersion(LinearAKV)->GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
 
     return code.str();
 }
@@ -179,7 +179,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).GetVersion(AKVSigmoid)(vectorSize),
+                (*GetCPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -188,7 +188,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetCPUNames(size).GetVersion(AKVLinear)(vectorSize),
+                (*GetCPUNames(size).GetVersion(LinearAKV))(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -202,7 +202,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).GetVersion(AKVSigmoid)(vectorSize),
+                (*GetGPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),
@@ -212,7 +212,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                GetGPUNames(size).GetVersion(AKVLinear)(vectorSize),
+                (*GetGPUNames(size).GetVersion(LinearAKV))(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),
