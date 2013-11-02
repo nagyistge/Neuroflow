@@ -17,6 +17,47 @@ OCLVectorKernelName OCLVectorUtils::AddMSEName = OCLVectorKernelName("AddMSE");
 OCLVectorKernelName OCLVectorUtils::DivName = OCLVectorKernelName("Div");
 OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
+OCLVectorUtils::OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+    ctx(ctx),
+    generator((std::random_device()() << 16) | std::random_device()())
+{
+    Build(vault);
+
+    z2.s[0] = 0.0f;
+    z2.s[1] = 0.0f;
+
+    z4.s[0] = 0.0f;
+    z4.s[1] = 0.0f;
+    z4.s[2] = 0.0f;
+    z4.s[3] = 0.0f;
+
+    z8.s[0] = 0.0f;
+    z8.s[1] = 0.0f;
+    z8.s[2] = 0.0f;
+    z8.s[3] = 0.0f;
+    z8.s[4] = 0.0f;
+    z8.s[5] = 0.0f;
+    z8.s[6] = 0.0f;
+    z8.s[7] = 0.0f;
+
+    z16.s[0] = 0.0f;
+    z16.s[1] = 0.0f;
+    z16.s[2] = 0.0f;
+    z16.s[3] = 0.0f;
+    z16.s[4] = 0.0f;
+    z16.s[5] = 0.0f;
+    z16.s[6] = 0.0f;
+    z16.s[7] = 0.0f;
+    z16.s[8] = 0.0f;
+    z16.s[9] = 0.0f;
+    z16.s[10] = 0.0f;
+    z16.s[11] = 0.0f;
+    z16.s[12] = 0.0f;
+    z16.s[13] = 0.0f;
+    z16.s[14] = 0.0f;
+    z16.s[15] = 0.0f;
+}
+
 void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
 {
     program = make_shared<OCLProgram>(ctx, "VectorUtilsPrg");
@@ -181,15 +222,67 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
         auto& buff = ctx->ToBuffer1(deviceArray);
         auto vectorSize = GetVectorSize(cref(buff));
 
-        zeroFExec.Execute(
-            program,
-            ZeroFName(vectorSize),
-            vectorSize,
-            [&](Kernel& kernel)
+        if (ctx->IsCPU())
+        {
+            switch (vectorSize)
             {
-                kernel.setArg(0, buff.GetCLBuffer());
-            },
-            buff.GetSize() / vectorSize);
+                case 2:
+                    {
+                        ctx->GetQueue().enqueueFillBuffer(
+                            buff.GetCLBuffer(),
+                            z2,
+                            0,
+                            sizeof(float)* buff.GetSize());
+                    }
+                    break;
+                case 4:
+                    {
+                        ctx->GetQueue().enqueueFillBuffer(
+                            buff.GetCLBuffer(),
+                            z4,
+                            0,
+                            sizeof(float)* buff.GetSize());
+                    }
+                    break;
+                case 8:
+                    {
+                        ctx->GetQueue().enqueueFillBuffer(
+                            buff.GetCLBuffer(),
+                            z8,
+                            0,
+                            sizeof(float)* buff.GetSize());
+                    }
+                    break;
+                case 16:
+                    {
+                        ctx->GetQueue().enqueueFillBuffer(
+                            buff.GetCLBuffer(),
+                            z16,
+                            0,
+                            sizeof(float)* buff.GetSize());
+                    }
+                    break;
+                default:
+                    ctx->GetQueue().enqueueFillBuffer(
+                        buff.GetCLBuffer(),
+                        0.0f,
+                        0,
+                        sizeof(float)* buff.GetSize());
+                    break;
+            }
+        }
+        else
+        {
+            zeroFExec.Execute(
+                program,
+                ZeroFName(vectorSize),
+                vectorSize,
+                [&](Kernel& kernel)
+                {
+                    kernel.setArg(0, buff.GetCLBuffer());
+                },
+                buff.GetSize() / vectorSize);
+        }
     }
     catch (exception& ex)
     {

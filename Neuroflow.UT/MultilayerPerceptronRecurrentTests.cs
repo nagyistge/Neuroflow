@@ -294,11 +294,11 @@ namespace Neuroflow.UT
                     }
                 };
 
-            const int inputSize = 1;
-            const int hiddenSize = 8;
-            const int outputSize = 3;
+            int inputSize = 1;
+            int hiddenSize = method == GradientComputationMethod.RTLR ? 64 : 8;
+            int outputSize = 3;
 
-            const int maxIterations = 1000;
+            int maxIterations = method == GradientComputationMethod.RTLR ? 10 : 1000;
 
             var layers = NNTestHelpers.CreateGDMLPLayers(false, inputSize, hiddenSize, outputSize, rules);
 

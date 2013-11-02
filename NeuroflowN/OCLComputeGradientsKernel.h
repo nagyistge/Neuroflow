@@ -34,11 +34,8 @@ namespace NeuroflowN
         OCLProgramSPtrT program;
 
         ComputeGradientsKernelVersion GradientComputationFlagsToVersion(GradientComputationFlags flags);
-
         std::string CreateKernelCode(GradientComputationFlags flags);
-
         std::string CreateCPUKernelCode(GradientComputationFlags flags);
-
         std::string CreateGPUKernelCode(GradientComputationFlags flags);
 
         inline static void ThrowUnknownFlagsEx(GradientComputationFlags flags)
@@ -51,20 +48,15 @@ namespace NeuroflowN
         }
 
         inline void FillKernelPars(KernelPars& pars, GradientComputationFlags flags);
-
         inline std::string CreateKernelHeader(const KernelPars& pars);
-
         void Exec(GradientComputationFlags flags, NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
+        void Build(const OCLVaultSPtrT& vault);
 
     public:
         OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
-        void Build(const OCLVaultSPtrT& vault);
-
         void ExecFF(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors);
-        
         void ExecBPTTPhase1(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, IDeviceArray* errors);
-        
         void ExecBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
     };
 }

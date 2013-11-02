@@ -4,6 +4,7 @@
 #include "OCLTypedefs.h"
 #include "OCLKernelToExecute.h"
 #include "OCLVectorKernelName.h"
+#include "OCL.h"
 
 namespace NeuroflowN
 {
@@ -19,28 +20,22 @@ namespace NeuroflowN
         std::mt19937 generator;
         OCLProgramSPtrT program;
         OCLKernelToExecute addExec, divExec, zeroFExec;
-
-    public:
-        OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-            ctx(ctx),
-            generator((std::random_device()() << 16) | std::random_device()())
-        {
-            Build(vault);
-        }
+        cl_float2 z2;
+        cl_float4 z4;
+        cl_float8 z8;
+        cl_float16 z16;
 
         void Build(const OCLVaultSPtrT& vault);
+    public:
+        OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
         void CalculateMSE(const SupervisedBatchT& batch, DataArray* mseValues, unsigned valueIndex);
-
         void RandomizeUniform(IDeviceArray* values, float min, float max);
-
         void Zero(IDeviceArray* deviceArray);
 
     private:
         unsigned GetPreferredWorkgroupSizeMul();
-
         void AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex);
-
         void Div(const OCLBuffer1& values, unsigned valueIndex, float byValue);
     };
 }

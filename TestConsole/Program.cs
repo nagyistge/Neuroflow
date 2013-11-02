@@ -16,19 +16,19 @@ namespace TestConsole
         {
             try
             {
-                //new Neuroflow.UT.MultilayerPerceptronRecurrentTests().OCLMLPTrainBPTTOfflineCPUTest().Wait();
+                //new Neuroflow.UT.MultilayerPerceptronRecurrentTests().OCLMLPTrainRTLRGDOnlineGPUTest().Wait();
 
                 //Console.WriteLine("Managed");
                 //ManagedMLPTrainBPOnlineCPUTest().Wait();
                 //Console.WriteLine();
 
-                Console.WriteLine("OpenCL CPU");
-                OCLMLPTrainBPOnlineCPUTest().Wait();
-                Console.WriteLine();
+                //Console.WriteLine("OpenCL CPU");
+                //OCLMLPTrainBPOnlineCPUTest().Wait();
+                //Console.WriteLine();
 
-                Console.WriteLine("OpenCL GPU");
-                OCLMLPTrainBPOnlineGPUTest().Wait();
-                Console.WriteLine();
+                //Console.WriteLine("OpenCL GPU");
+                //OCLMLPTrainBPOnlineGPUTest().Wait();
+                //Console.WriteLine();
             }
             catch (Exception ex)
             {
