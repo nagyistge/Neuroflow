@@ -14,7 +14,7 @@ using namespace NeuroflowN;
 using namespace cl;
 
 OCLComputeForwardKernel::OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    OCLVersionableKernelBase(ctx, "ComputeForward", { SigmoidAKV, LinearAKV, RTLRAKV }, ctx->GetMaxConnectionCount())
+OCLVersionableKernelBase(ctx, "ComputeForward", { SigmoidAKV, LinearAKV, SigmoidAKV | RTLRAKV, LinearAKV | RTLRAKV }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };
@@ -24,20 +24,6 @@ void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
     program = make_shared<OCLProgram>(ctx, "ComputeForwardPrg");
     if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetCommonCode());
     program->Using(vault->GetAFCode());
-
-    if (ctx->IsCPU())
-    {
-        ADD_OCL_CODE(program,
-
-        float ComputeForward_Sum$(global float$* inputs, int inputsSize, global float$* weights, int idx)
-        {
-            float$ sum = 0.0f;
-            for (int x = 0; x < inputsSize; x++) sum += inputs[x] * Get2$(weights, x, idx, inputsSize);
-            return SumComponents$(sum);
-        }
-
-        );
-    }
 
     for (unsigned size = 1; size <= ctx->GetMaxConnectionCount(); size++)
     {

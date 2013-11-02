@@ -50,7 +50,7 @@ NeuroflowN::SupervisedBatchT Neuroflow::ToNative(Data::SupervisedBatch^ batch)
 
 NeuroflowN::IDeviceArray* Neuroflow::ToNative(IDeviceArray^ deviceArray)
 {
-    if (deviceArray == null) throw gcnew ArgumentNullException("deviceArray");
+    if (deviceArray == null) return null;
 
     switch (deviceArray->Type)
     {
@@ -67,7 +67,7 @@ NeuroflowN::IDeviceArray* Neuroflow::ToNative(IDeviceArray^ deviceArray)
 
 NeuroflowN::IDeviceArray2* Neuroflow::ToNative(IDeviceArray2^ deviceArray)
 {
-    if (deviceArray == null) throw gcnew ArgumentNullException("deviceArray");
+    if (deviceArray == null) return null;
 
     return ((NativeDeviceArray2^)deviceArray)->PDeviceArray2;
 }
@@ -239,7 +239,7 @@ NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::R
     auto result = new NeuroflowN::RTLRComputationData();
     data->NativeVersion = gcnew NativePtr<NeuroflowN::RTLRComputationData>(result);
 
-    result->Inputs = ToNative(data->ManagedObject->Inputs);
+    if (data->ManagedObject->Inputs != null) result->Inputs = ToNative(data->ManagedObject->Inputs);
     result->Gradients = ToNative(data->ManagedObject->Gradients);
     result->GradientSums = ToNative(data->ManagedObject->GradientSums);
     result->BiasGradients = ToNative(data->ManagedObject->BiasGradients);

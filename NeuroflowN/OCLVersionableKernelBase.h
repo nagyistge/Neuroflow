@@ -35,7 +35,7 @@ namespace NeuroflowN
         {
         }
         
-        T* GetVersion(::size_t version) const
+        T* GetVersion(::size_t version = 0) const
         {
             return values[version].get();
         }
@@ -100,7 +100,7 @@ namespace NeuroflowN
         }
 
     public:
-        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions, unsigned maxConnectionCount = 1, bool differentForUnits = true) :
+        OCLVersionableKernelBase(const OCLIntCtxSPtrT& ctx, const std::string& namePrefix, const std::initializer_list<::size_t>& versions = { 0 }, unsigned maxConnectionCount = 1, bool differentForUnits = true) :
             OCLKernelBase(ctx),
             namePrefix(namePrefix)
         {

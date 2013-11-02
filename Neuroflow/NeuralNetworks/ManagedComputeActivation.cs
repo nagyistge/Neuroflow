@@ -462,9 +462,10 @@ namespace Neuroflow.NeuralNetworks
             float gradient = 0.0f;
 
             fixed (float* pOutputs = outputs != null ? outputs.InternalArray : null,
-                pDesiredOutputs = desiredOutputs != null ? desiredOutputs.InternalArray : null,
-                pInputs = inputs != null ? inputs.InternalArray : null)
+                pDesiredOutputs = desiredOutputs != null ? desiredOutputs.InternalArray : null)
             {
+                float inputValue = inputs != null ? inputs.InternalArray[data.JValueIndex] : 1.0f;
+
                 int outputLayerIndex = valueRelatedPBuffs.Length - 1;
                 for (int kLayerIndex = 0; kLayerIndex < valueRelatedPBuffs.Length; kLayerIndex++)
                 {
@@ -484,7 +485,6 @@ namespace Neuroflow.NeuralNetworks
                             // j: jLayerIndex, jValueIndex
                             // k: kLayerIndex, kValueIndex
 
-                            float netDeriv_k = layerNetValueDerivatesPtr[kValueIndex];
                             float sum = 0.0f;
 
                             var upperInfos_k = inputLayerInfos[kLayerIndex];
@@ -518,24 +518,9 @@ namespace Neuroflow.NeuralNetworks
                                 }
                             }
 
-                            if (data.ILayerIndex == kLayerIndex && data.IValueIndex == kValueIndex)
-                            {
-                                if (inputs != null)
-                                {
-                                    // Weighted connection
-                                    var inputsPtr = inputs.ToPtr(pInputs);
-                                    sum += inputsPtr[data.JValueIndex];
-                                }
-                                else 
-                                {
-                                    Debug.Assert(data.JValueIndex == -1);
+                            if (data.ILayerIndex == kLayerIndex && data.IValueIndex == kValueIndex) sum += inputValue;
 
-                                    // Biased connection
-                                    sum += 1.0f;
-                                }
-                            }
-
-                            p_i_j_k_ValuesPtr[kValueIndex] = netDeriv_k * sum;
+                            p_i_j_k_ValuesPtr[kValueIndex] = layerNetValueDerivatesPtr[kValueIndex] * sum;
 
                             if (computeGradient)
                             {

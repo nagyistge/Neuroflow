@@ -171,10 +171,13 @@
     <ClInclude Include="OCLVault.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
-    <ClInclude Include="OCLComputationState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OCLVersionableKernelBase.h">
+      <Filter>Header Files\OCL</Filter>
+    </ClInclude>
+    <ClInclude Include="OCLComputationState.h">
+      <Filter>Header Files\OCL</Filter>
+    </ClInclude>
+    <ClInclude Include="OCLComputeGradientsRTLRKernel.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
   </ItemGroup>
@@ -242,10 +245,13 @@
     <ClCompile Include="OCLVault.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
-    <ClCompile Include="OCLComputationState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OCLKernelToExecute.cpp">
+      <Filter>Source Files\OCL</Filter>
+    </ClCompile>
+    <ClCompile Include="OCLComputationState.cpp">
+      <Filter>Source Files\OCL</Filter>
+    </ClCompile>
+    <ClCompile Include="OCLComputeGradientsRTLRKernel.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,26 +27,32 @@ namespace NeuroflowN
 
         for (auto& p : platformList)
         {
-            string platformName;
-            p.getInfo((cl_platform_info)CL_PLATFORM_NAME, &platformName);
-            trim(platformName);
-
-            cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(p)(), 0 };
-
-            Context context(type, cprops, nullptr, nullptr, nullptr);
-
-            auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
-
-            for (auto& d : devices) 
+            try 
             {
-                auto v = d.getInfo<CL_DEVICE_OPENCL_C_VERSION>();
-                v.erase(v.begin(), find_if(v.begin(), v.end(), ptr_fun<int, int>(isspace)));
-                v.erase(v.begin() + 1, find_if(v.begin() + 1, v.end(), ptr_fun<int, int>(isspace)));
-                stringstream ss;
-                double oclv;
-                ss << v;
-                ss >> oclv;
-                if (oclv >= 1.2) all.push_back(make_tuple(platformName, context, d));
+                string platformName;
+                p.getInfo((cl_platform_info)CL_PLATFORM_NAME, &platformName);
+                trim(platformName);
+
+                cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(p)(), 0 };
+
+                Context context(type, cprops, nullptr, nullptr, nullptr);
+
+                auto devices = context.getInfo<CL_CONTEXT_DEVICES>();
+
+                for (auto& d : devices)
+                {
+                    auto v = d.getInfo<CL_DEVICE_OPENCL_C_VERSION>();
+                    v.erase(v.begin(), find_if(v.begin(), v.end(), ptr_fun<int, int>(isspace)));
+                    v.erase(v.begin() + 1, find_if(v.begin() + 1, v.end(), ptr_fun<int, int>(isspace)));
+                    stringstream ss;
+                    double oclv;
+                    ss << v;
+                    ss >> oclv;
+                    if (oclv >= 1.2) all.push_back(make_tuple(platformName, context, d));
+                }
+            }
+            catch (...) 
+            {
             }
         }
 

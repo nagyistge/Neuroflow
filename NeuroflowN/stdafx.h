@@ -26,6 +26,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/algorithm/string/find.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 #include "OCL.h"
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers

@@ -2,6 +2,7 @@
 
 #include "Typedefs.h"
 #include <assert.h>
+#include <boost/optional.hpp>
 
 namespace NeuroflowN
 {
@@ -131,7 +132,7 @@ namespace NeuroflowN
 
     struct RTLRComputationData
     {
-        DeviceArrayFactoryT Inputs;
+        boost::optional<DeviceArrayFactoryT> Inputs;
         IDeviceArray2* Gradients;
         IDeviceArray2* GradientSums;
         IDeviceArray* BiasGradients;

@@ -24,11 +24,11 @@ void OCLProgramUnit::AddCode(const std::string code)
     if (find(code.cbegin(), code.cend(), '$') != code.cend())
     {
         auto prg = CreateNumberedVersions(code);
-        codeBuilder << prg << endl;
+        codeBuilder << endl << prg << endl;
     }
     else
     {
-        codeBuilder << code << endl;
+        codeBuilder << endl << code << endl;
     }
 }
 

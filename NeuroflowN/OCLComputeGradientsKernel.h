@@ -33,7 +33,7 @@ namespace NeuroflowN
 
         OCLProgramSPtrT program;
 
-        ComputeGradientKernelVersion GradientComputationFlagsToVersion(GradientComputationFlags flags);
+        ComputeGradientsKernelVersion GradientComputationFlagsToVersion(GradientComputationFlags flags);
 
         std::string CreateKernelCode(GradientComputationFlags flags);
 
