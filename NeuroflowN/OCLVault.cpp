@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OCLVault.h"
 #include "OCLProgramUnit.h"
+#include "OCLIntCtx.h"
 
 using namespace std;
 using namespace cl;
@@ -12,15 +13,15 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
     // Common:
 
     commonCode = make_shared<OCLProgramUnit>(ctx, "common.h");
-    commonCode->AddCode("\n#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable\n");
-    commonCode->AddCode("\n#define D 100000000.0f\n");
+    commonCode->AddCode("#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable");
+    commonCode->AddCode("#define D 100000000.0f");
 
     ADD_OCL_CODE(commonCode,
     
     inline void AtomAdd(local int* ptr, int v)
     {
-            atom_add(ptr, v);
-        }
+        atom_add(ptr, v);
+    }
 
     typedef struct
     {
@@ -181,6 +182,14 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
         values1[index] /= by;
         values2[index] += values1[index];
     }
+
+    inline float ComputeForward_Sum$(global float$* inputs, int inputsSize, global float$* weights, int idx)
+    {
+        float$ sum = 0.0f;
+        for (int x = 0; x < inputsSize; x++) sum += inputs[x] * Get2$(weights, x, idx, inputsSize);
+        return SumComponents$(sum);
+    }
+
     );
 
     netCode->Using(commonCode);

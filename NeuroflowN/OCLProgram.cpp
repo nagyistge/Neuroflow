@@ -130,7 +130,7 @@ void OCLProgram::Build(cl::Program& p)
 {
     try
     {
-        p.build(vector<Device>(1, ctx->GetDevice()));
+        p.build(vector<Device>(1, ctx->GetDevice()), "-cl-fast-relaxed-math");
     }
     catch (Error&)
     {

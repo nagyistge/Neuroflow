@@ -21,7 +21,7 @@ namespace NeuroflowN
         RTLRAKV = 1 << 3
     };
 
-    enum ComputeGradientKernelVersion
+    enum ComputeGradientsKernelVersion
     {
         FFOnlineCGKV,
         FFOfflineCGKV,
@@ -33,8 +33,16 @@ namespace NeuroflowN
 
     enum ComputeOutputErrorKernelVersion
     {
-        SigmoidCOKV = 1 << 1,
-        LinearCOKV = 1 << 2
+        SigmoidCOKV,
+        LinearCOKV
+    };
+
+    enum ComputeGradientsRTLRKernelVersion
+    {
+        NoGradientCGRKV,
+        OnlineCGRKV,
+        OfflineCGRKV,
+        OnlineOfflineCGRKV
     };
 
     struct OCLReduceSizes;

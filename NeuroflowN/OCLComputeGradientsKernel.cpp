@@ -18,7 +18,7 @@ OCLComputeGradientsKernel::OCLComputeGradientsKernel(const OCLIntCtxSPtrT& ctx, 
     Build(vault);
 };
 
-ComputeGradientKernelVersion OCLComputeGradientsKernel::GradientComputationFlagsToVersion(GradientComputationFlags flags)
+ComputeGradientsKernelVersion OCLComputeGradientsKernel::GradientComputationFlagsToVersion(GradientComputationFlags flags)
 {
     if (flags & FF)
     {

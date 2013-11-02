@@ -112,6 +112,7 @@ void OCLComputeActivation::ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVe
 {
     try
     {
+        computeGradientsRTLRKernel.Exec(state, inputLayerInfos, netValueDerivates, data, valueRelatedPBuffs, outputs, desiredOutputs);
     }
     catch (exception& ex)
     {

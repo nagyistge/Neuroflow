@@ -13,11 +13,11 @@ namespace NeuroflowN
 
         std::string CreateCPUKernelCode(unsigned size);
         std::string CreateGPUKernelCode(unsigned size);
+        void Build(const OCLVaultSPtrT& vault);
 
     public:
         OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
-
-        void Build(const OCLVaultSPtrT& vault);
+        
         void Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, IDeviceArray* pNetValueDerivates, ActivationFunction function, float alpha);
     };
 }

@@ -145,19 +145,14 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
 {
     try
     {
-        auto nOutputs = outputs != null ? ToNative(outputs) : null;
-        auto nDOutputs = desiredOutputs != null ? ToNative(desiredOutputs) : null;
-
-        assert(nOutputs == null && nDOutputs == null || nOutputs != null && nDOutputs != null);
-
         computeActivation->ComputeGradientsRTLR(
             ToNative(state),
             ToNative(inputLayerInfos),
             ToNative(netValueDerivates),
             ToNative(data),
             ToNative(valueRelatedPBuffs),
-            nOutputs,
-            nDOutputs);
+            ToNative(outputs),
+            ToNative(desiredOutputs));
     }
     catch (exception& ex)
     {
