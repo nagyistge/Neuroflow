@@ -25,10 +25,10 @@ void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
     auto getCode = [=](const std::string& name, const char* calcCode)
     {
         stringstream code;
-        code << "__kernel void " << name << "$(";
-        code << "__global float$* errors,";
-        code << "__global float$* desiredOutputs,";
-        code << "__global float$* outputs,";
+        code << "kernel void " << name << "$(";
+        code << "global float$* errors,";
+        code << "global float$* desiredOutputs,";
+        code << "global float$* outputs,";
         code << "float alpha)";
         code << "{";
         code << "int idx = get_global_id(0);";

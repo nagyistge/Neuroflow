@@ -29,7 +29,7 @@ void OCLComputeInternalErrorsKernel::Build(const OCLVaultSPtrT& vault)
     {
         ADD_OCL_CODE(program,
 
-        float$ ComputeErrors_LowerErrorSum$(__global float* lowerErrors, int lowerErrorsSize, __global float$* lowerWeights, int idx, int currentOutputsSize)
+        float$ ComputeErrors_LowerErrorSum$(global float* lowerErrors, int lowerErrorsSize, global float$* lowerWeights, int idx, int currentOutputsSize)
         {
             float$ sum = 0.0f;
             for (int x = 0; x < lowerErrorsSize; x++) sum += lowerErrors[x] * Get2$(lowerWeights, idx, x, currentOutputsSize);
@@ -61,18 +61,18 @@ std::string OCLComputeInternalErrorsKernel::CreateCPUKernelCode(unsigned size)
     auto factory = [size](const string& name, const char* calcCode, bool hasOutputVector)
     {
         stringstream code;
-        code << "__kernel void " << name << "$(";
-        code << "__global float$* errors,";
+        code << "kernel void " << name << "$(";
+        code << "global float$* errors,";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float* lowerErrors" << i << ",";
+            code << "global float* lowerErrors" << i << ",";
             code << "int lowerErrorsSize" << i << ",";
         }
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* lowerWeights" << i << ",";
+            code << "global float$* lowerWeights" << i << ",";
         }
-        if (hasOutputVector) code << "__global float$* outputs,";
+        if (hasOutputVector) code << "global float$* outputs,";
         code << "int outputsSize,";
         code << "float alpha)";
         code << "{";
@@ -103,22 +103,22 @@ std::string OCLComputeInternalErrorsKernel::CreateGPUKernelCode(unsigned size)
     auto factory = [size](const string& name, const char* calcCode, bool hasOutputVector)
     {
         stringstream code;
-        code << "__kernel void " << name << "$(";
-        code << "__global float$* errors,";
+        code << "kernel void " << name << "$(";
+        code << "global float$* errors,";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float* lowerErrors" << i << ",";
+            code << "global float* lowerErrors" << i << ",";
             code << "int lowerErrorsSize" << i << ",";
         }
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* lowerWeights" << i << ",";
+            code << "global float$* lowerWeights" << i << ",";
         }
-        if (hasOutputVector) code << "__global float$* outputs,";
+        if (hasOutputVector) code << "global float$* outputs,";
         code << "int outputsSize,";
         code << "float alpha)";
         code << "{";
-        code << "__local int$ sum; int oidx = get_group_id(0); int leidx = get_local_id(0); int lsize = get_local_size(0); if (leidx == 0) sum = 0;";
+        code << "local int$ sum; int oidx = get_group_id(0); int leidx = get_local_id(0); int lsize = get_local_size(0); if (leidx == 0) sum = 0;";
         code << "barrier(CLK_LOCAL_MEM_FENCE);";
         for (unsigned i = 0; i < size; i++)
         {

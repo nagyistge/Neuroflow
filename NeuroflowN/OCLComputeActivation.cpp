@@ -20,7 +20,7 @@ void OCLComputeActivation::ComputeForward(NfObject* state, DeviceArrayFVecT* inp
 {
     try
     {
-        computeForwardKernel.Exec(state, inputs, weights, pBiases, pOutputs, function, alpha);
+        computeForwardKernel.Exec(state, inputs, weights, pBiases, pOutputs, null, function, alpha);
     }
     catch (logic_error&)
     {
@@ -36,7 +36,7 @@ void OCLComputeActivation::ComputeForwardRTLR(NfObject* state, DeviceArrayFVecT*
 {
     try
     {
-        //computeForwardKernel.ExecRTLR(state, inputs, weights, pBiases, pOutputs, function, alpha);
+        computeForwardKernel.Exec(state, inputs, weights, pBiases, pOutputs, pNetValueDerivates, function, alpha);
     }
     catch (logic_error&)
     {

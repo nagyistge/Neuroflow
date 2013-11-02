@@ -72,17 +72,17 @@ void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
         program->Using(vault->GetNetCode());
         ADD_OCL_CODE(program,
 
-        inline void ComputeGradients_SetGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx)
+        inline void ComputeGradients_SetGradients$(global float$* inputs, int inputsSize, global float$* gradients, global float* errors, int idx)
         {
             for (int x = 0; x < inputsSize; x++) Set2$(gradients, x, idx, inputsSize, inputs[x] * errors[idx]);
         }
 
-        inline void ComputeGradients_AddGradients$(__global float$* inputs, int inputsSize, __global float$* gradientSums, __global float* errors, int idx)
+        inline void ComputeGradients_AddGradients$(global float$* inputs, int inputsSize, global float$* gradientSums, global float* errors, int idx)
         {
             for (int x = 0; x < inputsSize; x++) Add2$(gradientSums, x, idx, inputsSize, inputs[x] * errors[idx]);
         }
 
-        inline void ComputeGradients_SetAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx)
+        inline void ComputeGradients_SetAddGradients$(global float$* inputs, int inputsSize, global float$* gradients, global float$* gradientSums, global float* errors, int idx)
         {
             for (int x = 0; x < inputsSize; x++)
             {
@@ -91,7 +91,7 @@ void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
             }
         }
 
-        inline void ComputeGradients_AddDivGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float* errors, int idx, float by)
+        inline void ComputeGradients_AddDivGradients$(global float$* inputs, int inputsSize, global float$* gradients, global float* errors, int idx, float by)
         {
             for (int x = 0; x < inputsSize; x++)
             {
@@ -100,7 +100,7 @@ void OCLComputeGradientsKernel::Build(const OCLVaultSPtrT& vault)
             }
         }
 
-        inline void ComputeGradients_AddDivAddGradients$(__global float$* inputs, int inputsSize, __global float$* gradients, __global float$* gradientSums, __global float* errors, int idx, float by)
+        inline void ComputeGradients_AddDivAddGradients$(global float$* inputs, int inputsSize, global float$* gradients, global float$* gradientSums, global float* errors, int idx, float by)
         {
             for (int x = 0; x < inputsSize; x++)
             {
@@ -158,17 +158,17 @@ void OCLComputeGradientsKernel::FillKernelPars(KernelPars& pars, GradientComputa
 std::string OCLComputeGradientsKernel::CreateKernelHeader(const KernelPars& pars)
 {
     stringstream code;
-    code << "__kernel void " << pars.name->GetName() << "$(";
-    code << "__global float* errors,";
-    if (pars.calcGradients) code << "__global float* biasGradients,";
-    if (pars.calcGradientSums) code << "__global float* biasGradientSums,";
-    code << "__global float$* inputs,";
+    code << "kernel void " << pars.name->GetName() << "$(";
+    code << "global float* errors,";
+    if (pars.calcGradients) code << "global float* biasGradients,";
+    if (pars.calcGradientSums) code << "global float* biasGradientSums,";
+    code << "global float$* inputs,";
     code << "int inputsSize,";
-    if (pars.calcGradients) code << "__global float$* gradients";
+    if (pars.calcGradients) code << "global float$* gradients";
     if (pars.calcGradientSums)
     {
         if (pars.calcGradients) code << ",";
-        code << "__global float$* gradientSums";
+        code << "global float$* gradientSums";
     }
     if (pars.bpttp2) code << ",float intItCount";
     code << ")";

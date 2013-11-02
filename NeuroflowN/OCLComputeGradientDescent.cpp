@@ -25,10 +25,10 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
     ADD_OCL_CODE(program,
 
     // Online
-    __kernel void GD_Online_Smooth$(
-    __global float$* weights,
-    __global float$* gradients,
-    __global float$* lastUpdates,
+    kernel void GD_Online_Smooth$(
+    global float$* weights,
+    global float$* gradients,
+    global float$* lastUpdates,
     float rate,
     float momentum)
     {
@@ -40,10 +40,10 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
         lastUpdates[idx] = update;
         }
 
-    __kernel void GD_Online$(
-        __global float$* weights,
-        __global float$* gradients,
-        __global float$* lastUpdates,
+    kernel void GD_Online$(
+        global float$* weights,
+        global float$* gradients,
+        global float$* lastUpdates,
         float rate,
         float momentum)
     {
@@ -56,10 +56,10 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
     }
 
     // Offline
-    __kernel void GD_Offline_Smooth$(
-        __global float$* weights,
-        __global float$* gradientSums,
-        __global float$* lastUpdates,
+    kernel void GD_Offline_Smooth$(
+        global float$* weights,
+        global float$* gradientSums,
+        global float$* lastUpdates,
         float iterationCount,
         float rate,
         float momentum)
@@ -72,10 +72,10 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
         lastUpdates[idx] = update;
     }
 
-    __kernel void GD_Offline$(
-        __global float$* weights,
-        __global float$* gradientSums,
-        __global float$* lastUpdates,
+    kernel void GD_Offline$(
+        global float$* weights,
+        global float$* gradientSums,
+        global float$* lastUpdates,
         float iterationCount,
         float rate,
         float momentum)
