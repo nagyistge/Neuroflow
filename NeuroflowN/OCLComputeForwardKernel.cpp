@@ -14,7 +14,7 @@ using namespace NeuroflowN;
 using namespace cl;
 
 OCLComputeForwardKernel::OCLComputeForwardKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    OCLVersionableKernelBase(ctx, "ComputeForward", { SigmoidAKV, LinearAKV }, ctx->GetMaxConnectionCount())
+    OCLVersionableKernelBase(ctx, "ComputeForward", { SigmoidAKV, LinearAKV, RTLRAKV }, ctx->GetMaxConnectionCount())
 {
     Build(vault);
 };
@@ -29,7 +29,7 @@ void OCLComputeForwardKernel::Build(const OCLVaultSPtrT& vault)
     {
         ADD_OCL_CODE(program,
 
-        float ComputeForward_Sum$(__global float$* inputs, int inputsSize, __global float$* weights, int idx)
+        float ComputeForward_Sum$(global float$* inputs, int inputsSize, global float$* weights, int idx)
         {
             float$ sum = 0.0f;
             for (int x = 0; x < inputsSize; x++) sum += inputs[x] * Get2$(weights, x, idx, inputsSize);
@@ -58,22 +58,24 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
 {
     auto& names = GetCPUNames(size);
 
-    auto factory = [size](const string& name, const char* calcCode)
+    auto factory = [size](const string& name, const char* calcCode, const char* calcNVDCode)
     {
         stringstream code;
-        code << "__kernel void " << name << "$(";
+        code << "kernel void " << name << "$(";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* inputs" << i << ",";
+            code << "global float$* inputs" << i << ",";
             code << "int inputsSize" << i << ",";
         }
-        code << "__global float* biases,";
+        code << "global float* biases,";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* weights" << i << ",";
+            code << "global float$* weights" << i << ",";
         }
-        code << "__global float* outputs,";
-        code << "float alpha)";
+        code << "global float* outputs";
+        code << ",float alpha";
+        if (calcNVDCode != null) code << ",global float* netValueDerivates";
+        code <<")";
         code << "{";
         code << "int idx = get_global_id(0);";
         code << "float sum = biases[idx]";
@@ -83,14 +85,19 @@ std::string OCLComputeForwardKernel::CreateCPUKernelCode(unsigned size)
             code << "ComputeForward_Sum$(inputs" << i << ", inputsSize" << i << ", weights" << i << ", idx)";
         }
         code << ";";
+        if (calcNVDCode != null) code << "netValueDerivates[idx] = " << calcNVDCode << ";";
         code << "outputs[idx] = " << calcCode << ";";
         code << "}";
         return move(code.str());
     };
 
     stringstream code;
-    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "Sigmoid(sum, alpha)");
-    code << factory(names.GetVersion(LinearAKV)->GetName(), "fmax(fmin(sum * alpha, alpha), -alpha)");
+    auto sig = "Sigmoid(sum, alpha)";
+    auto lin = "fmax(fmin(sum * alpha, alpha), -alpha)";
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), sig, null);
+    code << factory(names.GetVersion(LinearAKV)->GetName(), lin, null);
+    code << factory(names.GetVersion(SigmoidAKV | RTLRAKV)->GetName(), sig, "SigmoidD(sum, alpha)");
+    code << factory(names.GetVersion(LinearAKV | RTLRAKV)->GetName(), lin, "alpha");
 
     return code.str();
 }
@@ -99,24 +106,26 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
 {
     auto& names = GetGPUNames(size);
 
-    auto factory = [size](const string& name, const char* calcCode)
+    auto factory = [size](const string& name, const char* calcCode, const char* calcNVDCode)
     {
         stringstream code;
-        code << "__kernel void " << name << "$(";
+        code << "kernel void " << name << "$(";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* inputs" << i << ",";
+            code << "global float$* inputs" << i << ",";
             code << "int inputsSize" << i << ",";
         }
-        code << "__global float* biases,";
+        code << "global float* biases,";
         for (unsigned i = 0; i < size; i++)
         {
-            code << "__global float$* weights" << i << ",";
+            code << "global float$* weights" << i << ",";
         }
-        code << "__global float* outputs,";
-        code << "float alpha)";
+        code << "global float* outputs";
+        code << ",float alpha";
+        if (calcNVDCode != null) code << ",global float* netValueDerivates";
+        code << ")";
         code << "{";
-        code << "__local int$ sum; int oidx = get_group_id(0); int iidx = get_local_id(0); int lsize = get_local_size(0); if (iidx == 0) sum = 0; barrier(CLK_LOCAL_MEM_FENCE);";
+        code << "local int$ sum; int oidx = get_group_id(0); int iidx = get_local_id(0); int lsize = get_local_size(0); if (iidx == 0) sum = 0; barrier(CLK_LOCAL_MEM_FENCE);";
         for (unsigned i = 0; i < size; i++)
         {
             code << "for (int ciidx = iidx; ciidx < inputsSize" << i << "; ciidx += lsize)";
@@ -129,7 +138,8 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
         code << "if (iidx == 0)";
         code << "{";
         code << "float$ sumf = convert_float$(sum) / D;";
-        code << "float sumf1 = SumComponents$(sumf);";
+        code << "float sumf1 = biases[oidx] + SumComponents$(sumf);";
+        if (calcNVDCode != null) code << "netValueDerivates[oidx] = " << calcNVDCode << ";";
         code << "outputs[oidx] = " << calcCode << ";";
         code << "}";
         code << "}";
@@ -137,13 +147,17 @@ std::string OCLComputeForwardKernel::CreateGPUKernelCode(unsigned size)
     };
 
     stringstream code;
-    code << factory(names.GetVersion(SigmoidAKV)->GetName(), "Sigmoid(biases[oidx] + sumf1, alpha)");
-    code << factory(names.GetVersion(LinearAKV)->GetName(), "fmax(fmin((biases[oidx] + sumf1) * alpha, alpha), -alpha)");
+    auto sig = "Sigmoid(sumf1, alpha)";
+    auto lin = "fmax(fmin(sumf1 * alpha, alpha), -alpha)";
+    code << factory(names.GetVersion(SigmoidAKV)->GetName(), sig, null);
+    code << factory(names.GetVersion(LinearAKV)->GetName(), lin, null);
+    code << factory(names.GetVersion(SigmoidAKV | RTLRAKV)->GetName(), sig, "SigmoidD(sumf1, alpha)");
+    code << factory(names.GetVersion(LinearAKV | RTLRAKV)->GetName(), lin, "alpha");
 
     return code.str();
 }
 
-void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, ActivationFunction function, float alpha)
+void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* weights, IDeviceArray* pBiases, IDeviceArray* pOutputs, IDeviceArray* pNetValueDerivates, ActivationFunction function, float alpha)
 {
     unsigned size = (unsigned)inputs->size();
     assert(size == weights->size());
@@ -171,6 +185,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         kernel.setArg(aidx++, outputs.GetCLBuffer());
         kernel.setArg(aidx++, alpha);
+        if (pNetValueDerivates != null) kernel.setArg(aidx++, ctx->ToBuffer1(pNetValueDerivates).GetCLBuffer());
     };
 
     if (ctx->IsCPU())
@@ -179,7 +194,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                (*GetCPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
+                (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (SigmoidAKV | RTLRAKV) : SigmoidAKV))(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -188,7 +203,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                (*GetCPUNames(size).GetVersion(LinearAKV))(vectorSize),
+                (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (LinearAKV | RTLRAKV) : LinearAKV))(vectorSize),
                 vectorSize,
                 init,
                 outputs.GetSize());
@@ -202,7 +217,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                (*GetGPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
+                (*GetGPUNames(size).GetVersion(pNetValueDerivates != null ? (SigmoidAKV | RTLRAKV) : SigmoidAKV))(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),
@@ -212,7 +227,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         {
             exec.Execute(
                 program,
-                (*GetGPUNames(size).GetVersion(LinearAKV))(vectorSize),
+                (*GetGPUNames(size).GetVersion(pNetValueDerivates != null ? (LinearAKV | RTLRAKV) : LinearAKV))(vectorSize),
                 vectorSize,
                 init,
                 NDRange(sizes.first),

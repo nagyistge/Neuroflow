@@ -145,36 +145,36 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 
     ADD_OCL_CODE(netCode,
 
-    inline float$ Get2$(__global float$* values, int i1, int i2, int size1)
+    inline float$ Get2$(global float$* values, int i1, int i2, int size1)
     {
         return values[GetIndex2(i1, i2, size1)];
     }
 
-    inline void Set2$(__global float$* values, int i1, int i2, int size1, float$ value)
+    inline void Set2$(global float$* values, int i1, int i2, int size1, float$ value)
     {
         values[GetIndex2(i1, i2, size1)] = value;
     }
 
-    inline void Add2$(__global float$* values, int i1, int i2, int size1, float$ value)
+    inline void Add2$(global float$* values, int i1, int i2, int size1, float$ value)
     {
         values[GetIndex2(i1, i2, size1)] += value;
     }
 
-    inline void SetAdd2$(__global float$* values1, __global float$* values2, int i1, int i2, int size1, float$ value)
+    inline void SetAdd2$(global float$* values1, global float$* values2, int i1, int i2, int size1, float$ value)
     {
         int index = GetIndex2(i1, i2, size1);
         values1[index] = value;
         values2[index] += value;
     }
 
-    inline void AddDiv2$(__global float$* values, int i1, int i2, int size1, float$ value, float by)
+    inline void AddDiv2$(global float$* values, int i1, int i2, int size1, float$ value, float by)
     {
         int index = GetIndex2(i1, i2, size1);
         values[index] += value;
         values[index] /= by;
     }
 
-    inline void AddDivAdd2$(__global float$* values1, __global float$* values2, int i1, int i2, int size1, float$ value, float by)
+    inline void AddDivAdd2$(global float$* values1, global float$* values2, int i1, int i2, int size1, float$ value, float by)
     {
         int index = GetIndex2(i1, i2, size1);
         values1[index] += value;
