@@ -42,5 +42,4 @@ v0.0.2 Future Directions
 - Weight Decay
 - Long Short Term Memory architecture
 - Workflow Foundation 4.5 Activities. I have proof-of-concept code for WF integration ideas in my private repository but there is nothing publish-ready yet.
-- C++ AMP support
 - Double precision support
