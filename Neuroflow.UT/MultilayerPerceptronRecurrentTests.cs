@@ -153,9 +153,17 @@ namespace Neuroflow.UT
         [TestCategory(TestCategories.GradientDescent)]
         public async Task OCLMLPTrainRTLRGDOnlineCPUTest()
         {
-            using (var ctx = new OCLContext("cpu"))
+            try
             {
-                await MLPTrainRecTest(ctx, GradientComputationMethod.RTLR, GetGDRules(WeigthUpdateMode.Online, 0.01f));
+                using (var ctx = new OCLContext("cpu"))
+                {
+                    await MLPTrainRecTest(ctx, GradientComputationMethod.RTLR, GetGDRules(WeigthUpdateMode.Online, 0.01f));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
             }
         }
 
@@ -295,7 +303,7 @@ namespace Neuroflow.UT
                 };
 
             int inputSize = 1;
-            int hiddenSize = method == GradientComputationMethod.RTLR ? 64 : 8;
+            int hiddenSize = method == GradientComputationMethod.RTLR ? 32 : 8;
             int outputSize = 3;
 
             int maxIterations = method == GradientComputationMethod.RTLR ? 10 : 1000;

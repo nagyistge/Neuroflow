@@ -23,13 +23,13 @@ namespace NeuroflowN
         OCLComputeGradientsRTLRKernel computeGradientsRTLRKernel;
 
     public:
-        OCLComputeActivation(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
+        OCLComputeActivation(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<OCLDeviceArrayManagement>& deviceArrayManagement) :
             ctx(ctx),
             computeForwardKernel(ctx, vault),
             computeInternalErrorsKernel(ctx, vault),
             computeOutputErrorsKernel(ctx, vault),
             computeGradientsKernel(ctx, vault),
-            computeGradientsRTLRKernel(ctx, vault)
+            computeGradientsRTLRKernel(ctx, vault, deviceArrayManagement)
         {
         }
 

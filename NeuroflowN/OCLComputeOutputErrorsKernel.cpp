@@ -44,7 +44,7 @@ void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 
 void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha)
 {
-    auto& exec = ((OCLComputationState*)state)->GetExec(0);
+    auto exec = ((OCLComputationState*)state)->GetExec(0);
     auto& outputs = ctx->ToBuffer1(pOutputs);
     auto& errors = ctx->ToBuffer1(pErrors);
     auto& desiredOutputs = ctx->ToBuffer1(pDesiredOutputs);
@@ -62,7 +62,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
 
     if (function == ActivationFunction::Sigmoid)
     {
-        exec.Execute(
+        exec->Execute(
             program,
             (*GetNames().GetVersion(SigmoidCOKV))(vectorSize),
             vectorSize,
@@ -71,7 +71,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
     }
     else
     {
-        exec.Execute(
+        exec->Execute(
             program,
             (*GetNames().GetVersion(LinearCOKV))(vectorSize),
             vectorSize,

@@ -148,7 +148,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
     unsigned size = (unsigned)inputs->size();
     assert(size == weights->size());
 
-    auto& exec = ((OCLComputationState*)state)->GetExec(0);
+    auto exec = ((OCLComputationState*)state)->GetExec(0);
     auto& biases = ctx->ToBuffer1(pBiases);
     auto& outputs = ctx->ToBuffer1(pOutputs);
 
@@ -178,7 +178,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
     {
         if (function == ActivationFunction::Sigmoid)
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (SigmoidAKV | RTLRAKV) : SigmoidAKV))(vectorSize),
                 vectorSize,
@@ -187,7 +187,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         else
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (LinearAKV | RTLRAKV) : LinearAKV))(vectorSize),
                 vectorSize,
@@ -201,7 +201,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
 
         if (function == ActivationFunction::Sigmoid)
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*GetGPUNames(size).GetVersion(pNetValueDerivates != null ? (SigmoidAKV | RTLRAKV) : SigmoidAKV))(vectorSize),
                 vectorSize,
@@ -211,7 +211,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         }
         else
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*GetGPUNames(size).GetVersion(pNetValueDerivates != null ? (LinearAKV | RTLRAKV) : LinearAKV))(vectorSize),
                 vectorSize,

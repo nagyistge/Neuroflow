@@ -248,6 +248,7 @@ NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::R
     result->IValueIndex = data->ManagedObject->IValueIndex;
     result->JLayerIndex = data->ManagedObject->JLayerIndex;
     result->JValueIndex = data->ManagedObject->JValueIndex;
+    result->IJValueIndex = data->ManagedObject->IJValueIndex;
 
     return result;
 }

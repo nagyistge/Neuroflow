@@ -125,7 +125,7 @@ namespace Neuroflow.NeuralNetworks
                             // i: iLayerIndex, iValueIndex
                             // j: jLayerIndex, jValueIndex
 
-                            ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, -1, outputs, desiredOutputs);
+                            ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, -1, iValueIndex, outputs, desiredOutputs);
                         }
                         else
                         {
@@ -143,7 +143,7 @@ namespace Neuroflow.NeuralNetworks
                                 // i: iLayerIndex, iValueIndex
                                 // j: jLayerIndex, jValueIndex
 
-                                ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, jValueIndex, outputs, desiredOutputs);
+                                ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, jValueIndex, ijValueIndex, outputs, desiredOutputs);
                             }
                         }
                     }
@@ -151,7 +151,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        private void ComputeGradients(int computationIndex, Marshaled<IDeviceArray[]> valueRelatedPBuffs, int iLayerIndex, int iValueIndex, int jLayerIndex, int jValueIndex, IDeviceArray outputs, IDeviceArray desiredOutputs)
+        private void ComputeGradients(int computationIndex, Marshaled<IDeviceArray[]> valueRelatedPBuffs, int iLayerIndex, int iValueIndex, int jLayerIndex, int jValueIndex, int ijValueIndex, IDeviceArray outputs, IDeviceArray desiredOutputs)
         {
 #if DEBUG
             int outputLayerIndex = valueRelatedPBuffs.Instance().Length - 1;
@@ -179,6 +179,7 @@ namespace Neuroflow.NeuralNetworks
                 data.IValueIndex = iValueIndex;
                 data.JLayerIndex = jLayerIndex;
                 data.JValueIndex = jValueIndex;
+                data.IJValueIndex = ijValueIndex;
                 if (forBias)
                 {
                     Debug.Assert(jLayerIndex == 0);

@@ -9,8 +9,8 @@ namespace NeuroflowN
 {
     class OCLComputationState : public NfObject
     {
-        std::vector<OCLKernelToExecute> execs;
+        std::vector<std::unique_ptr<OCLKernelToExecute>> execs;
     public:
-        OCLKernelToExecute& GetExec(unsigned index);
+        OCLKernelToExecute* GetExec(unsigned index);
     };
 }

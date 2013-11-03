@@ -95,7 +95,11 @@ cl::Program OCLProgram::Compile()
 
 cl::Program OCLProgram::CreateProgramAndBinary(std::vector<char>& bin)
 {
-    auto p = Program(ctx->GetContext(), GetCode().c_str(), false);
+    auto code = GetCode();
+#if _DEBUG
+    source = code;
+#endif
+    auto p = Program(ctx->GetContext(), code.c_str(), false);
     Build(p);
 
     auto s = p.getInfo<CL_PROGRAM_BINARY_SIZES>();

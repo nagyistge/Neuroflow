@@ -7,6 +7,9 @@ namespace NeuroflowN
         public OCLProgramUnit
     {
         cl::Program program;
+#if _DEBUG
+        std::string source;
+#endif
     public:
         OCLProgram(const OCLProgram&) = delete;
         OCLProgram(const OCLIntCtxSPtrT& ctx, const std::string& name);
