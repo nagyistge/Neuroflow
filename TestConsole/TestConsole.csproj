@@ -97,10 +97,6 @@
       <Project>{137f4cfe-529f-4886-9faf-be4b4847c754}</Project>
       <Name>Neuroflow.Native</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Neuroflow.UT\Neuroflow.UT.csproj">
-      <Project>{259845fa-9834-41e9-a53e-8ae96e1a09ea}</Project>
-      <Name>Neuroflow.UT</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Neuroflow\Neuroflow.csproj">
       <Project>{eb83bf8d-63ad-4d0f-9f1c-686a4f04475c}</Project>
       <Name>Neuroflow</Name>

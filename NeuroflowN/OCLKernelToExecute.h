@@ -44,7 +44,7 @@ namespace NeuroflowN
         Data& GetData(unsigned vectorSize)
         {
             unsigned index = VectorSizeToIndex(vectorSize);
-            if (dataValues.size() < index + 1) dataValues.resize(index + 1);
+            dataValues.resize(index + 1);
             return dataValues[index];
         }
 

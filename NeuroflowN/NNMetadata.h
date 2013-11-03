@@ -141,6 +141,7 @@ namespace NeuroflowN
         int IValueIndex;
         int JLayerIndex;
         int JValueIndex;
+        int IJValueIndex;
     };
 
 #pragma endregion

@@ -121,7 +121,7 @@ OCLContextImpl::OCLContextImpl(const std::string& deviceID, const std::string& v
                 auto device = get<2>(di);
                 auto id = CreateDeviceID(platformName, device);
 
-                if (boost::find_first(id, deviceID))
+                if (boost::ifind_first(id, deviceID))
                 {
                     // Found!
                     Initialize(DeviceInfo(id, GetDeviceName(device), platformName), device);

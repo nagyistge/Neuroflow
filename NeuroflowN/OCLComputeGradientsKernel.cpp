@@ -343,7 +343,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
     assert(!pars.calcGradients || gradientsV->size() == size);
     assert(!pars.calcGradientSums || gradientSumsV->size() == size);
 
-    auto& exec = ((OCLComputationState*)state)->GetExec(0);
+    auto exec = ((OCLComputationState*)state)->GetExec(0);
     auto& errors = ctx->ToBuffer1(pErrors);
 
     unsigned vectorSize = CalculateVectorSize(inputsV);
@@ -368,7 +368,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
 
         if (flags & CPU)
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*pars.name)(vectorSize),
                 vectorSize,
@@ -377,7 +377,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
         }
         else
         {
-            exec.Execute(
+            exec->Execute(
                 program,
                 (*pars.name)(vectorSize),
                 vectorSize,

@@ -12,7 +12,7 @@ OCLMultilayerPerceptronAdapter::OCLMultilayerPerceptronAdapter(const OCLIntCtxSP
     ctx(ctx),
     vectorUtils(vectorUtils),
     deviceArrayManagement(deviceArrayManagement),
-    computeActivation(make_shared<OCLComputeActivation>(ctx, vault)),
+    computeActivation(make_shared<OCLComputeActivation>(ctx, vault, static_pointer_cast<OCLDeviceArrayManagement>(deviceArrayManagement))),
     learningAlgoFactory(make_shared<OCLLearningAlgoFactory>(ctx, vault))
 {
 }

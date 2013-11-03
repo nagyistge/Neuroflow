@@ -40,6 +40,7 @@ namespace NeuroflowN
     enum ComputeGradientsRTLRKernelVersion
     {
         NoGradientCGRKV,
+        CompGradientCGRKV,
         OnlineCGRKV,
         OfflineCGRKV,
         OnlineOfflineCGRKV

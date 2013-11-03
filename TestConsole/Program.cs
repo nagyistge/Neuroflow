@@ -16,26 +16,39 @@ namespace TestConsole
         {
             try
             {
-                //new Neuroflow.UT.MultilayerPerceptronRecurrentTests().OCLMLPTrainRTLRGDOnlineGPUTest().Wait();
-
-                //Console.WriteLine("Managed");
-                //ManagedMLPTrainBPOnlineCPUTest().Wait();
-                //Console.WriteLine();
-
-                //Console.WriteLine("OpenCL CPU");
-                //OCLMLPTrainBPOnlineCPUTest().Wait();
-                //Console.WriteLine();
-
-                //Console.WriteLine("OpenCL GPU");
-                //OCLMLPTrainBPOnlineGPUTest().Wait();
-                //Console.WriteLine();
+                Console.WriteLine("Managed");
+                ManagedMLPTrainBPOnlineCPUTest().Wait();
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine("Managed:\n{0}", ex);
             }
-            //Console.WriteLine("\nPress any ...");
-            //Console.ReadKey();
+
+            try
+            {
+                Console.WriteLine("OpenCL CPU");
+                OCLMLPTrainBPOnlineCPUTest().Wait();
+                Console.WriteLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("OpenCL CPU:\n{0}", ex);
+            }
+
+            try
+            {
+                Console.WriteLine("OpenCL GPU");
+                OCLMLPTrainBPOnlineGPUTest().Wait();
+                Console.WriteLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("OpenCL GPU:\n{0}", ex);
+            }
+
+            Console.WriteLine("\nPress any ...");
+            Console.ReadKey();
         }
 
         #region Training
