@@ -43,3 +43,5 @@ v0.0.2 Future Directions
 - Long Short Term Memory architecture
 - Workflow Foundation 4.5 Activities. I have proof-of-concept code for WF integration ideas in my private repository but there is nothing publish-ready yet.
 - Double precision support
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/e5bef57022b3a7db23cc94c1b61205ed "githalytics.com")](http://githalytics.com/unbornchikken/Neuroflow)
