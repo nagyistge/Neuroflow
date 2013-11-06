@@ -7,11 +7,9 @@
 
 #include "targetver.h"
 
-// Headers for CppUnitTest
-#include "CppUnitTest.h"
-#include <ppltasks.h>
-#include <boost\chrono.hpp>
-#include <exception>
-#include <random>
+#include <stdio.h>
+#include <tchar.h>
+
+
 
 // TODO: reference additional headers your program requires here

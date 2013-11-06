@@ -1,5 +1,6 @@
 #pragma once
 #include "OCLProgramUnit.h"
+#include "OCL.h"
 
 namespace NeuroflowN
 {

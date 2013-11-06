@@ -34,6 +34,8 @@ namespace NeuroflowN
 
         const DeviceInfo& GetDevice() const;
 
+        const OCLVaultSPtrT& GetVault() const;
+
         DataArrayFactory* GetDataArrayFactoryPtr() const;
 
         IVectorUtils* GetVectorUtilsPtr() const;

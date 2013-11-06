@@ -66,9 +66,17 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
     // Zero
     ADD_OCL_CODE(program,
 
-    kernel void ZeroF$(global float$* buffer)
+    kernel void ZeroF$(global float$* buffer, int size)
     {
-        buffer[get_global_id(0)] = (float$)(0.0f);
+        int block = size / get_global_size(0) + (size % get_global_size(0) != 0 ? 1 : 0);
+        int idx = get_global_id(0) * block;
+        int max = idx + block;
+        if (max > size) max = size;
+        while (idx <  max)
+        {
+            buffer[idx] = 0.0f;
+            idx++;
+        }
     }
 
     );
@@ -280,8 +288,9 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
                 [&](Kernel& kernel)
                 {
                     kernel.setArg(0, buff.GetCLBuffer());
+                    kernel.setArg(1, buff.GetSize() / vectorSize);
                 },
-                buff.GetSize() / vectorSize);
+                ctx->GetOptimalGlobalSize(buff.GetSize(), vectorSize));
         }
     }
     catch (exception& ex)
