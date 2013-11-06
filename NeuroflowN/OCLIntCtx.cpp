@@ -88,5 +88,25 @@ unsigned OCLIntCtx::GetBestLocalSize(unsigned size)
     unsigned rem = size % preferredWorkgroupSizeMul;
     size -= rem;
     if (size > maxWorkItemSizes[0]) return maxWorkItemSizes[0];
-    return size;
+    return ToPowerOfTwo(size);
+}
+
+unsigned OCLIntCtx::GetOptimalGlobalSize(unsigned workItemCount, unsigned vectorSize)
+{
+    unsigned gs = workItemCount / vectorSize;
+    if (gs > GetMaxWorkGroupSize())
+    {
+        gs -= gs % GetMaxWorkGroupSize();
+    }
+    else if (gs > GetPreferredWorkgroupSizeMul())
+    {
+        gs -= gs % GetPreferredWorkgroupSizeMul();
+    }
+    return ToPowerOfTwo(gs);
+}
+
+unsigned OCLIntCtx::ToPowerOfTwo(unsigned value)
+{
+    while (!IsPowerOfTwo(value)) value--;
+    return value;
 }

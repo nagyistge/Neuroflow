@@ -275,3 +275,8 @@ const DeviceInfo& OCLContextImpl::GetDevice() const
 {
     return deviceInfo;
 }
+
+const OCLVaultSPtrT& OCLContextImpl::GetVault() const
+{
+    return vault;
+}

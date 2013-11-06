@@ -34,7 +34,7 @@ namespace Neuroflow.UT
 
         private async Task DoTest(ComputationContext ctx)
         {
-            await DoTest(ctx, 64, 128);
+            await DoTest(ctx, 4096, 4911);
         }
 
         private async Task DoTest(ComputationContext ctx, int fromSize, int toSize)

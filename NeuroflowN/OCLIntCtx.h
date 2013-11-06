@@ -98,12 +98,15 @@ namespace NeuroflowN
 
         std::string AsVectorKernelName(char* kernelName, unsigned vectorSize);
 
+        unsigned GetOptimalGlobalSize(unsigned workItemCount, unsigned vectorSize);
+
         std::pair<unsigned, unsigned> GetIOReduceSizesInput(unsigned inputSize, unsigned vectorSize, unsigned outputSize);
 
         std::pair<unsigned, unsigned> GetIOReduceSizesOutput(unsigned inputSize, unsigned outputSize, unsigned vectorSize);
 
     private:
         inline unsigned GetBestLocalSize(unsigned size);
+        unsigned ToPowerOfTwo(unsigned value);
 
         bool IsPowerOfTwo(unsigned value)
         {
