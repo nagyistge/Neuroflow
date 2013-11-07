@@ -100,6 +100,8 @@ namespace NeuroflowN
 
         unsigned GetOptimalGlobalSize(unsigned workItemCount, unsigned vectorSize);
 
+        unsigned GetOptimalLocalSizeForOneWorkgroup(unsigned workItemCount, unsigned vectorSize);
+
         std::pair<unsigned, unsigned> GetIOReduceSizesInput(unsigned inputSize, unsigned vectorSize, unsigned outputSize);
 
         std::pair<unsigned, unsigned> GetIOReduceSizesOutput(unsigned inputSize, unsigned outputSize, unsigned vectorSize);
