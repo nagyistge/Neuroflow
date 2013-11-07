@@ -105,6 +105,16 @@ unsigned OCLIntCtx::GetOptimalGlobalSize(unsigned workItemCount, unsigned vector
     return ToPowerOfTwo(gs);
 }
 
+unsigned OCLIntCtx::GetOptimalLocalSizeForOneWorkgroup(unsigned workItemCount, unsigned vectorSize)
+{
+    unsigned gs = workItemCount / vectorSize;
+    if (gs > GetMaxWorkGroupSize())
+    {
+        gs = GetMaxWorkGroupSize();
+    }
+    return ToPowerOfTwo(gs);
+}
+
 unsigned OCLIntCtx::ToPowerOfTwo(unsigned value)
 {
     while (!IsPowerOfTwo(value)) value--;

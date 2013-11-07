@@ -109,61 +109,6 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
         atomic_add(&(array[15]), v.sf);
     }
 
-    inline void AtomAddG(global int* ptr, int v)
-    {
-        atomic_add(ptr, v);
-    }
-
-    inline void AtomAddG2(global int2* ptr, int2 v)
-    {
-        global int* array = ((global Int2CastType*)ptr)->ints;
-        atomic_add(&(array[0]), v.s0);
-        atomic_add(&(array[1]), v.s1);
-    }
-
-    inline void AtomAddG4(global int4* ptr, int4 v)
-    {
-        global int* array = ((global Int4CastType*)ptr)->ints;
-        atomic_add(&(array[0]), v.s0);
-        atomic_add(&(array[1]), v.s1);
-        atomic_add(&(array[2]), v.s2);
-        atomic_add(&(array[3]), v.s3);
-    }
-
-    inline void AtomAddG8(global int8* ptr, int8 v)
-    {
-        global int* array = ((global Int8CastType*)ptr)->ints;
-        atomic_add(&(array[0]), v.s0);
-        atomic_add(&(array[1]), v.s1);
-        atomic_add(&(array[2]), v.s2);
-        atomic_add(&(array[3]), v.s3);
-        atomic_add(&(array[4]), v.s4);
-        atomic_add(&(array[5]), v.s5);
-        atomic_add(&(array[6]), v.s6);
-        atomic_add(&(array[7]), v.s7);
-    }
-
-    inline void AtomAddG16(global int16* ptr, int16 v)
-    {
-        global int* array = ((global Int16CastType*)ptr)->ints;
-        atomic_add(&(array[0]), v.s0);
-        atomic_add(&(array[1]), v.s1);
-        atomic_add(&(array[2]), v.s2);
-        atomic_add(&(array[3]), v.s3);
-        atomic_add(&(array[4]), v.s4);
-        atomic_add(&(array[5]), v.s5);
-        atomic_add(&(array[6]), v.s6);
-        atomic_add(&(array[7]), v.s7);
-        atomic_add(&(array[8]), v.s8);
-        atomic_add(&(array[9]), v.s9);
-        atomic_add(&(array[10]), v.sa);
-        atomic_add(&(array[11]), v.sb);
-        atomic_add(&(array[12]), v.sc);
-        atomic_add(&(array[13]), v.sd);
-        atomic_add(&(array[14]), v.se);
-        atomic_add(&(array[15]), v.sf);
-    }
-
     inline float SumComponents(float value)
     {
         return value;
