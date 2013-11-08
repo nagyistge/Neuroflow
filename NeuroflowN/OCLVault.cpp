@@ -15,6 +15,7 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
     commonCode = make_shared<OCLProgramUnit>(ctx, "common.h");
     commonCode->AddCode("#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable");
     commonCode->AddCode("#define D 100000000.0f");
+    commonCode->AddCode("#define null 0");
 
     ADD_OCL_CODE(commonCode,
     
@@ -211,5 +212,30 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
         float$ a = fabs(value * alpha);
         return alpha * (1.0f / ((1.0f + a) * (1.0f + a)));
     }
+    );
+
+    // Reduce
+
+    reduceCode = make_shared<OCLProgramUnit>(ctx, "reduce.h");
+
+    ADD_OCL_CODE(reduceCode,
+    
+        inline void Reduce_Sum(local float* values)
+        {
+            int localSize = get_local_size(0);
+            int localId = get_local_id(0);
+
+            barrier(CLK_LOCAL_MEM_FENCE);
+
+            for (int offset = localSize / 2; offset > 0; offset = offset / 2)
+            {
+                if (localId < offset)
+                {
+                    values[localId] += values[localId + offset];
+                }
+
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+        }
     );
 }

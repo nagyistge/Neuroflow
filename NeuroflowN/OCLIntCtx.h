@@ -77,6 +77,11 @@ namespace NeuroflowN
             return 4;
         }
 
+        unsigned GetMaxLayerCount() const
+        {
+            return 4;
+        }
+
         unsigned GetPreferredWorkgroupSizeMul() const
         {
             return preferredWorkgroupSizeMul;

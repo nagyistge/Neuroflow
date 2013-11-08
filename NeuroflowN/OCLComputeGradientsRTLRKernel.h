@@ -10,8 +10,10 @@ namespace NeuroflowN
         std::shared_ptr<OCLDeviceArrayManagement> deviceArrayManagement;
         cl::Buffer tmpGradients;
 
-        std::string CreateCPUKernelCode(unsigned size);
-        std::string CreateGPUKernelCode(unsigned size);
+        std::string GetKernelHeader(const char* name);
+        std::string CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(unsigned layerIndex);
+        std::string CreateCPUKernelCode();
+        std::string CreateGPUKernelCode();
         void Build(const OCLVaultSPtrT& vault);
         void AnalyzeInfos(const RTLRLayerInfoVecT& infos, unsigned& vectorSize, unsigned& uCount) const;
 
