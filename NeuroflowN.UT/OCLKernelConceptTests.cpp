@@ -34,8 +34,7 @@ namespace NeuroflowNUT
                 auto prg = make_shared<OCLProgram>(ctx, "Bubu1");
 
                 prg->Using(ctxImpl.GetVault()->GetCommonCode());
-
-                prg->AddCode("#define null 0");
+                prg->Using(ctxImpl.GetVault()->GetReduceCode());
 
                 ADD_OCL_CODE(prg,
 
@@ -54,26 +53,15 @@ namespace NeuroflowNUT
                         int idx = localId * block;
                         int max = idx + block;
                         if (max > size) max = size;
-                        while (idx <  max)
+
+                        while (idx <  max)
                         {
                             tmpGradients[localId] += values[idx];
 
                             idx++;
                         }
 
-                        barrier(CLK_LOCAL_MEM_FENCE);
-
-                        for (int offset = localSize / 2; offset > 0; offset = offset / 2)
-                        {
-                            if (localId < offset)
-                            {
-                                float other = tmpGradients[localId + offset];
-                                float mine = tmpGradients[localId];
-                                tmpGradients[localId] = mine + other;
-                            }
-
-                            barrier(CLK_LOCAL_MEM_FENCE);
-                        }
+                        Reduce_Sum(tmpGradients);
 
                         if (localId == 0)
                         {

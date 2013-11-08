@@ -37,15 +37,6 @@ namespace NeuroflowN
         LinearCOKV
     };
 
-    enum ComputeGradientsRTLRKernelVersion
-    {
-        NoGradientCGRKV,
-        CompGradientCGRKV,
-        OnlineCGRKV,
-        OfflineCGRKV,
-        OnlineOfflineCGRKV
-    };
-
     struct OCLReduceSizes;
 
     class OCLContextImpl;
