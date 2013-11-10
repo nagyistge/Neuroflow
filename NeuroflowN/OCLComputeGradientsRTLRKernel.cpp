@@ -164,7 +164,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCallCode_ComputeGradinetsRTLR_L
         ",iLayerIndex == kLayerIndex ? iValueIndex : -1\n"
         ",inputs\n"
         ",inputIndex\n"
-        ",isLastLayer ? tmpGradients : null\n"
+        ",(isLastLayer && outputs != null) ? tmpGradients : null\n" // Because there is no way to null tmpGradients by clSetKerenlArgs
         ",isLastLayer ? outputs : null\n"
         ",isLastLayer ? desiredOutputs : null);\n";
 
@@ -232,19 +232,130 @@ std::string OCLComputeGradientsRTLRKernel::CreateGPUKernelCode()
 void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs)
 {
     auto cState = (OCLComputationState*)state;
+    auto exec = cState->GetExec(0);
+    unsigned kLayerSize = valueRelatedPBuffs->size();
+    unsigned vectorSize;
+    unsigned maxLayerSize;
+    AnalyzeInfos(*inputLayerInfos, vectorSize, maxLayerSize);
+    unsigned workSize = ctx->GetOptimalLocalSizeForOneWorkgroup(maxLayerSize, vectorSize);
+    bool hasError = outputs != null && desiredOutputs != null;
+    bool compGrads = hasError && (data->BiasGradients != null || data->Gradients != null);
+    bool compGradSums = hasError && (data->BiasGradientSums != null || data->GradientSums != null);
 
     auto init = [=](Kernel& kernel)
     {
+        int aidx = 0;
+
+        int lSet = 0;
+        for (int kLayerIndex = 0; kLayerIndex < kLayerSize; kLayerIndex++)
+        {
+            auto& layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
+            auto& p_i_j_k_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[kLayerIndex]);
+            auto& upperInfos_k = (*inputLayerInfos)[kLayerIndex];
+           
+            unsigned iSet = 0;
+            for (auto& upperInfo_k : upperInfos_k)
+            {
+                if (upperInfo_k.IsElementOfU)
+                {
+                    int lLayerIndex = upperInfo_k.Index;
+                    auto& p_i_j_l_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[lLayerIndex]);
+                    auto& weights = ctx->ToBuffer2(upperInfo_k.Weights);
+                    kernel.setArg(aidx++, p_i_j_l_Values.GetCLBuffer());
+                    kernel.setArg(aidx++, p_i_j_l_Values.GetSize() / vectorSize);
+                    kernel.setArg(aidx++, weights.GetCLBuffer());
+                    iSet++;
+                }
+            }
+            while (iSet < ctx->GetMaxConnectionCount())
+            {
+                kernel.setArg(aidx++, null);
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, null);
+                iSet++;
+            }
+            kernel.setArg(aidx++, p_i_j_k_Values.GetCLBuffer());
+            kernel.setArg(aidx++, p_i_j_k_Values.GetSize());
+            kernel.setArg(aidx++, layerNetValueDerivates.GetCLBuffer());
+            lSet++;
+        }
+        while (lSet < ctx->GetMaxLayerCount())
+        {
+            for (unsigned i = 0; i < ctx->GetMaxConnectionCount(); i++)
+            {
+                kernel.setArg(aidx++, null);
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, null);
+            }
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, -1);
+            kernel.setArg(aidx++, null);
+            lSet++;
+        }
+
+        kernel.setArg(aidx++, data->ILayerIndex);
+        kernel.setArg(aidx++, data->IValueIndex);
+        if (data->Inputs.is_initialized())
+        {
+            kernel.setArg(aidx++, ctx->ToBuffer1(data->Inputs.get()()).GetCLBuffer());
+            kernel.setArg(aidx++, data->JValueIndex);
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, -1);
+        }
+        if (hasError)
+        {
+            kernel.setArg(aidx++, ctx->ToBuffer1(outputs).GetCLBuffer());
+            kernel.setArg(aidx++, ctx->ToBuffer1(desiredOutputs).GetCLBuffer());
+            kernel.setArg(aidx++, workSize, null);
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, sizeof(float), null);
+        }
+        if (compGrads)
+        {
+            if (data->BiasGradients != null)
+            {
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradients).GetCLBuffer());
+            }
+            else
+            {
+                assert(data->Gradients != null);
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->Gradients).GetCLBuffer());
+            }
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+        }
+        if (compGradSums)
+        {
+            if (data->BiasGradientSums != null)
+            {
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradientSums).GetCLBuffer());
+            }
+            else
+            {
+                assert(data->GradientSums != null);
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->GradientSums).GetCLBuffer());
+            }
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+        }
+        kernel.setArg(aidx++, data->IJValueIndex);
     };
-
-    auto exec = cState->GetExec(0);
-
-    unsigned vectorSize = 1;
+    
 
     if (ctx->IsCPU())
     {
-        unsigned workSize = 64;
-        exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize);
+        exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
     }
 
     /*auto cState = (OCLComputationState*)state;
@@ -255,13 +366,16 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
     ctx->GetQueue().finish();*/
 }
 
-void OCLComputeGradientsRTLRKernel::AnalyzeInfos(const RTLRLayerInfoVecT& infos, unsigned& vectorSize, unsigned& uCount) const
+void OCLComputeGradientsRTLRKernel::AnalyzeInfos(const RTLRLayerInfoVecVecT& infos, unsigned& vectorSize, unsigned& maxLayerSize) const
 {
     vectorSize = 16;
-    uCount = 0;
-    for (auto& i : infos)
+    maxLayerSize = 0;
+    for (auto& li : infos)
     {
-        vectorSize = GetVectorSize(vectorSize, i.Size);
-        if (i.IsElementOfU) uCount++;
+        for (auto& i : li)
+        {
+            vectorSize = GetVectorSize(vectorSize, i.Size);
+            if (i.IsElementOfU && i.Size > maxLayerSize) maxLayerSize = i.Size;
+        }
     }
 }
