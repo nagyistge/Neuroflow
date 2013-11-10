@@ -49,3 +49,13 @@ std::pair<unsigned, unsigned> OCLKernelBase::GetIOReduceSizesOutput(DeviceArrayV
     }
     return move(sizes);
 }
+
+std::string OCLKernelBase::ReplaceIndexesInTemplate(const std::string tmpl, boost::optional<int> inputIndex, boost::optional<int> layerIndex)
+{
+    string result = tmpl;
+
+    if (inputIndex.is_initialized()) boost::replace_all(result, "{i}", to_string(inputIndex.get()));
+    if (layerIndex.is_initialized()) boost::replace_all(result, "{l}", to_string(layerIndex.get()));
+
+    return result;
+}

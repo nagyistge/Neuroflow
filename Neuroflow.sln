@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroflow", "Neuroflow\Neuroflow.csproj", "{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroflow.UT", "Neuroflow.UT\Neuroflow.UT.csproj", "{259845FA-9834-41E9-A53E-8AE96E1A09EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6417A480-6C0D-4F73-8447-CE864B378204} = {6417A480-6C0D-4F73-8447-CE864B378204}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}"
 EndProject
