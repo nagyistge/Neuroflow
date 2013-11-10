@@ -7,10 +7,9 @@ namespace NeuroflowN
     class OCLComputeGradientsRTLRKernel : public OCLVersionableKernelBase
     {
         OCLProgramSPtrT program;
-        std::shared_ptr<OCLDeviceArrayManagement> deviceArrayManagement;
-        cl::Buffer tmpGradients;
 
         std::string GetKernelHeader(const char* name);
+        std::string CreateCode_ComputeGradinetsRTLR_Layer_CPU();
         std::string CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(unsigned layerIndex);
         std::string CreateCPUKernelCode();
         std::string CreateGPUKernelCode();
@@ -18,7 +17,7 @@ namespace NeuroflowN
         void AnalyzeInfos(const RTLRLayerInfoVecT& infos, unsigned& vectorSize, unsigned& uCount) const;
 
     public:
-        OCLComputeGradientsRTLRKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<OCLDeviceArrayManagement>& deviceArrayManagement);
+        OCLComputeGradientsRTLRKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
         void Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs);
     };

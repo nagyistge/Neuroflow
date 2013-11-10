@@ -29,7 +29,7 @@ namespace NeuroflowN
             computeInternalErrorsKernel(ctx, vault),
             computeOutputErrorsKernel(ctx, vault),
             computeGradientsKernel(ctx, vault),
-            computeGradientsRTLRKernel(ctx, vault, deviceArrayManagement)
+            computeGradientsRTLRKernel(ctx, vault)
         {
         }
 
