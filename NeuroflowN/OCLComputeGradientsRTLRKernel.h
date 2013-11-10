@@ -14,7 +14,7 @@ namespace NeuroflowN
         std::string CreateCPUKernelCode();
         std::string CreateGPUKernelCode();
         void Build(const OCLVaultSPtrT& vault);
-        void AnalyzeInfos(const RTLRLayerInfoVecT& infos, unsigned& vectorSize, unsigned& uCount) const;
+        void AnalyzeInfos(const RTLRLayerInfoVecVecT& infos, unsigned& vectorSize, unsigned& maxLayerSize) const;
 
     public:
         OCLComputeGradientsRTLRKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
