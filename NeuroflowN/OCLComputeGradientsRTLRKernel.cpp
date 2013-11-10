@@ -6,6 +6,7 @@
 #include "OCLComputationState.h"
 #include "GetVectorSize.h"
 #include "OCLDeviceArrayManagement.h"
+#include "OCLOutOfOrderQueue.h"
 
 using namespace std;
 using namespace cl;
@@ -229,15 +230,13 @@ std::string OCLComputeGradientsRTLRKernel::CreateGPUKernelCode()
     return "kernel lofasz(global int* foo) { }";
 }
 
-void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs)
+void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
     auto cState = (OCLComputationState*)state;
-    auto exec = cState->GetExec(0);
+    auto exec = cState->GetExec(0, true);
     unsigned kLayerSize = valueRelatedPBuffs->size();
-    unsigned vectorSize;
-    unsigned maxLayerSize;
-    AnalyzeInfos(*inputLayerInfos, vectorSize, maxLayerSize);
-    unsigned workSize = ctx->GetOptimalLocalSizeForOneWorkgroup(maxLayerSize, vectorSize);
+    unsigned vectorSize = CalculateVectorSize(*inputLayerInfos);
+    unsigned workSize = CalculateWorkSize(*valueRelatedPBuffs);
     bool hasError = outputs != null && desiredOutputs != null;
     bool compGrads = hasError && (data->BiasGradients != null || data->Gradients != null);
     bool compGradSums = hasError && (data->BiasGradientSums != null || data->GradientSums != null);
@@ -352,30 +351,37 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         kernel.setArg(aidx++, data->IJValueIndex);
     };
     
+    if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->End();
 
     if (ctx->IsCPU())
     {
         exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
     }
 
-    /*auto cState = (OCLComputationState*)state;
-
-    unsigned kLayerSize = valueRelatedPBuffs->size();
-    unsigned outputLayerIndex = kLayerSize - 1;
-
-    ctx->GetQueue().finish();*/
+    if (seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
 }
 
-void OCLComputeGradientsRTLRKernel::AnalyzeInfos(const RTLRLayerInfoVecVecT& infos, unsigned& vectorSize, unsigned& maxLayerSize) const
+unsigned OCLComputeGradientsRTLRKernel::CalculateVectorSize(const RTLRLayerInfoVecVecT& infos) const
 {
-    vectorSize = 16;
-    maxLayerSize = 0;
+    unsigned vectorSize = 16;
     for (auto& li : infos)
     {
         for (auto& i : li)
         {
             vectorSize = GetVectorSize(vectorSize, i.Size);
-            if (i.IsElementOfU && i.Size > maxLayerSize) maxLayerSize = i.Size;
         }
     }
+    return vectorSize;
+}
+
+unsigned OCLComputeGradientsRTLRKernel::CalculateWorkSize(const DeviceArrayVecT& valueRelatedPBuffs) const
+{
+    double sum = 0.0;
+    double count = 0.0;
+    for (auto& b : valueRelatedPBuffs)
+    {
+        sum += b->GetSize();
+        count++;
+    }
+    return ctx->GetOptimalLocalSizeForOneWorkgroup(sum / count, 1);
 }

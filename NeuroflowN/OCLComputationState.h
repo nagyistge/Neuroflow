@@ -11,6 +11,6 @@ namespace NeuroflowN
     {
         std::vector<std::unique_ptr<OCLKernelToExecute>> execs;
     public:
-        OCLKernelToExecute* GetExec(unsigned index);
+        OCLKernelToExecute* GetExec(unsigned index, bool isOutOfOrder = false);
     };
 }

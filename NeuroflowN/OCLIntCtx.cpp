@@ -4,6 +4,7 @@
 #include "OCLBuffer2.h"
 #include "OCLDataArray.h"
 #include "OCLKernelToExecute.h"
+#include "OCLOutOfOrderQueue.h"
 
 using namespace std;
 using namespace cl;
@@ -119,4 +120,10 @@ unsigned OCLIntCtx::ToPowerOfTwo(unsigned value)
 {
     while (!IsPowerOfTwo(value)) value--;
     return value;
+}
+
+const OCLOutOfOrderQueueSPtrT& OCLIntCtx::GetOutOfOrderQueue()
+{
+    if (ooQueue == null) ooQueue = make_shared<OCLOutOfOrderQueue>(this);
+    return ooQueue;
 }

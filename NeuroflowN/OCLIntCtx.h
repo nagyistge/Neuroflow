@@ -18,6 +18,7 @@ namespace NeuroflowN
         cl::Context context;
         DeviceInfo deviceInfo;
         std::string version;
+        OCLOutOfOrderQueueSPtrT ooQueue;
 
         bool isCPU;
         unsigned maxWorkGroupSize;
@@ -56,6 +57,8 @@ namespace NeuroflowN
         {
             return version;
         }
+
+        const OCLOutOfOrderQueueSPtrT& GetOutOfOrderQueue();
 
         bool IsCPU() const
         {

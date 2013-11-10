@@ -5,10 +5,10 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
-OCLKernelToExecute* OCLComputationState::GetExec(unsigned index)
+OCLKernelToExecute* OCLComputationState::GetExec(unsigned index, bool isOutOfOrder)
 {
     execs.resize(index + 1);
     auto& current = execs[index];
     if (current != null) return current.get();
-    return (current = make_unique<OCLKernelToExecute>()).get();
+    return (current = make_unique<OCLKernelToExecute>(isOutOfOrder)).get();
 }

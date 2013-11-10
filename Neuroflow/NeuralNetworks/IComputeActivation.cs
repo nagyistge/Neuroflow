@@ -23,7 +23,7 @@ namespace Neuroflow.NeuralNetworks
 
         void ComputeGradientsBPTTPhase2(IDisposable state, Marshaled<DeviceArrayFactory[]> inputs, Marshaled<IDeviceArray2[]> gradients, IDeviceArray biasGradients, Marshaled<IDeviceArray2[]> gradientSums, IDeviceArray biasGradientSums, IDeviceArray errors, int intItCount);
 
-        void ComputeGradientsRTLR(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfos, Marshaled<IDeviceArray[]> netValueDerivates, Marshaled<RTLRComputationData> data, Marshaled<IDeviceArray[]> valueRelatedPBuffs, IDeviceArray outputs, IDeviceArray desiredOutputs);
+        void ComputeGradientsRTLR(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfos, Marshaled<IDeviceArray[]> netValueDerivates, Marshaled<RTLRComputationData> data, Marshaled<IDeviceArray[]> valueRelatedPBuffs, IDeviceArray outputs, IDeviceArray desiredOutputs, SequenceMarker seqMark);
 
         void CalculateGlobalError(IDisposable state, IDeviceArray desiredOutputs, IDeviceArray actualOutputs, IDeviceArray errorValue, IDeviceArray errorSumValue);
     }
