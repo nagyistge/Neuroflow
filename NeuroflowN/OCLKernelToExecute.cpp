@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OCLKernelToExecute.h"
 #include "OCLError.h"
+#include "OCLOutOfOrderQueue.h"
 
 using namespace NeuroflowN;
 using namespace cl;
@@ -19,14 +20,32 @@ void OCLKernelToExecute::DoExecute(const OCLProgramSPtrT& program, unsigned vect
     auto& data = GetData(vectorSize);
     if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {
-        program->GetIntCtx()->GetQueue().enqueueTask(data.kernel);
+        if (isOutOfOrder)
+        {
+            program->GetIntCtx()->GetOutOfOrderQueue()->EnqueueTask(data.kernel);
+        }
+        else
+        {
+            program->GetIntCtx()->GetQueue().enqueueTask(data.kernel);
+        }
     }
     else 
     {
-        program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
-            data.kernel,
-            workItemOffsets,
-            workItemSizes,
-            localSizes);
+        if (isOutOfOrder)
+        {
+            program->GetIntCtx()->GetOutOfOrderQueue()->EnqueueNDRangeKernel(
+                data.kernel,
+                workItemOffsets,
+                workItemSizes,
+                localSizes);
+        }
+        else
+        {
+            program->GetIntCtx()->GetQueue().enqueueNDRangeKernel(
+                data.kernel,
+                workItemOffsets,
+                workItemSizes,
+                localSizes);
+        }
     }
 }

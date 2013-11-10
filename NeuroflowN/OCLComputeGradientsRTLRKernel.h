@@ -14,12 +14,13 @@ namespace NeuroflowN
         std::string CreateCPUKernelCode();
         std::string CreateGPUKernelCode();
         void Build(const OCLVaultSPtrT& vault);
-        void AnalyzeInfos(const RTLRLayerInfoVecVecT& infos, unsigned& vectorSize, unsigned& maxLayerSize) const;
+        unsigned CalculateVectorSize(const RTLRLayerInfoVecVecT& infos) const;
+        unsigned CalculateWorkSize(const DeviceArrayVecT& valueRelatedPBuffs) const;
 
     public:
         OCLComputeGradientsRTLRKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
-        void Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs);
+        void Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark);
     };
 }
 

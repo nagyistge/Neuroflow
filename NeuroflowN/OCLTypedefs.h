@@ -53,12 +53,15 @@ namespace NeuroflowN
     class OCLProgramUnit;
     class OCLProgram;
     class OCLVault;
+    class OCLOutOfOrderQueue;
 
     typedef std::shared_ptr<OCLIntCtx> OCLIntCtxSPtrT;
 
     typedef std::shared_ptr<OCLProgramUnit> OCLProgramUnitSPtrT;
     typedef std::shared_ptr<OCLProgram> OCLProgramSPtrT;
     typedef std::shared_ptr<OCLVault> OCLVaultSPtrT;
+
+    typedef std::shared_ptr<OCLOutOfOrderQueue> OCLOutOfOrderQueueSPtrT;
 
     typedef std::vector<OCLKernelToExecute> OCLKernelToExecuteVecT;
 

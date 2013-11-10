@@ -110,6 +110,7 @@
     <Compile Include="NeuralNetworks\_LearningAlgo\ManagedAlopexBLearningAlgo.cs" />
     <Compile Include="NeuralNetworks\_LearningAlgo\ManagedCrossEntropyLearningAlgo.cs" />
     <Compile Include="Rtl.cs" />
+    <Compile Include="SequenceMarker.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="VectorUtils.cs" />
     <Compile Include="ManagedArray.cs" />

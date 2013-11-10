@@ -22,6 +22,8 @@ namespace NeuroflowN
 
         std::vector<Data> dataValues;
 
+        bool isOutOfOrder = false;
+
         unsigned VectorSizeToIndex(unsigned vectorSize)
         {
             switch (vectorSize)
@@ -49,6 +51,10 @@ namespace NeuroflowN
         }
 
     public:
+
+        OCLKernelToExecute() { }
+
+        OCLKernelToExecute(bool isOutOfOrder) : isOutOfOrder(isOutOfOrder) { }
 
         const std::string& GetKernelName(unsigned vectorSize)
         {

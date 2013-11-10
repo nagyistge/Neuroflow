@@ -141,7 +141,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
 }
 
 
-void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs)
+void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark)
 {
     try
     {
@@ -152,7 +152,8 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
             ToNative(data),
             ToNative(valueRelatedPBuffs),
             ToNative(outputs),
-            ToNative(desiredOutputs));
+            ToNative(desiredOutputs),
+            (NeuroflowN::SequenceMarker)((int)seqMark));
     }
     catch (exception& ex)
     {

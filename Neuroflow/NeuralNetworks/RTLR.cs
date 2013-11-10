@@ -39,7 +39,7 @@ namespace Neuroflow.NeuralNetworks
 
         List<Marshaled<IDeviceArray[]>[][]> pWeightValues = new List<Marshaled<IDeviceArray[]>[][]>();
 
-        List<Action<Marshaled<IDeviceArray[]>, IDeviceArray, IDeviceArray>> codes = new List<Action<Marshaled<IDeviceArray[]>, IDeviceArray, IDeviceArray>>();
+        List<Action<IDeviceArray, IDeviceArray>> codes = new List<Action<IDeviceArray, IDeviceArray>>();
 
         Marshaled<RTLRLayerInfo[][]> inputLayerInfos;
 
@@ -125,7 +125,9 @@ namespace Neuroflow.NeuralNetworks
                             // i: iLayerIndex, iValueIndex
                             // j: jLayerIndex, jValueIndex
 
-                            ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, -1, iValueIndex, outputs, desiredOutputs);
+                            bool isFirst = lidx == 1 && iValueIndex == 1;
+
+                            ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, -1, iValueIndex, outputs, desiredOutputs, isFirst ? SequenceMarker.Begin : SequenceMarker.Inner);
                         }
                         else
                         {
@@ -143,7 +145,14 @@ namespace Neuroflow.NeuralNetworks
                                 // i: iLayerIndex, iValueIndex
                                 // j: jLayerIndex, jValueIndex
 
-                                ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, jValueIndex, ijValueIndex, outputs, desiredOutputs);
+                                bool isLast =
+                                    lidx == mlp.Layers.Count &&
+                                    iValueIndex == layerOutputBufferSize - 1 &&
+                                    jLayerIndex == layerPWeightValues.Length - 1 &&
+                                    jValueIndex == inputLayerSize - 1;
+
+
+                                ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, jValueIndex, ijValueIndex, outputs, desiredOutputs, isLast ? SequenceMarker.End : SequenceMarker.Inner);
                             }
                         }
                     }
@@ -151,7 +160,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        private void ComputeGradients(int computationIndex, Marshaled<IDeviceArray[]> valueRelatedPBuffs, int iLayerIndex, int iValueIndex, int jLayerIndex, int jValueIndex, int ijValueIndex, IDeviceArray outputs, IDeviceArray desiredOutputs)
+        private void ComputeGradients(int computationIndex, Marshaled<IDeviceArray[]> valueRelatedPBuffs, int iLayerIndex, int iValueIndex, int jLayerIndex, int jValueIndex, int ijValueIndex, IDeviceArray outputs, IDeviceArray desiredOutputs, SequenceMarker seqMark)
         {
 #if DEBUG
             int outputLayerIndex = valueRelatedPBuffs.Instance().Length - 1;
@@ -162,12 +171,12 @@ namespace Neuroflow.NeuralNetworks
             if (codes.Count > computationIndex)
             {
                 var code = codes[computationIndex];
-                if (code != null) code(valueRelatedPBuffs, outputs, desiredOutputs);
+                if (code != null) code(outputs, desiredOutputs);
             }
             else
             {
                 codes.EnsureSize(computationIndex + 1);
-                Action<Marshaled<IDeviceArray[]>, IDeviceArray, IDeviceArray> code = null;
+                Action<IDeviceArray, IDeviceArray> code = null;
 
                 bool forBias = jValueIndex == -1;
                 var dataM = mlp.AsMarshaled(new RTLRComputationData());
@@ -200,10 +209,10 @@ namespace Neuroflow.NeuralNetworks
                 Debug.Assert(!(data.BiasGradients == null && data.BiasGradientSums == null && data.Gradients == null && data.GradientSums == null));
 
                 var state = mlp.CreateComputationState();
-                code = (p, os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(state, inputLayerInfos, netValueDerivates, dataM, p, os, dos);
+                code = (os, dos) => mlp.Adapter.ComputeActivation.ComputeGradientsRTLR(state, inputLayerInfos, netValueDerivates, dataM, valueRelatedPBuffs, os, dos, seqMark);
 
                 codes[computationIndex] = code;
-                code(valueRelatedPBuffs, outputs, desiredOutputs);
+                code(outputs, desiredOutputs);
             }
         }
 

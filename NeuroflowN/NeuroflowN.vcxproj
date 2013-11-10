@@ -175,6 +175,7 @@
     <ClInclude Include="NUtils.h" />
     <ClInclude Include="OCL.h" />
     <ClInclude Include="OCLComputeGradientsRTLRKernel.h" />
+    <ClInclude Include="OCLOutOfOrderQueue.h" />
     <ClInclude Include="OCLVersionableKernelBase.h" />
     <ClInclude Include="OCLBuffer1.h" />
     <ClInclude Include="OCLBuffer2.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="OCLKernelToExecute.cpp" />
     <ClCompile Include="OCLLearningAlgoFactory.cpp" />
     <ClCompile Include="OCLMultilayerPerceptronAdapter.cpp" />
+    <ClCompile Include="OCLOutOfOrderQueue.cpp" />
     <ClCompile Include="OCLProgram.cpp" />
     <ClCompile Include="OCLProgramUnit.cpp" />
     <ClCompile Include="OCLVault.cpp" />

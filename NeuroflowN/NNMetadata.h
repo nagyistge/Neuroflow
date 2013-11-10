@@ -20,6 +20,13 @@ namespace NeuroflowN
         SupervisedOffline = 1 << 2
     };
 
+    enum class SequenceMarker
+    {
+        Begin = -1,
+        Inner = 0,
+        End = 1
+    };
+
     struct LayerBehavior
     {
         virtual ~LayerBehavior() { }
