@@ -61,12 +61,18 @@ namespace Neuroflow
             }
         }
 
-        override unsafe public void Zero(IDeviceArray deviceArray)
+        override public void Zero(IDeviceArray deviceArray)
         {
             var a = deviceArray.ToManaged().InternalArray;
-            fixed (float* p = a)
+            ZeroMemory(a);
+        }
+
+        unsafe internal static void ZeroMemory(float[] array)
+        {
+            Debug.Assert(array != null);
+            fixed (float* p = array)
             {
-                Rtl.ZeroMemory(new IntPtr(p), new IntPtr(sizeof(float) * a.Length));
+                Rtl.ZeroMemory(new IntPtr(p), new IntPtr(sizeof(float) * array.Length));
             }
         }
     }

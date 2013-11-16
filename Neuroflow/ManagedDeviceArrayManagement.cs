@@ -22,7 +22,15 @@ namespace Neuroflow
 
         public unsafe void Copy(IDeviceArray from, int fromIndex, IDeviceArray to, int toIndex, int size)
         {
-            Array.Copy(from.ToManaged().InternalArray, fromIndex, to.ToManaged().InternalArray, toIndex, size);
+            var fm = from.ToManaged();
+            var tm = to.ToManaged();
+            Array.Copy(fm.InternalArray, fm.BeginIndex + fromIndex, tm.InternalArray, tm.BeginIndex + toIndex, size);
+        }
+
+
+        public IDeviceArrayPool CreatePool()
+        {
+            return new ManagedDeviceArrayPool();
         }
     }
 }

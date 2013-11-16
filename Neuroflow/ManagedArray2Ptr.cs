@@ -9,17 +9,20 @@ namespace Neuroflow
 {
     unsafe internal struct ManagedArray2Ptr
     {
-        internal ManagedArray2Ptr(ManagedArray2 array, float* ptr)
+        internal ManagedArray2Ptr(ManagedArray2 array, float* ptr, int beginIndex)
         {
             Debug.Assert(array != null && ptr != null);
 
             this.array = array;
             this.ptr = ptr;
+            this.beginIndex = beginIndex;
         }
 
         ManagedArray2 array;
 
         float* ptr;
+
+        int beginIndex;
 
         internal int Size
         {
@@ -41,11 +44,11 @@ namespace Neuroflow
         {
             get
             {
-                return array.InternalArray[lowerIndex * Size1 + upperIndex];
+                return array.InternalArray[beginIndex + (lowerIndex * Size1 + upperIndex)];
             }
             set
             {
-                array.InternalArray[lowerIndex * Size1 + upperIndex] = value;
+                array.InternalArray[beginIndex + (lowerIndex * Size1 + upperIndex)] = value;
             }
         }
 #else
@@ -53,11 +56,11 @@ namespace Neuroflow
         {
             get
             {
-                return ptr[lowerIndex * Size1 + upperIndex];
+                return ptr[beginIndex + (lowerIndex * Size1 + upperIndex)];
             }
             set
             {
-                ptr[lowerIndex * Size1 + upperIndex] = value;
+                ptr[beginIndex + (lowerIndex * Size1 + upperIndex)] = value;
             }
         }
 #endif

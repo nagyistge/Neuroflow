@@ -37,6 +37,8 @@ namespace Neuroflow.NeuralNetworks
 
         MultilayerPerceptron mlp;
 
+        IDeviceArrayPool pValuesPool;
+
         List<Marshaled<IDeviceArray[]>[][]> pWeightValues = new List<Marshaled<IDeviceArray[]>[][]>();
 
         List<Action<IDeviceArray, IDeviceArray>> codes = new List<Action<IDeviceArray, IDeviceArray>>();
@@ -47,6 +49,8 @@ namespace Neuroflow.NeuralNetworks
 
         private void CreatePValues(MultilayerPerceptron mlp)
         {
+            pValuesPool = mlp.Adapter.DeviceArrayManagement.CreatePool();
+
             int uLayersCount = mlp.Layers.Count - 1;
             for (int lidx = 1; lidx < mlp.Layers.Count; lidx++)
             {
@@ -58,13 +62,13 @@ namespace Neuroflow.NeuralNetworks
                 // Biases:
                 var pWeightValuesOfInput = new Marshaled<IDeviceArray[]>[biases.Size];
 
-                for (int weightIndex = 0; weightIndex < biases.Size; weightIndex++)
+                for (int biasIndex = 0; biasIndex < biases.Size; biasIndex++)
                 {
-                    pWeightValuesOfInput[weightIndex] = mlp.AsMarshaled(new IDeviceArray[uLayersCount]);
+                    pWeightValuesOfInput[biasIndex] = mlp.AsMarshaled(new IDeviceArray[uLayersCount]);
 
                     for (int lidx2 = 0; lidx2 < uLayersCount; lidx2++)
                     {
-                        pWeightValuesOfInput[weightIndex].Instance()[lidx2] = mlp.Adapter.DeviceArrayManagement.CreateArray(false, GetULayerSize(lidx2));
+                        pWeightValuesOfInput[biasIndex].Instance()[lidx2] = pValuesPool.CreateArray(false, GetULayerSize(lidx2));
                     }
                 }
 
@@ -84,7 +88,7 @@ namespace Neuroflow.NeuralNetworks
                         pWeightValuesOfInput[weightIndex] = mlp.AsMarshaled(new IDeviceArray[uLayersCount]);
                         for (int lidx2 = 0; lidx2 < uLayersCount; lidx2++)
                         {
-                            pWeightValuesOfInput[weightIndex].Instance()[lidx2] = mlp.Adapter.DeviceArrayManagement.CreateArray(false, GetULayerSize(lidx2));
+                            pWeightValuesOfInput[weightIndex].Instance()[lidx2] = pValuesPool.CreateArray(false, GetULayerSize(lidx2));
                         }
                     }
 
@@ -231,26 +235,11 @@ namespace Neuroflow.NeuralNetworks
             return mlp.Layers[lidx + 1].Layer.Size;
         }
 
-        #region Reset
+        #region Zero
 
-        internal void Reset()
+        internal void Zero()
         {
-            foreach (var p in pWeightValues) Reset(p);
-        }
-
-        private void Reset(Marshaled<IDeviceArray[]>[][] p)
-        {
-            foreach (var ip in p) Reset(ip);
-        }
-
-        private void Reset(Marshaled<IDeviceArray[]>[] p)
-        {
-            foreach (var ip in p) Reset(ip);
-        }
-
-        private void Reset(Marshaled<IDeviceArray[]> p)
-        {
-            foreach (var da in p.Instance()) mlp.Adapter.VectorUtils.Zero(da);
+            pValuesPool.Zero();
         }
 
         #endregion
@@ -266,26 +255,11 @@ namespace Neuroflow.NeuralNetworks
 
         private void Free()
         {
-            if (pWeightValues != null)
+            if (pValuesPool != null)
             {
-                foreach (var p in pWeightValues) Free(p);
-                pWeightValues = null;
+                ResourceManager.Free(pValuesPool);
+                pValuesPool = null;
             }
-        }
-
-        private void Free(Marshaled<IDeviceArray[]>[][] p)
-        {
-            foreach (var ip in p) Free(ip);
-        }
-
-        private void Free(Marshaled<IDeviceArray[]>[] p)
-        {
-            foreach (var ip in p) Free(ip);
-        }
-
-        private void Free(Marshaled<IDeviceArray[]> p)
-        {
-            ResourceManager.Free(p.Instance());
         }
 
         #endregion

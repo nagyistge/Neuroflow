@@ -95,7 +95,9 @@
     <Compile Include="DisposableObject.cs" />
     <Compile Include="GCHandleRef.cs" />
     <Compile Include="IDeviceArrayManagement.cs" />
+    <Compile Include="IDeviceArrayPool.cs" />
     <Compile Include="IndexedResourceBag.cs" />
+    <Compile Include="ManagedDeviceArrayPool.cs" />
     <Compile Include="Marshaled.cs" />
     <Compile Include="NeuralNetworks\DeviceArrayStack.cs" />
     <Compile Include="NeuralNetworks\FlowDirection.cs" />

@@ -118,7 +118,6 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode_ComputeGradinetsRTLR_Layer
         "{\n"
         "int localSize = get_local_size(0);\n"
         "int localId = get_local_id(0);\n"
-        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "int block = p_i_j_k_ValuesSize / localSize + (p_i_j_k_ValuesSize % localSize != 0 ? 1 : 0);\n"
         "int kValueIndex = localId * block;\n"
         "int max = kValueIndex + block;\n"
@@ -183,7 +182,8 @@ std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
         stringstream code;
         code << GetKernelHeader(name);
         code << "{\n";
-        code << "tmpGradients[get_global_id(0)] = 0.0f;\n";
+        code << "tmpGradients[get_local_id(0)] = 0.0f;\n";
+        code << "barrier(CLK_LOCAL_MEM_FENCE);\n";
         code << "int kLayerIndex;\n";
         code << "bool isLastLayer;\n";
 
@@ -191,8 +191,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
         {
             if (layerIndex != 0)
             {
-                code << 
-                    "if (!isLastLayer)\n"
+                code << "if (!isLastLayer)\n"
                     "{\n";
             }
 
@@ -206,11 +205,8 @@ std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
                 code << "isLastLayer =  p_i_j_k_Values_" << layerIndex + 1 << " == null;\n";
             }
             code << CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(layerIndex);
-
-            if (layerIndex != 0)
-            {
-                code << "};\n";
-            }
+            code << "barrier(CLK_LOCAL_MEM_FENCE);\n";
+            if (layerIndex != 0) code << "}\n";
         }
 
         code << "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums, gradientIndex);\n";
