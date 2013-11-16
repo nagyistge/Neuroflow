@@ -165,6 +165,7 @@
     <ClInclude Include="IDeviceArray.h" />
     <ClInclude Include="IDeviceArray2.h" />
     <ClInclude Include="IDeviceArrayManagement.h" />
+    <ClInclude Include="IDeviceArrayPool.h" />
     <ClInclude Include="ILearningAlgo.h" />
     <ClInclude Include="ILearningAlgoFactory.h" />
     <ClInclude Include="IMultilayerPerceptronAdapter.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="NUtils.h" />
     <ClInclude Include="OCL.h" />
     <ClInclude Include="OCLComputeGradientsRTLRKernel.h" />
+    <ClInclude Include="OCLDeviceArrayPool.h" />
     <ClInclude Include="OCLOutOfOrderQueue.h" />
     <ClInclude Include="OCLVersionableKernelBase.h" />
     <ClInclude Include="OCLBuffer1.h" />
@@ -222,6 +224,7 @@
     <ClCompile Include="OCLContextImpl.cpp" />
     <ClCompile Include="OCLDataArray.cpp" />
     <ClCompile Include="OCLDeviceArrayManagement.cpp" />
+    <ClCompile Include="OCLDeviceArrayPool.cpp" />
     <ClCompile Include="OCLGradientDescentLearningAlgo.cpp" />
     <ClCompile Include="OCLIntCtx.cpp" />
     <ClCompile Include="OCLKernelBase.cpp" />

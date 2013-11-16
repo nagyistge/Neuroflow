@@ -344,25 +344,25 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
     assert(!pars.calcGradientSums || gradientSumsV->size() == size);
 
     auto exec = ((OCLComputationState*)state)->GetExec(0);
-    auto& errors = ctx->ToBuffer1(pErrors);
+    auto errors = ctx->ToBuffer1(pErrors);
 
     unsigned vectorSize = CalculateVectorSize(inputsV);
 
     for (unsigned i = 0; i < size; i++)
     {
-        auto& inputs = ctx->ToBuffer1((*inputsV)[i]());
+        auto inputs = ctx->ToBuffer1((*inputsV)[i]());
         float fiic = (float)intItCount;
 
         auto init = [=](Kernel& kernel)
         {
             int aidx = 0;
-            kernel.setArg(aidx++, errors.GetCLBuffer());
-            if (pars.calcGradients) kernel.setArg(aidx++, (ctx->ToBuffer1(pBiasGradients)).GetCLBuffer());
-            if (pars.calcGradientSums) kernel.setArg(aidx++, (ctx->ToBuffer1(pBiasGradientSums)).GetCLBuffer());
-            kernel.setArg(aidx++, inputs.GetCLBuffer());
-            kernel.setArg(aidx++, inputs.GetSize() / vectorSize);
-            if (pars.calcGradients) kernel.setArg(aidx++, (ctx->ToBuffer2((*gradientsV)[i])).GetCLBuffer());
-            if (pars.calcGradientSums) kernel.setArg(aidx++, (ctx->ToBuffer2((*gradientSumsV)[i])).GetCLBuffer());
+            kernel.setArg(aidx++, errors->GetCLBuffer());
+            if (pars.calcGradients) kernel.setArg(aidx++, ctx->ToBuffer1(pBiasGradients)->GetCLBuffer());
+            if (pars.calcGradientSums) kernel.setArg(aidx++, ctx->ToBuffer1(pBiasGradientSums)->GetCLBuffer());
+            kernel.setArg(aidx++, inputs->GetCLBuffer());
+            kernel.setArg(aidx++, inputs->GetSize() / vectorSize);
+            if (pars.calcGradients) kernel.setArg(aidx++, ctx->ToBuffer2((*gradientsV)[i])->GetCLBuffer());
+            if (pars.calcGradientSums) kernel.setArg(aidx++, ctx->ToBuffer2((*gradientSumsV)[i])->GetCLBuffer());
             if (pars.bpttp2) kernel.setArg(aidx++, fiic);
         };
 
@@ -373,7 +373,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
                 (*pars.name)(vectorSize),
                 vectorSize,
                 init,
-                errors.GetSize());
+                errors->GetSize());
         }
         else
         {
@@ -382,7 +382,7 @@ void OCLComputeGradientsKernel::Exec(GradientComputationFlags flags, NfObject* s
                 (*pars.name)(vectorSize),
                 vectorSize,
                 init,
-                (inputs.GetSize() / vectorSize) * errors.GetSize());
+                (inputs->GetSize() / vectorSize) * errors->GetSize());
         }
     }
 }

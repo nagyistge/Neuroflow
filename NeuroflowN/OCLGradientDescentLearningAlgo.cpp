@@ -9,12 +9,11 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
-OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes) :
+OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const OCLDeviceArrayManagementSPtrT& daMan, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes) :
     ctx(ctx),
     LearningAlgo(rule, nodes),
     compute(ctx, vault)
 {
-    auto daMan = OCLDeviceArrayManagement(ctx);
     int eidx = 0;
     for (auto& node : nodes)
     {
@@ -28,25 +27,25 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
 
         for (unsigned i = 0; i < weights.size(); i++)
         {
-            auto& wa = ctx->ToBuffer1(weights[i]);
+            auto wa = ctx->ToBuffer1(weights[i]);
 
             if (rule->WeightUpdateMode == WeightUpdateMode::Online)
             {
-                auto& ga = ctx->ToBuffer1((*gradients)[i]);
+                auto ga = ctx->ToBuffer1((*gradients)[i]);
 
-                assert(wa.GetSize() == ga.GetSize());
+                assert(wa->GetSize() == ga->GetSize());
 
-                auto lua = OCLBuffer1SPtrT((OCLBuffer1 *) daMan.CreateArray(false, wa.GetSize()));
+                auto lua = OCLBuffer1SPtrT((OCLBuffer1 *) daMan->CreateArray(false, wa->GetSize()));
                 gdKernelExecs.emplace_back();
 
                 gdOnlineCode.push_back(
-                    [=]()
+                    [=, &ga, &wa]()
                     {
                         auto& exec = gdKernelExecs[eidx];
 
                         compute.UpdateWeightsOnline(
                             exec,
-                            lua->GetCLBuffer(),
+                            lua.get(),
                             wa,
                             ga,
                             rule->LearningRate,
@@ -56,11 +55,11 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
             }
             else
             {
-                auto& ga = ctx->ToBuffer1((*gradientSums)[i]);
+                auto ga = ctx->ToBuffer1((*gradientSums)[i]);
 
-                assert(wa.GetSize() == ga.GetSize());
+                assert(wa->GetSize() == ga->GetSize());
 
-                auto lua = OCLBuffer1SPtrT((OCLBuffer1 *)daMan.CreateArray(false, wa.GetSize()));
+                auto lua = OCLBuffer1SPtrT((OCLBuffer1 *)daMan->CreateArray(false, wa->GetSize()));
                 gdKernelExecs.emplace_back();
 
                 gdOfflineCode.push_back(
@@ -70,7 +69,7 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
 
                         compute.UpdateWeightsOffline(
                             exec,
-                            lua->GetCLBuffer(),
+                            lua.get(),
                             wa,
                             ga,
                             iterationCount,

@@ -11,6 +11,7 @@ namespace NeuroflowN
     class OCLVectorUtils : public IVectorUtils
     {
         friend class OCLContextImpl;
+        friend class OCLDeviceArrayPool;
 
         static OCLVectorKernelName AddMSEName;
         static OCLVectorKernelName DivName;
@@ -26,6 +27,7 @@ namespace NeuroflowN
         cl_float16 z16;
 
         void Build(const OCLVaultSPtrT& vault);
+        void Zero(const cl::Buffer buffer, unsigned size);
     public:
         OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 
@@ -35,7 +37,7 @@ namespace NeuroflowN
 
     private:
         unsigned GetPreferredWorkgroupSizeMul();
-        void AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex);
-        void Div(const OCLBuffer1& values, unsigned valueIndex, float byValue);
+        void AddMSE(OCLBuffer1* desiredValues, OCLBuffer1* currentValues, OCLBuffer1* mseValues, unsigned mseValueIndex);
+        void Div(OCLBuffer1* values, unsigned valueIndex, float byValue);
     };
 }

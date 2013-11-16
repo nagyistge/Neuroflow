@@ -20,6 +20,7 @@ namespace NeuroflowN
     class IDeviceArray;
     class IDeviceArray2;
     class IDeviceArrayManagement;
+    class IDeviceArrayPool;
     class IVectorUtils;
     class ILearningAlgo;
     class ILearningAlgoFactory;

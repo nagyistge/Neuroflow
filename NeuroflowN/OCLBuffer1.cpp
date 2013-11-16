@@ -1,10 +1,21 @@
 #include "stdafx.h"
 #include "OCLBuffer1.h"
 #include "OCLIntCtx.h"
+#include "OCLDeviceArrayPool.h"
 
 using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
+
+cl::Buffer& OCLBuffer1::GetCLBuffer()
+{
+    if (buffer() == null)
+    {
+        assert(pool != null);
+        buffer = pool->CreateSubBuffer(beginIndex, size);
+    }
+    return buffer;
+}
 
 void OCLBuffer1::Dump(const OCLIntCtxSPtrT& ctx, std::string title, bool toDebug) const
 {

@@ -9,9 +9,8 @@ namespace NeuroflowN
     {
     public:
         virtual IDeviceArray* CreateArray(bool copyOptimized, int size) = 0;
-
         virtual IDeviceArray2* CreateArray2(bool copyOptimized, int rowSize, int colSize) = 0;
-
         virtual void Copy(IDeviceArray* from, int fromIndex, IDeviceArray* to, int toIndex, int size) = 0;
+        virtual IDeviceArrayPool* CreatePool() = 0;
     };
 }

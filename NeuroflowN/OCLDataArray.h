@@ -26,9 +26,9 @@ namespace NeuroflowN
             return isConst;
         }
 
-        const OCLBuffer1& GetBuffer() const
+        OCLBuffer1* GetBaseBuffer()
         {
-            return buffer;
+            return &buffer;
         }
 
         unsigned GetSize() const

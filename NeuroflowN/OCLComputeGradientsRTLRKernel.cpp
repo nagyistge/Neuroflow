@@ -244,8 +244,8 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         int lSet = 0;
         for (int kLayerIndex = 0; kLayerIndex < kLayerSize; kLayerIndex++)
         {
-            auto& layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
-            auto& p_i_j_k_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[kLayerIndex]);
+            auto layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
+            auto p_i_j_k_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[kLayerIndex]);
             auto& upperInfos_k = (*inputLayerInfos)[kLayerIndex];
            
             unsigned iSet = 0;
@@ -254,11 +254,11 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
                 if (upperInfo_k.IsElementOfU)
                 {
                     int lLayerIndex = upperInfo_k.Index;
-                    auto& p_i_j_l_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[lLayerIndex]);
-                    auto& weights = ctx->ToBuffer2(upperInfo_k.Weights);
-                    kernel.setArg(aidx++, p_i_j_l_Values.GetCLBuffer());
-                    kernel.setArg(aidx++, p_i_j_l_Values.GetSize() / vectorSize);
-                    kernel.setArg(aidx++, weights.GetCLBuffer());
+                    auto p_i_j_l_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[lLayerIndex]);
+                    auto weights = ctx->ToBuffer2(upperInfo_k.Weights);
+                    kernel.setArg(aidx++, p_i_j_l_Values->GetCLBuffer());
+                    kernel.setArg(aidx++, p_i_j_l_Values->GetSize() / vectorSize);
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
                     iSet++;
                 }
             }
@@ -269,9 +269,9 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
                 kernel.setArg(aidx++, null);
                 iSet++;
             }
-            kernel.setArg(aidx++, p_i_j_k_Values.GetCLBuffer());
-            kernel.setArg(aidx++, p_i_j_k_Values.GetSize());
-            kernel.setArg(aidx++, layerNetValueDerivates.GetCLBuffer());
+            kernel.setArg(aidx++, p_i_j_k_Values->GetCLBuffer());
+            kernel.setArg(aidx++, p_i_j_k_Values->GetSize());
+            kernel.setArg(aidx++, layerNetValueDerivates->GetCLBuffer());
             lSet++;
         }
         while (lSet < ctx->GetMaxLayerCount())
@@ -292,7 +292,7 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         kernel.setArg(aidx++, data->IValueIndex);
         if (data->Inputs.is_initialized())
         {
-            kernel.setArg(aidx++, ctx->ToBuffer1(data->Inputs.get()()).GetCLBuffer());
+            kernel.setArg(aidx++, ctx->ToBuffer1(data->Inputs.get()())->GetCLBuffer());
             kernel.setArg(aidx++, data->JValueIndex);
         }
         else
@@ -302,8 +302,8 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         }
         if (hasError)
         {
-            kernel.setArg(aidx++, ctx->ToBuffer1(outputs).GetCLBuffer());
-            kernel.setArg(aidx++, ctx->ToBuffer1(desiredOutputs).GetCLBuffer());
+            kernel.setArg(aidx++, ctx->ToBuffer1(outputs)->GetCLBuffer());
+            kernel.setArg(aidx++, ctx->ToBuffer1(desiredOutputs)->GetCLBuffer());
             kernel.setArg(aidx++, workSize, null);
         }
         else
@@ -316,12 +316,12 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         {
             if (data->BiasGradients != null)
             {
-                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradients).GetCLBuffer());
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradients)->GetCLBuffer());
             }
             else
             {
                 assert(data->Gradients != null);
-                kernel.setArg(aidx++, ctx->ToBuffer2(data->Gradients).GetCLBuffer());
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->Gradients)->GetCLBuffer());
             }
         }
         else
@@ -332,12 +332,12 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         {
             if (data->BiasGradientSums != null)
             {
-                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradientSums).GetCLBuffer());
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradientSums)->GetCLBuffer());
             }
             else
             {
                 assert(data->GradientSums != null);
-                kernel.setArg(aidx++, ctx->ToBuffer2(data->GradientSums).GetCLBuffer());
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->GradientSums)->GetCLBuffer());
             }
         }
         else

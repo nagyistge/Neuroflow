@@ -34,12 +34,12 @@ namespace Neuroflow
             get { return internalArray != null; }
         }
 
-        public IDeviceArray CreateArray(bool copyOptimized, int size)
+        public IDeviceArray CreateArray(int size)
         {
             return new ManagedArray(this, Reserve(size), size);
         }
 
-        public IDeviceArray2 CreateArray2(bool copyOptimized, int rowSize, int colSize)
+        public IDeviceArray2 CreateArray2(int rowSize, int colSize)
         {
             return new ManagedArray2(this, Reserve(rowSize * colSize), rowSize, colSize);
         }

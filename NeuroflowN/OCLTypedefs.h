@@ -50,6 +50,7 @@ namespace NeuroflowN
     class OCLVectorUtils;
     class OCLMultilayerPerceptronAdapter;
     class OCLDeviceArrayManagement;
+    class OCLDeviceArrayPool;
     class OCLProgramUnit;
     class OCLProgram;
     class OCLVault;
@@ -60,6 +61,8 @@ namespace NeuroflowN
     typedef std::shared_ptr<OCLProgramUnit> OCLProgramUnitSPtrT;
     typedef std::shared_ptr<OCLProgram> OCLProgramSPtrT;
     typedef std::shared_ptr<OCLVault> OCLVaultSPtrT;
+    typedef std::shared_ptr<OCLVectorUtils> OCLVectorUtilsSPtrT;
+    typedef std::shared_ptr<OCLDeviceArrayManagement> OCLDeviceArrayManagementSPtrT;
 
     typedef std::shared_ptr<OCLOutOfOrderQueue> OCLOutOfOrderQueueSPtrT;
 

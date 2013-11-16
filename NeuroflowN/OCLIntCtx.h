@@ -100,9 +100,9 @@ namespace NeuroflowN
             queue.flush();
         }
 
-        const OCLBuffer1& ToBuffer1(IDeviceArray* a);
+        OCLBuffer1* ToBuffer1(IDeviceArray* a);
 
-        const OCLBuffer2& ToBuffer2(IDeviceArray* a);
+        OCLBuffer2* ToBuffer2(IDeviceArray* a);
 
         std::string AsVectorKernelName(char* kernelName, unsigned vectorSize);
 

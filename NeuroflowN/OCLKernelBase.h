@@ -13,8 +13,8 @@ namespace NeuroflowN
 
         unsigned CalculateVectorSize(DeviceArrayFVecT* inputList) const;
 
-        std::pair<unsigned, unsigned> GetIOReduceSizesInput(DeviceArrayFVecT* inputList, const OCLBuffer1& outputs, unsigned vectorSize) const;
-        std::pair<unsigned, unsigned> GetIOReduceSizesOutput(DeviceArrayVecT* inputList, const OCLBuffer1& outputs, unsigned vectorSize) const;
+        std::pair<unsigned, unsigned> GetIOReduceSizesInput(DeviceArrayFVecT* inputList, OCLBuffer1* outputs, unsigned vectorSize) const;
+        std::pair<unsigned, unsigned> GetIOReduceSizesOutput(DeviceArrayVecT* inputList, OCLBuffer1* outputs, unsigned vectorSize) const;
 
         static std::string ReplaceIndexesInTemplate(const std::string tmpl, int layerIndex)
         {
