@@ -29,23 +29,23 @@ OCLIntCtx::OCLIntCtx(
     maxWorkItemSizes = cl::NDRange(sizes[0], sizes[1], sizes[2]);
 }
 
-const OCLBuffer1& OCLIntCtx::ToBuffer1(IDeviceArray* a)
+OCLBuffer1* OCLIntCtx::ToBuffer1(IDeviceArray* a)
 {
     switch (a->GetType())
     {
     case DeviceArrayType::DeviceArray:
-        return *((OCLBuffer1*)a);
+        return ((OCLBuffer1*)a);
     case DeviceArrayType::DeviceArray2:
-        return ((OCLBuffer2*)a)->GetBaseBufferCRef();
+        return ((OCLBuffer2*)a)->GetBaseBuffer();
     default:
-        return ((OCLDataArray*)a)->GetBuffer();
+        return ((OCLDataArray*)a)->GetBaseBuffer();
     }
 }
 
-const OCLBuffer2& OCLIntCtx::ToBuffer2(IDeviceArray* a)
+OCLBuffer2* OCLIntCtx::ToBuffer2(IDeviceArray* a)
 {
     auto pb = dynamic_cast<OCLBuffer2*>(a);
-    if (pb != null) return *pb;
+    if (pb != null) return pb;
     throw_logic_error("Device array2 is not for OCL device.");
 }
 

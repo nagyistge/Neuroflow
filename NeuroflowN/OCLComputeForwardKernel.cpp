@@ -149,8 +149,8 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
     assert(size == weights->size());
 
     auto exec = ((OCLComputationState*)state)->GetExec(0);
-    auto& biases = ctx->ToBuffer1(pBiases);
-    auto& outputs = ctx->ToBuffer1(pOutputs);
+    auto biases = ctx->ToBuffer1(pBiases);
+    auto outputs = ctx->ToBuffer1(pOutputs);
 
     unsigned vectorSize = CalculateVectorSize(inputs);
 
@@ -159,19 +159,19 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
         int aidx = 0;
         for (unsigned i = 0; i < size; i++)
         {
-            auto& inputsI = ctx->ToBuffer1((*inputs)[i]());
-            kernel.setArg(aidx++, inputsI.GetCLBuffer());
-            kernel.setArg(aidx++, inputsI.GetSize() / vectorSize);
+            auto inputsI = ctx->ToBuffer1((*inputs)[i]());
+            kernel.setArg(aidx++, inputsI->GetCLBuffer());
+            kernel.setArg(aidx++, inputsI->GetSize() / vectorSize);
         }
-        kernel.setArg(aidx++, biases.GetCLBuffer());
+        kernel.setArg(aidx++, biases->GetCLBuffer());
         for (unsigned i = 0; i < size; i++)
         {
-            auto& weightsI = ctx->ToBuffer1((*weights)[i]);
-            kernel.setArg(aidx++, weightsI.GetCLBuffer());
+            auto weightsI = ctx->ToBuffer1((*weights)[i]);
+            kernel.setArg(aidx++, weightsI->GetCLBuffer());
         }
-        kernel.setArg(aidx++, outputs.GetCLBuffer());
+        kernel.setArg(aidx++, outputs->GetCLBuffer());
         kernel.setArg(aidx++, alpha);
-        if (pNetValueDerivates != null) kernel.setArg(aidx++, ctx->ToBuffer1(pNetValueDerivates).GetCLBuffer());
+        if (pNetValueDerivates != null) kernel.setArg(aidx++, ctx->ToBuffer1(pNetValueDerivates)->GetCLBuffer());
     };
 
     if (ctx->IsCPU())
@@ -183,7 +183,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
                 (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (SigmoidAKV | RTLRAKV) : SigmoidAKV))(vectorSize),
                 vectorSize,
                 init,
-                outputs.GetSize());
+                outputs->GetSize());
         }
         else
         {
@@ -192,7 +192,7 @@ void OCLComputeForwardKernel::Exec(NfObject* state, DeviceArrayFVecT* inputs, De
                 (*GetCPUNames(size).GetVersion(pNetValueDerivates != null ? (LinearAKV | RTLRAKV) : LinearAKV))(vectorSize),
                 vectorSize,
                 init,
-                outputs.GetSize());
+                outputs->GetSize());
         }
     }
     else

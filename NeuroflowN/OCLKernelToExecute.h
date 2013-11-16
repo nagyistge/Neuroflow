@@ -67,10 +67,10 @@ namespace NeuroflowN
             DoExecute(program, vectorSize, cl::NullRange, workItemSize > 1 ? cl::NDRange(workItemSize) : cl::NullRange, cl::NullRange);
         }
 
-        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const OCLBuffer1& extentBuffer)
+        void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, OCLBuffer1* extentBuffer)
         {
             EnsureKernel(program, kernelName, vectorSize, setupKernel);
-            DoExecute(program, vectorSize, cl::NullRange, cl::NDRange(extentBuffer.GetSize()), cl::NullRange);
+            DoExecute(program, vectorSize, cl::NullRange, cl::NDRange(extentBuffer->GetSize()), cl::NullRange);
         }
 
         void Execute(const OCLProgramSPtrT& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)

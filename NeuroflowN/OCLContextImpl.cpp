@@ -237,7 +237,7 @@ void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& 
         vault = make_shared<OCLVault>(ctx);
         dataArrayFactory = make_shared<OCLDataArrayFactory>(ctx);
         vectorUtils = make_shared<OCLVectorUtils>(ctx, vault);
-        deviceArrayManagement = make_shared<OCLDeviceArrayManagement>(ctx);
+        deviceArrayManagement = make_shared<OCLDeviceArrayManagement>(ctx, vectorUtils);
         multilayerPerceptronAdapter = make_shared<OCLMultilayerPerceptronAdapter>(ctx, vault, vectorUtils, deviceArrayManagement);
 
         ctx->preferredWorkgroupSizeMul = vectorUtils->GetPreferredWorkgroupSizeMul();

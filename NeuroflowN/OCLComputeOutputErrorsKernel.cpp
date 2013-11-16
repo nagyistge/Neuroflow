@@ -45,18 +45,18 @@ void OCLComputeOutputErrorsKernel::Build(const OCLVaultSPtrT& vault)
 void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs, IDeviceArray* pErrors, IDeviceArray* pDesiredOutputs, ActivationFunction function, float alpha)
 {
     auto exec = ((OCLComputationState*)state)->GetExec(0);
-    auto& outputs = ctx->ToBuffer1(pOutputs);
-    auto& errors = ctx->ToBuffer1(pErrors);
-    auto& desiredOutputs = ctx->ToBuffer1(pDesiredOutputs);
+    auto outputs = ctx->ToBuffer1(pOutputs);
+    auto errors = ctx->ToBuffer1(pErrors);
+    auto desiredOutputs = ctx->ToBuffer1(pDesiredOutputs);
 
-    unsigned vectorSize = GetVectorSize(cref(outputs));
+    unsigned vectorSize = GetVectorSize(outputs);
 
     auto init = [=](Kernel& kernel)
     {
         int aidx = 0;
-        kernel.setArg(aidx++, errors.GetCLBuffer());
-        kernel.setArg(aidx++, desiredOutputs.GetCLBuffer());
-        kernel.setArg(aidx++, outputs.GetCLBuffer());
+        kernel.setArg(aidx++, errors->GetCLBuffer());
+        kernel.setArg(aidx++, desiredOutputs->GetCLBuffer());
+        kernel.setArg(aidx++, outputs->GetCLBuffer());
         kernel.setArg(aidx++, alpha);
     };
 
@@ -67,7 +67,7 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
             (*GetNames().GetVersion(SigmoidCOKV))(vectorSize),
             vectorSize,
             init,
-            errors.GetSize() / vectorSize);
+            errors->GetSize() / vectorSize);
     }
     else
     {
@@ -76,6 +76,6 @@ void OCLComputeOutputErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutputs,
             (*GetNames().GetVersion(LinearCOKV))(vectorSize),
             vectorSize,
             init,
-            errors.GetSize() / vectorSize);
+            errors->GetSize() / vectorSize);
     }
 }

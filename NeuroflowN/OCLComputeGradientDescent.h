@@ -27,18 +27,18 @@ namespace NeuroflowN
 
         void UpdateWeightsOnline(
             OCLKernelToExecute& exec,
-            const OCLBuffer1& lastUpdates,
-            const OCLBuffer1& weights,
-            const OCLBuffer1& gradients,
+            OCLBuffer1* lastUpdates,
+            OCLBuffer1* weights,
+            OCLBuffer1* gradients,
             float rate,
             float momentum,
             bool smoothing);
 
         void UpdateWeightsOffline(
             OCLKernelToExecute& exec,
-            const OCLBuffer1& lastUpdates,
-            const OCLBuffer1& weights,
-            const OCLBuffer1& gradientSums,
+            OCLBuffer1* lastUpdates,
+            OCLBuffer1* weights,
+            OCLBuffer1* gradientSums,
             int iterationCount,
             float rate,
             float momentum,

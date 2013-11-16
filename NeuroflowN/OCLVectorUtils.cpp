@@ -109,12 +109,12 @@ unsigned OCLVectorUtils::GetPreferredWorkgroupSizeMul()
     return (unsigned)k.getWorkGroupInfo<CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE>(ctx->GetDevice());
 }
 
-void OCLVectorUtils::AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& currentValues, const OCLBuffer1& mseValues, unsigned mseValueIndex)
+void OCLVectorUtils::AddMSE(OCLBuffer1* desiredValues, OCLBuffer1* currentValues, OCLBuffer1* mseValues, unsigned mseValueIndex)
 {
-    assert(desiredValues.GetSize() == currentValues.GetSize());
-    assert(mseValueIndex < mseValues.GetSize());
+    assert(desiredValues->GetSize() == currentValues->GetSize());
+    assert(mseValueIndex < mseValues->GetSize());
 
-    unsigned vectorSize = GetVectorSize(cref(desiredValues));
+    unsigned vectorSize = GetVectorSize(desiredValues);
 
     addExec.Execute(
         program,
@@ -122,18 +122,18 @@ void OCLVectorUtils::AddMSE(const OCLBuffer1& desiredValues, const OCLBuffer1& c
         vectorSize,
         [&, vectorSize, mseValueIndex](Kernel& kernel)
         {
-            kernel.setArg(0, desiredValues.GetCLBuffer());
-            kernel.setArg(1, currentValues.GetCLBuffer());
-            kernel.setArg(2, desiredValues.GetSize() / vectorSize);
-            kernel.setArg(3, mseValues.GetCLBuffer());
-            kernel.setArg(4, mseValueIndex);
+        kernel.setArg(0, desiredValues->GetCLBuffer());
+        kernel.setArg(1, currentValues->GetCLBuffer());
+        kernel.setArg(2, desiredValues->GetSize() / vectorSize);
+        kernel.setArg(3, mseValues->GetCLBuffer());
+        kernel.setArg(4, mseValueIndex);
         },
         1);
 }
 
-void OCLVectorUtils::Div(const OCLBuffer1& values, unsigned valueIndex, float byValue)
+void OCLVectorUtils::Div(OCLBuffer1* values, unsigned valueIndex, float byValue)
 {
-    assert(valueIndex < values.GetSize());
+    assert(valueIndex < values->GetSize());
 
     divExec.Execute(
         program,
@@ -141,7 +141,7 @@ void OCLVectorUtils::Div(const OCLBuffer1& values, unsigned valueIndex, float by
         1,
         [&, valueIndex, byValue](Kernel& kernel)
         {
-            kernel.setArg(0, values.GetCLBuffer());
+            kernel.setArg(0, values->GetCLBuffer());
             kernel.setArg(1, byValue);
         },
         NDRange(valueIndex), 
@@ -153,19 +153,19 @@ void OCLVectorUtils::RandomizeUniform(IDeviceArray* values, float min, float max
 {
     try
     {
-        auto& buffer = ctx->ToBuffer1(values);
+        auto buffer = ctx->ToBuffer1(values);
 
         uniform_real_distribution<float> uniform_distribution(min, max);
         auto randF = bind(uniform_distribution, ref(generator));
         vector<float> v;
-        v.reserve(buffer.GetSize());
-        for (unsigned i = 0; i < buffer.GetSize(); i++) v.push_back(randF());
+        v.reserve(buffer->GetSize());
+        for (unsigned i = 0; i < buffer->GetSize(); i++) v.push_back(randF());
 
         ctx->GetQueue().enqueueWriteBuffer(
-            buffer.GetCLBuffer(),
+            buffer->GetCLBuffer(),
             true,
             0,
-            buffer.GetSize() * sizeof(float) ,
+            buffer->GetSize() * sizeof(float),
             &v[0]);
     }
     catch (exception& ex)
@@ -178,12 +178,12 @@ void OCLVectorUtils::CalculateMSE(const SupervisedBatchT& batch, DataArray* mseV
 {
     try
     {
-        auto mseA = dynamic_cast<const OCLDataArray*>(mseValues);
+        auto mseA = dynamic_cast<OCLDataArray*>(mseValues);
 
         verify_arg(mseA != nullptr, "mseValues");
         verify_arg(valueIndex >= 0 && valueIndex < mseA->GetSize(), "valueIndex");
 
-        ctx->GetQueue().enqueueFillBuffer<float>(mseA->GetBuffer().GetCLBuffer(), 0.0f, valueIndex * sizeof(float) , sizeof(float) );
+        ctx->GetQueue().enqueueFillBuffer<float>(mseA->GetBaseBuffer()->GetCLBuffer(), 0.0f, valueIndex * sizeof(float), sizeof(float));
 
         float count = 0.0f;
 
@@ -202,9 +202,9 @@ void OCLVectorUtils::CalculateMSE(const SupervisedBatchT& batch, DataArray* mseV
                     if (oclActual == nullptr) throw_logic_error("Unsupported data array type in 'ActualOutputs'.");
 
                     AddMSE(
-                        oclDesired->GetBuffer(),
-                        oclActual->GetBuffer(),
-                        mseA->GetBuffer(),
+                        oclDesired->GetBaseBuffer(),
+                        oclActual->GetBaseBuffer(),
+                        mseA->GetBaseBuffer(),
                         valueIndex);
 
                     count++;
@@ -214,7 +214,7 @@ void OCLVectorUtils::CalculateMSE(const SupervisedBatchT& batch, DataArray* mseV
 
         if (count != 0.0f)
         {
-            Div(mseA->GetBuffer(), valueIndex, count);
+            Div(mseA->GetBaseBuffer(), valueIndex, count);
         }
     }
     catch (exception& ex)
@@ -225,57 +225,62 @@ void OCLVectorUtils::CalculateMSE(const SupervisedBatchT& batch, DataArray* mseV
 
 void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
 {
+    auto buff = ctx->ToBuffer1(deviceArray);
+    Zero(buff->GetCLBuffer(), buff->GetSize());
+}
+
+void OCLVectorUtils::Zero(const cl::Buffer buffer, unsigned size)
+{
     try
     {
-        auto& buff = ctx->ToBuffer1(deviceArray);
-        auto vectorSize = GetVectorSize(cref(buff));
+        auto vectorSize = GetVectorSize(size);
 
         if (ctx->IsCPU())
         {
             switch (vectorSize)
             {
                 case 2:
-                    {
-                        ctx->GetQueue().enqueueFillBuffer(
-                            buff.GetCLBuffer(),
-                            z2,
-                            0,
-                            sizeof(float)* buff.GetSize());
-                    }
+                {
+                          ctx->GetQueue().enqueueFillBuffer(
+                              buffer,
+                              z2,
+                              0,
+                              sizeof(float)* size);
+                }
                     break;
                 case 4:
-                    {
-                        ctx->GetQueue().enqueueFillBuffer(
-                            buff.GetCLBuffer(),
-                            z4,
-                            0,
-                            sizeof(float)* buff.GetSize());
-                    }
+                {
+                          ctx->GetQueue().enqueueFillBuffer(
+                              buffer,
+                              z4,
+                              0,
+                              sizeof(float)* size);
+                }
                     break;
                 case 8:
-                    {
-                        ctx->GetQueue().enqueueFillBuffer(
-                            buff.GetCLBuffer(),
-                            z8,
-                            0,
-                            sizeof(float)* buff.GetSize());
-                    }
+                {
+                          ctx->GetQueue().enqueueFillBuffer(
+                              buffer,
+                              z8,
+                              0,
+                              sizeof(float)* size);
+                }
                     break;
                 case 16:
-                    {
-                        ctx->GetQueue().enqueueFillBuffer(
-                            buff.GetCLBuffer(),
-                            z16,
-                            0,
-                            sizeof(float)* buff.GetSize());
-                    }
+                {
+                           ctx->GetQueue().enqueueFillBuffer(
+                               buffer,
+                               z16,
+                               0,
+                               sizeof(float)* size);
+                }
                     break;
                 default:
                     ctx->GetQueue().enqueueFillBuffer(
-                        buff.GetCLBuffer(),
+                        buffer,
                         0.0f,
                         0,
-                        sizeof(float)* buff.GetSize());
+                        sizeof(float)* size);
                     break;
             }
         }
@@ -286,11 +291,11 @@ void OCLVectorUtils::Zero(IDeviceArray* deviceArray)
                 ZeroFName(vectorSize),
                 vectorSize,
                 [&](Kernel& kernel)
-                {
-                    kernel.setArg(0, buff.GetCLBuffer());
-                    kernel.setArg(1, buff.GetSize() / vectorSize);
-                },
-                ctx->GetOptimalGlobalSize(buff.GetSize(), vectorSize));
+            {
+                kernel.setArg(0, buffer);
+                kernel.setArg(1, size / vectorSize);
+            },
+                ctx->GetOptimalGlobalSize(size, vectorSize));
         }
     }
     catch (exception& ex)

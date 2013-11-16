@@ -150,28 +150,28 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
     assert(lowerWeights->size() == size);
 
     auto exec = ((OCLComputationState*)state)->GetExec(0);
-    auto& outputs = ctx->ToBuffer1(pOutputs);
-    auto& errors = ctx->ToBuffer1(pErrors);
+    auto outputs = ctx->ToBuffer1(pOutputs);
+    auto errors = ctx->ToBuffer1(pErrors);
 
-    unsigned vectorSize = GetVectorSize(cref(outputs));
+    unsigned vectorSize = GetVectorSize(outputs);
 
     auto init = [=](Kernel& kernel, bool hasOutputVector)
     {
         int aidx = 0;
-        kernel.setArg(aidx++, errors.GetCLBuffer());
+        kernel.setArg(aidx++, errors->GetCLBuffer());
         for (unsigned i = 0; i < size; i++)
         {
-            auto& lowerErrorsI = ctx->ToBuffer1((*lowerErrors)[i]);
-            kernel.setArg(aidx++, lowerErrorsI.GetCLBuffer());
-            kernel.setArg(aidx++, lowerErrorsI.GetSize());
+            auto lowerErrorsI = ctx->ToBuffer1((*lowerErrors)[i]);
+            kernel.setArg(aidx++, lowerErrorsI->GetCLBuffer());
+            kernel.setArg(aidx++, lowerErrorsI->GetSize());
         }
         for (unsigned i = 0; i < size; i++)
         {
-            auto& lowerWeightsI = ctx->ToBuffer1((*lowerWeights)[i]);
-            kernel.setArg(aidx++, lowerWeightsI.GetCLBuffer());
+            auto lowerWeightsI = ctx->ToBuffer1((*lowerWeights)[i]);
+            kernel.setArg(aidx++, lowerWeightsI->GetCLBuffer());
         }
-        if (hasOutputVector) kernel.setArg(aidx++, outputs.GetCLBuffer());
-        kernel.setArg(aidx++, outputs.GetSize() / vectorSize);
+        if (hasOutputVector) kernel.setArg(aidx++, outputs->GetCLBuffer());
+        kernel.setArg(aidx++, outputs->GetSize() / vectorSize);
         kernel.setArg(aidx++, alpha);
     };
 
@@ -187,7 +187,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
                 (*GetCPUNames(size).GetVersion(SigmoidAKV))(vectorSize),
                 vectorSize,
                 initSig,
-                errors.GetSize() / vectorSize);
+                errors->GetSize() / vectorSize);
         }
         else
         {
@@ -196,7 +196,7 @@ void OCLComputeInternalErrorsKernel::Exec(NfObject* state, IDeviceArray* pOutput
                 (*GetCPUNames(size).GetVersion(LinearAKV))(vectorSize),
                 vectorSize,
                 initLin,
-                errors.GetSize() / vectorSize);
+                errors->GetSize() / vectorSize);
         }
     }
     else

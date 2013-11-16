@@ -7,14 +7,18 @@ namespace NeuroflowN
 {
     class OCLBuffer2 : public IDeviceArray2
     {
-        OCLBuffer2();
-
         OCLBuffer1 baseBuffer;
         unsigned size1;
 
     public:
+        OCLBuffer2() = delete;
         OCLBuffer2(const cl::Buffer& buffer, unsigned size1) :
             baseBuffer(buffer),
+            size1(size1)
+        {
+        }
+        OCLBuffer2(OCLDeviceArrayPool* pool, unsigned beginIndex, unsigned size1, unsigned size2) :
+            baseBuffer(pool, beginIndex, size1 * size2),
             size1(size1)
         {
         }
@@ -39,14 +43,14 @@ namespace NeuroflowN
             return GetSize() / GetSize1();
         }
 
-        const cl::Buffer& GetCLBuffer() const
+        const cl::Buffer& GetCLBuffer()
         {
             return baseBuffer.GetCLBuffer();
         }
 
-        const OCLBuffer1& GetBaseBufferCRef() const
+        OCLBuffer1* GetBaseBuffer() 
         {
-            return baseBuffer;
+            return &baseBuffer;
         }
 
         void Dump(const OCLIntCtxSPtrT& ctx, std::string title, bool toDebug) const
@@ -56,11 +60,11 @@ namespace NeuroflowN
     };
 
     template <>
-    struct GetSize<std::reference_wrapper<const OCLBuffer2>>
+    struct GetSize<OCLBuffer2*>
     {
-        inline static unsigned Get(std::reference_wrapper<const OCLBuffer2> buff)
+        inline static unsigned Get(OCLBuffer2* buff)
         {
-            return buff.get().GetSize();
+            return buff->GetSize();
         }
     };
 }

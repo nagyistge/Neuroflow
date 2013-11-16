@@ -93,16 +93,16 @@ void OCLComputeGradientDescent::Build(const OCLVaultSPtrT& vault)
 
 void OCLComputeGradientDescent::UpdateWeightsOnline(
     OCLKernelToExecute& exec,
-    const OCLBuffer1& lastUpdates,
-    const OCLBuffer1& weights,
-    const OCLBuffer1& gradients,
+    OCLBuffer1* lastUpdates,
+    OCLBuffer1* weights,
+    OCLBuffer1* gradients,
     float rate,
     float momentum,
     bool smoothing)
 {
     try
     {
-        unsigned vectorSize = GetVectorSize(cref(weights));
+        unsigned vectorSize = GetVectorSize(weights);
         if (smoothing)
         {
             exec.Execute(
@@ -112,13 +112,13 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
                 [=](Kernel& kernel)
                 {
                     int aidx = 0;
-                    kernel.setArg(aidx++, weights.GetCLBuffer());
-                    kernel.setArg(aidx++, gradients.GetCLBuffer());
-                    kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
+                    kernel.setArg(aidx++, gradients->GetCLBuffer());
+                    kernel.setArg(aidx++, lastUpdates->GetCLBuffer());
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
                 },
-                weights.GetSize() / vectorSize);
+                    weights->GetSize() / vectorSize);
         }
         else
         {
@@ -129,13 +129,13 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
                 [=](Kernel& kernel)
                 {
                     int aidx = 0;
-                    kernel.setArg(aidx++, weights.GetCLBuffer());
-                    kernel.setArg(aidx++, gradients.GetCLBuffer());
-                    kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
+                    kernel.setArg(aidx++, gradients->GetCLBuffer());
+                    kernel.setArg(aidx++, lastUpdates->GetCLBuffer());
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
                 },
-                weights.GetSize() / vectorSize);
+                weights->GetSize() / vectorSize);
         }
     }
     catch (exception& ex)
@@ -146,9 +146,9 @@ void OCLComputeGradientDescent::UpdateWeightsOnline(
 
 void OCLComputeGradientDescent::UpdateWeightsOffline(
     OCLKernelToExecute& exec,
-    const OCLBuffer1& lastUpdates,
-    const OCLBuffer1& weights,
-    const OCLBuffer1& gradientSums,
+    OCLBuffer1* lastUpdates,
+    OCLBuffer1* weights,
+    OCLBuffer1* gradientSums,
     int iterationCount,
     float rate,
     float momentum,
@@ -157,7 +157,7 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
     float fitc = (float)iterationCount;
     try
     {
-        unsigned vectorSize = GetVectorSize(cref(weights));
+        unsigned vectorSize = GetVectorSize(weights);
         if (smoothing)
         {
             exec.Execute(
@@ -167,14 +167,14 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
                 [=](Kernel& kernel)
                 {
                     int aidx = 0;
-                    kernel.setArg(aidx++, weights.GetCLBuffer());
-                    kernel.setArg(aidx++, gradientSums.GetCLBuffer());
-                    kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
+                    kernel.setArg(aidx++, gradientSums->GetCLBuffer());
+                    kernel.setArg(aidx++, lastUpdates->GetCLBuffer());
                     kernel.setArg(aidx++, fitc);
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
                 },
-                weights.GetSize() / vectorSize);
+                weights->GetSize() / vectorSize);
         }
         else
         {
@@ -185,14 +185,14 @@ void OCLComputeGradientDescent::UpdateWeightsOffline(
                 [=](Kernel& kernel)
                 {
                     int aidx = 0;
-                    kernel.setArg(aidx++, weights.GetCLBuffer());
-                    kernel.setArg(aidx++, gradientSums.GetCLBuffer());
-                    kernel.setArg(aidx++, lastUpdates.GetCLBuffer());
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
+                    kernel.setArg(aidx++, gradientSums->GetCLBuffer());
+                    kernel.setArg(aidx++, lastUpdates->GetCLBuffer());
                     kernel.setArg(aidx++, fitc);
                     kernel.setArg(aidx++, rate);
                     kernel.setArg(aidx++, momentum);
                 },
-                weights.GetSize() / vectorSize);
+                weights->GetSize() / vectorSize);
         }
     }
     catch (exception& ex)

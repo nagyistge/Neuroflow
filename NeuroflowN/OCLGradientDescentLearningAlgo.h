@@ -17,7 +17,7 @@ namespace NeuroflowN
         OCLComputeGradientDescent compute;
 
     public:
-        OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes);
+        OCLGradientDescentLearningAlgo(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const OCLDeviceArrayManagementSPtrT& daMan, const std::shared_ptr<GradientDescentLearningRule>& rule, const TrainingNodeVecT& nodes);
 
         LearningAlgoIterationType GetIterationTypes();
 
