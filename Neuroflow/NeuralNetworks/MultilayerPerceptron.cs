@@ -473,7 +473,7 @@ namespace Neuroflow.NeuralNetworks
                     // Output:
                     if (!isOutput)
                     {
-                        Outputs.Add(lidx, OutputsPool.CreateArray(false, layer.Layer.Size));
+                        Outputs.Add(lidx, OutputsPool.CreateArray(layer.Layer.Size));
                     }
 
                     // Net Value Derivates:
@@ -489,19 +489,19 @@ namespace Neuroflow.NeuralNetworks
                     if (doBackpropagate)
                     {
                         // Errors:
-                        Errors.Add(lidx, ErrorsPool.CreateArray(false, layer.Layer.Size));
+                        Errors.Add(lidx, ErrorsPool.CreateArray(layer.Layer.Size));
                     }
 
                     if (learningInfo.Online || doBPTT)
                     {
                         // Bias Gradients:
-                        BiasGradients.Add(lidx, GradientsPool.CreateArray(false, layer.Layer.Size));
+                        BiasGradients.Add(lidx, GradientsPool.CreateArray(layer.Layer.Size));
                     }
 
                     if (learningInfo.Offline)
                     {
                         // Bias Gradient Sums:
-                        BiasGradientSums.Add(lidx, GradientSumsPool.CreateArray(false, layer.Layer.Size));
+                        BiasGradientSums.Add(lidx, GradientSumsPool.CreateArray(layer.Layer.Size));
                     }
 
                     for (int iidx = 0; iidx < layer.Layer.GetInputLayers().Count(); iidx++)
@@ -515,13 +515,13 @@ namespace Neuroflow.NeuralNetworks
                         if (learningInfo.Online || doBPTT)
                         {
                             // Gradients:
-                            Gradients.Add(key, GradientsPool.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
+                            Gradients.Add(key, GradientsPool.CreateArray2(inputLayer.Size, layer.Layer.Size));
                         }
 
                         if (learningInfo.Offline)
                         {
                             // Gradient Sums:
-                            GradientSums.Add(key, GradientSumsPool.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
+                            GradientSums.Add(key, GradientSumsPool.CreateArray2(inputLayer.Size, layer.Layer.Size));
                         }
 
                         if (doBPTT)

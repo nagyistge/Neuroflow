@@ -68,7 +68,7 @@ namespace Neuroflow.NeuralNetworks
 
                     for (int lidx2 = 0; lidx2 < uLayersCount; lidx2++)
                     {
-                        pWeightValuesOfInput[biasIndex].Instance()[lidx2] = pValuesPool.CreateArray(false, GetULayerSize(lidx2));
+                        pWeightValuesOfInput[biasIndex].Instance()[lidx2] = pValuesPool.CreateArray(GetULayerSize(lidx2));
                     }
                 }
 
@@ -88,7 +88,7 @@ namespace Neuroflow.NeuralNetworks
                         pWeightValuesOfInput[weightIndex] = mlp.AsMarshaled(new IDeviceArray[uLayersCount]);
                         for (int lidx2 = 0; lidx2 < uLayersCount; lidx2++)
                         {
-                            pWeightValuesOfInput[weightIndex].Instance()[lidx2] = pValuesPool.CreateArray(false, GetULayerSize(lidx2));
+                            pWeightValuesOfInput[weightIndex].Instance()[lidx2] = pValuesPool.CreateArray(GetULayerSize(lidx2));
                         }
                     }
 
