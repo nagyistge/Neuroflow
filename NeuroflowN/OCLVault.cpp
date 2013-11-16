@@ -225,8 +225,6 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
             int localSize = get_local_size(0);
             int localId = get_local_id(0);
 
-            barrier(CLK_LOCAL_MEM_FENCE);
-
             for (int offset = localSize / 2; offset > 0; offset = offset / 2)
             {
                 if (localId < offset)

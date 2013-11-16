@@ -132,6 +132,13 @@ namespace Neuroflow.NeuralNetworks
 
         IDisposable setOutputState;
 
+        IDeviceArrayPool outputsPool;
+
+        internal IDeviceArrayPool OutputsPool
+        {
+            get { return outputsPool ?? (outputsPool = Adapter.DeviceArrayManagement.CreatePool()); }
+        }
+
         Dictionary<int, IDeviceArray> outputs;
 
         internal Dictionary<int, IDeviceArray> Outputs
@@ -153,6 +160,20 @@ namespace Neuroflow.NeuralNetworks
             get { return biases ?? (biases = new Dictionary<int, IDeviceArray>()); }
         }
 
+        IDeviceArrayPool gradientsPool;
+
+        internal IDeviceArrayPool GradientsPool
+        {
+            get { return gradientsPool ?? (gradientsPool = Adapter.DeviceArrayManagement.CreatePool()); }
+        }
+
+        IDeviceArrayPool gradientSumsPool;
+
+        internal IDeviceArrayPool GradientSumsPool
+        {
+            get { return gradientSumsPool ?? (gradientSumsPool = Adapter.DeviceArrayManagement.CreatePool()); }
+        }
+
         Dictionary<int, IDeviceArray> biasGradients;
 
         internal Dictionary<int, IDeviceArray> BiasGradients
@@ -165,6 +186,13 @@ namespace Neuroflow.NeuralNetworks
         internal Dictionary<int, IDeviceArray> BiasGradientSums
         {
             get { return biasGradientSums ?? (biasGradientSums = new Dictionary<int, IDeviceArray>()); }
+        }
+
+        IDeviceArrayPool errorsPool;
+
+        internal IDeviceArrayPool ErrorsPool
+        {
+            get { return errorsPool ?? (errorsPool = Adapter.DeviceArrayManagement.CreatePool()); }
         }
 
         Dictionary<int, IDeviceArray> errors;
@@ -354,9 +382,10 @@ namespace Neuroflow.NeuralNetworks
                 ResourceManager.Free(computationStates);
                 computationStates = null;
             }
-            if (outputs != null)
+            if (outputsPool != null)
             {
-                ResourceManager.Free(outputs.Values);
+                ResourceManager.Free(outputsPool);
+                outputsPool = null;
                 outputs = null;
             }
             if (biases != null)
@@ -364,35 +393,30 @@ namespace Neuroflow.NeuralNetworks
                 ResourceManager.Free(biases.Values);
                 biases = null;
             }
-            if (biasGradients != null)
+            if (errorsPool != null)
             {
-                ResourceManager.Free(biasGradients.Values);
+                ResourceManager.Free(errorsPool);
+                errorsPool = null;
+                errors = null;
+            }
+            if (gradientsPool != null)
+            {
+                ResourceManager.Free(gradientsPool);
+                gradientsPool = null;
+                gradients = null;
                 biasGradients = null;
             }
-            if (biasGradientSums != null)
+            if (gradientSumsPool != null)
             {
-                ResourceManager.Free(biasGradientSums.Values);
+                ResourceManager.Free(gradientSumsPool);
+                gradientSumsPool = null;
+                gradientSums = null;
                 biasGradientSums = null;
-            }
-            if (errors != null)
-            {
-                ResourceManager.Free(errors.Values);
-                errors = null;
             }
             if (weights != null)
             {
                 ResourceManager.Free(weights.Values);
                 weights = null;
-            }
-            if (gradients != null)
-            {
-                ResourceManager.Free(gradients.Values);
-                gradients = null;
-            }
-            if (gradientSums != null)
-            {
-                ResourceManager.Free(gradientSums.Values);
-                gradientSums = null;
             }
             if (onlineSupervisedLearningAlgos != null)
             {
@@ -449,15 +473,13 @@ namespace Neuroflow.NeuralNetworks
                     // Output:
                     if (!isOutput)
                     {
-                        var outputArray = daMan.CreateArray(false, layer.Layer.Size);
-                        Outputs.Add(lidx, outputArray);
+                        Outputs.Add(lidx, OutputsPool.CreateArray(false, layer.Layer.Size));
                     }
 
                     // Net Value Derivates:
                     if (doRTLR)
                     {
-                        var netVDArray = daMan.CreateArray(false, layer.Layer.Size);
-                        NetValueDerivates.Add(lidx, netVDArray);
+                        NetValueDerivates.Add(lidx, daMan.CreateArray(false, layer.Layer.Size));
                     }
 
                     // Bias:
@@ -467,19 +489,19 @@ namespace Neuroflow.NeuralNetworks
                     if (doBackpropagate)
                     {
                         // Errors:
-                        Errors.Add(lidx, daMan.CreateArray(false, layer.Layer.Size));
+                        Errors.Add(lidx, ErrorsPool.CreateArray(false, layer.Layer.Size));
                     }
 
                     if (learningInfo.Online || doBPTT)
                     {
                         // Bias Gradients:
-                        BiasGradients.Add(lidx, daMan.CreateArray(false, layer.Layer.Size));
+                        BiasGradients.Add(lidx, GradientsPool.CreateArray(false, layer.Layer.Size));
                     }
 
                     if (learningInfo.Offline)
                     {
                         // Bias Gradient Sums:
-                        BiasGradientSums.Add(lidx, daMan.CreateArray(false, layer.Layer.Size));
+                        BiasGradientSums.Add(lidx, GradientSumsPool.CreateArray(false, layer.Layer.Size));
                     }
 
                     for (int iidx = 0; iidx < layer.Layer.GetInputLayers().Count(); iidx++)
@@ -493,13 +515,13 @@ namespace Neuroflow.NeuralNetworks
                         if (learningInfo.Online || doBPTT)
                         {
                             // Gradients:
-                            Gradients.Add(key, daMan.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
+                            Gradients.Add(key, GradientsPool.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
                         }
 
                         if (learningInfo.Offline)
                         {
                             // Gradient Sums:
-                            GradientSums.Add(key, daMan.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
+                            GradientSums.Add(key, GradientSumsPool.CreateArray2(true, inputLayer.Size, layer.Layer.Size));
                         }
 
                         if (doBPTT)
@@ -1041,9 +1063,9 @@ namespace Neuroflow.NeuralNetworks
                 {
                     // Do batch algos
                     OfflineSupervisedLearning(innerIterationCount);
-                    ResetGlobalOfflineError();
+                    ZeroGlobalOfflineError();
                 }
-                if (sample.Count > 1) ResetOutputs();
+                if (sample.Count > 1) ZeroOutputs();
             }
         }
 
@@ -1084,11 +1106,11 @@ namespace Neuroflow.NeuralNetworks
                 {
                     // Do batch algos
                     OfflineSupervisedLearning(innerIterationCount);
-                    ResetGradientSums();
-                    ResetGlobalOfflineError();
+                    ZeroGradientSums();
+                    ZeroGlobalOfflineError();
                 }
-                ResetOutputs();
-                rtlr.Reset();
+                ZeroOutputs();
+                rtlr.Zero();
             }
         }
 
@@ -1147,12 +1169,12 @@ namespace Neuroflow.NeuralNetworks
                 {
                     // Do batch algos
                     OfflineSupervisedLearning(innerIteartionIndex);
-                    ResetGradientSums();
-                    ResetGlobalOfflineError();
+                    ZeroGradientSums();
+                    ZeroGlobalOfflineError();
                 }
-                ResetGradients();
-                ResetOutputs();
-                ResetErrors();
+                ZeroGradients();
+                ZeroOutputs();
+                ZeroErrors();
             }
         }
 
@@ -1188,8 +1210,8 @@ namespace Neuroflow.NeuralNetworks
 
             // Do batch algos
             OfflineSupervisedLearning(batch.Count);
-            ResetGradientSums();
-            ResetGlobalOfflineError();
+            ZeroGradientSums();
+            ZeroGlobalOfflineError();
         }
 
         private DataArray FindActualOutput(SupervisedSample sample, int entryIndex)
@@ -1485,83 +1507,31 @@ namespace Neuroflow.NeuralNetworks
             foreach (var algo in OfflineSupervisedLearningAlgos) algo.Run(iterationCount, globalOfflineError);
         }
 
-        #region Reset
+        #region Zero
 
-        private void ResetGlobalOfflineError()
+        private void ZeroGlobalOfflineError()
         {
             if (globalOfflineError != null) Adapter.VectorUtils.Zero(globalOfflineError);
         }
 
-        IDeviceArray[] errorArrays;
-
-        IDeviceArray[] ErrorArrays
+        private void ZeroErrors()
         {
-            get { return errorArrays ?? (errorArrays = errors != null ? errors.Values.ToArray() : new IDeviceArray[0]); }
+            if (errorsPool != null) errorsPool.Zero();
         }
 
-        private void ResetErrors()
+        private void ZeroOutputs()
         {
-            Reset(ErrorArrays);
+            OutputsPool.Zero();
         }
 
-        IDeviceArray[] outputArrays;
-
-        IDeviceArray[] OutputArrays
+        private void ZeroGradients()
         {
-            get { return outputArrays ?? (outputArrays = outputs != null ? outputs.Values.ToArray() : new IDeviceArray[0]); }
+            if (gradientsPool != null) gradientsPool.Zero();
         }
 
-        private void ResetOutputs()
+        private void ZeroGradientSums()
         {
-            Reset(OutputArrays);
-        }
-
-        IDeviceArray[] gradientArrays;
-
-        IDeviceArray[] GradientArrays
-        {
-            get
-            {
-                if (gradientArrays == null)
-                {
-                    var gs = gradients != null ? gradients.Values : Enumerable.Empty<IDeviceArray>();
-                    var bs = biasGradients != null ? biasGradients.Values : Enumerable.Empty<IDeviceArray>();
-                    gradientArrays = gs.Concat(bs).ToArray();
-                }
-                return gradientArrays;
-            }
-        }
-
-        private void ResetGradients()
-        {
-            Reset(GradientArrays);
-        }
-
-        IDeviceArray[] gradientSumArrays;
-
-        IDeviceArray[] GradientSumArrays
-        {
-            get
-            {
-                if (gradientSumArrays == null)
-                {
-                    var gs = gradientSums != null ? gradientSums.Values : Enumerable.Empty<IDeviceArray>();
-                    var bs = biasGradientSums != null ? biasGradientSums.Values : Enumerable.Empty<IDeviceArray>();
-                    gradientSumArrays = gs.Concat(bs).ToArray();
-                }
-                return gradientSumArrays;
-            }
-        }
-
-        private void ResetGradientSums()
-        {
-            Reset(GradientSumArrays);
-        }
-
-        private void Reset(IDeviceArray[] deviceArrays)
-        {
-            Debug.Assert(deviceArrays != null);
-            foreach (var deviceArray in deviceArrays) Adapter.VectorUtils.Zero(deviceArray);
+            if (gradientSumsPool != null) gradientSumsPool.Zero();
         }
 
         #endregion

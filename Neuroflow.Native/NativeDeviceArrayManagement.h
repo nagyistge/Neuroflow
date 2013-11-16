@@ -21,5 +21,10 @@ namespace Neuroflow
         virtual IDeviceArray2^ CreateArray2(bool copyOptimized, int rowSize, int colSize);
 
         virtual void Copy(IDeviceArray^ from, int fromIndex, IDeviceArray^ to, int toIndex, int size);
+
+        virtual IDeviceArrayPool^ CreatePool()
+        {
+            throw gcnew System::NotImplementedException();
+        }
     };
 }

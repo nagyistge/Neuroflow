@@ -13,22 +13,41 @@ namespace Neuroflow
         {
             Debug.Assert(array != null && array.Length > 0);
 
-            InternalArray = array;
+            internalArray = array;
+            Size = array.Length;
         }
 
         internal ManagedArray(int size)
         {
             Debug.Assert(size > 0);
 
-            InternalArray = new float[size];
+            internalArray = new float[size];
+            Size = size;
         }
 
-        internal float[] InternalArray { get; private set; }
-
-        public int Size
+        internal ManagedArray(ManagedDeviceArrayPool pool, int beginIndex, int size)
         {
-            get { return InternalArray.Length; }
+            Debug.Assert(size > 0);
+            Debug.Assert(beginIndex >= 0);
+            Debug.Assert(pool != null);
+
+            this.pool = pool;
+            BeginIndex = beginIndex;
+            Size = size;
         }
+
+        ManagedDeviceArrayPool pool;
+
+        float[] internalArray;
+
+        internal float[] InternalArray
+        {
+            get { return internalArray ?? pool.InternalArray; }
+        }
+
+        internal int BeginIndex { get; private set; }
+
+        public int Size { get; private set; }
 
         public virtual DeviceArrayType Type
         {
@@ -37,13 +56,7 @@ namespace Neuroflow
 
         unsafe internal ManagedArrayPtr ToPtr(float* ptr)
         {
-            return new ManagedArrayPtr(this, ptr);
-        }
-
-        [Conditional("Debug")]
-        internal void Dump()
-        {
-            Debug.WriteLine(string.Format("{0}: {1}", Size, string.Join(" ", InternalArray)));
+            return new ManagedArrayPtr(this, ptr, BeginIndex);
         }
     }
 }
