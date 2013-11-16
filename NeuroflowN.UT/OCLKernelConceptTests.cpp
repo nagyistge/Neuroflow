@@ -82,10 +82,10 @@ namespace NeuroflowNUT
                 auto init = [=](Kernel& kernel)
                 {
                     int aidx = 0;
-                    kernel.setArg(aidx++, ctx->ToBuffer1(a).GetCLBuffer());
+                    kernel.setArg(aidx++, ctx->ToBuffer1(a)->GetCLBuffer());
                     kernel.setArg(aidx++, size);
                     kernel.setArg(aidx++, lsize * sizeof(float), null);
-                    kernel.setArg(aidx++, ctx->ToBuffer1(r).GetCLBuffer());
+                    kernel.setArg(aidx++, ctx->ToBuffer1(r)->GetCLBuffer());
                     kernel.setArg(aidx++, null);
                     kernel.setArg(aidx++, 1);
                 };
