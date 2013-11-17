@@ -21,7 +21,7 @@ OCLVersionableKernelBase(ctx, "ComputeGradientsRTLR")
 void OCLComputeGradientsRTLRKernel::Build(const OCLVaultSPtrT& vault)
 {
     program = make_shared<OCLProgram>(ctx, "ComputeGradientsRTLRPrg");
-    if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetCommonCode());
+    if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetNetCode());
     program->Using(vault->GetReduceCode());
 
     ADD_OCL_CODE(program,
@@ -138,6 +138,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode_ComputeGradinetsRTLR_Layer
         "if (tmpGradients != null) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
         "kValueIndex++;\n"
         "}\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "}\n";
 
     return code.str();
@@ -205,7 +206,6 @@ std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
                 code << "isLastLayer =  p_i_j_k_Values_" << layerIndex + 1 << " == null;\n";
             }
             code << CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(layerIndex);
-            code << "barrier(CLK_LOCAL_MEM_FENCE);\n";
             if (layerIndex != 0) code << "}\n";
         }
 
@@ -223,7 +223,8 @@ std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
 
 std::string OCLComputeGradientsRTLRKernel::CreateGPUKernelCode()
 {
-    return "kernel lofasz(global int* foo) { }";
+    //return "kernel lofasz(global int* foo) { }";
+    return CreateCPUKernelCode();
 }
 
 void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
@@ -350,6 +351,10 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
     if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
 
     if (ctx->IsCPU())
+    {
+        exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
+    }
+    else
     {
         exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
     }

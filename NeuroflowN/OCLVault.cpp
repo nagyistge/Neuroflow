@@ -220,20 +220,39 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
 
     ADD_OCL_CODE(reduceCode,
     
-        inline void Reduce_Sum(local float* values)
+    inline void Reduce_Sum(local float* values)
+    {
+        int localSize = get_local_size(0);
+        int localId = get_local_id(0);
+
+        for (int offset = localSize / 2; offset > 0; offset = offset / 2)
         {
-            int localSize = get_local_size(0);
-            int localId = get_local_id(0);
-
-            for (int offset = localSize / 2; offset > 0; offset = offset / 2)
+            if (localId < offset)
             {
-                if (localId < offset)
-                {
-                    values[localId] += values[localId + offset];
-                }
-
-                barrier(CLK_LOCAL_MEM_FENCE);
+                values[localId] += values[localId + offset];
             }
+
+            barrier(CLK_LOCAL_MEM_FENCE);
         }
+    }
+
+    inline void Reduce_SumFrom(local float* values, int from)
+    {
+        int localSize = get_local_size(0);
+        int localId = get_local_id(0);
+
+        from *= localSize;
+
+        for (int offset = localSize / 2; offset > 0; offset = offset / 2)
+        {
+            if (localId < offset)
+            {
+                int idx = from + localId;
+                values[idx] += values[idx + offset];
+            }
+
+            barrier(CLK_LOCAL_MEM_FENCE);
+        }
+    }
     );
 }
