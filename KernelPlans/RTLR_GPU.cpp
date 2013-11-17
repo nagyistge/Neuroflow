@@ -1,4 +1,29 @@
-void ComputeGradinetsRTLR_Layer_CPU$(
+void LocalComputeForwardSum$(global float$* inputs, int inputSize, global float$* weights, int outputIndex, local float* tmpSums)
+{
+    int localSize = get_local_size(0);
+    int localId = get_local_id(0);
+    int block = inputSize / localSize + (inputSize % localSize != 0 ? 1 : 0);
+    int inputIndex = localId * block;
+    int max = inputIndex + block;
+    if (max > inputSize) max = inputSize;
+    int d = localSize * outputIndex;
+
+    while (inputIndex < max)
+    {
+        int widx = GetIndex2(inputIndex, outputIndex, inputSize);
+        tmpSums[d + localId] += SumComponents$(inputs[inputIndex] * weights[widx]);
+
+        inputIndex++;
+    }
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    Reduce_SumFrom(tmpSums, outputIndex);
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+}
+
+void ComputeGradinetsRTLR_Layer_GPU$(
     global float$* p_i_j_l_Values_0
     , int p_i_j_l_ValuesSize_0
     , global float$* weights_0
@@ -17,6 +42,7 @@ void ComputeGradinetsRTLR_Layer_CPU$(
     , int iValueIndex
     , global float* inputs
     , int inputIndex
+    , local float* tmpSums
     , local float* tmpGradients
     , global float* outputs
     , global float* desiredOutputs)
@@ -30,15 +56,16 @@ void ComputeGradinetsRTLR_Layer_CPU$(
     while (kValueIndex < max)
     {
         float sum = iValueIndex == kValueIndex ? (inputs != null ? inputs[inputIndex] : 1.0f) : 0.0f;
-        sum += ComputeForward_Sum$(p_i_j_l_Values_0, p_i_j_l_ValuesSize_0, weights_0, kValueIndex);
+        /*sum += ComputeForward_Sum$(p_i_j_l_Values_0, p_i_j_l_ValuesSize_0, weights_0, kValueIndex);
         if (p_i_j_l_Values_1 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_1, p_i_j_l_ValuesSize_1, weights_1, kValueIndex);
         if (p_i_j_l_Values_2 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_2, p_i_j_l_ValuesSize_2, weights_2, kValueIndex);
-        if (p_i_j_l_Values_3 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_3, p_i_j_l_ValuesSize_3, weights_3, kValueIndex);
+        if (p_i_j_l_Values_3 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_3, p_i_j_l_ValuesSize_3, weights_3, kValueIndex);*/
         float p = netDerivValues[kValueIndex] * sum;
         p_i_j_k_Values[kValueIndex] = p;
         if (tmpGradients != null) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;
         kValueIndex++;
     }
+    barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums, int gradientsIndex)
@@ -119,12 +146,15 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
     , int inputIndex
     , global float* outputs
     , global float* desiredOutputs
+    , local float* tmpSums
     , local float* tmpGradients
     , global float* gradients
     , global float* gradientSums
     , int gradientIndex)
 {
-    tmpGradients[get_local_id(0)] = 0.0f;
+    int localId = get_local_id(0);
+    tmpSums[localId] = 0.0f;
+    tmpGradients[localId] = 0.0f;
     barrier(CLK_LOCAL_MEM_FENCE);
     int kLayerIndex;
     bool isLastLayer;
@@ -152,7 +182,6 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
         , (isLastLayer && outputs != null) ? tmpGradients : null
         , isLastLayer ? outputs : null
         , isLastLayer ? desiredOutputs : null);
-    barrier(CLK_LOCAL_MEM_FENCE);
     if (!isLastLayer)
     {
         kLayerIndex = 1;
@@ -179,7 +208,6 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
             , (isLastLayer && outputs != null) ? tmpGradients : null
             , isLastLayer ? outputs : null
             , isLastLayer ? desiredOutputs : null);
-        barrier(CLK_LOCAL_MEM_FENCE);
     }
     if (!isLastLayer)
     {
@@ -207,7 +235,6 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
             , (isLastLayer && outputs != null) ? tmpGradients : null
             , isLastLayer ? outputs : null
             , isLastLayer ? desiredOutputs : null);
-        barrier(CLK_LOCAL_MEM_FENCE);
     }
     if (!isLastLayer)
     {
@@ -235,7 +262,6 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
             , (isLastLayer && outputs != null) ? tmpGradients : null
             , isLastLayer ? outputs : null
             , isLastLayer ? desiredOutputs : null);
-        barrier(CLK_LOCAL_MEM_FENCE);
     }
     ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums, gradientIndex);
 }
