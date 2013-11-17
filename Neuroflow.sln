@@ -32,6 +32,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!GIT", "!GIT", "{4722DFEF-F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NeuroflowN.UT", "NeuroflowN.UT\NeuroflowN.UT.vcxproj", "{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. KernelPlans", "1. KernelPlans", "{37FDC73D-9010-4519-8667-E2B960BF98CA}"
+	ProjectSection(SolutionItems) = preProject
+		KernelPlans\RTLR_CPU.cpp = KernelPlans\RTLR_CPU.cpp
+		KernelPlans\RTLR_GPU.cpp = KernelPlans\RTLR_GPU.cpp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
