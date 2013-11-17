@@ -347,7 +347,7 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         kernel.setArg(aidx++, data->IJValueIndex);
     };
     
-    if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->End();
+    if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
 
     if (ctx->IsCPU())
     {

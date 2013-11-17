@@ -23,8 +23,6 @@ namespace NeuroflowN
     public:
         OCLContextImpl(const std::string& deviceID, const std::string& version);
 
-        void Free();
-
         static DeviceInfoVecT GetAvailableDevices();
 
         const OCLIntCtxSPtrT& GetIntCtx() const 
@@ -43,6 +41,10 @@ namespace NeuroflowN
         IMultilayerPerceptronAdapter* GetMultilayerPerceptronAdapterPtr() const;
 
         IDeviceArrayManagement* GetDeviceArrayManagementPtr() const;
+
+        void Finish(doneCallback done) const;
+
+        void Finish() const;
 
     private:
         void Initialize(const DeviceInfo& deviceInfo, const cl::Device& device);

@@ -59,11 +59,13 @@ void OCLOutOfOrderQueue::Begin()
     {
         for (unsigned i = 0; i < queues.size(); i++)
         {
+            clEnqueueBarrierWithWaitList(queues[i](), 0, null, null);
             clEnqueueBarrierWithWaitList(queues[i](), 1, &(e()), null);
         }
     }
     else
     {
+        clEnqueueBarrierWithWaitList(queues[0](), 0, null, null);
         clEnqueueBarrierWithWaitList(queues[0](), 1, &(e()), null);
     }
 }
@@ -75,14 +77,16 @@ void OCLOutOfOrderQueue::End()
         vector<Event> events(queues.size());
         for (unsigned i = 0; i < queues.size(); i++)
         {
-            clEnqueueBarrierWithWaitList(queues[0](), 0, null, (cl_event*)&events.front() + i);
+            clEnqueueBarrierWithWaitList(queues[i](), 0, null, (cl_event*)&events.front() + i);
         }
+        clEnqueueBarrierWithWaitList(ctx->GetQueue()(), 0, null, null);
         clEnqueueBarrierWithWaitList(ctx->GetQueue()(), events.size(), (cl_event*)&events.front(), null);
     }
     else
     {
         Event e;
         clEnqueueBarrierWithWaitList(queues[0](), 0, null, &(e()));
+        clEnqueueBarrierWithWaitList(ctx->GetQueue()(), 0, null, null);
         clEnqueueBarrierWithWaitList(ctx->GetQueue()(), 1, &(e()), null);
     }
 }

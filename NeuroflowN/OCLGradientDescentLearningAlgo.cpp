@@ -39,7 +39,7 @@ OCLGradientDescentLearningAlgo::OCLGradientDescentLearningAlgo(const OCLIntCtxSP
                 gdKernelExecs.emplace_back();
 
                 gdOnlineCode.push_back(
-                    [=, &ga, &wa]()
+                    [=]()
                     {
                         auto& exec = gdKernelExecs[eidx];
 

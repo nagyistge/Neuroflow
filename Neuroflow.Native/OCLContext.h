@@ -52,6 +52,8 @@ namespace Neuroflow
     protected:
         virtual void CleanupNativeResources() override;
 
+        virtual void WaitForFinish(ComputationFinishedCallback^ callback) override;
+
     private:
         Neuroflow::Device GetDevice();
     };

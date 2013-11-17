@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Neuroflow
 {
+    public delegate void ComputationFinishedCallback(Exception ex);
+
     public abstract class ComputationContext : DisposableObject
     {
         public abstract Device Device { get; }
@@ -33,6 +35,19 @@ namespace Neuroflow
         {
             get { throw GetNSEx("Multilayer Perceptron Adapter"); }
         }
+
+        public Task Finish()
+        {
+            var result = new TaskCompletionSource<object>();
+            ComputationFinishedCallback cb = (ex) =>
+            {
+                if (ex == null) result.TrySetResult(null); else result.TrySetException(ex);
+            };
+            WaitForFinish(cb);
+            return result.Task;
+        }
+
+        protected abstract void WaitForFinish(ComputationFinishedCallback callback);
 
         private static NotSupportedException GetNSEx(string name)
         {

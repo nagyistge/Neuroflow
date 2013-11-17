@@ -6,9 +6,11 @@
 #include "NativeMultilayerPerceptronAdapter.h"
 #include "NativeVectorUtils.h"
 #include "MUtil.h"
+#include "Callbacks.h"
 
 using namespace System;
 using namespace Neuroflow;
+using namespace System::Runtime::InteropServices;
 
 OCLContext::OCLContext(String^ deviceID)
 {
@@ -33,7 +35,7 @@ void OCLContext::CleanupNativeResources()
     {
         if (oclContext != nullptr)
         {
-            oclContext->Free();
+            delete oclContext;
             oclContext = nullptr;
         }
     }
@@ -72,5 +74,19 @@ Neuroflow::Device OCLContext::GetDevice()
     catch (std::exception& ex)
     {
         throw gcnew NativeException(ex);
+    }
+}
+
+void OCLContext::WaitForFinish(ComputationFinishedCallback^ callback)
+{
+    try
+    {
+        auto fp = Marshal::GetFunctionPointerForDelegate(callback).ToPointer();
+
+        oclContext->Finish(StandardCallback((StandardCallbackFnc*)fp));
+    }
+    catch (std::exception& ex)
+    {
+        throw gcnew Neuroflow::NativeException(ex);
     }
 }
