@@ -2,15 +2,14 @@
 
 #include "Typedefs.h"
 #include <assert.h>
+#include "NativePtr.h"
 
 namespace Neuroflow
 {
     namespace NeuralNetworks
     {
-        ref class NativeMultilayerPerceptronAdapter : public Neuroflow::NeuralNetworks::IMultilayerPerceptronAdapter
+        ref class NativeMultilayerPerceptronAdapter : public NativePtr<NeuroflowN::IMultilayerPerceptronAdapter>, public IMultilayerPerceptronAdapter
         {
-            NeuroflowN::IMultilayerPerceptronAdapter* adapter;
-
             Neuroflow::IDeviceArrayManagement^ deviceArrayManagement;
 
             Neuroflow::VectorUtils^ vectorUtils;

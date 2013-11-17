@@ -24,6 +24,7 @@ namespace NeuroflowN
         unsigned maxWorkGroupSize;
         unsigned maxComputeUnits;
         unsigned preferredWorkgroupSizeMul;
+        unsigned alignBits;
         cl::NDRange maxWorkItemSizes;
 
         Registry<std::pair<unsigned, unsigned>, std::pair<unsigned, unsigned>> ioReduceSizes;
@@ -93,6 +94,11 @@ namespace NeuroflowN
         const cl::NDRange GetMaxWorkItemSizes() const
         {
             return maxWorkItemSizes;
+        }
+
+        unsigned GetAlignBits() const
+        {
+            return alignBits;
         }
 
         void Flush()

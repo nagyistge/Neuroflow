@@ -156,6 +156,7 @@
     <ClInclude Include="NativeDeviceArray.h" />
     <ClInclude Include="NativeDeviceArray2.h" />
     <ClInclude Include="NativeDeviceArrayManagement.h" />
+    <ClInclude Include="NativeDeviceArrayPool.h" />
     <ClInclude Include="NativeException.h" />
     <ClInclude Include="NativeLearningAlgo.h" />
     <ClInclude Include="NativeLearningAlgoFactory.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="NativeDataArray.cpp" />
     <ClCompile Include="NativeDataArrayFactory.cpp" />
     <ClCompile Include="NativeDeviceArrayManagement.cpp" />
+    <ClCompile Include="NativeDeviceArrayPool.cpp" />
     <ClCompile Include="NativeLearningAlgo.cpp" />
     <ClCompile Include="NativeLearningAlgoFactory.cpp" />
     <ClCompile Include="NativeMultilayerPerceptronAdapter.cpp" />

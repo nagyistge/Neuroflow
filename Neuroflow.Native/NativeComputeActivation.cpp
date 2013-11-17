@@ -13,7 +13,7 @@ System::IDisposable^ NativeComputeActivation::CreateComputationState()
 {
     try
     {
-        return gcnew NativeObject(computeActivation->CreateComputationState());
+        return gcnew NativeObject(Ptr->CreateComputationState());
     }
     catch (exception& ex)
     {
@@ -25,7 +25,7 @@ void NativeComputeActivation::ComputeForward(System::IDisposable^ state, Marshal
 {
     try
     {
-        computeActivation->ComputeForward(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(function), alpha);
+        Ptr->ComputeForward(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -37,7 +37,7 @@ void NativeComputeActivation::ComputeForwardRTLR(System::IDisposable^ state, Mar
 {
     try
     {
-        computeActivation->ComputeForwardRTLR(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(netValueDerivates), ToNative(function), alpha);
+        Ptr->ComputeForwardRTLR(ToNative(state), ToNative(inputs), ToNative(weights), ToNative(biases), ToNative(outputs), ToNative(netValueDerivates), ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -52,7 +52,7 @@ void NativeComputeActivation::ComputeErrors(System::IDisposable^ state, IDeviceA
         auto lowerWeightsPtr = ToNative(lowerWeights);
         auto lowerErrorsPtr = ToNative(lowerErrors);
 
-        computeActivation->ComputeErrors(ToNative(state), ToNative(outputs), ToNative(errors), lowerWeightsPtr, lowerErrorsPtr, ToNative(function), alpha);
+        Ptr->ComputeErrors(ToNative(state), ToNative(outputs), ToNative(errors), lowerWeightsPtr, lowerErrorsPtr, ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -65,7 +65,7 @@ void NativeComputeActivation::ComputeErrors(System::IDisposable^ state, IDeviceA
 {
     try
     {
-        computeActivation->ComputeErrors(ToNative(state), ToNative(outputs), ToNative(errors), ToNative(desiredOutputs), ToNative(function), alpha);
+        Ptr->ComputeErrors(ToNative(state), ToNative(outputs), ToNative(errors), ToNative(desiredOutputs), ToNative(function), alpha);
     }
     catch (exception& ex)
     {
@@ -81,7 +81,7 @@ void NativeComputeActivation::ComputeGradientsFF(System::IDisposable^ state, Mar
         auto gradientsPtr = gradients != null ? ToNative(gradients) : null;
         auto gradientSumsPtr = gradientSums != null ? ToNative(gradientSums) : null;
 
-        computeActivation->ComputeGradientsFF(
+        Ptr->ComputeGradientsFF(
             ToNative(state), 
             inputsPtr, 
             gradientsPtr, 
@@ -103,7 +103,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase1(System::IDisposable^ st
         auto inputsPtr = ToNative(inputs);
         auto gradientsPtr = gradients != null ? ToNative(gradients) : null;
 
-        computeActivation->ComputeGradientsBPTTPhase1(
+        Ptr->ComputeGradientsBPTTPhase1(
             ToNative(state),
             inputsPtr,
             gradientsPtr,
@@ -124,7 +124,7 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
         auto gradientsPtr = gradients != null ? ToNative(gradients) : null;
         auto gradientSumsPtr = gradientSums != null ? ToNative(gradientSums) : null;
 
-        computeActivation->ComputeGradientsBPTTPhase2(
+        Ptr->ComputeGradientsBPTTPhase2(
             ToNative(state),
             inputsPtr,
             gradientsPtr,
@@ -145,7 +145,7 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
 {
     try
     {
-        computeActivation->ComputeGradientsRTLR(
+        Ptr->ComputeGradientsRTLR(
             ToNative(state),
             ToNative(inputLayerInfos),
             ToNative(netValueDerivates),

@@ -258,8 +258,24 @@ namespace Neuroflow.NeuralNetworks
             if (pValuesPool != null)
             {
                 ResourceManager.Free(pValuesPool);
+                foreach (var p in pWeightValues) Free(p);
                 pValuesPool = null;
             }
+        }
+
+        private void Free(Marshaled<IDeviceArray[]>[][] p)
+        {
+            foreach (var ip in p) Free(ip);
+        }
+
+        private void Free(Marshaled<IDeviceArray[]>[] p)
+        {
+            foreach (var ip in p) Free(ip);
+        }
+
+        private void Free(Marshaled<IDeviceArray[]> p)
+        {
+            ResourceManager.Free(p.Instance());
         }
 
         #endregion

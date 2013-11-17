@@ -2,18 +2,17 @@
 
 #include "Typedefs.h"
 #include <assert.h>
+#include "NativePtr.h"
 
 namespace Neuroflow
 {
     namespace NeuralNetworks
     {
-        ref class NativeLearningAlgo : public ILearningAlgo
+        ref class NativeLearningAlgo : public NativePtr<NeuroflowN::ILearningAlgo>, public ILearningAlgo
         {
-            NeuroflowN::ILearningAlgo* learningAlgo;
-
         public:
             NativeLearningAlgo(NeuroflowN::ILearningAlgo* learningAlgo) :
-                learningAlgo(learningAlgo)
+                NativePtr(learningAlgo)
             {
                 assert(learningAlgo != null);
             }

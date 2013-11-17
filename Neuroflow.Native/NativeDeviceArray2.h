@@ -2,18 +2,17 @@
 
 #include <assert.h>
 #include "IDeviceArray2.h"
+#include "NativePtr.h"
 
 namespace Neuroflow
 {
-    ref class NativeDeviceArray2 : public Neuroflow::IDeviceArray2
+    ref class NativeDeviceArray2 : public NativePtr<NeuroflowN::IDeviceArray2>, public IDeviceArray2
     {
-        NeuroflowN::IDeviceArray2* deviceArray;
-
     public:
         NativeDeviceArray2(NeuroflowN::IDeviceArray2* deviceArray) :
-            deviceArray(deviceArray)
+            NativePtr(deviceArray)
         {
-            assert(deviceArray != nullptr);
+            assert(deviceArray != null);
         }
 
         virtual property DeviceArrayType Type
@@ -28,7 +27,7 @@ namespace Neuroflow
         {
             int get() 
             {
-                return (int) deviceArray->GetSize();
+                return (int) Ptr->GetSize();
             }
         }
 
@@ -36,7 +35,7 @@ namespace Neuroflow
         {
             int get() 
             {
-                return (int) deviceArray->GetSize1();
+                return (int)Ptr->GetSize1();
             }
         }
 
@@ -44,15 +43,7 @@ namespace Neuroflow
         {
             int get() 
             {
-                return (int) deviceArray->GetSize2();
-            }
-        }
-
-        property NeuroflowN::IDeviceArray2 * PDeviceArray2
-        {
-            NeuroflowN::IDeviceArray2 * get()
-            {
-                return deviceArray;
+                return (int)Ptr->GetSize2();
             }
         }
     };

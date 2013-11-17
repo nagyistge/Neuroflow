@@ -13,7 +13,7 @@ namespace Neuroflow
         NativeVectorUtils(NeuroflowN::IVectorUtils* vectorUtils) :
             vectorUtils(vectorUtils)
         {
-            assert(vectorUtils != nullptr);
+            assert(vectorUtils != null);
         }
 
         virtual void RandomizeUniform(Neuroflow::IDeviceArray^ values, float min, float max) override;

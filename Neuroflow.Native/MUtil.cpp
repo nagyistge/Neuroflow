@@ -28,7 +28,7 @@ NeuroflowN::DataArray* Neuroflow::ToNative(Neuroflow::Data::DataArray^ dataArray
         throw gcnew ArgumentNullException("dataArray");
     }
 
-    return ((Data::NativeDataArray^)dataArray)->PDataArray;
+    return ((Data::NativeDataArray^)dataArray)->Ptr;
 }
 
 NeuroflowN::SupervisedBatchT Neuroflow::ToNative(Data::SupervisedBatch^ batch)
@@ -55,11 +55,11 @@ NeuroflowN::IDeviceArray* Neuroflow::ToNative(IDeviceArray^ deviceArray)
     switch (deviceArray->Type)
     {
     case DeviceArrayType::DeviceArray:
-        return ((NativeDeviceArray^)deviceArray)->PDeviceArray;
+        return ((NativeDeviceArray^)deviceArray)->Ptr;
     case DeviceArrayType::DeviceArray2:
-        return ((NativeDeviceArray2^)deviceArray)->PDeviceArray2;
+        return ((NativeDeviceArray2^)deviceArray)->Ptr;
     case DeviceArrayType::DataArray:
-        return ((Data::NativeDataArray^)deviceArray)->PDataArray;
+        return ((Data::NativeDataArray^)deviceArray)->Ptr;
     }
 
     throw gcnew ArgumentException("DeviceArray type " + deviceArray->GetType()->FullName + " is unknown.", "deviceArray");
@@ -69,7 +69,7 @@ NeuroflowN::IDeviceArray2* Neuroflow::ToNative(IDeviceArray2^ deviceArray)
 {
     if (deviceArray == null) return null;
 
-    return ((NativeDeviceArray2^)deviceArray)->PDeviceArray2;
+    return ((NativeDeviceArray2^)deviceArray)->Ptr;
 }
 
 NeuroflowN::DeviceArrayFactoryT Neuroflow::ToNative(DeviceArrayFactory^ deviceArrayF)

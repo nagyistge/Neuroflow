@@ -9,7 +9,7 @@ using namespace NeuroflowN;
 using namespace std;
 using namespace cl;
 
-cl::Buffer OCLDeviceArrayManagement::CreateBuffer(bool copyOptimized, int size)
+cl::Buffer OCLDeviceArrayManagement::CreateBuffer(bool copyOptimized, unsigned sizeInBytes)
 {
     try
     {
@@ -20,14 +20,14 @@ cl::Buffer OCLDeviceArrayManagement::CreateBuffer(bool copyOptimized, int size)
 #else
             (copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS),
 #endif
-            sizeof(float)* size,
+            sizeInBytes,
             nullptr);
 
         ctx->GetQueue().enqueueFillBuffer<float>(
             buffer,
             0.0f, //
             0, // offset
-            size * sizeof(float),
+            sizeInBytes,
             nullptr,
             nullptr);
 
@@ -41,12 +41,12 @@ cl::Buffer OCLDeviceArrayManagement::CreateBuffer(bool copyOptimized, int size)
 
 IDeviceArray* OCLDeviceArrayManagement::CreateArray(bool copyOptimized, int size)
 {
-    return new OCLBuffer1(CreateBuffer(copyOptimized, size));
+    return new OCLBuffer1(CreateBuffer(copyOptimized, size * sizeof(float)));
 }
 
 IDeviceArray2* OCLDeviceArrayManagement::CreateArray2(bool copyOptimized, int rowSize, int colSize)
 {
-    return new OCLBuffer2(CreateBuffer(copyOptimized, rowSize * colSize), rowSize);
+    return new OCLBuffer2(CreateBuffer(copyOptimized, rowSize * colSize * sizeof(float)), rowSize);
 }
 
 void OCLDeviceArrayManagement::Copy(IDeviceArray* from, int fromIndex, IDeviceArray* to, int toIndex, int size)
