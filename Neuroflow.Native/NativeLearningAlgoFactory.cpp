@@ -13,7 +13,7 @@ ILearningAlgo^ NativeLearningAlgoFactory::CreateLearningAlgo(LearningBehavior^ l
 {
     try
     {
-        return gcnew NativeLearningAlgo(learningAlgoFactory->CreateLearningAlgo(ToNative(learningBehavior), ToNative(nodes)));
+        return gcnew NativeLearningAlgo(Ptr->CreateLearningAlgo(ToNative(learningBehavior), ToNative(nodes)));
     }
     catch (exception& ex)
     {

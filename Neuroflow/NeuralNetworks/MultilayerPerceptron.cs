@@ -385,6 +385,7 @@ namespace Neuroflow.NeuralNetworks
             if (outputsPool != null)
             {
                 ResourceManager.Free(outputsPool);
+                ResourceManager.Free(outputs.Values);
                 outputsPool = null;
                 outputs = null;
             }
@@ -402,6 +403,8 @@ namespace Neuroflow.NeuralNetworks
             if (gradientsPool != null)
             {
                 ResourceManager.Free(gradientsPool);
+                ResourceManager.Free(gradients.Values);
+                ResourceManager.Free(biasGradients.Values);
                 gradientsPool = null;
                 gradients = null;
                 biasGradients = null;
@@ -409,6 +412,8 @@ namespace Neuroflow.NeuralNetworks
             if (gradientSumsPool != null)
             {
                 ResourceManager.Free(gradientSumsPool);
+                ResourceManager.Free(gradientSums.Values);
+                ResourceManager.Free(biasGradientSums.Values);
                 gradientSumsPool = null;
                 gradientSums = null;
                 biasGradientSums = null;

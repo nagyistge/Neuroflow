@@ -21,7 +21,8 @@ OCLIntCtx::OCLIntCtx(
     isCPU((device.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),
     maxComputeUnits(device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()),
     maxWorkGroupSize(device.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()),
-    maxWorkItemSizes(cl::NullRange)
+    maxWorkItemSizes(cl::NullRange),
+    alignBits(device.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>())
 {
     queue = CommandQueue(context, device);
 

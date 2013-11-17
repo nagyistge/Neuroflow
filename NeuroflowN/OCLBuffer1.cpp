@@ -12,7 +12,7 @@ cl::Buffer& OCLBuffer1::GetCLBuffer()
     if (buffer() == null)
     {
         assert(pool != null);
-        buffer = pool->CreateSubBuffer(beginIndex, size);
+        buffer = pool->CreateSubBuffer(beginOffset, size);
     }
     return buffer;
 }

@@ -12,7 +12,7 @@ void NativeLearningAlgo::Initialize()
 {
     try
     {
-        learningAlgo->Initalize();
+        Ptr->Initalize();
     }
     catch (exception& ex)
     {
@@ -24,7 +24,7 @@ void NativeLearningAlgo::Run(int iterationCount, IDeviceArray^ error)
 {
     try
     {
-        learningAlgo->Run(iterationCount, error != null ? ToNative(error) : null);
+        Ptr->Run(iterationCount, error != null ? ToNative(error) : null);
     }
     catch (exception& ex)
     {
@@ -36,7 +36,7 @@ LearningAlgoIterationType NativeLearningAlgo::GetIterationTypes()
 {
     try
     {
-        return ToManaged(learningAlgo->GetIterationTypes());
+        return ToManaged(Ptr->GetIterationTypes());
     }
     catch (exception& ex)
     {

@@ -7,7 +7,7 @@ namespace Neuroflow
 {
     namespace Data
     {
-        ref class NativeDataArray : public Neuroflow::Data::DataArray
+        ref class NativeDataArray : public DataArray
         {
             NeuroflowN::DataArray* dataArray;
         
@@ -35,7 +35,7 @@ namespace Neuroflow
             }
 
         internal:
-            property NeuroflowN::DataArray* PDataArray
+            property NeuroflowN::DataArray* Ptr
             {
                 NeuroflowN::DataArray* get()
                 {

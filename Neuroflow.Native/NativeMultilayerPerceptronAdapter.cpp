@@ -12,9 +12,9 @@ using namespace Neuroflow;
 using namespace Neuroflow::NeuralNetworks;
 
 NativeMultilayerPerceptronAdapter::NativeMultilayerPerceptronAdapter(NeuroflowN::IMultilayerPerceptronAdapter* adapter) :
-    adapter(adapter)
+    NativePtr(adapter, false)
 {
-    assert(adapter != nullptr);
+    assert(adapter != null);
 
     try
     {

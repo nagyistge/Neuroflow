@@ -8,8 +8,6 @@ namespace Neuroflow
 {
     public interface IDeviceArrayPool
     {
-        int Size { get; }
-
         bool IsAllocated { get; }
 
         IDeviceArray CreateArray(int size);

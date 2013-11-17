@@ -6,7 +6,7 @@ namespace Neuroflow
 {
     namespace Data
     {
-        public ref class NativeDataArrayFactory : public Neuroflow::Data::DataArrayFactory
+        public ref class NativeDataArrayFactory : public DataArrayFactory
         {
             NeuroflowN::DataArrayFactory* dataArrayFactory;
 
@@ -23,6 +23,15 @@ namespace Neuroflow
             virtual DataArray^ DoCreate(array<float>^ array, int beginPos, int length) override;
 
             virtual DataArray^ DoCreateConst(array<float>^ array, int beginPos, int length) override;
+
+        internal:
+            property NeuroflowN::DataArrayFactory* Ptr
+            {
+                NeuroflowN::DataArrayFactory* get()
+                {
+                    return dataArrayFactory;
+                }
+            }
         };
     }
 }

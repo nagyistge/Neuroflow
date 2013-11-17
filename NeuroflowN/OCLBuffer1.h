@@ -10,7 +10,7 @@ namespace NeuroflowN
 {
     class OCLBuffer1 : public IDeviceArray
     {        
-        unsigned beginIndex = 0;
+        unsigned beginOffset = 0;
         unsigned size;
         cl::Buffer buffer;
         OCLDeviceArrayPool* pool = null;
@@ -22,8 +22,8 @@ namespace NeuroflowN
             size(buffer.getInfo<CL_MEM_SIZE>() / sizeof(float))
         {
         }
-        OCLBuffer1(OCLDeviceArrayPool* pool, unsigned beginIndex, unsigned size) :
-            beginIndex(beginIndex),
+        OCLBuffer1(OCLDeviceArrayPool* pool, unsigned beginOffset, unsigned size) :
+            beginOffset(beginOffset),
             size(size),
             pool(pool)
         {
@@ -39,9 +39,9 @@ namespace NeuroflowN
             return size;
         }
 
-        unsigned GetBeginIndex() const
+        unsigned GetBeginOffset() const
         {
-            return beginIndex;
+            return beginOffset;
         }
 
         cl::Buffer& GetCLBuffer();

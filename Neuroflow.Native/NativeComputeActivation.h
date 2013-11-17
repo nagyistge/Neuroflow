@@ -1,19 +1,20 @@
 #pragma once
 
 #include "Typedefs.h"
+#include "NativePtr.h"
+#include <assert.h>
 
 namespace Neuroflow
 {
     namespace NeuralNetworks
     {
-        ref class NativeComputeActivation : public IComputeActivation
+        ref class NativeComputeActivation : public NativePtr<NeuroflowN::IComputeActivation>, public IComputeActivation
         {
-            NeuroflowN::IComputeActivation* computeActivation;
-
         public:
             NativeComputeActivation(NeuroflowN::IComputeActivation* computeActivation) :
-                computeActivation(computeActivation)
+                NativePtr(computeActivation, false)
             {
+                assert(computeActivation != null);
             }
 
             virtual System::IDisposable^ CreateComputationState();

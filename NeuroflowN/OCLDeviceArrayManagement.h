@@ -15,7 +15,7 @@ namespace NeuroflowN
         OCLIntCtxSPtrT ctx;
         OCLVectorUtilsSPtrT vectorUtils;
 
-        cl::Buffer CreateBuffer(bool copyOptimized, int size);
+        cl::Buffer CreateBuffer(bool copyOptimized, unsigned sizeInBytes);
 
     public:
         OCLDeviceArrayManagement(const OCLIntCtxSPtrT& ctx, const OCLVectorUtilsSPtrT& vectorUtils) :

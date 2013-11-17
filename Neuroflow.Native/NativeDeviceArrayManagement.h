@@ -2,18 +2,17 @@
 
 #include "Typedefs.h"
 #include <assert.h>
+#include "NativePtr.h"
 
 namespace Neuroflow
 {
-    ref class NativeDeviceArrayManagement : Neuroflow::IDeviceArrayManagement
+    ref class NativeDeviceArrayManagement : public NativePtr<NeuroflowN::IDeviceArrayManagement>, public IDeviceArrayManagement
     {
-        NeuroflowN::IDeviceArrayManagement* deviceArrayManagement;
-
     public:
         NativeDeviceArrayManagement(NeuroflowN::IDeviceArrayManagement* deviceArrayManagement) :
-            deviceArrayManagement(deviceArrayManagement)
+            NativePtr(deviceArrayManagement, false)
         {
-            assert(deviceArrayManagement != nullptr);
+            assert(deviceArrayManagement != null);
         }
 
         virtual IDeviceArray^ CreateArray(bool copyOptimized, int size);
@@ -22,9 +21,6 @@ namespace Neuroflow
 
         virtual void Copy(IDeviceArray^ from, int fromIndex, IDeviceArray^ to, int toIndex, int size);
 
-        virtual IDeviceArrayPool^ CreatePool()
-        {
-            throw gcnew System::NotImplementedException();
-        }
+        virtual IDeviceArrayPool^ CreatePool();
     };
 }
