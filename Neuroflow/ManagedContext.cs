@@ -35,5 +35,10 @@ namespace Neuroflow
         {
             get { return multilayerPerceptronAdapter; }
         }
+
+        protected override void WaitForFinish(ComputationFinishedCallback callback)
+        {
+            callback(null);
+        }
     }
 }

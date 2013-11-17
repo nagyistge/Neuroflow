@@ -129,7 +129,7 @@ namespace Neuroflow.NeuralNetworks
                             // i: iLayerIndex, iValueIndex
                             // j: jLayerIndex, jValueIndex
 
-                            bool isFirst = lidx == 1 && iValueIndex == 1;
+                            bool isFirst = lidx == 1 && iValueIndex == 0;
 
                             ComputeGradients(computationIndex++, valueRelatedPBuffs, iLayerIndex, iValueIndex, jLayerIndex, -1, iValueIndex, outputs, desiredOutputs, isFirst ? SequenceMarker.Begin : SequenceMarker.Inner);
                         }
@@ -150,7 +150,7 @@ namespace Neuroflow.NeuralNetworks
                                 // j: jLayerIndex, jValueIndex
 
                                 bool isLast =
-                                    lidx == mlp.Layers.Count &&
+                                    lidx == mlp.Layers.Count - 1 &&
                                     iValueIndex == layerOutputBufferSize - 1 &&
                                     jLayerIndex == layerPWeightValues.Length - 1 &&
                                     jValueIndex == inputLayerSize - 1;

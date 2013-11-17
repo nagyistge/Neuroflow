@@ -156,6 +156,7 @@ namespace Neuroflow.UT
             try
             {
                 using (var ctx = new OCLContext("cpu"))
+                //using (var ctx = new OCLContext("avx"))
                 {
                     await MLPTrainRecTest(ctx, GradientComputationMethod.RTLR, GetGDRules(WeigthUpdateMode.Online, 0.01f));
                 }
@@ -303,10 +304,10 @@ namespace Neuroflow.UT
                 };
 
             int inputSize = 1;
-            int hiddenSize = method == GradientComputationMethod.RTLR ? 32 : 8;
+            int hiddenSize = method == GradientComputationMethod.RTLR ? 64 : 8;
             int outputSize = 3;
 
-            int maxIterations = method == GradientComputationMethod.RTLR ? 5 : 1000;
+            int maxIterations = method == GradientComputationMethod.RTLR ? 30 : 1000;
 
             var layers = NNTestHelpers.CreateGDMLPLayers(false, inputSize, hiddenSize, outputSize, rules);
 
@@ -341,6 +342,8 @@ namespace Neuroflow.UT
                 for (int it = 0; it < maxIterations; it++)
                 {
                     nn.Train(batch);
+
+                    await ctx.Finish();
 
                     ctx.VectorUtils.CalculateMSE(batch, errors, it);
 

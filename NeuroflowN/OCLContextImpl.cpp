@@ -191,42 +191,6 @@ IDeviceArrayManagement* OCLContextImpl::GetDeviceArrayManagementPtr() const
     return deviceArrayManagement.get();
 }
 
-void OCLContextImpl::Free()
-{
-    struct Args
-    {
-        OCLContextImpl* toDel;
-    };
-
-    Args args;
-    args.toDel = this;
-
-    try
-    {
-        ctx->GetQueue().enqueueNativeKernel(
-            [](void* userData)
-            {
-                auto passed = reinterpret_cast<Args*>(userData);
-                delete passed->toDel;
-            },
-            make_pair(&args, sizeof(Args)));
-    }
-    catch (Error&)
-    {
-        // Native kernel is not supported:
-        using namespace concurrency;
-        create_task([=]()
-        {
-            ctx->GetQueue().finish();
-            delete args.toDel;
-        });
-    }
-    catch (exception& ex)
-    {
-        throw as_ocl_error(ex);
-    }
-}
-
 void OCLContextImpl::Initialize(const DeviceInfo& deviceInfo, const cl::Device& device)
 {
     try
@@ -279,4 +243,47 @@ const DeviceInfo& OCLContextImpl::GetDevice() const
 const OCLVaultSPtrT& OCLContextImpl::GetVault() const
 {
     return vault;
+}
+
+void OCLContextImpl::Finish() const
+{
+    try
+    {
+        ctx->GetQueue().finish();
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
+}
+
+void OCLContextImpl::Finish(doneCallback done) const
+{
+    try
+    {
+        Event e;
+
+        clEnqueueBarrierWithWaitList(ctx->GetQueue()(), 0, null, &(e()));
+
+        e.setCallback(
+            CL_COMPLETE,
+            [](cl_event event, cl_int status, void* userData)
+            {
+                auto cb = (doneCallback*)userData;
+                try
+                {
+                    (*cb)(null);
+                }
+                catch (...)
+                {
+                    OutputDebugString(L"OCLContextImpl::Finish done callback cannot be called.\n");
+                }
+                delete cb;
+            },
+            new doneCallback(done));
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
 }
