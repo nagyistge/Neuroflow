@@ -126,11 +126,11 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode_ComputeGradinetsRTLR_Layer
         "{\n"
         "float sum = iValueIndex == kValueIndex ? (inputs != null ? inputs[inputIndex] : 1.0f) : 0.0f; \n";
     
-    for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
+    /*for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
     {
         if (inputIndex != 0) code << "if (p_i_j_l_Values_" << inputIndex << " != null) ";
         code << "sum += ComputeForward_Sum$(p_i_j_l_Values_" << inputIndex << ", p_i_j_l_ValuesSize_" << inputIndex << ", weights_" << inputIndex << ", kValueIndex);\n";
-    };
+    };*/
     
     code <<
         "float p = netDerivValues[kValueIndex] * sum;\n"
@@ -230,7 +230,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateGPUKernelCode()
 void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
     auto cState = (OCLComputationState*)state;
-    auto exec = cState->GetExec(0, true);
+    auto exec = cState->GetExec(0, ctx->IsCPU());
     unsigned kLayerSize = valueRelatedPBuffs->size();
     unsigned vectorSize = CalculateVectorSize(*inputLayerInfos);
     unsigned workSize = CalculateWorkSize(*valueRelatedPBuffs);
@@ -348,18 +348,16 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         kernel.setArg(aidx++, data->IJValueIndex);
     };
     
-    if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
-
     if (ctx->IsCPU())
     {
+        if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
         exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
+        if (seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
     }
     else
     {
         exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
     }
-
-    if (seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
 }
 
 unsigned OCLComputeGradientsRTLRKernel::CalculateVectorSize(const RTLRLayerInfoVecVecT& infos) const
