@@ -2,6 +2,11 @@ void LocalComputeForwardSum$(global float$* inputs, int inputSize, global float$
 {
     int localSize = get_local_size(0);
     int localId = get_local_id(0);
+
+    tmpSums[localId] = 0.0f;
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+
     int block = inputSize / localSize + (inputSize % localSize != 0 ? 1 : 0);
     int inputIndex = localId * block;
     int max = inputIndex + block;
@@ -11,16 +16,14 @@ void LocalComputeForwardSum$(global float$* inputs, int inputSize, global float$
     while (inputIndex < max)
     {
         int widx = GetIndex2(inputIndex, outputIndex, inputSize);
-        tmpSums[d + localId] += SumComponents$(inputs[inputIndex] * weights[widx]);
+        tmpSums[localId] += SumComponents$(inputs[inputIndex] * weights[widx]);
 
         inputIndex++;
     }
 
     barrier(CLK_LOCAL_MEM_FENCE);
 
-    Reduce_SumFrom(tmpSums, outputIndex);
-
-    barrier(CLK_LOCAL_MEM_FENCE);
+    Reduce_Sum(tmpSums);
 }
 
 void ComputeGradinetsRTLR_Layer_GPU$(
@@ -43,43 +46,43 @@ void ComputeGradinetsRTLR_Layer_GPU$(
     , global float* inputs
     , int inputIndex
     , local float* tmpSums
-    , local float* tmpGradients
+    , global float* tmpGradients
     , global float* outputs
     , global float* desiredOutputs)
 {
-    int localSize = get_local_size(0);
+    int globalSize = get_global_size(0);
+    int localSize = get_local_size();
+    int globalId = get_global_id(0);
     int localId = get_local_id(0);
-    int block = p_i_j_k_ValuesSize / localSize + (p_i_j_k_ValuesSize % localSize != 0 ? 1 : 0);
-    int kValueIndex = localId * block;
-    int max = kValueIndex + block;
-    if (max > p_i_j_k_ValuesSize) max = p_i_j_k_ValuesSize;
-    while (kValueIndex < max)
+    int max = p_i_j_k_ValuesSize * localSize;
+    for (int idx = globalId; idx < max; idx += globalSize)
     {
-        float sum = iValueIndex == kValueIndex ? (inputs != null ? inputs[inputIndex] : 1.0f) : 0.0f;
-        /*sum += ComputeForward_Sum$(p_i_j_l_Values_0, p_i_j_l_ValuesSize_0, weights_0, kValueIndex);
-        if (p_i_j_l_Values_1 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_1, p_i_j_l_ValuesSize_1, weights_1, kValueIndex);
-        if (p_i_j_l_Values_2 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_2, p_i_j_l_ValuesSize_2, weights_2, kValueIndex);
-        if (p_i_j_l_Values_3 != null) sum += ComputeForward_Sum$(p_i_j_l_Values_3, p_i_j_l_ValuesSize_3, weights_3, kValueIndex);*/
-        float p = netDerivValues[kValueIndex] * sum;
-        p_i_j_k_Values[kValueIndex] = p;
-        if (tmpGradients != null) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;
-        kValueIndex++;
+        int kValueIndex = idx % localSize;
+        float sum = 0.0f;
+        LocalComputeForwardSum$(p_i_j_l_Values_0, p_i_j_l_ValuesSize_0, weights_0, kValueIndex, tmpSums);
+        if (localId == 0) sum = (iValueIndex == kValueIndex ? (inputs != null ? inputs[inputIndex] : 1.0f) : 0.0f) + tmpSums[0];
+        if (p_i_j_l_Values_1 != null)
+        {
+            LocalComputeForwardSum$(p_i_j_l_Values_1, p_i_j_l_ValuesSize_1, weights_1, kValueIndex, tmpSums);
+            if (localId == 0) sum += tmpSums[0];
+        }
+        if (p_i_j_l_Values_2 != null)
+        {
+            // ,,,
+        }
+        // ...
+        if (localId == 0)
+        {
+            float p = netDerivValues[kValueIndex] * sum;
+            p_i_j_k_Values[kValueIndex] = p;
+            if (tmpGradients != null) tmpGradients[globalId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;
+        }
     }
+
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
-void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums, int gradientsIndex)
-{
-    Reduce_Sum(tmpGradients);
-
-    if (get_local_id(0) == 0)
-    {
-        if (gradients != null) gradients[gradientsIndex] = tmpGradients[0];
-        if (gradientSums != null) gradientSums[gradientsIndex] += tmpGradients[0];
-    }
-}
-
-kernel void ComputeGradientsRTLR_V0_CPU$(
+kernel void ComputeGradientsRTLR_V0_GPU$(
     global float$* p_i_j_l_Values_0_0
     , int p_i_j_l_ValuesSize_0_0
     , global float$* weights_0_0
@@ -147,14 +150,10 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
     , global float* outputs
     , global float* desiredOutputs
     , local float* tmpSums
-    , local float* tmpGradients
-    , global float* gradients
-    , global float* gradientSums
-    , int gradientIndex)
+    , global float* tmpGradients)
 {
-    int localId = get_local_id(0);
-    tmpSums[localId] = 0.0f;
-    tmpGradients[localId] = 0.0f;
+    int globalId = get_global_id(0);
+    tmpGradients[globalId] = 0.0f;
     barrier(CLK_LOCAL_MEM_FENCE);
     int kLayerIndex;
     bool isLastLayer;
@@ -263,5 +262,21 @@ kernel void ComputeGradientsRTLR_V0_CPU$(
             , isLastLayer ? outputs : null
             , isLastLayer ? desiredOutputs : null);
     }
-    ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums, gradientIndex);
+}
+
+kernel void ComputeGradinetsRTLR_GPUSetGradients(global float* tmpGradients, local float* tmpGradientsLoc, global float* gradients, global float* gradientSums, int gradientsIndex)
+{
+    int localId = get_local_id(0);
+
+    tmpGradientsLoc[localId] = tmpGradients[localId];
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    Reduce_Sum(tmpGradientsLoc);
+
+    if (localId == 0)
+    {
+        if (gradients != null) gradients[gradientsIndex] = tmpGradientsLoc[0];
+        if (gradientSums != null) gradientSums[gradientsIndex] += tmpGradientsLoc[0];
+    }
 }
