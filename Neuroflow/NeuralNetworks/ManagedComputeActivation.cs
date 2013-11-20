@@ -632,7 +632,7 @@ namespace Neuroflow.NeuralNetworks
 
                 int inputsSize = inputs == null ? 1 : inputs.Size;
 
-                for (int ijValueIndex = 0; ijValueIndex < pValuesOfWeights.Size1; ijValueIndex++) // Global Id
+                for (int ijValueIndex = 0; ijValueIndex < pValuesOfWeights.Size1; ijValueIndex++) // group Id
                 {
                     float gradient = 0.0f;
 

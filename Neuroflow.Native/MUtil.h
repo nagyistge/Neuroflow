@@ -42,4 +42,6 @@ namespace Neuroflow
     NeuroflowN::RTLRLayerInfoVecVecT* ToNative(Marshaled<array<array<NeuralNetworks::RTLRLayerInfo^>^>^>^ inputLayerInfos);
 
     NeuroflowN::RTLRComputationData* ToNative(Marshaled<NeuralNetworks::RTLRComputationData^>^ data);
+
+    NeuroflowN::RTLRComputationData2* ToNative(Marshaled<NeuralNetworks::RTLRComputationData2^>^ data);
 }
