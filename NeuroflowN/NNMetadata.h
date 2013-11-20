@@ -151,6 +151,19 @@ namespace NeuroflowN
         int IJValueIndex;
     };
 
+    struct RTLRComputationData2
+    {
+        boost::optional<DeviceArrayFactoryT> Inputs;
+        IDeviceArray2* Gradients;
+        IDeviceArray2* GradientSums;
+        IDeviceArray* BiasGradients;
+        IDeviceArray* BiasGradientSums;
+        int ILayerIndex;
+        int JLayerIndex;
+        int MaxULayerSize;
+        int ULayersCount;
+    };
+
 #pragma endregion
 
 

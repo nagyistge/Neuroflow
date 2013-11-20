@@ -252,3 +252,28 @@ NeuroflowN::RTLRComputationData* Neuroflow::ToNative(Marshaled<NeuralNetworks::R
 
     return result;
 }
+
+NeuroflowN::RTLRComputationData2* Neuroflow::ToNative(Marshaled<NeuralNetworks::RTLRComputationData2^>^ data)
+{
+    if (data == null || data->ManagedObject == null) return null;
+    if (data->NativeVersion != null)
+    {
+        return ((NativePtr<NeuroflowN::RTLRComputationData2>^)data->NativeVersion)->Ptr;
+    }
+
+    auto d = data->ManagedObject;
+    auto result = new NeuroflowN::RTLRComputationData2();
+    data->NativeVersion = gcnew NativePtr<NeuroflowN::RTLRComputationData2>(result);
+
+    if (data->ManagedObject->Inputs != null) result->Inputs = ToNative(data->ManagedObject->Inputs);
+    result->Gradients = ToNative(data->ManagedObject->Gradients);
+    result->GradientSums = ToNative(data->ManagedObject->GradientSums);
+    result->BiasGradients = ToNative(data->ManagedObject->BiasGradients);
+    result->BiasGradientSums = ToNative(data->ManagedObject->BiasGradientSums);
+    result->ILayerIndex = data->ManagedObject->ILayerIndex;
+    result->JLayerIndex = data->ManagedObject->JLayerIndex;
+    result->MaxULayerSize = data->ManagedObject->MaxULayerSize;
+    result->ULayersCount = data->ManagedObject->ULayersCount;
+
+    return result;
+}
