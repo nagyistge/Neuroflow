@@ -32,7 +32,7 @@ namespace Neuroflow.NeuralNetworks
                              IsElementOfU = inputLayer != mlp.Layers[0].Layer
                          }).ToArray()).ToArray());
 
-            CreatePValues(mlp);
+            CreatePValues();
         }
 
         MultilayerPerceptron mlp;
@@ -47,7 +47,7 @@ namespace Neuroflow.NeuralNetworks
 
         Marshaled<IDeviceArray[]> netValueDerivates;
 
-        private void CreatePValues(MultilayerPerceptron mlp)
+        private void CreatePValues()
         {
             pValuesPool = mlp.Adapter.DeviceArrayManagement.CreatePool();
 

@@ -25,6 +25,8 @@ namespace Neuroflow.NeuralNetworks
 
         void ComputeGradientsRTLR(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfos, Marshaled<IDeviceArray[]> netValueDerivates, Marshaled<RTLRComputationData> data, Marshaled<IDeviceArray[]> valueRelatedPBuffs, IDeviceArray outputs, IDeviceArray desiredOutputs, SequenceMarker seqMark);
 
+        void ComputeGradientsRTLR2(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfos, Marshaled<IDeviceArray[]> netValueDerivates, Marshaled<RTLRComputationData2> data, Marshaled<IDeviceArray2> pValuesOfWeights, IDeviceArray outputs, IDeviceArray desiredOutputs, SequenceMarker seqMark);
+
         void CalculateGlobalError(IDisposable state, IDeviceArray desiredOutputs, IDeviceArray actualOutputs, IDeviceArray errorValue, IDeviceArray errorSumValue);
     }
 }

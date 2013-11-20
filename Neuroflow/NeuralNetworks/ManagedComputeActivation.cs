@@ -44,7 +44,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* pInputs = inputsMA.InternalArray, pWeights = weightsMA.InternalArray)
                             {
-                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr(pWeights), oIdx);
+                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr2(pWeights), oIdx);
                             }
                         }
 
@@ -66,7 +66,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* pInputs = inputsMA.InternalArray, pWeights = weightsMA.InternalArray)
                             {
-                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr(pWeights), oIdx);
+                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr2(pWeights), oIdx);
                             }
                         }
 
@@ -108,7 +108,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* pInputs = inputsMA.InternalArray, pWeights = weightsMA.InternalArray)
                             {
-                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr(pWeights), oIdx);
+                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr2(pWeights), oIdx);
                             }
                         }
 
@@ -131,7 +131,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* pInputs = inputsMA.InternalArray, pWeights = weightsMA.InternalArray)
                             {
-                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr(pWeights), oIdx);
+                                sum += ComputeForward_Sum(inputsMA.ToPtr(pInputs), weightsMA.ToPtr2(pWeights), oIdx);
                             }
                         }
 
@@ -201,7 +201,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* pLowerWeights = lowerWeightsMA.InternalArray, pLowerErrors = lowerErrorsMA.InternalArray)
                             {
-                                sum += ComputeErrors_LowerErrorSum(lowerErrorsMA.ToPtr(pLowerErrors), lowerWeightsMA.ToPtr(pLowerWeights), oIdx);
+                                sum += ComputeErrors_LowerErrorSum(lowerErrorsMA.ToPtr(pLowerErrors), lowerWeightsMA.ToPtr2(pLowerWeights), oIdx);
                             }
                         }
                         errorsPtr[oIdx] = sum * SigmoidD(outputsPtr[oIdx], alpha);
@@ -222,7 +222,7 @@ namespace Neuroflow.NeuralNetworks
 
                             fixed (float* plw = lowerWeightsMA.InternalArray, ple = lowerWeightsMA.InternalArray)
                             {
-                                sum += ComputeErrors_LowerErrorSum(lowerErrorsMA.ToPtr(ple), lowerWeightsMA.ToPtr(plw), oIdx);
+                                sum += ComputeErrors_LowerErrorSum(lowerErrorsMA.ToPtr(ple), lowerWeightsMA.ToPtr2(plw), oIdx);
                             }
                         }
                         errorsPtr[oIdx] = sum * alpha;
@@ -269,7 +269,7 @@ namespace Neuroflow.NeuralNetworks
                             var gradientSumsMA = (ManagedArray2)gradientSums[lIdx];
                             fixed (float* pi = inputsMA.InternalArray, pg = gradientsMA.InternalArray, pgs = gradientSumsMA.InternalArray)
                             {
-                                ComputeGradients_SetAndAddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr(pg), gradientSumsMA.ToPtr(pgs), errorsPtr, eIdx);
+                                ComputeGradients_SetAndAddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr2(pg), gradientSumsMA.ToPtr2(pgs), errorsPtr, eIdx);
                             }
                         }
                         else if (online)
@@ -277,7 +277,7 @@ namespace Neuroflow.NeuralNetworks
                             var gradientsMA = (ManagedArray2)gradients[lIdx];
                             fixed (float* pi = inputsMA.InternalArray, pg = gradientsMA.InternalArray)
                             {
-                                ComputeGradients_SetGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr(pg), errorsPtr, eIdx);
+                                ComputeGradients_SetGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr2(pg), errorsPtr, eIdx);
                             }
                         }
                         else 
@@ -286,7 +286,7 @@ namespace Neuroflow.NeuralNetworks
                             var gradientSumsMA = (ManagedArray2)gradientSums[lIdx];
                             fixed (float* pi = inputsMA.InternalArray, pgs = gradientSumsMA.InternalArray)
                             {
-                                ComputeGradients_AddGradients(inputsMA.ToPtr(pi), gradientSumsMA.ToPtr(pgs), errorsPtr, eIdx);
+                                ComputeGradients_AddGradients(inputsMA.ToPtr(pi), gradientSumsMA.ToPtr2(pgs), errorsPtr, eIdx);
                             }
                         }
                     }
@@ -320,7 +320,7 @@ namespace Neuroflow.NeuralNetworks
                         var gradientsMA = (ManagedArray2)gradients[lIdx];
                         fixed (float* pi = inputsMA.InternalArray, pg = gradientsMA.InternalArray)
                         {
-                            ComputeGradients_AddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr(pg), errorsPtr, eIdx);
+                            ComputeGradients_AddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr2(pg), errorsPtr, eIdx);
                         }
                     }
                 }
@@ -367,14 +367,14 @@ namespace Neuroflow.NeuralNetworks
                             var gradientSumsMA = (ManagedArray2)gradientSums[lIdx];
                             fixed (float* pi = inputsMA.InternalArray, pg = gradientsMA.InternalArray, pgs = gradientSumsMA.InternalArray)
                             {
-                                ComputeGradients_AddDivAddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr(pg), gradientSumsMA.ToPtr(pgs), errorsPtr, eIdx, by);
+                                ComputeGradients_AddDivAddGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr2(pg), gradientSumsMA.ToPtr2(pgs), errorsPtr, eIdx, by);
                             }
                         }
                         else
                         {
                             fixed (float* pi = inputsMA.InternalArray, pg = gradientsMA.InternalArray)
                             {
-                                ComputeGradients_AddDivGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr(pg), errorsPtr, eIdx, by);
+                                ComputeGradients_AddDivGradients(inputsMA.ToPtr(pi), gradientsMA.ToPtr2(pg), errorsPtr, eIdx, by);
                             }
                         }
                     }
@@ -459,6 +459,7 @@ namespace Neuroflow.NeuralNetworks
             var desiredOutputs = desiredOutputsA != null ? desiredOutputsA.ToManaged() : null;
             var inputs = data.Inputs != null ? data.Inputs().ToManaged() : null;
             var valueRelatedPBuffs = valueRelatedPBuffsM.Instance();
+
             float gradient = 0.0f;
 
             fixed (float* pOutputs = outputs != null ? outputs.InternalArray : null,
@@ -503,7 +504,7 @@ namespace Neuroflow.NeuralNetworks
                                     fixed (float* pp_i_j_l = p_i_j_l_Values.InternalArray, pWeights = weights.InternalArray)
                                     {
                                         var p_i_j_l_ValuesPtr = p_i_j_l_Values.ToPtr(pp_i_j_l);
-                                        var weightsPtr = weights.ToPtr(pWeights);
+                                        var weightsPtr = weights.ToPtr2(pWeights);
 
                                         for (int lValueIndex = 0; lValueIndex < p_i_j_l_Values.Size; lValueIndex++)
                                         {
@@ -551,14 +552,14 @@ namespace Neuroflow.NeuralNetworks
                 if (pGradients != null)
                 {
                     Debug.Assert(data.JLayerIndex > 0);
-                    var gradientsPtr = gradients.ToPtr(pGradients);
+                    var gradientsPtr = gradients.ToPtr2(pGradients);
                     gradientsPtr[data.JValueIndex, data.IValueIndex] = gradient;
                 }
 
                 if (pGradientSums != null)
                 {
                     Debug.Assert(data.JLayerIndex > 0);
-                    var gradientSumsPtr = gradientSums.ToPtr(pGradientSums);
+                    var gradientSumsPtr = gradientSums.ToPtr2(pGradientSums);
                     gradientSumsPtr[data.JValueIndex, data.IValueIndex] += gradient;
                 }
 
@@ -604,6 +605,141 @@ namespace Neuroflow.NeuralNetworks
                 {
                     var errorSumValuePtr = errorSumValue.ToPtr(pErrorSumValue);
                     errorSumValuePtr[0] += errorValuePtr[0];
+                }
+            }
+        }
+
+
+        public void ComputeGradientsRTLR2(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData2> dataM, Marshaled<IDeviceArray2> pValuesOfWeightsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA, SequenceMarker seqMark)
+        {
+            var data = dataM.Instance();
+            var inputLayerInfos = inputLayerInfosM.Instance();
+            var netValueDerivates = netValueDerivatesM.Instance();
+
+            var outputs = outputsA != null ? outputsA.ToManaged() : null;
+            var desiredOutputs = desiredOutputsA != null ? desiredOutputsA.ToManaged() : null;
+            var pValuesOfWeights = pValuesOfWeightsM.Instance().ToManaged2();
+            var inputs = data.Inputs != null ? data.Inputs().ToManaged() : null;
+
+            fixed (float* pOutputs = outputs != null ? outputs.InternalArray : null,
+                pDesiredOutputs = desiredOutputs != null ? desiredOutputs.InternalArray : null,
+                pPValuesOfWeights = pValuesOfWeights.InternalArray,
+                pInputs = inputs != null ? inputs.InternalArray : null)
+            {
+                ManagedArrayPtr? outputsPtr = pOutputs != null ? outputs.ToPtr(pOutputs) : default(ManagedArrayPtr?);
+                ManagedArrayPtr? desiredOutputsPtr = pDesiredOutputs != null ? desiredOutputs.ToPtr(pDesiredOutputs) : default(ManagedArrayPtr?);
+                ManagedArrayPtr? inputsPtr = pInputs != null ? inputs.ToPtr(pInputs) : default(ManagedArrayPtr?);
+
+                int inputsSize = inputs == null ? 1 : inputs.Size;
+
+                for (int ijValueIndex = 0; ijValueIndex < pValuesOfWeights.Size1; ijValueIndex++) // Global Id
+                {
+                    float gradient = 0.0f;
+
+                    int iValueIndex = ijValueIndex / inputsSize;
+                    int jValueIndex = ijValueIndex % inputsSize;
+
+                    float inputValue = inputsPtr.HasValue ? inputsPtr.Value[jValueIndex] : 1.0f;
+
+                    for (int kLayerAndValueIndex = 0; kLayerAndValueIndex < pValuesOfWeights.Size2; kLayerAndValueIndex++)
+                    {
+                        int kLayerIndex = kLayerAndValueIndex / data.MaxULayerSize;
+                        int kValueIndex = kLayerAndValueIndex % data.MaxULayerSize;
+                        int kLayerSize = netValueDerivates[kLayerIndex].Size;
+
+                        if (kValueIndex == kLayerSize) break;
+
+                        var layerNetValueDerivates = netValueDerivates[kLayerIndex].ToManaged();
+                        int outputLayerIndex = layerNetValueDerivates.Size - 1;
+                        bool computeGradient = kLayerIndex == outputLayerIndex && outputs != null && desiredOutputs != null;
+                        var p_i_j_k_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, kLayerIndex);
+
+                        float sum = 0.0f;
+
+                        var upperInfos_k = inputLayerInfos[kLayerIndex];
+                        foreach (var lLayerInfo in upperInfos_k)
+                        {
+                            if (lLayerInfo.IsElementOfU)
+                            {
+                                Debug.Assert(lLayerInfo.Weights != null);
+                                int lLayerIndex = lLayerInfo.Index;
+                                var p_i_j_l_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, lLayerIndex);
+                                var weights = lLayerInfo.Weights.ToManaged2();
+
+                                fixed (float* pWeights = weights.InternalArray)
+                                {
+                                    var weightsPtr = weights.ToPtr2(pWeights);
+
+                                    for (int lValueIndex = 0; lValueIndex < lLayerInfo.Size; lValueIndex++)
+                                    {
+                                        sum += weightsPtr[lValueIndex, kValueIndex] * p_i_j_l_Ptr[lValueIndex];
+                                    }
+                                }
+                            }
+                        }
+
+                        if (data.ILayerIndex == kLayerIndex && iValueIndex == kValueIndex) sum += inputValue;
+
+                        fixed (float* pLayerNetValueDerivates = layerNetValueDerivates.InternalArray)
+                        {
+                            p_i_j_k_Ptr[kValueIndex] = layerNetValueDerivates.ToPtr(pLayerNetValueDerivates)[kValueIndex] * sum;
+                        }
+
+                        if (computeGradient)
+                        {
+                            Debug.Assert(outputsPtr.HasValue && desiredOutputsPtr.HasValue);
+                            gradient += (desiredOutputsPtr.Value[kValueIndex] - outputsPtr.Value[kValueIndex]) * p_i_j_k_Ptr[kValueIndex];
+                        }
+                    }
+
+                    SetGradientsRTLR(data, ijValueIndex, gradient);
+                }
+            }
+        }
+
+        unsafe private static ManagedArrayPtr GetPValuesPtr(ManagedArray2 pValuesOfWeights, float* pPValuesOfWeights, int ijValueIndex, RTLRComputationData2 data, int kLayerIndex)
+        {
+            return new ManagedArrayPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex * (data.ULayersCount * data.MaxULayerSize) + kLayerIndex * data.MaxULayerSize);
+        }
+
+        unsafe private static void SetGradientsRTLR(RTLRComputationData2 data, int ijValueIndex, float gradient)
+        {
+            var gradients = data.Gradients != null ? data.Gradients.ToManaged2() : null;
+            var gradientSums = data.GradientSums != null ? data.GradientSums.ToManaged2() : null;
+            var biasGradients = data.BiasGradients != null ? data.BiasGradients.ToManaged() : null;
+            var biasGradientSums = data.BiasGradientSums != null ? data.BiasGradientSums.ToManaged() : null;
+
+            fixed (float* pGradients = gradients != null ? gradients.InternalArray : null,
+                pGradientSums = gradientSums != null ? gradientSums.InternalArray : null,
+                pBiasGradients = biasGradients != null ? biasGradients.InternalArray : null,
+                pBiasGradientSums = biasGradientSums != null ? biasGradientSums.InternalArray : null)
+            {
+                if (pGradients != null)
+                {
+                    Debug.Assert(data.JLayerIndex > 0);
+                    var gradientsPtr = gradients.ToPtr(pGradients);
+                    gradientsPtr[ijValueIndex] = gradient;
+                }
+
+                if (pGradientSums != null)
+                {
+                    Debug.Assert(data.JLayerIndex > 0);
+                    var gradientSumsPtr = gradientSums.ToPtr(pGradientSums);
+                    gradientSumsPtr[ijValueIndex] += gradient;
+                }
+
+                if (pBiasGradients != null)
+                {
+                    Debug.Assert(data.JLayerIndex == 0);
+                    var biasGradientsPtr = biasGradients.ToPtr(pBiasGradients);
+                    biasGradientsPtr[ijValueIndex] = gradient;
+                }
+
+                if (pBiasGradientSums != null)
+                {
+                    Debug.Assert(data.JLayerIndex == 0);
+                    var biasGradientSumsPtr = biasGradientSums.ToPtr(pBiasGradientSums);
+                    biasGradientSumsPtr[ijValueIndex] += gradient;
                 }
             }
         }
