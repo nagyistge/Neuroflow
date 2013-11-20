@@ -8,62 +8,57 @@ kernel void ComputeGradientsRTLR_V0_CPU(
     , int p_i_j_l_ValuesLayerIndex_1_0
     , int p_i_j_l_ValuesSize_1_0
     , global float* weights_1_0
-    //, global float* p_i_j_l_Values_2_0
+    , int p_i_j_l_ValuesLayerIndex_2_0
     , int p_i_j_l_ValuesSize_2_0
     , global float* weights_2_0
-    //, global float* p_i_j_l_Values_3_0
+    , int p_i_j_l_ValuesLayerIndex_3_0
     , int p_i_j_l_ValuesSize_3_0
     , global float* weights_3_0
-    //, global float* p_i_j_k_Values_0
     , int p_i_j_k_ValuesSize_0
     , global float* netDerivValues_0
-    //, global float* p_i_j_l_Values_0_1
+    , int p_i_j_l_ValuesLayerIndex_0_1
     , int p_i_j_l_ValuesSize_0_1
     , global float* weights_0_1
-    //, global float* p_i_j_l_Values_1_1
+    , int p_i_j_l_ValuesLayerIndex_1_1
     , int p_i_j_l_ValuesSize_1_1
     , global float* weights_1_1
-    //, global float* p_i_j_l_Values_2_1
+    , int p_i_j_l_ValuesLayerIndex_2_1
     , int p_i_j_l_ValuesSize_2_1
     , global float* weights_2_1
-    //, global float* p_i_j_l_Values_3_1
+    , int p_i_j_l_ValuesLayerIndex_3_1
     , int p_i_j_l_ValuesSize_3_1
     , global float* weights_3_1
-    //, global float* p_i_j_k_Values_1
     , int p_i_j_k_ValuesSize_1
     , global float* netDerivValues_1
-    //, global float* p_i_j_l_Values_0_2
+    , int p_i_j_l_ValuesLayerIndex_0_2
     , int p_i_j_l_ValuesSize_0_2
     , global float* weights_0_2
-    //, global float* p_i_j_l_Values_1_2
+    , int p_i_j_l_ValuesLayerIndex_1_2
     , int p_i_j_l_ValuesSize_1_2
     , global float* weights_1_2
-    //, global float* p_i_j_l_Values_2_2
+    , int p_i_j_l_ValuesLayerIndex_2_2
     , int p_i_j_l_ValuesSize_2_2
     , global float* weights_2_2
-    //, global float* p_i_j_l_Values_3_2
+    , int p_i_j_l_ValuesLayerIndex_3_2
     , int p_i_j_l_ValuesSize_3_2
     , global float* weights_3_2
-    //, global float* p_i_j_k_Values_2
     , int p_i_j_k_ValuesSize_2
     , global float* netDerivValues_2
-    //, global float* p_i_j_l_Values_0_3
+    , int p_i_j_l_ValuesLayerIndex_0_3
     , int p_i_j_l_ValuesSize_0_3
     , global float* weights_0_3
-    //, global float* p_i_j_l_Values_1_3
+    , int p_i_j_l_ValuesLayerIndex_1_3
     , int p_i_j_l_ValuesSize_1_3
     , global float* weights_1_3
-    //, global float* p_i_j_l_Values_2_3
+    , int p_i_j_l_ValuesLayerIndex_2_3
     , int p_i_j_l_ValuesSize_2_3
     , global float* weights_2_3
-    //, global float* p_i_j_l_Values_3_3
+    , int p_i_j_l_ValuesLayerIndex_3_3
     , int p_i_j_l_ValuesSize_3_3
     , global float* weights_3_3
-    //, global float* p_i_j_k_Values_3
     , int p_i_j_k_ValuesSize_3
     , global float* netDerivValues_3
     , int iLayerIndex
-    //, int iValueIndex
     , global float* inputs
     , int inputsSize // + bias (null) = 1, inputs: size
     , global float* outputs
