@@ -126,7 +126,7 @@ namespace Neuroflow.NeuralNetworks
 
         IDisposable calculateGlobalErrorState;
 
-        RTLR rtlr;
+        RTLR2 rtlr;
 
         LinkedList<IDisposable> computationStates = new LinkedList<IDisposable>();
 
@@ -956,7 +956,7 @@ namespace Neuroflow.NeuralNetworks
             }
             else if (doRTLR)
             {
-                rtlr = new RTLR(this);
+                rtlr = new RTLR2(this);
             }
 
             if (calculateGlobalOnlineError || calculateGlobalOfflineError)

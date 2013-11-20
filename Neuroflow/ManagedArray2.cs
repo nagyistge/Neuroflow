@@ -41,7 +41,7 @@ namespace Neuroflow
             }
         }
 
-        new unsafe internal ManagedArray2Ptr ToPtr(float* ptr)
+        unsafe internal ManagedArray2Ptr ToPtr2(float* ptr)
         {
             return new ManagedArray2Ptr(this, ptr, BeginIndex);
         }

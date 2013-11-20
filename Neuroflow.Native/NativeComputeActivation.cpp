@@ -161,6 +161,11 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
     }
 }
 
+void NativeComputeActivation::ComputeGradientsRTLR2(System::IDisposable^  state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData2^>^ data, Marshaled<IDeviceArray2^>^ pValuesOfWeights, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark)
+{
+    throw gcnew System::NotImplementedException();
+}
+
 void NativeComputeActivation::CalculateGlobalError(System::IDisposable^ state, IDeviceArray^ desiredOutputs, IDeviceArray^ actualOutputs, IDeviceArray^ errorValue, IDeviceArray^ errorSumValue)
 {
     throw gcnew System::NotImplementedException();

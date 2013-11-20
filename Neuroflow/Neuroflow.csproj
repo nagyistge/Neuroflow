@@ -104,7 +104,9 @@
     <Compile Include="NeuralNetworks\GradientComputationMethod.cs" />
     <Compile Include="NeuralNetworks\MultilayerPerceptronProperties.cs" />
     <Compile Include="NeuralNetworks\RTLR.cs" />
+    <Compile Include="NeuralNetworks\RTLR2.cs" />
     <Compile Include="NeuralNetworks\RTLRComputationData.cs" />
+    <Compile Include="NeuralNetworks\RTLRComputationData2.cs" />
     <Compile Include="NeuralNetworks\RTLRLayerInfo.cs" />
     <Compile Include="NeuralNetworks\_LearningAlgo\AlopexBLearningRule.cs" />
     <Compile Include="NeuralNetworks\_LearningAlgo\CrossEntropyLearningRule.cs" />
