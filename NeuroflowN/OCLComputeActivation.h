@@ -8,7 +8,7 @@
 #include "OCLComputeInternalErrorsKernel.h"
 #include "OCLComputeOutputErrorsKernel.h"
 #include "OCLComputeGradientsKernel.h"
-#include "OCLComputeGradientsRTLR2Kernel.h"
+#include "OCLComputeGradientsRTLRKernel.h"
 
 namespace NeuroflowN
 {
@@ -20,7 +20,7 @@ namespace NeuroflowN
         OCLComputeInternalErrorsKernel computeInternalErrorsKernel;
         OCLComputeOutputErrorsKernel computeOutputErrorsKernel;
         OCLComputeGradientsKernel computeGradientsKernel;
-        OCLComputeGradientsRTLR2Kernel computeGradientsRTLRKernel;
+        OCLComputeGradientsRTLRKernel computeGradientsRTLRKernel;
 
     public:
         OCLComputeActivation(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<OCLDeviceArrayManagement>& deviceArrayManagement) :

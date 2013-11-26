@@ -12,8 +12,10 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
+OCLVectorKernelName OCLComputeGradientsRTLRKernel::name = OCLVectorKernelName("ComputeGradientsRTLR");
+
 OCLComputeGradientsRTLRKernel::OCLComputeGradientsRTLRKernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-OCLVersionableKernelBase(ctx, "ComputeGradientsRTLR")
+OCLKernelBase(ctx)
 {
     Build(vault);
 }
@@ -21,219 +23,215 @@ OCLVersionableKernelBase(ctx, "ComputeGradientsRTLR")
 void OCLComputeGradientsRTLRKernel::Build(const OCLVaultSPtrT& vault)
 {
     program = make_shared<OCLProgram>(ctx, "ComputeGradientsRTLRPrg");
-    if (ctx->IsCPU()) program->Using(vault->GetNetCode()); else program->Using(vault->GetNetCode());
+    program->Using(vault->GetNetCode());
     program->Using(vault->GetReduceCode());
 
+    program->AddCode(DeclarePickMethod("int", "PickIntValueByLayerIndex"));
+
     ADD_OCL_CODE(program,
-        void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums, int gradientsIndex)
+    inline global float* GetPValuesPtr(global float* pValuesOfWeights, int uLayersCount, int maxULayerSize, int kLayerIndex)
+    {
+        int ijValueIndex = get_group_id(0);
+        return pValuesOfWeights + (ijValueIndex * uLayersCount * maxULayerSize) + (kLayerIndex * maxULayerSize);
+    }
+
+    void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums)
+    {
+        Reduce_Sum(tmpGradients);
+
+        if (get_local_id(0) == 0)
         {
-            Reduce_Sum(tmpGradients);
-
-            if (get_local_id(0) == 0)
-            {
-                if (gradients != null) gradients[gradientsIndex] = tmpGradients[0];
-                if (gradientSums != null) gradientSums[gradientsIndex] += tmpGradients[0];
-            }
+            int ijValueIndex = get_group_id(0);
+            if (gradients != null) gradients[ijValueIndex] = tmpGradients[0];
+            if (gradientSums != null) gradientSums[ijValueIndex] += tmpGradients[0];
         }
-    );
+    });
 
-    if (ctx->IsCPU())
-    {
-        auto cpuCode = CreateCPUKernelCode();
-        program->AddCode(cpuCode);
-    }
-    else
-    {
-        auto gpuCode = CreateGPUKernelCode();
-        program->AddCode(gpuCode);
-    }
+    string code = CreateCode();
+    program->AddCode(code);
 }
 
-std::string OCLComputeGradientsRTLRKernel::GetKernelHeader(const char* name)
+std::string OCLComputeGradientsRTLRKernel::DeclarePickMethod(const string& type, const string& name) const
 {
-    string layerParsTmpl1 =
-        "global float$* p_i_j_l_Values_{i}_{l}\n"
-        ",int p_i_j_l_ValuesSize_{i}_{l}\n"
-        ",global float$* weights_{i}_{l}\n";
-
-    string layerParsTmpl2 =
-        ",global float* p_i_j_k_Values_{l}\n"
-        ",int p_i_j_k_ValuesSize_{l}\n"
-        ",global float* netDerivValues_{l}\n";
-
-    stringstream hdr;
-    hdr << "kernel void " << name << "$(\n";
-
-    for (unsigned layerIndex = 0; layerIndex < ctx->GetMaxLayerCount(); layerIndex++)
+    function<string(unsigned)> createPickMethodExpr = [&](unsigned parIndex)
     {
-        for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
-        {
-            if (!(inputIndex == 0 && layerIndex == 0)) hdr << ',';
-            hdr << ReplaceIndexesInTemplate(layerParsTmpl1, inputIndex, layerIndex);
-        }
-
-        hdr << ReplaceIndexesInTemplate(layerParsTmpl2, layerIndex);
-    }
-
-    hdr << ",int iLayerIndex\n";
-    hdr << ",int iValueIndex\n";
-    hdr << ",global float* inputs\n";
-    hdr << ",int inputIndex\n";
-    hdr << ",global float* outputs\n";
-    hdr << ",global float* desiredOutputs\n";
-    hdr << ",local float* tmpGradients\n";
-    hdr << ",global float* gradients\n";
-    hdr << ",global float* gradientSums\n";
-    hdr << ",int gradientIndex)\n";
-
-    string hdrStr = hdr.str();
-    return hdrStr;
-}
-
-std::string OCLComputeGradientsRTLRKernel::CreateCode_ComputeGradinetsRTLR_Layer_CPU()
-{
-    string tmpl = 
-        "global float$* p_i_j_l_Values_{i}\n"
-        ",int p_i_j_l_ValuesSize_{i}\n"
-        ",global float$* weights_{i}\n";
-
-    stringstream code;
-    code << "void ComputeGradinetsRTLR_Layer_CPU$(\n";
-    for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
-    {
-        if (inputIndex != 0) code << ",";
-        code << ReplaceIndexesInTemplate(tmpl, inputIndex, null);
-    }
-    code << 
-        ",global float* p_i_j_k_Values\n"
-        ",int p_i_j_k_ValuesSize\n"
-        ",global float* netDerivValues\n"
-        ",int iValueIndex\n"
-        ",global float* inputs\n"
-        ",int inputIndex\n"
-        ",local float* tmpGradients\n"
-        ",global float* outputs\n"
-        ",global float* desiredOutputs)\n";
-    code <<
-        "{\n"
-        "int localSize = get_local_size(0);\n"
-        "int localId = get_local_id(0);\n"
-        "int block = p_i_j_k_ValuesSize / localSize + (p_i_j_k_ValuesSize % localSize != 0 ? 1 : 0);\n"
-        "int kValueIndex = localId * block;\n"
-        "int max = kValueIndex + block;\n"
-        "if (max > p_i_j_k_ValuesSize) max = p_i_j_k_ValuesSize;\n"
-        "while (kValueIndex < max)\n"
-        "{\n"
-        "float sum = iValueIndex == kValueIndex ? (inputs != null ? inputs[inputIndex] : 1.0f) : 0.0f; \n";
-    
-    /*for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
-    {
-        if (inputIndex != 0) code << "if (p_i_j_l_Values_" << inputIndex << " != null) ";
-        code << "sum += ComputeForward_Sum$(p_i_j_l_Values_" << inputIndex << ", p_i_j_l_ValuesSize_" << inputIndex << ", weights_" << inputIndex << ", kValueIndex);\n";
-    };*/
-    
-    code <<
-        "float p = netDerivValues[kValueIndex] * sum;\n"
-        "p_i_j_k_Values[kValueIndex] = p;\n"
-        "if (tmpGradients != null) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
-        "kValueIndex++;\n"
-        "}\n"
-        "barrier(CLK_LOCAL_MEM_FENCE);\n"
-        "}\n";
-
-    return code.str();
-}
-
-std::string OCLComputeGradientsRTLRKernel::CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(unsigned layerIndex)
-{
-    string tmpl = 
-        "p_i_j_l_Values_{i}_{l}\n"
-        ",p_i_j_l_ValuesSize_{i}_{l}\n"
-        ",weights_{i}_{l}\n";
-
-    stringstream code;
-    code << "ComputeGradinetsRTLR_Layer_CPU$(\n";
-    for (unsigned inputIndex = 0; inputIndex < ctx->GetMaxConnectionCount(); inputIndex++)
-    {
-        if (inputIndex != 0) code << ',';
-        code << ReplaceIndexesInTemplate(tmpl, inputIndex, layerIndex);
-    }
-
-    code << ReplaceIndexesInTemplate(",p_i_j_k_Values_{l}\n,p_i_j_k_ValuesSize_{l}\n,netDerivValues_{l}\n", layerIndex);
-
-    code <<
-        ",iLayerIndex == kLayerIndex ? iValueIndex : -1\n"
-        ",inputs\n"
-        ",inputIndex\n"
-        ",(isLastLayer && outputs != null) ? tmpGradients : null\n" // Because there is no way to null tmpGradients by clSetKerenlArgs
-        ",isLastLayer ? outputs : null\n"
-        ",isLastLayer ? desiredOutputs : null);\n";
-
-    return code.str();
-}
-
-std::string OCLComputeGradientsRTLRKernel::CreateCPUKernelCode()
-{
-    auto& names = GetCPUNames();
-    stringstream code;
-    code << CreateCode_ComputeGradinetsRTLR_Layer_CPU();
-
-    auto createCode = [=](const char* name)
-    {
-        stringstream code;
-        code << GetKernelHeader(name);
-        code << "{\n";
-        code << "tmpGradients[get_local_id(0)] = 0.0f;\n";
-        code << "barrier(CLK_LOCAL_MEM_FENCE);\n";
-        code << "int kLayerIndex;\n";
-        code << "bool isLastLayer;\n";
-
-        for (int layerIndex = 0; layerIndex < ctx->GetMaxLayerCount(); layerIndex++)
-        {
-            if (layerIndex != 0)
-            {
-                code << "if (!isLastLayer)\n"
-                    "{\n";
-            }
-
-            code << "kLayerIndex = " << layerIndex << ";\n";
-            if (layerIndex == ctx->GetMaxLayerCount() - 1)
-            {
-                code << "isLastLayer =  true;\n";
-            }
-            else
-            {
-                code << "isLastLayer =  p_i_j_k_Values_" << layerIndex + 1 << " == null;\n";
-            }
-            code << CreateCallCode_ComputeGradinetsRTLR_Layer_CPU(layerIndex);
-            if (layerIndex != 0) code << "}\n";
-        }
-
-        code << "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums, gradientIndex);\n";
-        code << "}\n";
-
-        return code.str();
+        string pidx = to_string(parIndex);
+        if (parIndex == ctx->GetMaxLayerCount() - 1) return "v" + pidx;
+        return "idx == " + pidx + " ? v" + pidx + " : (" + createPickMethodExpr(parIndex + 1) + ")";
     };
 
-    code << createCode(names.GetVersion()->GetName().c_str());
-    string codeStr = code.str();
-    
-    return codeStr;
+    stringstream r;
+    r << "inline ";
+    r << type << " ";
+    r << name << "(";
+    for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
+    {
+        r << type << " v" << lidx << ", ";
+    }
+    r << "int idx)\n";
+    r << "{\n";
+    r << "return " << createPickMethodExpr(0) << ";\n";
+    r << "}\n";
+    return r.str();
 }
 
-std::string OCLComputeGradientsRTLRKernel::CreateGPUKernelCode()
+std::string OCLComputeGradientsRTLRKernel::CreateCode()
 {
-    //return "kernel lofasz(global int* foo) { }";
-    return CreateCPUKernelCode();
+    stringstream code;
+
+    auto pickIntCall = [&](const string& parName)
+    {
+        stringstream r;
+        r << "PickIntValueByLayerIndex(";
+        for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
+        {
+            r << parName << "_" << lidx << ", ";
+        }
+        r << "kLayerIndex);";
+        return r.str();
+    };
+
+    auto pickFPCall = [&](const string& parName, bool vector)
+    {
+        stringstream r;
+        r << "PickFPValueByLayerIndex";
+        if (vector) r << "$";
+        r << "(";
+        for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
+        {
+            r << parName << "_" << lidx << ", ";
+        }
+        r << "kLayerIndex);";
+        return r.str();
+    };
+
+    // --- BEGIN HELPERS ---
+
+    code << DeclarePickMethod("global float$*", "PickFPValueByLayerIndex$");
+
+    // --- END HELPERS ---
+
+    // --- BEGIN HEADER ---
+
+    code <<
+        "kernel void " << name.GetName() << "$(\n"
+        "global float* pValuesOfWeights\n"
+        ", int uLayersCount\n"
+        ", int maxULayerSize\n";
+
+    for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
+    {
+        for (unsigned iidx = 0; iidx < ctx->GetMaxConnectionCount(); iidx++)
+        {
+            string tmpl =
+                ", int p_i_j_l_LayerIndex_{i}_{l}\n"
+                ", int p_i_j_l_LayerSize_{i}_{l}\n"
+                ", global float$* weights_{i}_{l}\n";
+
+            code << ReplaceIndexesInTemplate(tmpl, iidx, lidx);
+        }
+
+        string tmpl =
+            ", int p_i_j_k_LayerSize_{l}\n"
+            ", global float* netDerivValues_{l}\n";
+
+        code << ReplaceIndexesInTemplate(tmpl, lidx);
+    }
+
+    code <<
+        ", int iLayerIndex\n"
+        ", global float* inputs\n"
+        ", int inputsSize\n"
+        ", global float* outputs\n"
+        ", global float* desiredOutputs\n"
+        ", local float* tmpGradients\n"
+        ", global float* gradients\n"
+        ", global float* gradientSums)\n";
+
+    // --- END HEADER ---
+
+    // --- BEGIN BODY ---
+
+    code <<
+        "{\n"
+        "int localId = get_local_id(0);\n"
+        "int localSize = get_local_size(0);\n"
+        "int ijValueIndex = get_group_id(0);\n"
+        "int iValueIndex = ijValueIndex / inputsSize;\n"
+        "int jValueIndex = ijValueIndex % inputsSize;\n"
+        "tmpGradients[localId] = 0.0f;\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
+        "int pValuesOfWeightsSize2 = uLayersCount * maxULayerSize;\n"
+        "int block = pValuesOfWeightsSize2 / localSize + (pValuesOfWeightsSize2 % localSize != 0 ? 1 : 0);\n"
+        "int kLayerAndValueIndex = localId * block;\n"
+        "int max = kLayerAndValueIndex + block;\n"
+        "if (max > pValuesOfWeightsSize2) max = pValuesOfWeightsSize2;\n"
+        "while (kLayerAndValueIndex < max)\n"
+        "{\n"
+        "int kLayerIndex = kLayerAndValueIndex / maxULayerSize;\n"
+        "int kValueIndex = kLayerAndValueIndex % maxULayerSize;\n";
+
+    code << "int kLayerSize = " << pickIntCall("p_i_j_k_LayerSize") << ";\n";
+
+    code <<
+        "if (kValueIndex < kLayerSize)\n"
+        "{\n"
+        "bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;\n"
+        "float sum = (iLayerIndex == kLayerIndex && iValueIndex == kValueIndex) ? (inputs != null ? inputs[jValueIndex] : 1.0f) : 0.0f;\n";
+
+    string incSumCode = "sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);\n";
+
+    for (unsigned iidx = 0; iidx < ctx->GetMaxConnectionCount(); iidx++)
+    {
+        string iidxstr = to_string(iidx);
+        if (iidx == 0)
+        {
+            code << "int p_i_j_l_LayerIndex = " << pickIntCall("p_i_j_l_LayerIndex_" + iidxstr) << ";\n";
+            code << "int p_i_j_l_LayerSize = " << pickIntCall("p_i_j_l_LayerSize_" + iidxstr) << ";\n";
+            code << "global float$* weights = " << pickFPCall("weights_" + iidxstr, true) << ";\n";
+            code << incSumCode;
+        }
+        else
+        {
+            code << "p_i_j_l_LayerIndex = " << pickIntCall("p_i_j_l_LayerIndex_" + iidxstr) << ";\n";
+            code <<
+                "if (p_i_j_l_LayerIndex != -1)\n"
+                "{\n";
+            code << "p_i_j_l_LayerSize = " << pickIntCall("p_i_j_l_LayerSize_" + iidxstr) << ";\n";
+            code << "weights = " << pickFPCall("weights_" + iidxstr, true) << ";\n";
+            code << incSumCode;
+            code << "}\n";
+        }
+    }
+
+    code <<
+        "global float* netDerivValues = " << pickFPCall("netDerivValues", false) << ";\n"
+        "float p = netDerivValues[kValueIndex] * sum;\n"
+        "GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, kLayerIndex)[kValueIndex] = p;\n"
+        "if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
+        "}\n"
+        "kLayerAndValueIndex++;\n"
+        "}\n"
+        "if (gradients != null || gradientSums != null)\n"
+        "{\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
+        "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);\n"
+        "}\n";
+
+    code << "}";
+
+    return code.str();
 }
 
-void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
+void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
+    bool ooo = ctx->IsCPU();
     auto cState = (OCLComputationState*)state;
-    auto exec = cState->GetExec(0, ctx->IsCPU());
-    unsigned kLayerSize = valueRelatedPBuffs->size();
-    unsigned vectorSize = CalculateVectorSize(*inputLayerInfos);
-    unsigned workSize = CalculateWorkSize(*valueRelatedPBuffs);
+    auto pValuesOfWeightsBuff = ctx->ToBuffer2(pValuesOfWeights);
+    auto exec = cState->GetExec(0, ooo);
+    unsigned vectorSize = CalculateVectorSize(inputLayerInfos);
+    unsigned localSize = CalculateLocalSize(netValueDerivates);
+    unsigned globalSize = localSize * pValuesOfWeightsBuff->GetSize1();
     bool hasError = outputs != null && desiredOutputs != null;
     bool compGrads = hasError && (data->BiasGradients != null || data->Gradients != null);
     bool compGradSums = hasError && (data->BiasGradientSums != null || data->GradientSums != null);
@@ -241,37 +239,37 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
     auto init = [=](Kernel& kernel)
     {
         int aidx = 0;
+        kernel.setArg(aidx++, pValuesOfWeightsBuff->GetCLBuffer());
+        kernel.setArg(aidx++, data->ULayersCount);
+        kernel.setArg(aidx++, data->MaxULayerSize);
 
         int lSet = 0;
-        for (int kLayerIndex = 0; kLayerIndex < kLayerSize; kLayerIndex++)
+        for (int kLayerIndex = 0; kLayerIndex < data->ULayersCount; kLayerIndex++)
         {
-            auto layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
-            auto p_i_j_k_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[kLayerIndex]);
             auto& upperInfos_k = (*inputLayerInfos)[kLayerIndex];
-           
+
             unsigned iSet = 0;
             for (auto& upperInfo_k : upperInfos_k)
             {
                 if (upperInfo_k.IsElementOfU)
                 {
                     int lLayerIndex = upperInfo_k.Index;
-                    auto p_i_j_l_Values = ctx->ToBuffer1((*valueRelatedPBuffs)[lLayerIndex]);
                     auto weights = ctx->ToBuffer2(upperInfo_k.Weights);
-                    kernel.setArg(aidx++, p_i_j_l_Values->GetCLBuffer());
-                    kernel.setArg(aidx++, p_i_j_l_Values->GetSize() / vectorSize);
+                    kernel.setArg(aidx++, lLayerIndex);
+                    kernel.setArg(aidx++, upperInfo_k.Size / vectorSize);
                     kernel.setArg(aidx++, weights->GetCLBuffer());
                     iSet++;
                 }
             }
             while (iSet < ctx->GetMaxConnectionCount())
             {
-                kernel.setArg(aidx++, null);
+                kernel.setArg(aidx++, -1);
                 kernel.setArg(aidx++, -1);
                 kernel.setArg(aidx++, null);
                 iSet++;
             }
-            kernel.setArg(aidx++, p_i_j_k_Values->GetCLBuffer());
-            kernel.setArg(aidx++, p_i_j_k_Values->GetSize());
+            auto layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
+            kernel.setArg(aidx++, layerNetValueDerivates->GetSize());
             kernel.setArg(aidx++, layerNetValueDerivates->GetCLBuffer());
             lSet++;
         }
@@ -279,40 +277,49 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         {
             for (unsigned i = 0; i < ctx->GetMaxConnectionCount(); i++)
             {
-                kernel.setArg(aidx++, null);
+                kernel.setArg(aidx++, -1);
                 kernel.setArg(aidx++, -1);
                 kernel.setArg(aidx++, null);
             }
-            kernel.setArg(aidx++, null);
             kernel.setArg(aidx++, -1);
             kernel.setArg(aidx++, null);
             lSet++;
         }
 
         kernel.setArg(aidx++, data->ILayerIndex);
-        kernel.setArg(aidx++, data->IValueIndex);
+
         if (data->Inputs.is_initialized())
         {
-            kernel.setArg(aidx++, ctx->ToBuffer1(data->Inputs.get()())->GetCLBuffer());
-            kernel.setArg(aidx++, data->JValueIndex);
+            auto inputs = ctx->ToBuffer1(data->Inputs.get()());
+            kernel.setArg(aidx++, inputs->GetCLBuffer());
+            kernel.setArg(aidx++, inputs->GetSize());
         }
         else
         {
             kernel.setArg(aidx++, null);
-            kernel.setArg(aidx++, -1);
+            kernel.setArg(aidx++, 1);
         }
+
         if (hasError)
         {
             kernel.setArg(aidx++, ctx->ToBuffer1(outputs)->GetCLBuffer());
             kernel.setArg(aidx++, ctx->ToBuffer1(desiredOutputs)->GetCLBuffer());
-            kernel.setArg(aidx++, workSize, null);
         }
         else
         {
             kernel.setArg(aidx++, null);
             kernel.setArg(aidx++, null);
-            kernel.setArg(aidx++, sizeof(float), null);
         }
+
+        if (compGrads || compGradSums)
+        {
+            kernel.setArg(aidx++, localSize, null);
+        }
+        else
+        {
+            kernel.setArg(aidx++, 1, null);
+        }
+
         if (compGrads)
         {
             if (data->BiasGradients != null)
@@ -345,39 +352,31 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
         {
             kernel.setArg(aidx++, null);
         }
-        kernel.setArg(aidx++, data->IJValueIndex);
     };
-    
-    if (ctx->IsCPU())
-    {
-        if (seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
-        exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
-        if (seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
-    }
-    else
-    {
-        exec->Execute(program, (*GetCPUNames().GetVersion())(vectorSize), vectorSize, init, workSize, workSize);
-    }
+
+    if (ooo && seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
+    exec->Execute(program, name(vectorSize), vectorSize, init, globalSize, localSize);
+    if (ooo && seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
 }
 
-unsigned OCLComputeGradientsRTLRKernel::CalculateVectorSize(const RTLRLayerInfoVecVecT& infos) const
+unsigned OCLComputeGradientsRTLRKernel::CalculateVectorSize(const RTLRLayerInfoVecVecT* infos) const
 {
     unsigned vectorSize = 16;
-    for (auto& li : infos)
+    for (auto& li : *infos)
     {
         for (auto& i : li)
         {
-            vectorSize = GetVectorSize(vectorSize, i.Size);
+            if (i.IsElementOfU) vectorSize = GetVectorSize(vectorSize, i.Size);
         }
     }
     return vectorSize;
 }
 
-unsigned OCLComputeGradientsRTLRKernel::CalculateWorkSize(const DeviceArrayVecT& valueRelatedPBuffs) const
+unsigned OCLComputeGradientsRTLRKernel::CalculateLocalSize(const DeviceArrayVecT* netValueDerivates) const
 {
     double sum = 0.0;
     double count = 0.0;
-    for (auto& b : valueRelatedPBuffs)
+    for (auto& b : *netValueDerivates)
     {
         sum += b->GetSize();
         count++;
