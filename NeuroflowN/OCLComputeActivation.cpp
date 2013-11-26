@@ -108,11 +108,11 @@ void OCLComputeActivation::ComputeGradientsBPTTPhase2(NfObject* state, DeviceArr
     }
 }
 
-void OCLComputeActivation::ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
+void OCLComputeActivation::ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
     try
     {
-        computeGradientsRTLRKernel.Exec(state, inputLayerInfos, netValueDerivates, data, valueRelatedPBuffs, outputs, desiredOutputs, seqMark);
+        computeGradientsRTLRKernel.Exec(state, inputLayerInfos, netValueDerivates, data, pValuesOfWeights, outputs, desiredOutputs, seqMark);
     }
     catch (exception& ex)
     {

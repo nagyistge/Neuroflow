@@ -610,15 +610,15 @@ namespace Neuroflow.NeuralNetworks
         }
 
 
-        public void ComputeGradientsRTLR2(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData2> dataM, Marshaled<IDeviceArray2> pValuesOfWeightsM, IDeviceArray outputsA, IDeviceArray desiredOutputsA, SequenceMarker seqMark)
+        public void ComputeGradientsRTLR2(IDisposable state, Marshaled<RTLRLayerInfo[][]> inputLayerInfosM, Marshaled<IDeviceArray[]> netValueDerivatesM, Marshaled<RTLRComputationData2> dataM, IDeviceArray2 pValuesOfWeightsA, IDeviceArray outputsA, IDeviceArray desiredOutputsA, SequenceMarker seqMark)
         {
             var data = dataM.Instance();
             var inputLayerInfos = inputLayerInfosM.Instance();
             var netValueDerivates = netValueDerivatesM.Instance();
+            var pValuesOfWeights = pValuesOfWeightsA.ToManaged2();
 
             var outputs = outputsA != null ? outputsA.ToManaged() : null;
             var desiredOutputs = desiredOutputsA != null ? desiredOutputsA.ToManaged() : null;
-            var pValuesOfWeights = pValuesOfWeightsM.Instance().ToManaged2();
             var inputs = data.Inputs != null ? data.Inputs().ToManaged() : null;
 
             fixed (float* pOutputs = outputs != null ? outputs.InternalArray : null,

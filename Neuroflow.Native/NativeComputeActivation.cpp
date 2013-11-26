@@ -143,6 +143,11 @@ void NativeComputeActivation::ComputeGradientsBPTTPhase2(System::IDisposable^ st
 
 void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark)
 {
+    throw gcnew System::NotSupportedException();
+}
+
+void NativeComputeActivation::ComputeGradientsRTLR2(System::IDisposable^  state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData2^>^ data, IDeviceArray2^ pValuesOfWeights, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark)
+{
     try
     {
         Ptr->ComputeGradientsRTLR(
@@ -150,7 +155,7 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
             ToNative(inputLayerInfos),
             ToNative(netValueDerivates),
             ToNative(data),
-            ToNative(valueRelatedPBuffs),
+            ToNative(pValuesOfWeights),
             ToNative(outputs),
             ToNative(desiredOutputs),
             (NeuroflowN::SequenceMarker)((int)seqMark));
@@ -159,11 +164,6 @@ void NativeComputeActivation::ComputeGradientsRTLR(System::IDisposable^ state, M
     {
         throw gcnew NativeException(ex);
     }
-}
-
-void NativeComputeActivation::ComputeGradientsRTLR2(System::IDisposable^  state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData2^>^ data, Marshaled<IDeviceArray2^>^ pValuesOfWeights, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark)
-{
-    throw gcnew System::NotImplementedException();
 }
 
 void NativeComputeActivation::CalculateGlobalError(System::IDisposable^ state, IDeviceArray^ desiredOutputs, IDeviceArray^ actualOutputs, IDeviceArray^ errorValue, IDeviceArray^ errorSumValue)

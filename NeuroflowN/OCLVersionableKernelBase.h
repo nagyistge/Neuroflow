@@ -1,8 +1,5 @@
 #pragma once
 
-#include "OCLTypedefs.h"
-#include "OCLVectorKernelName.h"
-#include "NNMetadata.h"
 #include "OCLKernelBase.h"
 #include <tuple>
 

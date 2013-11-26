@@ -35,7 +35,7 @@ namespace Neuroflow
 
             virtual void ComputeGradientsRTLR(System::IDisposable^ state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData^>^ data, Marshaled<array<IDeviceArray^>^>^ valueRelatedPBuffs, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark);
             
-            virtual void ComputeGradientsRTLR2(System::IDisposable^  state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData2^>^ data, Marshaled<IDeviceArray2^>^ pValuesOfWeights, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark);
+            virtual void ComputeGradientsRTLR2(System::IDisposable^  state, Marshaled<array<array<RTLRLayerInfo^>^>^>^ inputLayerInfos, Marshaled<array<IDeviceArray^>^>^ netValueDerivates, Marshaled<RTLRComputationData2^>^ data, IDeviceArray2^ pValuesOfWeights, IDeviceArray^ outputs, IDeviceArray^ desiredOutputs, SequenceMarker seqMark);
 
             virtual void CalculateGlobalError(System::IDisposable^ state, IDeviceArray^ desiredOutputs, IDeviceArray^ actualOutputs, IDeviceArray^ errorValue, IDeviceArray^ errorSumValue);
         };

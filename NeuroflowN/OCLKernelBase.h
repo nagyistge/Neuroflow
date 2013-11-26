@@ -3,6 +3,9 @@
 #include "OCLTypedefs.h"
 #include "NfObject.h"
 #include <boost/optional.hpp>
+#include "OCLTypedefs.h"
+#include "OCLVectorKernelName.h"
+#include "NNMetadata.h"
 
 namespace NeuroflowN
 {
