@@ -177,9 +177,6 @@
     <ClInclude Include="OCLComputationState.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
-    <ClInclude Include="OCLComputeGradientsRTLRKernel.h">
-      <Filter>Header Files\OCL</Filter>
-    </ClInclude>
     <ClInclude Include="IDeviceArrayPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -189,7 +186,7 @@
     <ClInclude Include="OCLOutOfOrderQueue.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
-    <ClInclude Include="OCLComputeGradientsRTLR2Kernel.h">
+    <ClInclude Include="OCLComputeGradientsRTLRKernel.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
   </ItemGroup>
@@ -263,16 +260,13 @@
     <ClCompile Include="OCLComputationState.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
-    <ClCompile Include="OCLComputeGradientsRTLRKernel.cpp">
-      <Filter>Source Files\OCL</Filter>
-    </ClCompile>
     <ClCompile Include="OCLOutOfOrderQueue.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
     <ClCompile Include="OCLDeviceArrayPool.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
-    <ClCompile Include="OCLComputeGradientsRTLR2Kernel.cpp">
+    <ClCompile Include="OCLComputeGradientsRTLRKernel.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
   </ItemGroup>
