@@ -1,5 +1,6 @@
 #include "OCLTypedefs.h"
 #include "OCLKernelBase.h"
+#include <string>
 
 namespace NeuroflowN
 {
@@ -13,6 +14,7 @@ namespace NeuroflowN
         std::string CreateCode();
         unsigned CalculateVectorSize(const RTLRLayerInfoVecVecT* infos) const;
         unsigned CalculateLocalSize(const DeviceArrayVecT* netValueDerivates) const;
+        std::string DeclarePickMethod(const std::string& type, const std::string& name) const;
     public:
         OCLComputeGradientsRTLR2Kernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault);
 

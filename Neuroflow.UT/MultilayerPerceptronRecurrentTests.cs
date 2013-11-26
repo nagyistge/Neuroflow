@@ -155,8 +155,8 @@ namespace Neuroflow.UT
         {
             try
             {
-                //using (var ctx = new OCLContext("cpu"))
-                using (var ctx = new OCLContext("avx"))
+                using (var ctx = new OCLContext("cpu"))
+                //using (var ctx = new OCLContext("avx"))
                 {
                     await MLPTrainRecTest(ctx, GradientComputationMethod.RTLR, GetGDRules(WeigthUpdateMode.Online, 0.01f));
                 }
@@ -343,7 +343,7 @@ namespace Neuroflow.UT
                 {
                     nn.Train(batch);
 
-                    await ctx.Finish();
+                    //await ctx.Finish();
 
                     ctx.VectorUtils.CalculateMSE(batch, errors, it);
 

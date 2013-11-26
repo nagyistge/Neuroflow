@@ -26,8 +26,53 @@ void OCLComputeGradientsRTLR2Kernel::Build(const OCLVaultSPtrT& vault)
     program->Using(vault->GetNetCode());
     program->Using(vault->GetReduceCode());
 
+    program->AddCode(DeclarePickMethod("int", "PickIntValueByLayerIndex"));
+
+    ADD_OCL_CODE(program,
+    inline global float* GetPValuesPtr(global float* pValuesOfWeights, int uLayersCount, int maxULayerSize, int kLayerIndex)
+    {
+        int ijValueIndex = get_group_id(0);
+        return pValuesOfWeights + (ijValueIndex * uLayersCount * maxULayerSize) + (kLayerIndex * maxULayerSize);
+    }
+
+    void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums)
+    {
+        Reduce_Sum(tmpGradients);
+
+        if (get_local_id(0) == 0)
+        {
+            int ijValueIndex = get_group_id(0);
+            if (gradients != null) gradients[ijValueIndex] = tmpGradients[0];
+            if (gradientSums != null) gradientSums[ijValueIndex] += tmpGradients[0];
+        }
+    });
+
     string code = CreateCode();
     program->AddCode(code);
+}
+
+std::string OCLComputeGradientsRTLR2Kernel::DeclarePickMethod(const string& type, const string& name) const
+{
+    function<string(unsigned)> createPickMethodExpr = [&](unsigned parIndex)
+    {
+        string pidx = to_string(parIndex);
+        if (parIndex == ctx->GetMaxLayerCount() - 1) return "v" + pidx;
+        return "idx == " + pidx + " ? v" + pidx + " : (" + createPickMethodExpr(parIndex + 1) + ")";
+    };
+
+    stringstream r;
+    r << "inline ";
+    r << type << " ";
+    r << name << "(";
+    for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
+    {
+        r << type << " v" << lidx << ", ";
+    }
+    r << "int idx)\n";
+    r << "{\n";
+    r << "return " << createPickMethodExpr(0) << ";\n";
+    r << "}\n";
+    return r.str();
 }
 
 std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
@@ -60,51 +105,9 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
         return r.str();
     };
 
-    function<string(unsigned)> createPickMethodExpr = [&](unsigned parIndex)
-    {
-        string pidx = to_string(parIndex);
-        if (parIndex == ctx->GetMaxLayerCount() - 1) return "v" + pidx;
-        return "idx == " + pidx + " ? v" + pidx + " : (" + createPickMethodExpr(parIndex + 1) + ")";
-    };
-
-    auto declarePickMethod = [&](const string& type, const string& name)
-    {
-        stringstream r;
-        r << "inline ";
-        r << type << " ";
-        r << name << "(";
-        for (unsigned lidx = 0; lidx < ctx->GetMaxLayerCount(); lidx++)
-        {
-            r << type << " v" << lidx << ", ";
-        }
-        r << "int idx)\n";
-        r << "{\n";
-        r << "return " << createPickMethodExpr(0) << ";\n";
-        r << "}\n";
-        return r.str();
-    };
-
     // --- BEGIN HELPERS ---
 
-    code << declarePickMethod("global float$*", "PickFPValueByLayerIndex$");
-    code << declarePickMethod("int", "PickIntValueByLayerIndex");
-
-    code <<
-        "inline global float* GetPValuesPtr(global float* pValuesOfWeights, int uLayersCount, int maxULayerSize, int kLayerIndex)\n"
-        "{\n"
-        "int ijValueIndex = get_group_id(0);\n"
-        "return pValuesOfWeights + (ijValueIndex * uLayersCount * maxULayerSize) + (kLayerIndex * maxULayerSize);\n"
-        "}\n"
-        "void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* gradients, global float* gradientSums)\n"
-        "{\n"
-        "Reduce_Sum(tmpGradients);\n"
-        "if (get_local_id(0) == 0)\n"
-        "{\n"
-        "int gradientsIndex = get_group_id(0);\n"
-        "if (gradients != null) gradients[gradientsIndex] = tmpGradients[0];\n"
-        "if (gradientSums != null) gradientSums[gradientsIndex] += tmpGradients[0];\n"
-        "}\n"
-        "}\n";
+    code << DeclarePickMethod("global float$*", "PickFPValueByLayerIndex$");
 
     // --- END HELPERS ---
 
@@ -128,7 +131,7 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
             code << ReplaceIndexesInTemplate(tmpl, iidx, lidx);
         }
 
-        string tmpl = 
+        string tmpl =
             ", int p_i_j_k_LayerSize_{l}\n"
             ", global float* netDerivValues_{l}\n";
 
@@ -136,6 +139,7 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
     }
 
     code <<
+        ", int iLayerIndex\n"
         ", global float* inputs\n"
         ", int inputsSize\n"
         ", global float* outputs\n"
@@ -151,6 +155,7 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
     code <<
         "{\n"
         "int localId = get_local_id(0);\n"
+        "int localSize = get_local_size(0);\n"
         "int ijValueIndex = get_group_id(0);\n"
         "int iValueIndex = ijValueIndex / inputsSize;\n"
         "int jValueIndex = ijValueIndex % inputsSize;\n"
@@ -167,15 +172,15 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
         "int kValueIndex = kLayerAndValueIndex % maxULayerSize;\n";
 
     code << "int kLayerSize = " << pickIntCall("p_i_j_k_LayerSize") << ";\n";
-    
+
     code <<
         "if (kValueIndex < kLayerSize)\n"
         "{\n"
         "bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;\n"
         "float sum = (iLayerIndex == kLayerIndex && iValueIndex == kValueIndex) ? (inputs != null ? inputs[jValueIndex] : 1.0f) : 0.0f;\n";
 
-    string incSumCode = "sum += ComputeForward_Sum$((float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);\n";
-    
+    string incSumCode = "sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);\n";
+
     for (unsigned iidx = 0; iidx < ctx->GetMaxConnectionCount(); iidx++)
     {
         string iidxstr = to_string(iidx);
@@ -203,7 +208,7 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
         "global float* netDerivValues = " << pickFPCall("netDerivValues", false) << ";\n"
         "float p = netDerivValues[kValueIndex] * sum;\n"
         "GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, kLayerIndex)[kValueIndex] = p;\n"
-        "if (computeGradients) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
+        "if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
         "}\n"
         "kLayerAndValueIndex++;\n"
         "}\n"
@@ -281,6 +286,8 @@ void OCLComputeGradientsRTLR2Kernel::Exec(NfObject* state, RTLRLayerInfoVecVecT*
             lSet++;
         }
 
+        kernel.setArg(aidx++, data->ILayerIndex);
+
         if (data->Inputs.is_initialized())
         {
             auto inputs = ctx->ToBuffer1(data->Inputs.get()());
@@ -310,7 +317,7 @@ void OCLComputeGradientsRTLR2Kernel::Exec(NfObject* state, RTLRLayerInfoVecVecT*
         }
         else
         {
-            kernel.setArg(aidx++, 0, null);
+            kernel.setArg(aidx++, 1, null);
         }
 
         if (compGrads)
