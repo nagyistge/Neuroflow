@@ -21,7 +21,7 @@ namespace NeuroflowN
             return ReplaceIndexesInTemplate(tmpl, null, layerIndex);
         }
 
-        static std::string ReplaceIndexesInTemplate(const std::string tmpl, boost::optional<int> inputIndex, boost::optional<int> layerIndex);
+        static std::string ReplaceIndexesInTemplate(const std::string& tmpl, boost::optional<int> inputIndex, boost::optional<int> layerIndex);
 
     public:
         OCLKernelBase(const OCLIntCtxSPtrT& ctx);

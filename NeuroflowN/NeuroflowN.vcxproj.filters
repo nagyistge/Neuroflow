@@ -189,6 +189,9 @@
     <ClInclude Include="OCLOutOfOrderQueue.h">
       <Filter>Header Files\OCL</Filter>
     </ClInclude>
+    <ClInclude Include="OCLComputeGradientsRTLR2Kernel.h">
+      <Filter>Header Files\OCL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -267,6 +270,9 @@
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
     <ClCompile Include="OCLDeviceArrayPool.cpp">
+      <Filter>Source Files\OCL</Filter>
+    </ClCompile>
+    <ClCompile Include="OCLComputeGradientsRTLR2Kernel.cpp">
       <Filter>Source Files\OCL</Filter>
     </ClCompile>
   </ItemGroup>

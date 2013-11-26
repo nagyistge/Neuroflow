@@ -175,6 +175,7 @@
     <ClInclude Include="NNMetadata.h" />
     <ClInclude Include="NUtils.h" />
     <ClInclude Include="OCL.h" />
+    <ClInclude Include="OCLComputeGradientsRTLR2Kernel.h" />
     <ClInclude Include="OCLComputeGradientsRTLRKernel.h" />
     <ClInclude Include="OCLDeviceArrayPool.h" />
     <ClInclude Include="OCLOutOfOrderQueue.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="OCLComputeForwardKernel.cpp" />
     <ClCompile Include="OCLComputeGradientDescent.cpp" />
     <ClCompile Include="OCLComputeGradientsKernel.cpp" />
+    <ClCompile Include="OCLComputeGradientsRTLR2Kernel.cpp" />
     <ClCompile Include="OCLComputeGradientsRTLRKernel.cpp" />
     <ClCompile Include="OCLComputeInternalErrorsKernel.cpp" />
     <ClCompile Include="OCLComputeOutputErrorsKernel.cpp" />
