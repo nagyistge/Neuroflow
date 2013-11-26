@@ -43,19 +43,19 @@ namespace Neuroflow.NeuralNetworks
 
         IDeviceArrayPool pValuesPool;
 
-        Marshaled<IDeviceArray2>[][] pValues;
+        IDeviceArray2[][] pValues;
 
         List<Action<IDeviceArray, IDeviceArray>> codes = new List<Action<IDeviceArray, IDeviceArray>>();
 
         private void CreatePValues()
         {
-            var pvs = new LinkedList<Marshaled<IDeviceArray2>[]>();
+            var pvs = new LinkedList<IDeviceArray2[]>();
             pValuesPool = mlp.Adapter.DeviceArrayManagement.CreatePool();
             uLayersCount = mlp.Layers.Count - 1;
             maxULayerSize = mlp.Layers.Where(l => l.Index != 0).Max(l => l.Layer.Size);
             for (int lidx = 1; lidx < mlp.Layers.Count; lidx++)
             {
-                var lpvs = new LinkedList<Marshaled<IDeviceArray2>>();
+                var lpvs = new LinkedList<IDeviceArray2>();
                 var layer = mlp.Layers[lidx];
                 var biases = mlp.Biases[lidx];
                 lpvs.AddLast(CreatePValuesForWeights(biases));
@@ -71,11 +71,11 @@ namespace Neuroflow.NeuralNetworks
             pValues = pvs.ToArray();
         }
 
-        private Marshaled<IDeviceArray2> CreatePValuesForWeights(IDeviceArray weights)
+        private IDeviceArray2 CreatePValuesForWeights(IDeviceArray weights)
         {
             int xSize = uLayersCount * maxULayerSize;
             int ySize = weights.Size;
-            return mlp.AsMarshaled(pValuesPool.CreateArray2(ySize, xSize));
+            return pValuesPool.CreateArray2(ySize, xSize);
         }
 
         internal void ComputeGradients(IDeviceArray desiredOutputs)
@@ -99,7 +99,7 @@ namespace Neuroflow.NeuralNetworks
             }
         }
 
-        private void ComputeGradients(int iLayerIndex, int jLayerIndex, Marshaled<IDeviceArray2> pValuesOfWeights, IDeviceArray outputs, IDeviceArray desiredOutputs, int computationIndex, SequenceMarker seqMark)
+        private void ComputeGradients(int iLayerIndex, int jLayerIndex, IDeviceArray2 pValuesOfWeights, IDeviceArray outputs, IDeviceArray desiredOutputs, int computationIndex, SequenceMarker seqMark)
         {
             // jLayerIndex: 0: Bias, 1..: Weights
 

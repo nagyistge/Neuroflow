@@ -12,6 +12,8 @@ using namespace std;
 using namespace cl;
 using namespace NeuroflowN;
 
+OCLVectorKernelName OCLComputeGradientsRTLR2Kernel::name = OCLVectorKernelName("ComputeGradientsRTLR");
+
 OCLComputeGradientsRTLR2Kernel::OCLComputeGradientsRTLR2Kernel(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
 OCLKernelBase(ctx)
 {
@@ -104,12 +106,12 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
         "}\n"
         "}\n";
 
-    // --- END HELPERS
+    // --- END HELPERS ---
 
     // --- BEGIN HEADER ---
 
     code <<
-        "kernel void ComputeGradientsRTLR$(\n"
+        "kernel void " << name.GetName() << "$(\n"
         "global float* pValuesOfWeights\n"
         ", int uLayersCount\n"
         ", int maxULayerSize\n";
@@ -205,9 +207,172 @@ std::string OCLComputeGradientsRTLR2Kernel::CreateCode()
         "}\n"
         "kLayerAndValueIndex++;\n"
         "}\n"
+        "if (gradients != null || gradientSums != null)\n"
+        "{\n"
         "barrier(CLK_LOCAL_MEM_FENCE);\n"
-        "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);\n";
+        "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);\n"
+        "}\n";
+
     code << "}";
 
     return code.str();
+}
+
+void OCLComputeGradientsRTLR2Kernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
+{
+    bool ooo = ctx->IsCPU();
+    auto cState = (OCLComputationState*)state;
+    auto pValuesOfWeightsBuff = ctx->ToBuffer2(pValuesOfWeights);
+    auto exec = cState->GetExec(0, ooo);
+    unsigned vectorSize = CalculateVectorSize(inputLayerInfos);
+    unsigned localSize = CalculateLocalSize(netValueDerivates);
+    unsigned globalSize = localSize * pValuesOfWeightsBuff->GetSize1();
+    bool hasError = outputs != null && desiredOutputs != null;
+    bool compGrads = hasError && (data->BiasGradients != null || data->Gradients != null);
+    bool compGradSums = hasError && (data->BiasGradientSums != null || data->GradientSums != null);
+
+    auto init = [=](Kernel& kernel)
+    {
+        int aidx = 0;
+        kernel.setArg(aidx++, pValuesOfWeightsBuff->GetCLBuffer());
+        kernel.setArg(aidx++, data->ULayersCount);
+        kernel.setArg(aidx++, data->MaxULayerSize);
+
+        int lSet = 0;
+        for (int kLayerIndex = 0; kLayerIndex < data->ULayersCount; kLayerIndex++)
+        {
+            auto& upperInfos_k = (*inputLayerInfos)[kLayerIndex];
+
+            unsigned iSet = 0;
+            for (auto& upperInfo_k : upperInfos_k)
+            {
+                if (upperInfo_k.IsElementOfU)
+                {
+                    int lLayerIndex = upperInfo_k.Index;
+                    auto weights = ctx->ToBuffer2(upperInfo_k.Weights);
+                    kernel.setArg(aidx++, lLayerIndex);
+                    kernel.setArg(aidx++, upperInfo_k.Size / vectorSize);
+                    kernel.setArg(aidx++, weights->GetCLBuffer());
+                    iSet++;
+                }
+            }
+            while (iSet < ctx->GetMaxConnectionCount())
+            {
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, null);
+                iSet++;
+            }
+            auto layerNetValueDerivates = ctx->ToBuffer1((*netValueDerivates)[kLayerIndex]);
+            kernel.setArg(aidx++, layerNetValueDerivates->GetSize());
+            kernel.setArg(aidx++, layerNetValueDerivates->GetCLBuffer());
+            lSet++;
+        }
+        while (lSet < ctx->GetMaxLayerCount())
+        {
+            for (unsigned i = 0; i < ctx->GetMaxConnectionCount(); i++)
+            {
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, -1);
+                kernel.setArg(aidx++, null);
+            }
+            kernel.setArg(aidx++, -1);
+            kernel.setArg(aidx++, null);
+            lSet++;
+        }
+
+        if (data->Inputs.is_initialized())
+        {
+            auto inputs = ctx->ToBuffer1(data->Inputs.get()());
+            kernel.setArg(aidx++, inputs->GetCLBuffer());
+            kernel.setArg(aidx++, inputs->GetSize());
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, 1);
+        }
+
+        if (hasError)
+        {
+            kernel.setArg(aidx++, ctx->ToBuffer1(outputs)->GetCLBuffer());
+            kernel.setArg(aidx++, ctx->ToBuffer1(desiredOutputs)->GetCLBuffer());
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+            kernel.setArg(aidx++, null);
+        }
+
+        if (compGrads || compGradSums)
+        {
+            kernel.setArg(aidx++, localSize, null);
+        }
+        else
+        {
+            kernel.setArg(aidx++, 0, null);
+        }
+
+        if (compGrads)
+        {
+            if (data->BiasGradients != null)
+            {
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradients)->GetCLBuffer());
+            }
+            else
+            {
+                assert(data->Gradients != null);
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->Gradients)->GetCLBuffer());
+            }
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+        }
+        if (compGradSums)
+        {
+            if (data->BiasGradientSums != null)
+            {
+                kernel.setArg(aidx++, ctx->ToBuffer1(data->BiasGradientSums)->GetCLBuffer());
+            }
+            else
+            {
+                assert(data->GradientSums != null);
+                kernel.setArg(aidx++, ctx->ToBuffer2(data->GradientSums)->GetCLBuffer());
+            }
+        }
+        else
+        {
+            kernel.setArg(aidx++, null);
+        }
+    };
+
+    if (ooo && seqMark == SequenceMarker::Begin) ctx->GetOutOfOrderQueue()->Begin();
+    exec->Execute(program, name(vectorSize), vectorSize, init, globalSize, localSize);
+    if (ooo && seqMark == SequenceMarker::End) ctx->GetOutOfOrderQueue()->End();
+}
+
+unsigned OCLComputeGradientsRTLR2Kernel::CalculateVectorSize(const RTLRLayerInfoVecVecT* infos) const
+{
+    unsigned vectorSize = 16;
+    for (auto& li : *infos)
+    {
+        for (auto& i : li)
+        {
+            if (i.IsElementOfU) vectorSize = GetVectorSize(vectorSize, i.Size);
+        }
+    }
+    return vectorSize;
+}
+
+unsigned OCLComputeGradientsRTLR2Kernel::CalculateLocalSize(const DeviceArrayVecT* netValueDerivates) const
+{
+    double sum = 0.0;
+    double count = 0.0;
+    for (auto& b : *netValueDerivates)
+    {
+        sum += b->GetSize();
+        count++;
+    }
+    return ctx->GetOptimalLocalSizeForOneWorkgroup(sum / count, 1);
 }

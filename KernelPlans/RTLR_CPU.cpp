@@ -132,9 +132,11 @@ kernel void ComputeGradientsRTLR_V0_CPU(
         kLayerAndValueIndex++;
     }
 
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);
+    if (gradients != null || gradientSums != null)
+    {
+        barrier(CLK_LOCAL_MEM_FENCE);
+        ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);
+    }
 }
 
 inline global float$* PickFPValueByLayerIndex$(global float$* v0, global float$* v1, global float$* v2, global float$* v3, int idx)
@@ -159,8 +161,8 @@ void ComputeGradinetsRTLR_SetGradients(local float* tmpGradients, global float* 
 
     if (get_local_id(0) == 0)
     {
-        int gradientsIndex = get_group_id(0);
-        if (gradients != null) gradients[gradientsIndex] = tmpGradients[0];
-        if (gradientSums != null) gradientSums[gradientsIndex] += tmpGradients[0];
+        int ijValueIndex = get_group_id(0);
+        if (gradients != null) gradients[ijValueIndex] = tmpGradients[0];
+        if (gradientSums != null) gradientSums[ijValueIndex] += tmpGradients[0];
     }
 }

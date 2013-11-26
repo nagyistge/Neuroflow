@@ -8,7 +8,7 @@
 #include "OCLComputeInternalErrorsKernel.h"
 #include "OCLComputeOutputErrorsKernel.h"
 #include "OCLComputeGradientsKernel.h"
-#include "OCLComputeGradientsRTLRKernel.h"
+#include "OCLComputeGradientsRTLR2Kernel.h"
 
 namespace NeuroflowN
 {
@@ -20,7 +20,7 @@ namespace NeuroflowN
         OCLComputeInternalErrorsKernel computeInternalErrorsKernel;
         OCLComputeOutputErrorsKernel computeOutputErrorsKernel;
         OCLComputeGradientsKernel computeGradientsKernel;
-        OCLComputeGradientsRTLRKernel computeGradientsRTLRKernel;
+        OCLComputeGradientsRTLR2Kernel computeGradientsRTLRKernel;
 
     public:
         OCLComputeActivation(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault, const std::shared_ptr<OCLDeviceArrayManagement>& deviceArrayManagement) :
@@ -49,6 +49,6 @@ namespace NeuroflowN
 
         void ComputeGradientsBPTTPhase2(NfObject* state, DeviceArrayFVecT* inputs, DeviceArray2VecT* gradients, IDeviceArray* biasGradients, DeviceArray2VecT* gradientSums, IDeviceArray* biasGradientSums, IDeviceArray* errors, unsigned intItCount);
 
-        void ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData* data, DeviceArrayVecT* valueRelatedPBuffs, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark);
+        void ComputeGradientsRTLR(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark);
     };
 }
