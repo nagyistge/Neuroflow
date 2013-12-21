@@ -211,10 +211,10 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
         "if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
         "}\n"
         "kLayerAndValueIndex++;\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "}\n"
         "if (gradients != null || gradientSums != null)\n"
         "{\n"
-        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);\n"
         "}\n";
 
