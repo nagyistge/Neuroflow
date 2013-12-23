@@ -14,12 +14,12 @@ using namespace concurrency;
 
 namespace NeuroflowNUT
 {
-	TEST_CLASS(OCLKernelConceptTests)
-	{
-	public:
-		
+    TEST_CLASS(OCLKernelConceptTests)
+    {
+    public:
+        
         TEST_METHOD(ComputeGradinetsRTLR_SetGradients_Test)
-		{
+        {
             try
             {
                 mt19937 generator((random_device()() << 16) | random_device()());
@@ -119,7 +119,7 @@ namespace NeuroflowNUT
                 Logger::WriteMessage(ex.what());
                 throw;
             }
-		}
+        }
 
-	};
+    };
 }

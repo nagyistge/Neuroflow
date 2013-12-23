@@ -290,5 +290,21 @@ OCLVault::OCLVault(const OCLIntCtxSPtrT& ctx) :
             barrier(CLK_LOCAL_MEM_FENCE);
         }
     }
+
+    inline void Reduce2D_Sum(local float* values)
+    {
+        int localSize = get_local_size(0);
+        int localId = get_local_id(0);
+
+        for (int offset = localSize / 2; offset > 0; offset = offset / 2)
+        {
+            if (localId < offset && get_local_id(1) == 0)
+            {
+                values[localId] += values[localId + offset];
+            }
+
+            barrier(CLK_LOCAL_MEM_FENCE);
+        }
+    }
     );
 }
