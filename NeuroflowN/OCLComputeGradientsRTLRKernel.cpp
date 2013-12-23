@@ -48,26 +48,21 @@ void OCLComputeGradientsRTLRKernel::Build(const OCLVaultSPtrT& vault)
     });
 
     ADD_OCL_CODE(program,
-    void ComputeForwardRTLR_Sum$(global float$* inputs, int inputsSize, global float$* weights, int idx, local float* tmpSum, bool start)
+    void ComputeForwardRTLR_Sum$(global float$* inputs, int inputsSize, global float$* weights, int idx, local float* tmpSum)
     {
         int localId1 = get_local_id(1);
         int localSize1 = get_local_size(1);
 
-        if (start) tmpSum[localId1] = 0.0f;
-        barrier(CLK_LOCAL_MEM_FENCE);
-
         int block = inputsSize / localSize1 + (inputsSize % localSize1 != 0 ? 1 : 0);
-        int idx = localId1 * block;
-        int max = idx + block;
-        if (max > size) max = size;
-        while (idx <  max)
+        int x = localId1 * block;
+        int max = x + block;
+        if (max > inputsSize) max = inputsSize;
+        while (x <  max)
         {
             tmpSum[localId1] += SumComponents$(inputs[x] * Get2$(weights, x, idx, inputsSize));
 
-            idx++;
+            x++;
         }
-
-        barrier(CLK_LOCAL_MEM_FENCE);
     }
 
     void ReduceRTLR_Sum$(local float* tmpSum)
@@ -75,13 +70,24 @@ void OCLComputeGradientsRTLRKernel::Build(const OCLVaultSPtrT& vault)
         int localId1 = get_local_id(1);
         int localSize1 = get_local_size(1);
 
-        for (int offset = localSize / 2; offset > 0; offset = offset / 2)
+        for (int offset = localSize1 / 2; offset > 0; offset = offset / 2)
         {
             if (localId1 < offset)
             {
                 tmpSum[localId1] += tmpSum[localId1 + offset];
             }
 
+            barrier(CLK_LOCAL_MEM_FENCE);
+        }
+    });
+
+    ADD_OCL_CODE(program,
+    void ReduceRTLRBarriers()
+    {
+        int localSize1 = get_local_size(1);
+
+        for (int offset = localSize1 / 2; offset > 0; offset = offset / 2)
+        {
             barrier(CLK_LOCAL_MEM_FENCE);
         }
     });
@@ -216,14 +222,14 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
     code << "int kLayerSize = " << pickIntCall("p_i_j_k_LayerSize") << ";\n";
 
     code <<
+        "local float* tmpSum = tmpSums + kLayerIndex * kValueIndex * localSize1;\n"
+        "tmpSum[localId1] = 0.0f;\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "if (kValueIndex < kLayerSize)\n"
         "{\n"
-        "bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;\n"
-        "float sum = 0.0f;\n"
-        "local float* tmpSum = tmpSums + kLayerIndex * localSize1;\n";
+        "bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;\n";
 
-    string incSumCode0 = "ComputeForwardRTLR_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex, tmpSum, true);\n";
-    string incSumCode1 = "ComputeForwardRTLR_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex, tmpSum, false);\n";
+    string incSumCode = "ComputeForwardRTLR_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex, tmpSum);\n";
 
     for (unsigned iidx = 0; iidx < ctx->GetMaxConnectionCount(); iidx++)
     {
@@ -233,7 +239,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
             code << "int p_i_j_l_LayerIndex = " << pickIntCall("p_i_j_l_LayerIndex_" + iidxstr) << ";\n";
             code << "int p_i_j_l_LayerSize = " << pickIntCall("p_i_j_l_LayerSize_" + iidxstr) << ";\n";
             code << "global float$* weights = " << pickFPCall("weights_" + iidxstr, true) << ";\n";
-            code << incSumCode0;
+            code << incSumCode;
         }
         else
         {
@@ -243,12 +249,13 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
                 "{\n";
             code << "p_i_j_l_LayerSize = " << pickIntCall("p_i_j_l_LayerSize_" + iidxstr) << ";\n";
             code << "weights = " << pickFPCall("weights_" + iidxstr, true) << ";\n";
-            code << incSumCode1;
+            code << incSumCode;
             code << "}\n";
         }
     }
 
     code <<
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "ReduceRTLR_Sum$(tmpSum);\n"
         "if (localId1 == 0)\n"
         "{\n"
@@ -259,6 +266,11 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
         "GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, kLayerIndex)[kValueIndex] = p;\n"
         "if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
         "}\n"
+        "}\n"
+        "else\n"
+        "{\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
+        "ReduceRTLRBarriers();\n"
         "}\n"
         "kLayerAndValueIndex++;\n"
         "barrier(CLK_LOCAL_MEM_FENCE);\n"
@@ -371,7 +383,7 @@ void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* 
             kernel.setArg(aidx++, 1, null);
         }
 
-        kernel.setArg(aidx++, localSize2 * data->MaxULayerSize, null);
+        kernel.setArg(aidx++, localSize2 * data->MaxULayerSize * data->ULayersCount, null);
 
         if (compGrads)
         {
