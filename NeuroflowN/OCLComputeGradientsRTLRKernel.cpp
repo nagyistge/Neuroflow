@@ -176,6 +176,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
     code <<
         "if (kValueIndex < kLayerSize)\n"
         "{\n"
+        "mem_fence(CLK_LOCAL_MEM_FENCE);\n"
         "bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;\n"
         "float sum = (iLayerIndex == kLayerIndex && iValueIndex == kValueIndex) ? (inputs != null ? inputs[jValueIndex] : 1.0f) : 0.0f;\n";
 
@@ -196,7 +197,8 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
             code << "p_i_j_l_LayerIndex = " << pickIntCall("p_i_j_l_LayerIndex_" + iidxstr) << ";\n";
             code <<
                 "if (p_i_j_l_LayerIndex != -1)\n"
-                "{\n";
+                "{\n"
+                "mem_fence(CLK_LOCAL_MEM_FENCE);\n";
             code << "p_i_j_l_LayerSize = " << pickIntCall("p_i_j_l_LayerSize_" + iidxstr) << ";\n";
             code << "weights = " << pickFPCall("weights_" + iidxstr, true) << ";\n";
             code << incSumCode;
@@ -211,10 +213,10 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
         "if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;\n"
         "}\n"
         "kLayerAndValueIndex++;\n"
-        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "}\n"
         "if (gradients != null || gradientSums != null)\n"
         "{\n"
+        "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);\n"
         "}\n";
 
@@ -225,7 +227,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
 
 void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
-    bool ooo = ctx->IsCPU();
+    bool ooo = false;// ctx->IsCPU();
     auto cState = (OCLComputationState*)state;
     auto pValuesOfWeightsBuff = ctx->ToBuffer2(pValuesOfWeights);
     auto exec = cState->GetExec(0, ooo);
