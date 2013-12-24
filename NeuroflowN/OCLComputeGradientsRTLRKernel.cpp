@@ -287,7 +287,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
 
 void OCLComputeGradientsRTLRKernel::Exec(NfObject* state, RTLRLayerInfoVecVecT* inputLayerInfos, DeviceArrayVecT* netValueDerivates, RTLRComputationData2* data, IDeviceArray2* pValuesOfWeights, IDeviceArray* outputs, IDeviceArray* desiredOutputs, SequenceMarker seqMark)
 {
-    bool ooo = ctx->IsCPU();
+    bool ooo = false;// ctx->IsCPU();
     auto cState = (OCLComputationState*)state;
     auto pValuesOfWeightsBuff = ctx->ToBuffer2(pValuesOfWeights);
     auto exec = cState->GetExec(0, ooo);
