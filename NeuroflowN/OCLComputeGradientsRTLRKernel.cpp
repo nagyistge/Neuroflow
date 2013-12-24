@@ -222,7 +222,7 @@ std::string OCLComputeGradientsRTLRKernel::CreateCode()
     code << "int kLayerSize = " << pickIntCall("p_i_j_k_LayerSize") << ";\n";
 
     code <<
-        "local float* tmpSum = tmpSums + kLayerIndex * kValueIndex * localSize1;\n"
+        "local float* tmpSum = tmpSums + localId * localSize1;\n"
         "tmpSum[localId1] = 0.0f;\n"
         "barrier(CLK_LOCAL_MEM_FENCE);\n"
         "if (kValueIndex < kLayerSize)\n"
