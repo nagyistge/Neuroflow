@@ -78,7 +78,66 @@ kernel void ComputeGradientsRTLR_V0_CPU(
 
     barrier(CLK_LOCAL_MEM_FENCE);
 
-    int pValuesOfWeightsSize2 = uLayersCount * maxULayerSize;
+    // Local size ~ avg uLayerSize
+    for (int kLayerIndex = 0; kLayerIndex < uLayersCount; kLayerIndex++)
+    {
+        int kLayerSize = PickIntValueByLayerIndex(p_i_j_k_LayerSize_0, p_i_j_k_LayerSize_1, p_i_j_k_LayerSize_2, p_i_j_k_LayerSize_3, kLayerIndex);
+        bool computeGradient = (kLayerIndex == uLayersCount - 1) && outputs != null && desiredOutputs != null;
+
+        int block = kLayerSize / localSize + (kLayerSize % localSize != 0 ? 1 : 0);
+        int kValueIndex = localId * block;
+        int max = kValueIndex + block;
+        if (max > kLayerSize) max = kLayerSize;
+        while (kValueIndex < max)
+        {
+            float sum = (iLayerIndex == kLayerIndex && iValueIndex == kValueIndex) ? (inputs != null ? inputs[jValueIndex] : 1.0f) : 0.0f;
+
+            int p_i_j_l_LayerIndex = PickIntValueByLayerIndex(p_i_j_l_LayerIndex_0_0, p_i_j_l_LayerIndex_0_1, p_i_j_l_LayerIndex_0_2, p_i_j_l_LayerIndex_0_3, kLayerIndex);
+            int p_i_j_l_LayerSize = PickIntValueByLayerIndex(p_i_j_l_LayerSize_0_0, p_i_j_l_LayerSize_0_1, p_i_j_l_LayerSize_0_2, p_i_j_l_LayerSize_0_3, kLayerIndex);
+            global float$* weights = PickFPValueByLayerIndex$(weights_0_0, weights_0_1, weights_0_2, weights_0_3, kLayerIndex);
+            sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);
+
+            p_i_j_l_LayerIndex = PickIntValueByLayerIndex(p_i_j_l_LayerIndex_1_0, p_i_j_l_LayerIndex_1_1, p_i_j_l_LayerIndex_1_2, p_i_j_l_LayerIndex_1_3, kLayerIndex);
+            if (p_i_j_l_LayerIndex != -1)
+            {
+                p_i_j_l_LayerSize = PickIntValueByLayerIndex(p_i_j_l_LayerSize_1_0, p_i_j_l_LayerSize_1_1, p_i_j_l_LayerSize_1_2, p_i_j_l_LayerSize_1_3, kLayerIndex);
+                weights = PickFPValueByLayerIndex$(weights_1_0, weights_1_1, weights_1_2, weights_1_3, kLayerIndex);
+                sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);
+            }
+
+            p_i_j_l_LayerIndex = PickIntValueByLayerIndex(p_i_j_l_LayerIndex_2_0, p_i_j_l_LayerIndex_2_1, p_i_j_l_LayerIndex_2_2, p_i_j_l_LayerIndex_2_3, kLayerIndex);
+            if (p_i_j_l_LayerIndex != -1)
+            {
+                p_i_j_l_LayerSize = PickIntValueByLayerIndex(p_i_j_l_LayerSize_2_0, p_i_j_l_LayerSize_2_1, p_i_j_l_LayerSize_2_2, p_i_j_l_LayerSize_2_3, kLayerIndex);
+                weights = PickFPValueByLayerIndex$(weights_2_0, weights_2_1, weights_2_2, weights_2_3, kLayerIndex);
+                sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);
+            }
+
+            p_i_j_l_LayerIndex = PickIntValueByLayerIndex(p_i_j_l_LayerIndex_3_0, p_i_j_l_LayerIndex_3_1, p_i_j_l_LayerIndex_3_2, p_i_j_l_LayerIndex_3_3, kLayerIndex);
+            if (p_i_j_l_LayerIndex != -1)
+            {
+                p_i_j_l_LayerSize = PickIntValueByLayerIndex(p_i_j_l_LayerSize_3_0, p_i_j_l_LayerSize_3_1, p_i_j_l_LayerSize_3_2, p_i_j_l_LayerSize_3_3, kLayerIndex);
+                weights = PickFPValueByLayerIndex$(weights_3_0, weights_3_1, weights_3_2, weights_3_3, kLayerIndex);
+                sum += ComputeForward_Sum$((global float$*)GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, p_i_j_l_LayerIndex), p_i_j_l_LayerSize, weights, kValueIndex);
+            }
+
+            global float* netDerivValues = PickFPValueByLayerIndex(netDerivValues_0, netDerivValues_1, netDerivValues_2, netDerivValues_3, kLayerIndex);
+            float p = netDerivValues[kValueIndex] * sum;
+            GetPValuesPtr(pValuesOfWeights, uLayersCount, maxULayerSize, kLayerIndex)[kValueIndex] = p;
+
+            if (computeGradient) tmpGradients[localId] += (desiredOutputs[kValueIndex] - outputs[kValueIndex]) * p;
+
+            kValueIndex++;
+        }
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+    if (gradients != null || gradientSums != null)
+    {
+        ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);
+    }
+
+    /*int pValuesOfWeightsSize2 = uLayersCount * maxULayerSize;
     int block = pValuesOfWeightsSize2 / localSize + (pValuesOfWeightsSize2 % localSize != 0 ? 1 : 0);
     int kLayerAndValueIndex = localId * block;
     int max = kLayerAndValueIndex + block;
@@ -132,13 +191,7 @@ kernel void ComputeGradientsRTLR_V0_CPU(
         }
 
         kLayerAndValueIndex++;
-    }
-
-    if (gradients != null || gradientSums != null)
-    {
-        barrier(CLK_LOCAL_MEM_FENCE);
-        ComputeGradinetsRTLR_SetGradients(tmpGradients, gradients, gradientSums);
-    }
+    }*/
 }
 
 inline global float$* PickFPValueByLayerIndex$(global float$* v0, global float$* v1, global float$* v2, global float$* v3, int idx)
