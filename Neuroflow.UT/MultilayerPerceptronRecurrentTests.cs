@@ -307,7 +307,7 @@ namespace Neuroflow.UT
             int hiddenSize = method == GradientComputationMethod.RTLR ? 32 : 8;
             int outputSize = 3;
 
-            int maxIterations = method == GradientComputationMethod.RTLR ? 10 : 1000;
+            int maxIterations = method == GradientComputationMethod.RTLR ? 30 : 1000;
 
             var layers = NNTestHelpers.CreateGDMLPLayers(false, inputSize, hiddenSize, outputSize, rules);
 

@@ -641,54 +641,53 @@ namespace Neuroflow.NeuralNetworks
 
                     float inputValue = inputsPtr.HasValue ? inputsPtr.Value[jValueIndex] : 1.0f;
 
-                    for (int kLayerAndValueIndex = 0; kLayerAndValueIndex < pValuesOfWeights.Size2; kLayerAndValueIndex++)
+                    for (int kLayerIndex = 0; kLayerIndex < data.ULayersCount; kLayerIndex++)
                     {
-                        int kLayerIndex = kLayerAndValueIndex / data.MaxULayerSize;
-                        int kValueIndex = kLayerAndValueIndex % data.MaxULayerSize;
                         int kLayerSize = netValueDerivates[kLayerIndex].Size;
 
-                        if (kValueIndex == kLayerSize) break;
-
-                        var layerNetValueDerivates = netValueDerivates[kLayerIndex].ToManaged();
-                        int outputLayerIndex = layerNetValueDerivates.Size - 1;
-                        bool computeGradient = kLayerIndex == outputLayerIndex && outputs != null && desiredOutputs != null;
-                        var p_i_j_k_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, kLayerIndex);
-
-                        float sum = 0.0f;
-
-                        var upperInfos_k = inputLayerInfos[kLayerIndex];
-                        foreach (var lLayerInfo in upperInfos_k)
+                        for (int kValueIndex = 0; kValueIndex < kLayerSize; kValueIndex++)
                         {
-                            if (lLayerInfo.IsElementOfU)
+                            var layerNetValueDerivates = netValueDerivates[kLayerIndex].ToManaged();
+                            int outputLayerIndex = layerNetValueDerivates.Size - 1;
+                            bool computeGradient = kLayerIndex == outputLayerIndex && outputs != null && desiredOutputs != null;
+                            var p_i_j_k_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, kLayerIndex);
+
+                            float sum = 0.0f;
+
+                            var upperInfos_k = inputLayerInfos[kLayerIndex];
+                            foreach (var lLayerInfo in upperInfos_k)
                             {
-                                Debug.Assert(lLayerInfo.Weights != null);
-                                int lLayerIndex = lLayerInfo.Index;
-                                var p_i_j_l_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, lLayerIndex);
-                                var weights = lLayerInfo.Weights.ToManaged2();
-
-                                fixed (float* pWeights = weights.InternalArray)
+                                if (lLayerInfo.IsElementOfU)
                                 {
-                                    var weightsPtr = weights.ToPtr2(pWeights);
+                                    Debug.Assert(lLayerInfo.Weights != null);
+                                    int lLayerIndex = lLayerInfo.Index;
+                                    var p_i_j_l_Ptr = GetPValuesPtr(pValuesOfWeights, pPValuesOfWeights, ijValueIndex, data, lLayerIndex);
+                                    var weights = lLayerInfo.Weights.ToManaged2();
 
-                                    for (int lValueIndex = 0; lValueIndex < lLayerInfo.Size; lValueIndex++)
+                                    fixed (float* pWeights = weights.InternalArray)
                                     {
-                                        sum += weightsPtr[lValueIndex, kValueIndex] * p_i_j_l_Ptr[lValueIndex];
+                                        var weightsPtr = weights.ToPtr2(pWeights);
+
+                                        for (int lValueIndex = 0; lValueIndex < lLayerInfo.Size; lValueIndex++)
+                                        {
+                                            sum += weightsPtr[lValueIndex, kValueIndex] * p_i_j_l_Ptr[lValueIndex];
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if (data.ILayerIndex == kLayerIndex && iValueIndex == kValueIndex) sum += inputValue;
+                            if (data.ILayerIndex == kLayerIndex && iValueIndex == kValueIndex) sum += inputValue;
 
-                        fixed (float* pLayerNetValueDerivates = layerNetValueDerivates.InternalArray)
-                        {
-                            p_i_j_k_Ptr[kValueIndex] = layerNetValueDerivates.ToPtr(pLayerNetValueDerivates)[kValueIndex] * sum;
-                        }
+                            fixed (float* pLayerNetValueDerivates = layerNetValueDerivates.InternalArray)
+                            {
+                                p_i_j_k_Ptr[kValueIndex] = layerNetValueDerivates.ToPtr(pLayerNetValueDerivates)[kValueIndex] * sum;
+                            }
 
-                        if (computeGradient)
-                        {
-                            Debug.Assert(outputsPtr.HasValue && desiredOutputsPtr.HasValue);
-                            gradient += (desiredOutputsPtr.Value[kValueIndex] - outputsPtr.Value[kValueIndex]) * p_i_j_k_Ptr[kValueIndex];
+                            if (computeGradient)
+                            {
+                                Debug.Assert(outputsPtr.HasValue && desiredOutputsPtr.HasValue);
+                                gradient += (desiredOutputsPtr.Value[kValueIndex] - outputsPtr.Value[kValueIndex]) * p_i_j_k_Ptr[kValueIndex];
+                            }
                         }
                     }
 
