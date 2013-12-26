@@ -11,6 +11,8 @@
 
 namespace nf
 {
+    typedef ::size_t idx_t;
+
     typedef std::shared_ptr<nf_object> nf_object_ptr;
 
     struct device_array;

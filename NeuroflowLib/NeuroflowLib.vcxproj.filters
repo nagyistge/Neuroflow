@@ -76,6 +76,9 @@
     <ClInclude Include="ocl.h">
       <Filter>Ocl</Filter>
     </ClInclude>
+    <ClInclude Include="ocl_device_array_pool.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -94,6 +97,9 @@
       <Filter>Cpp</Filter>
     </ClCompile>
     <ClCompile Include="ocl_device_array.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_device_array_pool.cpp">
       <Filter>Ocl</Filter>
     </ClCompile>
   </ItemGroup>

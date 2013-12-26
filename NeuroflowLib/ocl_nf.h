@@ -13,4 +13,10 @@ namespace nf
 
     struct ocl_device_array_pool;
     typedef std::shared_ptr<ocl_device_array_pool> ocl_device_array_pool_ptr;
+
+    struct ocl_device_array_management;
+    typedef std::shared_ptr<ocl_device_array_management> ocl_device_array_management_ptr;
+
+    struct ocl_utils;
+    typedef std::shared_ptr<ocl_utils> ocl_utils_ptr;
 }

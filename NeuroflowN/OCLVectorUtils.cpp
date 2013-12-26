@@ -18,8 +18,8 @@ OCLVectorKernelName OCLVectorUtils::DivName = OCLVectorKernelName("Div");
 OCLVectorKernelName OCLVectorUtils::ZeroFName = OCLVectorKernelName("ZeroF");
 
 OCLVectorUtils::OCLVectorUtils(const OCLIntCtxSPtrT& ctx, const OCLVaultSPtrT& vault) :
-    ctx(ctx),
-    generator((std::random_device()() << 16) | std::random_device()())
+ctx(ctx),
+generator((std::random_device()() << 16) | std::random_device()())
 {
     Build(vault);
 
@@ -66,34 +66,34 @@ void OCLVectorUtils::Build(const OCLVaultSPtrT& vault)
     // Zero
     ADD_OCL_CODE(program,
 
-    kernel void ZeroF$(global float$* buffer, int size)
+        kernel void ZeroF$(global float$* buffer, int size)
     {
-        int block = size / get_global_size(0) + (size % get_global_size(0) != 0 ? 1 : 0);
-        int idx = get_global_id(0) * block;
-        int max = idx + block;
-        if (max > size) max = size;
-        while (idx <  max)
-        {
-            buffer[idx] = 0.0f;
-            idx++;
+            int block = size / get_global_size(0) + (size % get_global_size(0) != 0 ? 1 : 0);
+            int idx = get_global_id(0) * block;
+            int max = idx + block;
+            if (max > size) max = size;
+            while (idx < max)
+            {
+                buffer[idx] = 0.0f;
+                idx++;
+            }
         }
-    }
 
     );
 
     // Auto Vec Functions:
     ADD_OCL_CODE(program,
 
-    kernel void AddMSE$(global float$* desiredValues, global float$* currentValues, unsigned valueCount, global float* mseValues, unsigned mseValueIndex)
+        kernel void AddMSE$(global float$* desiredValues, global float$* currentValues, unsigned valueCount, global float* mseValues, unsigned mseValueIndex)
     {
-        float$ mse = 0.0f;
-        for (int x = 0; x < valueCount; x++)
-        {
-            float$ error = (desiredValues[x] - currentValues[x]) * 0.5f;
-            mse += error * error;
+            float$ mse = 0.0f;
+            for (int x = 0; x < valueCount; x++)
+            {
+                float$ error = (desiredValues[x] - currentValues[x]) * 0.5f;
+                mse += error * error;
+            }
+            mseValues[mseValueIndex] += SumComponents$(mse) / (float)(valueCount * $$);
         }
-        mseValues[mseValueIndex] += SumComponents$(mse) / (float)(valueCount * $$);
-    }
 
     kernel void Div$(global float$* values, float byValue)
     {
@@ -121,13 +121,13 @@ void OCLVectorUtils::AddMSE(OCLBuffer1* desiredValues, OCLBuffer1* currentValues
         AddMSEName(vectorSize),
         vectorSize,
         [&, vectorSize, mseValueIndex](Kernel& kernel)
-        {
+    {
         kernel.setArg(0, desiredValues->GetCLBuffer());
         kernel.setArg(1, currentValues->GetCLBuffer());
         kernel.setArg(2, desiredValues->GetSize() / vectorSize);
         kernel.setArg(3, mseValues->GetCLBuffer());
         kernel.setArg(4, mseValueIndex);
-        },
+    },
         1);
 }
 
@@ -140,11 +140,11 @@ void OCLVectorUtils::Div(OCLBuffer1* values, unsigned valueIndex, float byValue)
         DivName(1),
         1,
         [&, valueIndex, byValue](Kernel& kernel)
-        {
-            kernel.setArg(0, values->GetCLBuffer());
-            kernel.setArg(1, byValue);
-        },
-        NDRange(valueIndex), 
+    {
+        kernel.setArg(0, values->GetCLBuffer());
+        kernel.setArg(1, byValue);
+    },
+        NDRange(valueIndex),
         NDRange(1),
         NullRange);
 }
@@ -240,40 +240,32 @@ void OCLVectorUtils::Zero(const cl::Buffer buffer, unsigned size)
             switch (vectorSize)
             {
                 case 2:
-                {
-                          ctx->GetQueue().enqueueFillBuffer(
-                              buffer,
-                              z2,
-                              0,
-                              sizeof(float)* size);
-                }
+                    ctx->GetQueue().enqueueFillBuffer(
+                        buffer,
+                        z2,
+                        0,
+                        sizeof(float)* size);
                     break;
                 case 4:
-                {
-                          ctx->GetQueue().enqueueFillBuffer(
-                              buffer,
-                              z4,
-                              0,
-                              sizeof(float)* size);
-                }
+                    ctx->GetQueue().enqueueFillBuffer(
+                        buffer,
+                        z4,
+                        0,
+                        sizeof(float)* size);
                     break;
                 case 8:
-                {
-                          ctx->GetQueue().enqueueFillBuffer(
-                              buffer,
-                              z8,
-                              0,
-                              sizeof(float)* size);
-                }
+                    ctx->GetQueue().enqueueFillBuffer(
+                        buffer,
+                        z8,
+                        0,
+                        sizeof(float)* size);
                     break;
                 case 16:
-                {
-                           ctx->GetQueue().enqueueFillBuffer(
-                               buffer,
-                               z16,
-                               0,
-                               sizeof(float)* size);
-                }
+                    ctx->GetQueue().enqueueFillBuffer(
+                        buffer,
+                        z16,
+                        0,
+                        sizeof(float)* size);
                     break;
                 default:
                     ctx->GetQueue().enqueueFillBuffer(
