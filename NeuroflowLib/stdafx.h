@@ -6,6 +6,14 @@
 #pragma once
 
 #include "targetver.h"
+#include <memory>
+#include <vector>
+#include <sstream>
+#include <exception>
+#include <assert.h>
+#include <malloc.h>
+#include <boost/mpl/assert.hpp>
+#include "ocl.h"
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
