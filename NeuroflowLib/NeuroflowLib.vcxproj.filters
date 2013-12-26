@@ -93,5 +93,8 @@
     <ClCompile Include="cpp_device_array_management.cpp">
       <Filter>Cpp</Filter>
     </ClCompile>
+    <ClCompile Include="ocl_device_array.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

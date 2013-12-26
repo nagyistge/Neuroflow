@@ -19,12 +19,12 @@ bool cpp_device_array_pool::is_allocated() const
     return internalArray != null;
 }
 
-device_array_ptr cpp_device_array_pool::create_array(size_t size)
+device_array_ptr cpp_device_array_pool::create_array(::size_t size)
 {
     return make_shared<cpp_device_array>(shared_this<cpp_device_array_pool>(), reserve(size), size);
 }
 
-device_array2_ptr cpp_device_array_pool::create_array2(size_t rowSize, size_t colSize)
+device_array2_ptr cpp_device_array_pool::create_array2(::size_t rowSize, ::size_t colSize)
 {
     return make_shared<cpp_device_array2>(shared_this<cpp_device_array_pool>(), reserve(rowSize * colSize), rowSize, colSize);
 }
@@ -41,7 +41,7 @@ void cpp_device_array_pool::zero()
     memset(internalArray, 0, endIndex * sizeof(float));
 }
 
-size_t cpp_device_array_pool::reserve(size_t size)
+::size_t cpp_device_array_pool::reserve(::size_t size)
 {
     if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
     int beginIndex = endIndex;
