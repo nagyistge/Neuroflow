@@ -5,21 +5,21 @@
 using namespace std;
 using namespace nf;
 
-cpp_device_array::cpp_device_array(float* internalArray, ::size_t arraySize) :
+cpp_device_array::cpp_device_array(float* internalArray, idx_t arraySize) :
 internalArray(internalArray),
 arraySize(arraySize)
 {
     assert(internalArray != null && arraySize > 0);
 }
 
-cpp_device_array::cpp_device_array(::size_t arraySize) :
+cpp_device_array::cpp_device_array(idx_t arraySize) :
 internalArray(new float[arraySize]),
 arraySize(arraySize)
 {
     assert(arraySize > 0);
 }
 
-cpp_device_array::cpp_device_array(const cpp_device_array_pool_ptr& pool, ::size_t beginIndex, ::size_t arraySize) :
+cpp_device_array::cpp_device_array(const cpp_device_array_pool_ptr& pool, idx_t beginIndex, idx_t arraySize) :
 pool(pool),
 beginIndex(beginIndex),
 arraySize(arraySize)
@@ -29,7 +29,7 @@ arraySize(arraySize)
     assert(pool != null);
 }
 
-::size_t cpp_device_array::size() const
+idx_t cpp_device_array::size() const
 {
     return arraySize;
 }

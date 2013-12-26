@@ -163,6 +163,7 @@
     <ClInclude Include="cpp_nf.h" />
     <ClInclude Include="ocl.h" />
     <ClInclude Include="ocl_device_array.h" />
+    <ClInclude Include="ocl_device_array_pool.h" />
     <ClInclude Include="ocl_nf.h" />
     <ClInclude Include="nf_object.h" />
     <ClInclude Include="stdafx.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
     <ClCompile Include="ocl_device_array.cpp" />
+    <ClCompile Include="ocl_device_array_pool.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
