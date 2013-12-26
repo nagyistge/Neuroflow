@@ -173,6 +173,7 @@
     <ClCompile Include="cpp_device_array2.cpp" />
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
+    <ClCompile Include="ocl_device_array.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
