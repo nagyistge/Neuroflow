@@ -153,6 +153,7 @@
     <ClInclude Include="cpp_device_array2.h" />
     <ClInclude Include="cpp_device_array_management.h" />
     <ClInclude Include="cpp_device_array_pool.h" />
+    <ClInclude Include="cpp_utils.h" />
     <ClInclude Include="device_array.h" />
     <ClInclude Include="device_array2.h" />
     <ClInclude Include="device_array_management.h" />
@@ -162,19 +163,29 @@
     <ClInclude Include="nf.h" />
     <ClInclude Include="cpp_nf.h" />
     <ClInclude Include="ocl.h" />
+    <ClInclude Include="ocl_contexted.h" />
+    <ClInclude Include="ocl_conv.h" />
     <ClInclude Include="ocl_device_array.h" />
+    <ClInclude Include="ocl_device_array2.h" />
+    <ClInclude Include="ocl_device_array_management.h" />
     <ClInclude Include="ocl_device_array_pool.h" />
+    <ClInclude Include="ocl_error.h" />
+    <ClInclude Include="ocl_internal_context.h" />
     <ClInclude Include="ocl_nf.h" />
     <ClInclude Include="nf_object.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp_device_array.cpp" />
     <ClCompile Include="cpp_device_array2.cpp" />
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
+    <ClCompile Include="cpp_utils.cpp" />
     <ClCompile Include="ocl_device_array.cpp" />
+    <ClCompile Include="ocl_device_array2.cpp" />
+    <ClCompile Include="ocl_device_array_management.cpp" />
     <ClCompile Include="ocl_device_array_pool.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -2,9 +2,13 @@
 
 #include "nf.h"
 #include "ocl.h"
+#include "ocl_error.h"
 
 namespace nf
 {
+    struct ocl_internal_context;
+    typedef std::shared_ptr<ocl_internal_context> ocl_internal_context_ptr;
+
     struct ocl_device_array;
     typedef std::shared_ptr<ocl_device_array> ocl_device_array_ptr;
 

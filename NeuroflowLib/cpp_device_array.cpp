@@ -17,6 +17,7 @@ internalArray(new float[arraySize]),
 arraySize(arraySize)
 {
     assert(arraySize > 0);
+    memset(internalArray, 0, arraySize * sizeof(float));
 }
 
 cpp_device_array::cpp_device_array(const cpp_device_array_pool_ptr& pool, idx_t beginIndex, idx_t arraySize) :
