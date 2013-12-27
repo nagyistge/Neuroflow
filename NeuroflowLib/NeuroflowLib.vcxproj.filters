@@ -79,6 +79,30 @@
     <ClInclude Include="ocl_device_array_pool.h">
       <Filter>Ocl</Filter>
     </ClInclude>
+    <ClInclude Include="ocl_device_array2.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_internal_context.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_device_array_management.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_contexted.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_conv.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_error.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_utils.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -101,6 +125,15 @@
     </ClCompile>
     <ClCompile Include="ocl_device_array_pool.cpp">
       <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_device_array2.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_device_array_management.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_utils.cpp">
+      <Filter>Cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
