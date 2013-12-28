@@ -60,7 +60,7 @@ idx_t ocl_device_array_pool::reserve(idx_t size)
     return beginIndex;
 }
 
-cl::Buffer ocl_device_array_pool::create_sub_buffer(unsigned beginOffset, unsigned size)
+cl::Buffer ocl_device_array_pool::create_sub_buffer(idx_t beginOffset, idx_t size)
 {
     allocate();
     cl_buffer_region r;

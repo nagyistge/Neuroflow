@@ -8,6 +8,8 @@
 #include "error.h"
 
 #define null nullptr
+#define _interface struct
+#define _implements virtual
 
 namespace nf
 {

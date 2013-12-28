@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct cpp_device_array_management : device_array_management
+    struct cpp_device_array_management : _implements device_array_management
     {
         device_array_ptr create_array(bool copyOptimized, idx_t size) override;
         device_array2_ptr create_array2(bool copyOptimized, idx_t rowSize, idx_t colSize) override;

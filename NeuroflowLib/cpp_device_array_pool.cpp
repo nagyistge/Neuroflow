@@ -44,7 +44,7 @@ void cpp_device_array_pool::zero()
 idx_t cpp_device_array_pool::reserve(idx_t size)
 {
     if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
-    int beginIndex = endIndex;
+    idx_t beginIndex = endIndex;
     endIndex += size;
     return beginIndex;
 }
