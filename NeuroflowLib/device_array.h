@@ -4,7 +4,7 @@
 
 namespace nf
 {
-    struct device_array : virtual nf_object
+    _interface device_array : virtual nf_object
     {
         virtual idx_t size() const = 0;
     };

@@ -6,7 +6,7 @@
 
 namespace nf
 {
-    struct ocl_device_array_management : ocl_contexted, virtual device_array_management
+    struct ocl_device_array_management : ocl_contexted, _implements device_array_management
     {
         friend struct ocl_device_array_pool;
 

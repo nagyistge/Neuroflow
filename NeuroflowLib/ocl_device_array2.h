@@ -6,7 +6,7 @@
 
 namespace nf
 {
-    struct ocl_device_array2 : ocl_device_array, virtual device_array2
+    struct ocl_device_array2 : ocl_device_array, _implements device_array2
     {
         ocl_device_array2(const cl::Buffer& buffer, idx_t size1);
         ocl_device_array2(const ocl_device_array_pool_ptr& pool, idx_t beginIndex, idx_t size1, idx_t size2);

@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct ocl_device_array_pool : device_array_pool
+    struct ocl_device_array_pool : _implements device_array_pool
     {
         friend struct ocl_device_array;
 
@@ -24,6 +24,6 @@ namespace nf
         ocl_utils_ptr utils;
 
         idx_t reserve(idx_t size);
-        cl::Buffer create_sub_buffer(unsigned beginOffset, unsigned size);
+        cl::Buffer create_sub_buffer(idx_t beginOffset, idx_t size);
     };
 }

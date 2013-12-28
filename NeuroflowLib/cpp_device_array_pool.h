@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct cpp_device_array_pool : device_array_pool
+    struct cpp_device_array_pool : _implements device_array_pool
     {
         bool is_allocated() const override;
         device_array_ptr create_array(idx_t size) override;
