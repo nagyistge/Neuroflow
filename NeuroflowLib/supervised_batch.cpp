@@ -44,7 +44,7 @@ void supervised_batch::add(const data_array_ptr& input)
     _samples.emplace_back(input);
 }
 
-void supervised_batch::add(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput)
+void supervised_batch::add(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput) 
 {
     _samples.emplace_back(input, desiredOutput, actualOutput);
 }
