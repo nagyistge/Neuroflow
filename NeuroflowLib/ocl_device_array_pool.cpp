@@ -4,6 +4,7 @@
 #include "ocl_device_array2.h"
 #include "ocl_device_array_management.h"
 #include "ocl_internal_context.h"
+#include "ocl_utils.h"
 
 using namespace std;
 using namespace nf;

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "ocl_exec.h"
 #include "ocl_device_array.h"
+#include "ocl_program.h"
+#include "ocl_internal_context.h"
 
 using namespace std;
 using namespace nf;

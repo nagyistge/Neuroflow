@@ -10,6 +10,8 @@
 #include <list>
 #include <unordered_set>
 #include <unordered_map>
+#include <ppltasks.h>
+#include <random>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/algorithm/string/find.hpp>
@@ -17,6 +19,7 @@
 #include <boost/optional.hpp>
 #include "nf_object.h"
 #include "error.h"
+#include "version.h"
 
 #define null nullptr
 #define _interface struct
@@ -36,4 +39,14 @@ namespace nf
 
     struct device_array_pool;
     typedef std::shared_ptr<device_array_pool> device_array_pool_ptr;
+
+    struct data_array;
+    typedef std::shared_ptr<data_array> data_array_ptr;
+
+    struct data_array_factory;
+    typedef std::shared_ptr<data_array_factory> data_array_factory_ptr;
+
+    struct supervised_batch;
+    struct supervised_sample;
+    struct supervised_sample_entry;
 }

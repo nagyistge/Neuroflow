@@ -30,6 +30,11 @@ arraySize(arraySize)
     assert(pool != null);
 }
 
+cpp_device_array::~cpp_device_array()
+{
+    delete[] internalArray;
+}
+
 idx_t cpp_device_array::size() const
 {
     return arraySize;

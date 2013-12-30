@@ -124,6 +124,24 @@
     <ClInclude Include="ocl_program.h">
       <Filter>Ocl</Filter>
     </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="data_array.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="data_array_factory.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_sample_entry.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_sample.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_batch.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -176,6 +194,15 @@
     </ClCompile>
     <ClCompile Include="ocl_program.cpp">
       <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="supervised_sample_entry.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="supervised_sample.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="supervised_batch.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
