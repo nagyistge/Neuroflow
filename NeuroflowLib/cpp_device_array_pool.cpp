@@ -6,6 +6,11 @@
 using namespace std;
 using namespace nf;
 
+cpp_device_array_pool::~cpp_device_array_pool()
+{
+    delete[] internalArray;
+}
+
 float* cpp_device_array_pool::ptr()
 {
     allocate();

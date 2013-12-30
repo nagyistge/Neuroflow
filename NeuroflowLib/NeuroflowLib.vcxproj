@@ -154,6 +154,8 @@
     <ClInclude Include="cpp_device_array_management.h" />
     <ClInclude Include="cpp_device_array_pool.h" />
     <ClInclude Include="cpp_utils.h" />
+    <ClInclude Include="data_array.h" />
+    <ClInclude Include="data_array_factory.h" />
     <ClInclude Include="device_array.h" />
     <ClInclude Include="device_array2.h" />
     <ClInclude Include="device_array_management.h" />
@@ -181,8 +183,12 @@
     <ClInclude Include="ocl_sizes.h" />
     <ClInclude Include="ocl_utils.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="supervised_batch.h" />
+    <ClInclude Include="supervised_sample.h" />
+    <ClInclude Include="supervised_sample_entry.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp_device_array.cpp" />
@@ -207,6 +213,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="supervised_batch.cpp" />
+    <ClCompile Include="supervised_sample.cpp" />
+    <ClCompile Include="supervised_sample_entry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

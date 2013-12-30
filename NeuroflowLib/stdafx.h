@@ -19,6 +19,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <ppltasks.h>
+#include <random>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/algorithm/string/find.hpp>

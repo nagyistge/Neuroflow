@@ -39,7 +39,7 @@ cl::Program ocl_program::compile()
     TCHAR exePath[MAX_PATH];
     GetCurrentDirectory(MAX_PATH, exePath);
 
-    auto ver = toAlphanumeric(nf_version());
+    auto ver = toAlphanumeric(version());
 
     wstringstream fns;
     fns << wstring(exePath);
