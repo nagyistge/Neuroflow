@@ -142,6 +142,15 @@
     <ClInclude Include="supervised_batch.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_data_array.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="nf_helpers.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_data_array_factory.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -203,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="supervised_batch.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_data_array.cpp">
+      <Filter>Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_data_array_factory.cpp">
+      <Filter>Cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

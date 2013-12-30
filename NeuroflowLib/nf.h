@@ -20,6 +20,7 @@
 #include "nf_object.h"
 #include "error.h"
 #include "version.h"
+#include "nf_helpers.h"
 
 #define null nullptr
 #define _interface struct

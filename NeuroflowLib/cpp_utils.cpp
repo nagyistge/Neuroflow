@@ -2,6 +2,7 @@
 #include "cpp_utils.h"
 #include "cpp_conv.h"
 #include "cpp_device_array.h"
+#include "supervised_batch.h"
 
 using namespace std;
 using namespace nf;
@@ -11,13 +12,13 @@ generator((std::random_device()() << 16) | std::random_device()())
 {
 }
 
-void cpp_utils::zero(device_array_ptr& deviceArray) const
+void cpp_utils::zero(device_array_ptr& deviceArray)
 {
     auto& cppArray = to_cpp(deviceArray, false);
     memset(cppArray->ptr(), 0, sizeof(float)* cppArray->size());
 }
 
-void cpp_utils::randomize_uniform(device_array_ptr& deviceArray, float min, float max) const
+void cpp_utils::randomize_uniform(device_array_ptr& deviceArray, float min, float max)
 {
     auto& cppArray = to_cpp(deviceArray, false);
     uniform_real_distribution<float> uniform_distribution(min, max);
@@ -27,38 +28,40 @@ void cpp_utils::randomize_uniform(device_array_ptr& deviceArray, float min, floa
     for (idx_t i = 0; i < size; i++) p[i] = randF();
 }
 
-void cpp_utils::calculate_mse(const supervised_batch& batch, data_array_ptr& dataArray, idx_t valueIndex) const
+void cpp_utils::calculate_mse(supervised_batch& batch, data_array_ptr& dataArray, idx_t valueIndex) const
 {
-    /*auto& cppArray = to_cpp(dataArray, false);
+    verify_arg(dataArray != null, "dataArray");
+    verify_arg(valueIndex >= 0 && valueIndex < dataArray->size(), "valueIndex");
 
-    msePtr[valueIndex] = 0.0f;
+    auto& cppArray = to_cpp(dataArray, false);
+    auto ptr = cppArray->ptr();
+
+    ptr[valueIndex] = 0.0f;
     float count = 0.0f;
-    foreach(var sample in batch)
+    for (auto& sample : batch.samples())
     {
-        foreach(var entry in sample)
+        for (auto& entry : sample.entries())
         {
-            if (entry.HasOutput)
+            if (entry.has_output())
             {
-                var actualOutputs = entry.ActualOutput.ToManaged();
-                var desiredOutputs = entry.DesiredOutput.ToManaged();
-                fixed(float* pAO = actualOutputs.InternalArray, pDO = desiredOutputs.InternalArray)
+                auto& actualOutput = to_cpp(entry.actual_output(), false);
+                auto& desiredOutput = to_cpp(entry.desired_output(), false);
+                float cMse = 0.0f;
+
+                idx_t size = actualOutput->size();
+                float* doPtr = desiredOutput->ptr();
+                float* aoPtr = actualOutput->ptr();
+                for (int x = 0; x < size; x++)
                 {
-                    var aoPtr = actualOutputs.ToPtr(pAO);
-                    var doPtr = desiredOutputs.ToPtr(pDO);
-                    float cMse = 0.0f;
-
-                    for (int x = 0; x < actualOutputs.Size; x++)
-                    {
-                        float error = (doPtr[x] - aoPtr[x]) * 0.5f;
-                        cMse += error * error;
-                    }
-                    msePtr[valueIndex] += cMse / (float)actualOutputs.Size;
-
-                    count++;
+                    float error = (doPtr[x] - aoPtr[x]) * 0.5f;
+                    cMse += error * error;
                 }
+                ptr[valueIndex] += cMse / (float)size;
+
+                count++;
             }
         }
     }
 
-    if (count != 0.0f) msePtr[valueIndex] /= count;*/
+    if (count != 0.0f) ptr[valueIndex] /= count;
 }
