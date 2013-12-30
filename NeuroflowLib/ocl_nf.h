@@ -23,4 +23,10 @@ namespace nf
 
     struct ocl_utils;
     typedef std::shared_ptr<ocl_utils> ocl_utils_ptr;
+
+    struct ocl_program;
+    typedef std::shared_ptr<ocl_program> ocl_program_ptr;
+
+    struct ocl_program_unit;
+    typedef std::shared_ptr<ocl_program_unit> ocl_program_unit_ptr;
 }

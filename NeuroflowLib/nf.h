@@ -4,6 +4,17 @@
 #include <vector>
 #include <sstream>
 #include <exception>
+#include <string>
+#include <tuple>
+#include <functional>
+#include <list>
+#include <unordered_set>
+#include <unordered_map>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/algorithm/string/find.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 #include "nf_object.h"
 #include "error.h"
 

@@ -51,7 +51,7 @@ idx_t ocl_device_array_pool::reserve(idx_t size)
     if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
     if (endIndex != 0)
     {
-        idx_t align = deviceArrayMan->context()->get_align_bits(); // bits
+        idx_t align = deviceArrayMan->context()->align_bits(); // bits
         align /= 8; // bytes
         while (endIndex % align != 0) endIndex++;
     }
