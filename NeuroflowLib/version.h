@@ -1,11 +1,10 @@
 #pragma once
-
 #include <string>
 
 #define MAJOR_VER 1
 #define MINOR_VER 0
 #define BUILD_VER 363
-#define REVISION_VER 36519
+#define REVISION_VER 36606
 
 namespace nf
 {
