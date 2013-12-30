@@ -102,6 +102,9 @@
       <AdditionalLibraryDirectories>$(OCLLIBx64)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencl.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.h</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,6 +152,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="cpp_conv.h" />
+    <ClInclude Include="cpp_data_array.h" />
+    <ClInclude Include="cpp_data_array_factory.h" />
     <ClInclude Include="cpp_device_array.h" />
     <ClInclude Include="cpp_device_array2.h" />
     <ClInclude Include="cpp_device_array_management.h" />
@@ -163,6 +168,7 @@
     <ClInclude Include="device_info.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="get_size.h" />
+    <ClInclude Include="nf_helpers.h" />
     <ClInclude Include="nf.h" />
     <ClInclude Include="cpp_nf.h" />
     <ClInclude Include="ocl.h" />
@@ -191,6 +197,8 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cpp_data_array.cpp" />
+    <ClCompile Include="cpp_data_array_factory.cpp" />
     <ClCompile Include="cpp_device_array.cpp" />
     <ClCompile Include="cpp_device_array2.cpp" />
     <ClCompile Include="cpp_device_array_management.cpp" />
