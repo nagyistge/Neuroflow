@@ -30,5 +30,8 @@
     <ClCompile Include="data_array_factory_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
+    <ClCompile Include="utils_tests.cpp">
+      <Filter>BaseTests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

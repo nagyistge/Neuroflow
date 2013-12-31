@@ -12,7 +12,7 @@ _size2(size2)
     assert(size2 > 0);
 }
 
-cpp_device_array2::cpp_device_array2(const cpp_device_array_pool_ptr pool, idx_t beginIndex, idx_t size1, idx_t size2) :
+cpp_device_array2::cpp_device_array2(const cpp_device_array_pool_ptr& pool, idx_t beginIndex, idx_t size1, idx_t size2) :
 cpp_device_array(pool, beginIndex, size1 * size2),
 _size1(size1),
 _size2(size2)

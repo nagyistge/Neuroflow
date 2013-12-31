@@ -5,17 +5,17 @@ USING;
 
 supervised_sample::supervised_sample(const supervised_sample_entry& entry)
 {
-    add(entry);
+    push_back(entry);
 }
 
 supervised_sample::supervised_sample(const data_array_ptr& input)
 {
-    add(input);
+    push_back(input);
 }
 
 supervised_sample::supervised_sample(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput)
 {
-    add(input, desiredOutput, actualOutput);
+    push_back(input, desiredOutput, actualOutput);
 }
 
 idx_t supervised_sample::number_of_outputs() const
@@ -30,17 +30,17 @@ std::list<supervised_sample_entry>& supervised_sample::entries()
     return _entries;
 }
 
-void supervised_sample::add(const supervised_sample_entry& entry)
+void supervised_sample::push_back(const supervised_sample_entry& entry)
 {
     _entries.emplace_back(entry);
 }
 
-void supervised_sample::add(const data_array_ptr& input)
+void supervised_sample::push_back(const data_array_ptr& input)
 {
     _entries.emplace_back(input);
 }
 
-void supervised_sample::add(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput)
+void supervised_sample::push_back(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput)
 {
     _entries.emplace_back(input, desiredOutput, actualOutput);
 }
