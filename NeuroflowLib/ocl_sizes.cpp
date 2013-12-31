@@ -2,9 +2,7 @@
 #include "ocl_sizes.h"
 #include "ocl_internal_context.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_sizes::ocl_sizes(const ocl_internal_context_ptr& context) :
 ocl_contexted(context)

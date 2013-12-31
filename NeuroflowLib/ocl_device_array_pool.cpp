@@ -6,9 +6,7 @@
 #include "ocl_internal_context.h"
 #include "ocl_utils.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_device_array_pool::ocl_device_array_pool(const ocl_device_array_management_ptr& deviceArrayMan, const ocl_utils_ptr& utils) :
 deviceArrayMan(deviceArrayMan),
@@ -36,7 +34,7 @@ device_array2_ptr ocl_device_array_pool::create_array2(idx_t rowSize, idx_t colS
 void ocl_device_array_pool::allocate()
 {
     if (endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
-    if (!is_allocated()) buffer = deviceArrayMan->create_buffer(false, endIndex);
+    if (!is_allocated()) buffer = deviceArrayMan->create_buffer(CL_MEM_HOST_NO_ACCESS, endIndex);
 }
 
 void ocl_device_array_pool::zero()

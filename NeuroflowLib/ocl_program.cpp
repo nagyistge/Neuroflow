@@ -3,9 +3,7 @@
 #include "ocl_internal_context.h"
 #include "device_info.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 using namespace boost::filesystem;
 
 ocl_program::ocl_program(const ocl_internal_context_ptr& context, const std::string& name) : 

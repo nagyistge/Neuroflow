@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "supervised_batch.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 supervised_batch::supervised_batch(const supervised_sample& sample)
 {

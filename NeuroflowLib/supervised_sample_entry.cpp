@@ -2,8 +2,7 @@
 #include "supervised_sample_entry.h"
 #include "data_array.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 supervised_sample_entry::supervised_sample_entry(const data_array_ptr& input) : data(input, null, null) 
 { 

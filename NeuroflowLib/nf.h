@@ -25,6 +25,7 @@
 #define null nullptr
 #define _interface struct
 #define _implements virtual
+#define USING using namespace std; using namespace nf; using namespace cl; using namespace concurrency
 
 namespace nf
 {

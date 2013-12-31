@@ -2,9 +2,7 @@
 #include "ocl_device_array.h"
 #include "ocl_device_array_pool.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_device_array::ocl_device_array(const cl::Buffer& buffer) :
 _buffer(buffer),

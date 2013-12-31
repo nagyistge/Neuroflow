@@ -8,13 +8,15 @@ namespace nf
 {
     struct cpp_data_array : cpp_device_array, _implements data_array
     {
-        cpp_data_array(float* internalArray, idx_t arraySize, bool isReadOnly);
+        cpp_data_array(float* internalArray, idx_t arraySize, bool isConst);
 
-        bool is_read_only() const override;
-        concurrency::task<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) const override;
+        bool is_const() const override;
+        concurrency::task<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) override;
         concurrency::task<void> write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex) override;
 
     private:
-        bool isReadOnly;
+        bool isConst;
+
+        inline void verify_if_accessible() const;
     };
 }

@@ -9,6 +9,7 @@ namespace nf
     struct ocl_device_array_management : ocl_contexted, _implements device_array_management
     {
         friend struct ocl_device_array_pool;
+        friend struct ocl_data_array_factory;
 
         ocl_device_array_management(const ocl_internal_context_ptr& context, const ocl_utils_ptr& utils);
 
@@ -20,6 +21,7 @@ namespace nf
     private:
         ocl_utils_ptr utils;
 
-        cl::Buffer create_buffer(bool copyOptimized, idx_t sizeInBytes);
+        cl::Buffer create_buffer(cl_mem_flags flags, idx_t sizeInBytes, float fill = 0.0f);
+        cl::Buffer create_buffer(cl_mem_flags flags, float* from, idx_t sizeInBytes);
     };
 }

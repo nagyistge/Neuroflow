@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "cpp_device_array2.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 cpp_device_array2::cpp_device_array2(idx_t size1, idx_t size2) :
 cpp_device_array(size1 * size2),

@@ -3,8 +3,7 @@
 #include "cpp_device_array.h"
 #include "cpp_device_array2.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 cpp_device_array_pool::~cpp_device_array_pool()
 {

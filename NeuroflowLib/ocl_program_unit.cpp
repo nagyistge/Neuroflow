@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "ocl_program_unit.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_program_unit::ocl_program_unit(const ocl_internal_context_ptr& context, const std::string& name) :
 ocl_contexted(context),
