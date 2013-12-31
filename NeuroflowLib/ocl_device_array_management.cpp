@@ -6,9 +6,7 @@
 #include "ocl_internal_context.h"
 #include "ocl_conv.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_device_array_management::ocl_device_array_management(const ocl_internal_context_ptr& context, const ocl_utils_ptr& utils) :
 ocl_contexted(context),
@@ -18,12 +16,12 @@ utils(utils)
 
 device_array_ptr ocl_device_array_management::create_array(bool copyOptimized, idx_t size)
 {
-    return make_shared<ocl_device_array>(create_buffer(copyOptimized, size * sizeof(float)));
+    return make_shared<ocl_device_array>(create_buffer((copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS), size * sizeof(float)));
 }
 
 device_array2_ptr ocl_device_array_management::create_array2(bool copyOptimized, idx_t rowSize, idx_t colSize)
 {
-    return make_shared<ocl_device_array2>(create_buffer(copyOptimized, rowSize * colSize * sizeof(float)), rowSize);
+    return make_shared<ocl_device_array2>(create_buffer((copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS), rowSize * colSize * sizeof(float)), rowSize);
 }
 
 void ocl_device_array_management::copy(device_array_ptr from, idx_t fromIndex, device_array_ptr to, idx_t toIndex, idx_t size)
@@ -48,29 +46,41 @@ device_array_pool_ptr ocl_device_array_management::create_pool()
     return make_shared<ocl_device_array_pool>(shared_this<ocl_device_array_management>(), utils);
 }
 
-cl::Buffer ocl_device_array_management::create_buffer(bool copyOptimized, idx_t sizeInBytes)
+cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t sizeInBytes, float fill)
 {
     try
     {
         auto buffer = Buffer(
             context()->cl_context(),
-#if _DEBUG
-            0,
-#else
-            (copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS),
-#endif
+            flags,
             sizeInBytes,
             nullptr);
 
         context()->cl_queue().enqueueFillBuffer<float>(
             buffer,
-            0.0f, //
+            fill, //
             0, // offset
             sizeInBytes,
             nullptr,
             nullptr);
 
         return buffer;
+    }
+    catch (exception& ex)
+    {
+        throw as_ocl_error(ex);
+    }
+}
+
+cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float* from, idx_t sizeInBytes)
+{
+    try
+    {
+        return Buffer(
+            context()->cl_context(),
+            flags,
+            sizeof(float)* sizeInBytes,
+            from);
     }
     catch (exception& ex)
     {

@@ -1,17 +1,20 @@
 #pragma once
 
-#include "cpp_nf.h"
+#include "ocl_nf.h"
+#include "ocl_contexted.h"
 #include "data_array_factory.h"
 
 namespace nf
 {
-    struct cpp_data_array_factory : _implements data_array_factory
+    struct ocl_data_array_factory : _implements data_array_factory
     {
+        ocl_data_array_factory(const ocl_device_array_management_ptr& deviceArrayMan);
+
         data_array_ptr create(idx_t size, float fill) override;
         data_array_ptr create(float* values, idx_t beginPos, idx_t size) override;
         data_array_ptr create_const(float* values, idx_t beginPos, idx_t size) override;
 
     private:
-        data_array_ptr create(float* values, idx_t beginPos, idx_t size, bool isConst);
+        ocl_device_array_management_ptr deviceArrayMan;
     };
 }

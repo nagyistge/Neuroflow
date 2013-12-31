@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "ocl_internal_context.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_internal_context::ocl_internal_context(const nf::device_info& deviceInfo, const cl::Device& device) :
 context(device),

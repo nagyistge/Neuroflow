@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "ocl_kernel_name.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 ocl_kernel_name::ocl_kernel_name(const char* name)
 {

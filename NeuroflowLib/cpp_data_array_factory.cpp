@@ -2,8 +2,7 @@
 #include "cpp_data_array_factory.h"
 #include "cpp_data_array.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 data_array_ptr cpp_data_array_factory::create(idx_t size, float fill)
 {
@@ -27,12 +26,12 @@ data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx
     return create(values, beginPos, size, false);
 }
 
-data_array_ptr cpp_data_array_factory::create_read_only(float* values, idx_t beginPos, idx_t size)
+data_array_ptr cpp_data_array_factory::create_const(float* values, idx_t beginPos, idx_t size)
 {
     return create(values, beginPos, size, true);
 }
 
-data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx_t size, bool isReadOnly)
+data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx_t size, bool isConst)
 {
     verify_arg(values != null, "values");
     verify_arg(beginPos >= 0, "beginPos");
@@ -42,7 +41,7 @@ data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx
     try
     {
         memcpy(data, values + beginPos, size * sizeof(float));
-        return make_shared<cpp_data_array>(data, size, isReadOnly);
+        return make_shared<cpp_data_array>(data, size, isConst);
     }
     catch (...)
     {

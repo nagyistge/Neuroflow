@@ -4,8 +4,7 @@
 #include "cpp_device_array.h"
 #include "supervised_batch.h"
 
-using namespace std;
-using namespace nf;
+USING;
 
 cpp_utils::cpp_utils() :
 generator((std::random_device()() << 16) | std::random_device()())

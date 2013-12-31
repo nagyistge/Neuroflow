@@ -4,9 +4,7 @@
 #include "ocl_program.h"
 #include "ocl_internal_context.h"
 
-using namespace std;
-using namespace nf;
-using namespace cl;
+USING;
 
 const std::string& ocl_exec::get_kernel_name(idx_t vectorSize)
 {
