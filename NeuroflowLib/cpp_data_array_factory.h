@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct cpp_data_array_factory : _implements data_array_factory
+    struct cpp_data_array_factory : virtual data_array_factory
     {
         data_array_ptr create(idx_t size, float fill) override;
         data_array_ptr create(float* values, idx_t beginPos, idx_t size) override;

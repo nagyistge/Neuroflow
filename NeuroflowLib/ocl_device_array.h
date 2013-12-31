@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct ocl_device_array : _implements device_array
+    struct ocl_device_array : virtual device_array
     {
         ocl_device_array(const cl::Buffer& buffer);
         ocl_device_array(const ocl_device_array_pool_ptr& pool, idx_t beginOffset, idx_t arraySize);

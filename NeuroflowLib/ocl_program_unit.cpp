@@ -3,7 +3,7 @@
 
 USING;
 
-ocl_program_unit::ocl_program_unit(const ocl_internal_context_ptr& context, const std::string& name) :
+ocl_program_unit::ocl_program_unit(const ocl_internal_context_ptr& context, const std::wstring& name) :
 ocl_contexted(context),
 _name(name)
 {
@@ -50,7 +50,7 @@ std::string ocl_program_unit::code()
     return code.str();
 }
 
-const std::string& ocl_program_unit::name() const
+const std::wstring& ocl_program_unit::name() const
 {
     return _name;
 }

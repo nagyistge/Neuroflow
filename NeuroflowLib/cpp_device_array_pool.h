@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct cpp_device_array_pool : _implements device_array_pool
+    struct cpp_device_array_pool : virtual device_array_pool
     {
         ~cpp_device_array_pool();
 

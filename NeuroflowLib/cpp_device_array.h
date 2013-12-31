@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct cpp_device_array : _implements device_array
+    struct cpp_device_array : virtual device_array
     {
         cpp_device_array(float* internalArray, idx_t arraySize);
         cpp_device_array(idx_t arraySize);

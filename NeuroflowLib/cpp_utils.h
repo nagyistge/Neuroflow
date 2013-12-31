@@ -4,7 +4,7 @@
 
 namespace nf
 {
-    struct cpp_utils : _implements utils
+    struct cpp_utils : virtual utils
     {
         cpp_utils();
 

@@ -7,7 +7,7 @@
 
 namespace nf
 {
-    struct ocl_data_array : ocl_device_array, ocl_contexted, _implements data_array
+    struct ocl_data_array : ocl_device_array, ocl_contexted, virtual data_array
     {
         ocl_data_array(const ocl_internal_context_ptr& context, const cl::Buffer& buffer, bool isConst);
 

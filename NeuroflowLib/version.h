@@ -3,13 +3,13 @@
 
 #define MAJOR_VER 1
 #define MINOR_VER 0
-#define BUILD_VER 363
-#define REVISION_VER 36606
+#define BUILD_VER 364
+#define REVISION_VER 24305
 
 namespace nf
 {
-    inline std::string version()
+    inline std::wstring version()
     {
-        return std::to_string(MAJOR_VER) + "." + std::to_string(MINOR_VER) + "." + std::to_string(BUILD_VER) + "." + std::to_string(REVISION_VER);
+        return std::to_wstring(MAJOR_VER) + L"." + std::to_wstring(MINOR_VER) + L"." + std::to_wstring(BUILD_VER) + L"." + std::to_wstring(REVISION_VER);
     }
 }

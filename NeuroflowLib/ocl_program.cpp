@@ -6,7 +6,7 @@
 USING;
 using namespace boost::filesystem;
 
-ocl_program::ocl_program(const ocl_internal_context_ptr& context, const std::string& name) : 
+ocl_program::ocl_program(const ocl_internal_context_ptr& context, const std::wstring& name) : 
 ocl_program_unit(context, name)
 {
 }
@@ -24,7 +24,7 @@ const cl::Program& ocl_program::get_or_create_program()
 
 cl::Program ocl_program::compile()
 {
-    auto toAlphanumeric = [](const string& str)
+    auto toAlphanumeric = [](const wstring& str)
     {
         wstringstream result;
         for (auto ch : str)

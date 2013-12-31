@@ -9,18 +9,18 @@ namespace nf
 {
     struct ocl_program_unit : ocl_contexted
     {
-        ocl_program_unit(const ocl_internal_context_ptr& context, const std::string& name);
+        ocl_program_unit(const ocl_internal_context_ptr& context, const std::wstring& name);
 
         void using_base(const ocl_program_unit_ptr& baseUnit);
         void add_code(const std::string code);
         std::string code();
-        const std::string& name() const;
+        const std::wstring& name() const;
 
     protected:
         void add_builders(std::list<std::stringstream*>& to);
 
     private:
-        std::string _name;
+        std::wstring _name;
         std::stringstream codeBuilder;
         std::list<ocl_program_unit_ptr> baseUnits;
 
