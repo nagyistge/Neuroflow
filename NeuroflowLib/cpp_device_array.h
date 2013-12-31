@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp_nf.h"
+#include "cpp_nfdev.h"
 #include "device_array.h"
 
 namespace nf

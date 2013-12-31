@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ocl_nf.h"
+#include "ocl_nfdev.h"
 #include "ocl_program_unit.h"
 
 namespace nf

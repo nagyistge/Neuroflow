@@ -81,9 +81,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx86)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOSTLIBx86);$(OCLLIBx86)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -99,12 +106,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOSTLIBx64);$(OCLLIBx64)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>..\Tools\gencppver $(ProjectDir)version.h</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -124,9 +135,16 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx86)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOSTLIBx86);$(OCLLIBx86)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -146,9 +164,16 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(OCLLIBx64)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOSTLIBx64);$(OCLLIBx64)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="computation_context.h" />
@@ -173,9 +198,10 @@
     <ClInclude Include="device_info.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="get_size.h" />
-    <ClInclude Include="nf_helpers.h" />
     <ClInclude Include="nf.h" />
-    <ClInclude Include="cpp_nf.h" />
+    <ClInclude Include="nf_helpers.h" />
+    <ClInclude Include="nfdev.h" />
+    <ClInclude Include="cpp_nfdev.h" />
     <ClInclude Include="ocl.h" />
     <ClInclude Include="ocl_contexted.h" />
     <ClInclude Include="ocl_conv.h" />
@@ -189,7 +215,7 @@
     <ClInclude Include="ocl_exec.h" />
     <ClInclude Include="ocl_internal_context.h" />
     <ClInclude Include="ocl_kernel_name.h" />
-    <ClInclude Include="ocl_nf.h" />
+    <ClInclude Include="ocl_nfdev.h" />
     <ClInclude Include="nf_object.h" />
     <ClInclude Include="ocl_program.h" />
     <ClInclude Include="ocl_program_unit.h" />
@@ -200,6 +226,7 @@
     <ClInclude Include="supervised_sample.h" />
     <ClInclude Include="supervised_sample_entry.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="typedefs.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
@@ -236,6 +263,7 @@
     <ClCompile Include="supervised_batch.cpp" />
     <ClCompile Include="supervised_sample.cpp" />
     <ClCompile Include="supervised_sample_entry.cpp" />
+    <ClCompile Include="version.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

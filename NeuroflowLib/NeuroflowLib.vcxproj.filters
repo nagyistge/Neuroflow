@@ -8,14 +8,17 @@
     <Filter Include="VS">
       <UniqueIdentifier>{082e5d84-fc05-4554-ba99-caf7bb5a7217}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Base">
-      <UniqueIdentifier>{28ae8289-9819-4083-aff7-875ed92126c7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Cpp">
       <UniqueIdentifier>{8114df76-6c02-454b-8900-45c5e4e8aba0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Ocl">
       <UniqueIdentifier>{c43e386b-669a-4ad6-b566-2293bdd158a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{28ae8289-9819-4083-aff7-875ed92126c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{5a94e9e8-b409-41fd-8880-2272a1a856ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,9 +27,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>VS</Filter>
-    </ClInclude>
-    <ClInclude Include="nf.h">
-      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="nf_object.h">
       <Filter>Base</Filter>
@@ -63,12 +63,6 @@
     </ClInclude>
     <ClInclude Include="get_size.h">
       <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="cpp_nf.h">
-      <Filter>Cpp</Filter>
-    </ClInclude>
-    <ClInclude Include="ocl_nf.h">
-      <Filter>Ocl</Filter>
     </ClInclude>
     <ClInclude Include="ocl_device_array.h">
       <Filter>Ocl</Filter>
@@ -172,6 +166,21 @@
     <ClInclude Include="cpp_computation_context.h">
       <Filter>Cpp</Filter>
     </ClInclude>
+    <ClInclude Include="nfdev.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_nfdev.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_nfdev.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="nf.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="typedefs.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -254,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="cpp_computation_context.cpp">
       <Filter>Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="version.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

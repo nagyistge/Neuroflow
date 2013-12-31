@@ -50,7 +50,7 @@ void cpp_utils::calculate_mse(supervised_batch& batch, data_array_ptr& dataArray
                 idx_t size = actualOutput->size();
                 float* doPtr = desiredOutput->ptr();
                 float* aoPtr = actualOutput->ptr();
-                for (int x = 0; x < size; x++)
+                for (idx_t x = 0; x < size; x++)
                 {
                     float error = (doPtr[x] - aoPtr[x]) * 0.5f;
                     cMse += error * error;

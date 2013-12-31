@@ -1,14 +1,28 @@
 #include "stdafx.h"
 #include "computation_context_factory.h"
 #include "cc_factory_adapter.h"
+#include "cpp_cc_factory_adapter.h"
 
 USING;
 
+computation_context_factory computation_context_factory::_default = computation_context_factory();
+
 computation_context_factory::computation_context_factory()
 {
+    register_type(cpp_context, make_shared<cpp_cc_factory_adapter>());
 }
 
-std::list<device_info> computation_context_factory::get_available_devices(const wchar_t* typeId)
+const computation_context_factory& computation_context_factory::default()
+{
+    return _default;
+}
+
+void computation_context_factory::register_type(const wchar_t* typeId, const cc_factory_adapter_ptr& adapter)
+{
+    adapters.insert(make_pair(wstring(typeId), adapter));
+}
+
+std::list<device_info> computation_context_factory::get_available_devices(const wchar_t* typeId) const
 {
     cc_factory_adapter_ptr adapter;
     auto found = adapters.find(typeId);
@@ -16,7 +30,7 @@ std::list<device_info> computation_context_factory::get_available_devices(const 
     return found->second->get_available_devices();
 }
 
-computation_context_ptr computation_context_factory::create_context(const wchar_t* typeId, const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties)
+computation_context_ptr computation_context_factory::create_context(const wchar_t* typeId, const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties) const
 {
     cc_factory_adapter_ptr adapter;
     auto found = adapters.find(typeId);

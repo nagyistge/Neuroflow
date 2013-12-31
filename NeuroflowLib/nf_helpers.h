@@ -13,7 +13,7 @@ namespace nf
         return task<T>(comp);
     }
 
-    concurrency::task<void> create_do_nothing_task()
+    inline concurrency::task<void> create_do_nothing_task()
     {
         using namespace concurrency;
         auto comp = task_completion_event<void>();

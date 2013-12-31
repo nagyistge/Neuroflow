@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp_nf.h"
+#include "cpp_nfdev.h"
 #include "ocl_device_array.h"
 #include "data_array.h"
 #include "ocl_contexted.h"

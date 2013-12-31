@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nf.h"
+#include "nfdev.h"
 #include "supervised_sample_entry.h"
 
 namespace nf
