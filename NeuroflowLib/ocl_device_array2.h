@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ocl_nf.h"
+#include "ocl_nfdev.h"
 #include "device_array2.h"
 #include "ocl_device_array.h"
 

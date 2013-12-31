@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ocl_nf.h"
+#include "ocl_nfdev.h"
 #include "ocl_contexted.h"
 
 #define ADD_OCL_CODE(u, c) u->add_code(#c);

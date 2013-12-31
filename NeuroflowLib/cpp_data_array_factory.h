@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp_nf.h"
+#include "cpp_nfdev.h"
 #include "data_array_factory.h"
 
 namespace nf

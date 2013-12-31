@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpp_nf.h"
+#include "cpp_nfdev.h"
 #include "cpp_device_array.h"
 #include "cpp_device_array2.h"
 #include "cpp_data_array.h"

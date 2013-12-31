@@ -22,5 +22,5 @@ idx_t ocl_device_array2::size1() const
 
 idx_t ocl_device_array2::size2() const
 {
-    return size() / _size1;
+    return size() / _size1; 
 }
