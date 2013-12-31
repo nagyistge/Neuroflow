@@ -14,9 +14,9 @@ namespace nf
 
         idx_t number_of_outputs() const;
         std::list<supervised_sample_entry>& entries();
-        void add(const supervised_sample_entry& entry);
-        void add(const data_array_ptr& input);
-        void add(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
+        void push_back(const supervised_sample_entry& entry);
+        void push_back(const data_array_ptr& input);
+        void push_back(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
 
     private:
         std::list<supervised_sample_entry> _entries;

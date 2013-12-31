@@ -14,10 +14,12 @@ namespace nf
         supervised_batch(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
 
         std::list<supervised_sample> samples();
-        void add(const supervised_sample& sample);
-        void add(const supervised_sample_entry& entry);
-        void add(const data_array_ptr& input);
-        void add(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
+        std::list<supervised_sample>::reference back();
+        std::list<supervised_sample>::reference new_back();
+        void push_back(const supervised_sample& sample);
+        void push_back(const supervised_sample_entry& entry);
+        void push_back(const data_array_ptr& input);
+        void push_back(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
 
     private:
         std::list<supervised_sample> _samples;
