@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct ocl_device_array_pool : _implements device_array_pool
+    struct ocl_device_array_pool : virtual device_array_pool
     {
         friend struct ocl_device_array;
 

@@ -6,7 +6,7 @@
 
 namespace nf
 {
-    struct cpp_data_array : cpp_device_array, _implements data_array
+    struct cpp_data_array : cpp_device_array, virtual data_array
     {
         cpp_data_array(float* internalArray, idx_t arraySize, bool isConst);
 

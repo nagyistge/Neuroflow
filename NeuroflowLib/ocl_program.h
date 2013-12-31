@@ -7,7 +7,7 @@ namespace nf
 {
     struct ocl_program : ocl_program_unit
     {
-        ocl_program(const ocl_internal_context_ptr& context, const std::string& name);
+        ocl_program(const ocl_internal_context_ptr& context, const std::wstring& name);
         cl::Kernel create_kernel(const std::string name);
 
     private:

@@ -6,7 +6,7 @@
 
 namespace nf
 {
-    struct ocl_data_array_factory : _implements data_array_factory
+    struct ocl_data_array_factory : virtual data_array_factory
     {
         ocl_data_array_factory(const ocl_device_array_management_ptr& deviceArrayMan);
 

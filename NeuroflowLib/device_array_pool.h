@@ -4,7 +4,7 @@
 
 namespace nf
 {
-    _interface device_array_pool : virtual nf_object
+    struct device_array_pool : virtual nf_object
     {
         virtual bool is_allocated() const = 0;
         virtual device_array_ptr create_array(idx_t size) = 0;

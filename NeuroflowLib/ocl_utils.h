@@ -4,7 +4,7 @@
 
 namespace nf
 {
-    struct ocl_utils : _implements utils
+    struct ocl_utils : virtual utils
     {
         friend struct ocl_device_array_pool;
 

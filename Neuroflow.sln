@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Tools", "2. Tools", "{3E
 		Tools\gencppver.exe.config = Tools\gencppver.exe.config
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NeuroflowNativeUT", "NeuroflowNativeUT\NeuroflowNativeUT.vcxproj", "{16C640C2-B50D-4494-A459-4E8F6D082F33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -69,7 +71,6 @@ Global
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Debug|x64.ActiveCfg = Debug|x64
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Debug|x64.Build.0 = Debug|x64
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Debug|x86.ActiveCfg = Debug|x86
-		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Debug|x86.Build.0 = Debug|x86
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}.Release|Win32.ActiveCfg = Release|x86
@@ -85,7 +86,6 @@ Global
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Debug|x64.ActiveCfg = Debug|x64
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Debug|x64.Build.0 = Debug|x64
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Debug|x86.ActiveCfg = Debug|x86
-		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Debug|x86.Build.0 = Debug|x86
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Release|Mixed Platforms.Build.0 = Release|x86
 		{259845FA-9834-41E9-A53E-8AE96E1A09EA}.Release|Win32.ActiveCfg = Release|x86
@@ -101,7 +101,6 @@ Global
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Debug|x64.ActiveCfg = Debug|x64
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Debug|x64.Build.0 = Debug|x64
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Debug|x86.ActiveCfg = Debug|x86
-		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Debug|x86.Build.0 = Debug|x86
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Release|Mixed Platforms.Build.0 = Release|x86
 		{DF6AD2FA-8708-4E0F-B873-E85F6E6B69E6}.Release|Win32.ActiveCfg = Release|x86
@@ -117,7 +116,6 @@ Global
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Debug|x64.ActiveCfg = Debug|x64
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Debug|x64.Build.0 = Debug|x64
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Debug|x86.ActiveCfg = Debug|Win32
-		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Debug|x86.Build.0 = Debug|Win32
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{137F4CFE-529F-4886-9FAF-BE4B4847C754}.Release|Win32.ActiveCfg = Release|Win32
@@ -133,7 +131,6 @@ Global
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Debug|x64.ActiveCfg = Debug|x64
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Debug|x64.Build.0 = Debug|x64
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Debug|x86.ActiveCfg = Debug|Win32
-		{6417A480-6C0D-4F73-8447-CE864B378204}.Debug|x86.Build.0 = Debug|Win32
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{6417A480-6C0D-4F73-8447-CE864B378204}.Release|Win32.ActiveCfg = Release|Win32
@@ -149,7 +146,6 @@ Global
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Debug|x64.ActiveCfg = Debug|x64
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Debug|x64.Build.0 = Debug|x64
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Debug|x86.ActiveCfg = Debug|Win32
-		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Debug|x86.Build.0 = Debug|Win32
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{698EBDD7-4FEB-4FD5-89FA-5A269EC610F3}.Release|Win32.ActiveCfg = Release|Win32
@@ -181,7 +177,6 @@ Global
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x64.ActiveCfg = Debug|x64
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x64.Build.0 = Debug|x64
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x86.ActiveCfg = Debug|Win32
-		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x86.Build.0 = Debug|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Win32.ActiveCfg = Release|Win32
@@ -190,6 +185,21 @@ Global
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|x64.Build.0 = Release|x64
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|x86.ActiveCfg = Release|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|x86.Build.0 = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|Win32.ActiveCfg = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|Win32.Build.0 = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|x64.ActiveCfg = Debug|x64
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|x64.Build.0 = Debug|x64
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|x86.ActiveCfg = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Debug|x86.Build.0 = Debug|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|Win32.ActiveCfg = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|Win32.Build.0 = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|x64.ActiveCfg = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|x86.ActiveCfg = Release|Win32
+		{16C640C2-B50D-4494-A459-4E8F6D082F33}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,5 +207,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1E3F9155-8960-457D-8A38-9F1E20F07763} = {AE357080-8CFF-4E31-ACDF-82227214EB57}
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3} = {AE357080-8CFF-4E31-ACDF-82227214EB57}
+		{16C640C2-B50D-4494-A459-4E8F6D082F33} = {AE357080-8CFF-4E31-ACDF-82227214EB57}
 	EndGlobalSection
 EndGlobal

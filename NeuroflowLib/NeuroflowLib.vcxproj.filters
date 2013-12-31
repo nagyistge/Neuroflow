@@ -157,6 +157,21 @@
     <ClInclude Include="ocl_data_array_factory.h">
       <Filter>Ocl</Filter>
     </ClInclude>
+    <ClInclude Include="computation_context_factory.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="computation_context.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cc_factory_adapter.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_cc_factory_adapter.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_computation_context.h">
+      <Filter>Cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -230,6 +245,15 @@
     </ClCompile>
     <ClCompile Include="ocl_data_array_factory.cpp">
       <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="computation_context_factory.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_cc_factory_adapter.cpp">
+      <Filter>Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_computation_context.cpp">
+      <Filter>Cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
