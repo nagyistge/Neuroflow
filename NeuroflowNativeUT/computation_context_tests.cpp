@@ -65,10 +65,18 @@ namespace nfut
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(get_ocl_devices)
         {
-            computation_context_factory factory;
-            auto devices = factory.get_available_devices(ocl_context);
+            try
+            {
+                computation_context_factory factory;
+                auto devices = factory.get_available_devices(ocl_context);
 
-            Assert::AreNotEqual(size_t(0), devices.size());
+                Assert::AreNotEqual(size_t(0), devices.size());
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }            
         }
     };
 }

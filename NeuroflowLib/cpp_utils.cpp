@@ -27,7 +27,7 @@ void cpp_utils::randomize_uniform(device_array_ptr deviceArray, float min, float
     for (idx_t i = 0; i < size; i++) p[i] = randF();
 }
 
-void cpp_utils::calculate_mse(supervised_batch& batch, data_array_ptr dataArray, idx_t valueIndex) const
+void cpp_utils::calculate_mse(supervised_batch& batch, data_array_ptr dataArray, idx_t valueIndex)
 {
     verify_arg(dataArray != null, "dataArray");
     verify_arg(valueIndex >= 0 && valueIndex < dataArray->size(), "valueIndex");

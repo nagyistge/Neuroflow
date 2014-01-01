@@ -16,6 +16,7 @@
 #include <malloc.h>
 #include <functional>
 #include <list>
+#include <algorithm>
 #include <unordered_set>
 #include <unordered_map>
 #include <ppltasks.h>

@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include <ppltasks.h>
 #include <random>
+#include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>

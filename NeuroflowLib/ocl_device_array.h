@@ -11,7 +11,7 @@ namespace nf
         ocl_device_array(const ocl_device_array_pool_ptr& pool, idx_t beginOffset, idx_t arraySize);
 
         idx_t size() const override;
-        cl::Buffer& buffer();
+        const cl::Buffer& buffer();
 
     private:
         cl::Buffer _buffer;
