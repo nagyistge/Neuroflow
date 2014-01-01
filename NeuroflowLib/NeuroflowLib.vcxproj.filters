@@ -61,9 +61,6 @@
     <ClInclude Include="cpp_conv.h">
       <Filter>Cpp</Filter>
     </ClInclude>
-    <ClInclude Include="get_size.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="ocl_device_array.h">
       <Filter>Ocl</Filter>
     </ClInclude>
@@ -190,6 +187,12 @@
     <ClInclude Include="prop_def.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="ocl_units.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="get_vector_size.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -280,6 +283,9 @@
       <Filter>Ocl</Filter>
     </ClCompile>
     <ClCompile Include="ocl_contexted.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_units.cpp">
       <Filter>Ocl</Filter>
     </ClCompile>
   </ItemGroup>

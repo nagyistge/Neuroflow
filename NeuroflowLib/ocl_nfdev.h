@@ -37,4 +37,10 @@ namespace nf
 
     struct ocl_program_unit;
     typedef std::shared_ptr<ocl_program_unit> ocl_program_unit_ptr;
+
+    struct ocl_units;
+    typedef std::shared_ptr<ocl_units> ocl_units_ptr;
+
+    struct ocl_sizes;
+    typedef std::shared_ptr<ocl_sizes> ocl_sizes_ptr;
 }

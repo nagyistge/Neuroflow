@@ -22,7 +22,7 @@ idx_t ocl_device_array::size() const
     return arraySize;
 }
 
-cl::Buffer& ocl_device_array::buffer()
+const cl::Buffer& ocl_device_array::buffer()
 {
     if (_buffer() == null)
     {

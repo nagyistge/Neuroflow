@@ -9,7 +9,7 @@ _name(name)
 {
 }
 
-void ocl_program_unit::using_base(const ocl_program_unit_ptr& baseUnit)
+void ocl_program_unit::include(const ocl_program_unit_ptr& baseUnit)
 {
     if (baseUnit != null && find(baseUnits.cbegin(), baseUnits.cend(), baseUnit) == baseUnits.cend())
     {

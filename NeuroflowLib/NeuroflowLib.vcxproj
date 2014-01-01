@@ -197,7 +197,7 @@
     <ClInclude Include="device_array_pool.h" />
     <ClInclude Include="device_info.h" />
     <ClInclude Include="error.h" />
-    <ClInclude Include="get_size.h" />
+    <ClInclude Include="get_vector_size.h" />
     <ClInclude Include="nf.h" />
     <ClInclude Include="nf_helpers.h" />
     <ClInclude Include="nfdev.h" />
@@ -222,6 +222,7 @@
     <ClInclude Include="ocl_program.h" />
     <ClInclude Include="ocl_program_unit.h" />
     <ClInclude Include="ocl_sizes.h" />
+    <ClInclude Include="ocl_units.h" />
     <ClInclude Include="ocl_utils.h" />
     <ClInclude Include="prop_def.h" />
     <ClInclude Include="stdafx.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="ocl_program.cpp" />
     <ClCompile Include="ocl_program_unit.cpp" />
     <ClCompile Include="ocl_sizes.cpp" />
+    <ClCompile Include="ocl_units.cpp" />
     <ClCompile Include="ocl_utils.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
