@@ -2,6 +2,7 @@
 #include "computation_context_factory.h"
 #include "cc_factory_adapter.h"
 #include "cpp_cc_factory_adapter.h"
+#include "ocl_cc_factory_adapter.h"
 
 USING;
 
@@ -10,6 +11,7 @@ computation_context_factory computation_context_factory::_default = computation_
 computation_context_factory::computation_context_factory()
 {
     register_type(cpp_context, make_shared<cpp_cc_factory_adapter>());
+    register_type(ocl_context, make_shared<ocl_cc_factory_adapter>());
 }
 
 const computation_context_factory& computation_context_factory::default()

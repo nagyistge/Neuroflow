@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace cl;
-using namespace NeuroflowN; 
+using namespace NeuroflowN;
 
 namespace NeuroflowN
 {

@@ -9,7 +9,7 @@ namespace nf
 {
     struct ocl_program_unit : ocl_contexted
     {
-        ocl_program_unit(const ocl_internal_context_ptr& context, const std::wstring& name);
+        ocl_program_unit(const ocl_computation_context_wptr& context, const std::wstring& name);
 
         void using_base(const ocl_program_unit_ptr& baseUnit);
         void add_code(const std::string code);

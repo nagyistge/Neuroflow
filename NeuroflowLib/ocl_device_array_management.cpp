@@ -3,14 +3,13 @@
 #include "ocl_device_array.h"
 #include "ocl_device_array2.h"
 #include "ocl_device_array_pool.h"
-#include "ocl_internal_context.h"
+#include "ocl_computation_context.h"
 #include "ocl_conv.h"
 
 USING;
 
-ocl_device_array_management::ocl_device_array_management(const ocl_internal_context_ptr& context, const ocl_utils_ptr& utils) :
-ocl_contexted(context),
-utils(utils)
+ocl_device_array_management::ocl_device_array_management(const ocl_computation_context_wptr& context) :
+ocl_contexted(context)
 {
 }
 
@@ -26,9 +25,11 @@ device_array2_ptr ocl_device_array_management::create_array2(bool copyOptimized,
 
 void ocl_device_array_management::copy(device_array_ptr from, idx_t fromIndex, device_array_ptr to, idx_t toIndex, idx_t size)
 {
+    auto ctx = lock_context();
+
     try
     {
-        context()->cl_queue().enqueueCopyBuffer(
+        ctx->cl_queue().enqueueCopyBuffer(
             to_ocl(from, false)->buffer(),
             to_ocl(to, false)->buffer(),
             fromIndex * sizeof(float),
@@ -43,20 +44,22 @@ void ocl_device_array_management::copy(device_array_ptr from, idx_t fromIndex, d
 
 device_array_pool_ptr ocl_device_array_management::create_pool()
 {
-    return make_shared<ocl_device_array_pool>(shared_this<ocl_device_array_management>(), utils);
+    return make_shared<ocl_device_array_pool>(lock_context());
 }
 
 cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t sizeInBytes, float fill)
 {
+    auto ctx = lock_context();
+
     try
     {
         auto buffer = Buffer(
-            context()->cl_context(),
+            ctx->cl_context(),
             flags,
             sizeInBytes,
             nullptr);
 
-        context()->cl_queue().enqueueFillBuffer<float>(
+        ctx->cl_queue().enqueueFillBuffer<float>(
             buffer,
             fill, //
             0, // offset
@@ -74,10 +77,12 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t 
 
 cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float* from, idx_t sizeInBytes)
 {
+    auto ctx = lock_context();
+
     try
     {
         return Buffer(
-            context()->cl_context(),
+            ctx->cl_context(),
             flags,
             sizeof(float)* sizeInBytes,
             from);

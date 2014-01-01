@@ -2,14 +2,15 @@
 
 #include "ocl_nfdev.h"
 #include "device_array_pool.h"
+#include "ocl_contexted.h"
 
 namespace nf
 {
-    struct ocl_device_array_pool : virtual device_array_pool
+    struct ocl_device_array_pool : ocl_contexted, virtual device_array_pool
     {
         friend struct ocl_device_array;
 
-        ocl_device_array_pool(const ocl_device_array_management_ptr& deviceArrayMan, const ocl_utils_ptr& utils);
+        ocl_device_array_pool(const ocl_computation_context_wptr& context);
 
         bool is_allocated() const override;
         device_array_ptr create_array(idx_t size) override;
@@ -20,8 +21,6 @@ namespace nf
     private:
         cl::Buffer buffer;
         idx_t endIndex;
-        ocl_device_array_management_ptr deviceArrayMan;
-        ocl_utils_ptr utils;
 
         idx_t reserve(idx_t size);
         cl::Buffer create_sub_buffer(idx_t beginOffset, idx_t size);

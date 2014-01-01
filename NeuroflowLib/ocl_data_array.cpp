@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "ocl_data_array.h"
-#include "ocl_internal_context.h"
+#include "ocl_computation_context.h"
 
 USING;
 
-ocl_data_array::ocl_data_array(const ocl_internal_context_ptr& context, const cl::Buffer& buffer, bool isConst) :
+ocl_data_array::ocl_data_array(const ocl_computation_context_wptr& context, const cl::Buffer& buffer, bool isConst) :
 ocl_device_array(buffer),
 ocl_contexted(context),
 isConst(isConst)
@@ -25,11 +25,12 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
 
     verify_if_accessible();
 
+    auto ctx = lock_context();
     auto tce = new task_completion_event<void>();
     try
     {
         Event e;
-        auto& queue = context()->cl_queue();
+        auto queue = ctx->cl_queue();
 
         queue.enqueueReadBuffer(
             buffer(),
@@ -86,11 +87,12 @@ concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBe
 
     verify_if_accessible();
 
+    auto ctx = lock_context();
     auto tce = new task_completion_event<void>();
     try
     {
         Event e;
-        auto& queue = context()->cl_queue();
+        auto queue = ctx->cl_queue();
 
         queue.enqueueWriteBuffer(
             buffer(),

@@ -1,16 +1,19 @@
 #pragma once
 
 #include "ocl_nfdev.h"
+#include "ocl_contexted.h"
 
 namespace nf
 {
-    struct ocl_exec
+    struct ocl_exec : ocl_contexted
     {
         struct named_kernel
         {
             cl::Kernel kernel;
             std::string kernelName;
         };
+
+        ocl_exec(const ocl_computation_context_wptr& context);
 
         const std::string& get_kernel_name(idx_t vectorSize);
         void execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, idx_t workItemSize = 1);

@@ -3,17 +3,14 @@
 #include "ocl_device_array.h"
 #include "ocl_device_array2.h"
 #include "ocl_device_array_management.h"
-#include "ocl_internal_context.h"
+#include "ocl_computation_context.h"
 #include "ocl_utils.h"
 
 USING;
 
-ocl_device_array_pool::ocl_device_array_pool(const ocl_device_array_management_ptr& deviceArrayMan, const ocl_utils_ptr& utils) :
-deviceArrayMan(deviceArrayMan),
-utils(utils)
+ocl_device_array_pool::ocl_device_array_pool(const ocl_computation_context_wptr& context) :
+ocl_contexted(context)
 {
-    assert(deviceArrayMan != null);
-    assert(utils != null);
 }
 
 bool ocl_device_array_pool::is_allocated() const
@@ -33,24 +30,30 @@ device_array2_ptr ocl_device_array_pool::create_array2(idx_t rowSize, idx_t colS
 
 void ocl_device_array_pool::allocate()
 {
+    auto ctx = lock_context();
+
     if (endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
-    if (!is_allocated()) buffer = deviceArrayMan->create_buffer(CL_MEM_HOST_NO_ACCESS, endIndex);
+    if (!is_allocated()) buffer = ctx->ocl_device_array_management()->create_buffer(CL_MEM_HOST_NO_ACCESS, endIndex);
 }
 
 void ocl_device_array_pool::zero()
 {
+    auto ctx = lock_context();
+
     if (!is_allocated()) throw_logic_error("Cannot zero out an unallocated pool.");
     idx_t fsize = endIndex / sizeof(float);
     assert(endIndex % sizeof(float) == 0);
-    utils->zero(buffer, fsize);
+    ctx->ocl_utils()->zero(buffer, fsize);
 }
 
 idx_t ocl_device_array_pool::reserve(idx_t size)
 {
+    auto ctx = lock_context();
+
     if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
     if (endIndex != 0)
     {
-        idx_t align = deviceArrayMan->context()->align_bits(); // bits
+        idx_t align = ctx->align_bits(); // bits
         align /= 8; // bytes
         while (endIndex % align != 0) endIndex++;
     }

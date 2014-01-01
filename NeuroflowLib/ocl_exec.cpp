@@ -2,9 +2,14 @@
 #include "ocl_exec.h"
 #include "ocl_device_array.h"
 #include "ocl_program.h"
-#include "ocl_internal_context.h"
+#include "ocl_computation_context.h"
 
 USING;
+
+ocl_exec::ocl_exec(const ocl_computation_context_wptr& context) :
+ocl_contexted(context)
+{
+}
 
 const std::string& ocl_exec::get_kernel_name(idx_t vectorSize)
 {
@@ -71,13 +76,14 @@ void ocl_exec::ensure_kernel(const ocl_program_ptr& program, const std::string& 
 
 void ocl_exec::do_execute(const ocl_program_ptr& program, idx_t vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
+    auto ctx = lock_context();
     auto& k = get_named_kernel(vectorSize);
     if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
     {
-        program->context()->cl_queue().enqueueTask(k.kernel);
+        ctx->cl_queue().enqueueTask(k.kernel);
     }
     else
     {
-        program->context()->cl_queue().enqueueNDRangeKernel(k.kernel, workItemOffsets, workItemSizes, localSizes);
+        ctx->cl_queue().enqueueNDRangeKernel(k.kernel, workItemOffsets, workItemSizes, localSizes);
     }
 }

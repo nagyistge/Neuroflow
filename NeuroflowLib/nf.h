@@ -15,3 +15,4 @@
 #include "device_info.h"
 #include "supervised_batch.h"
 #include "utils.h"
+#include "ocl_cc_props.h"

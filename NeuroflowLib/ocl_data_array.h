@@ -9,7 +9,7 @@ namespace nf
 {
     struct ocl_data_array : ocl_device_array, ocl_contexted, virtual data_array
     {
-        ocl_data_array(const ocl_internal_context_ptr& context, const cl::Buffer& buffer, bool isConst);
+        ocl_data_array(const ocl_computation_context_wptr& context, const cl::Buffer& buffer, bool isConst);
 
         bool is_const() const;
         concurrency::task<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex);

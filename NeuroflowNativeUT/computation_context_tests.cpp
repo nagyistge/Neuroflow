@@ -59,5 +59,16 @@ namespace nfut
             Assert::IsNotNull(ctx->utils().get());
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(get_ocl_devices)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(get_ocl_devices)
+        {
+            computation_context_factory factory;
+            auto devices = factory.get_available_devices(ocl_context);
+
+            Assert::AreNotEqual(size_t(0), devices.size());
+        }
     };
 }
