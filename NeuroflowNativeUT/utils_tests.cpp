@@ -65,8 +65,6 @@ namespace nfut
 
         void test_calculate_mse(computation_context_ptr ctx)
         {
-            const int repeat = 10000;
-
             vector<vector<vector<float>>> desired =
             {
                 {
@@ -116,15 +114,12 @@ namespace nfut
 
             vector<float> result(2);
 
-            for (int i = 0; i < repeat; i++)
-            {
-                ctx->utils()->calculate_mse(batch, resultValues, 1);
+            ctx->utils()->calculate_mse(batch, resultValues, 1);
 
-                resultValues->read(0, result.size(), &result[0], 0).wait();
+            resultValues->read(0, result.size(), &result[0], 0).wait();
 
-                Assert::AreEqual(0.0f, result[0]);
-                Assert::AreEqual(mse, result[1]);
-            }
+            Assert::AreEqual(0.0f, result[0]);
+            Assert::AreEqual(mse, result[1]);
         }
 
         float calc_mse(const vector<vector<vector<float>>>& desired, const vector<vector<vector<float>>>& current)

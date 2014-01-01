@@ -203,6 +203,9 @@
     <ClInclude Include="nfdev.h" />
     <ClInclude Include="cpp_nfdev.h" />
     <ClInclude Include="ocl.h" />
+    <ClInclude Include="ocl_cc_factory_adapter.h" />
+    <ClInclude Include="ocl_cc_props.h" />
+    <ClInclude Include="ocl_computation_context.h" />
     <ClInclude Include="ocl_contexted.h" />
     <ClInclude Include="ocl_conv.h" />
     <ClInclude Include="ocl_data_array.h" />
@@ -213,7 +216,6 @@
     <ClInclude Include="ocl_device_array_pool.h" />
     <ClInclude Include="ocl_error.h" />
     <ClInclude Include="ocl_exec.h" />
-    <ClInclude Include="ocl_internal_context.h" />
     <ClInclude Include="ocl_kernel_name.h" />
     <ClInclude Include="ocl_nfdev.h" />
     <ClInclude Include="nf_object.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="ocl_program_unit.h" />
     <ClInclude Include="ocl_sizes.h" />
     <ClInclude Include="ocl_utils.h" />
+    <ClInclude Include="prop_def.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
     <ClInclude Include="supervised_sample.h" />
@@ -241,6 +244,9 @@
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
     <ClCompile Include="cpp_utils.cpp" />
+    <ClCompile Include="ocl_cc_factory_adapter.cpp" />
+    <ClCompile Include="ocl_computation_context.cpp" />
+    <ClCompile Include="ocl_contexted.cpp" />
     <ClCompile Include="ocl_data_array.cpp" />
     <ClCompile Include="ocl_data_array_factory.cpp" />
     <ClCompile Include="ocl_device_array.cpp" />
@@ -248,7 +254,6 @@
     <ClCompile Include="ocl_device_array_management.cpp" />
     <ClCompile Include="ocl_device_array_pool.cpp" />
     <ClCompile Include="ocl_exec.cpp" />
-    <ClCompile Include="ocl_internal_context.cpp" />
     <ClCompile Include="ocl_kernel_name.cpp" />
     <ClCompile Include="ocl_program.cpp" />
     <ClCompile Include="ocl_program_unit.cpp" />

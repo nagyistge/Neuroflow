@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "ocl_program.h"
-#include "ocl_internal_context.h"
+#include "ocl_computation_context.h"
 #include "device_info.h"
 
 USING;
 using namespace boost::filesystem;
 
-ocl_program::ocl_program(const ocl_internal_context_ptr& context, const std::wstring& name) : 
+ocl_program::ocl_program(const ocl_computation_context_wptr& context, const std::wstring& name) :
 ocl_program_unit(context, name)
 {
 }
@@ -24,6 +24,8 @@ const cl::Program& ocl_program::get_or_create_program()
 
 cl::Program ocl_program::compile()
 {
+    auto ctx = lock_context();
+
     auto toAlphanumeric = [](const wstring& str)
     {
         wstringstream result;
@@ -69,7 +71,7 @@ cl::Program ocl_program::compile()
 
     fns << toAlphanumeric(name());
     fns << '_';
-    fns << toAlphanumeric(context()->device_info().id());
+    fns << toAlphanumeric(ctx->device_info().id());
     fns << ".bin";
     wstring fn = fns.str();
 
@@ -94,11 +96,12 @@ cl::Program ocl_program::compile()
 
 cl::Program ocl_program::create_program_and_binary(std::vector<char>& bin)
 {
+    auto ctx = lock_context();
     auto code = this->code();
 #if _DEBUG
     source = code;
 #endif
-    auto p = Program(context()->cl_context(), code.c_str(), false);
+    auto p = Program(ctx->cl_context(), code.c_str(), false);
     build(p);
 
     auto s = p.getInfo<CL_PROGRAM_BINARY_SIZES>();
@@ -122,22 +125,26 @@ cl::Program ocl_program::create_program_and_binary(std::vector<char>& bin)
 
 cl::Program ocl_program::create_program(const std::vector<char>& bin)
 {
+    auto ctx = lock_context();
+
     Program::Binaries bins;
     bins.emplace_back(&bin[0], bin.size());
-    auto p = Program(context()->cl_context(), vector<Device>(1, context()->cl_device()), bins);
+    auto p = Program(ctx->cl_context(), vector<Device>(1, ctx->cl_device()), bins);
     build(p);
     return p;
 }
 
 void ocl_program::build(cl::Program& program)
 {
+    auto ctx = lock_context();
+
     try
     {
-        program.build(vector<Device>(1, context()->cl_device()), "-cl-fast-relaxed-math");
+        program.build(vector<Device>(1, ctx->cl_device()), "-cl-fast-relaxed-math");
     }
     catch (Error&)
     {
-        auto info = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(context()->cl_device());
+        auto info = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(ctx->cl_device());
         info = string("\nOPENCL BUILD FAILED:\n") + info;
         throw_logic_error(info.c_str());
     }

@@ -6,17 +6,13 @@ namespace nf
 {
     struct ocl_contexted
     {
-        ocl_contexted(const ocl_internal_context_ptr& context) : _context(context) 
-        {
-            assert(context != null);
-        }
+    protected:
 
-        const ocl_internal_context_ptr& context() const
-        {
-            return _context;
-        }
+        ocl_contexted(const ocl_computation_context_wptr& context);
+
+        ocl_computation_context_ptr lock_context() const;
 
     private:
-        ocl_internal_context_ptr _context;
+        ocl_computation_context_wptr _context;
     };
 }

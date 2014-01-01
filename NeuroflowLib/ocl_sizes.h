@@ -26,7 +26,7 @@ namespace nf
 
     struct ocl_sizes : ocl_contexted
     {
-        ocl_sizes(const ocl_internal_context_ptr& context);
+        ocl_sizes(const ocl_computation_context_wptr& context);
 
         idx_t get_optimal_global_size(idx_t workItemsCount, idx_t vectorSize) const;
         ocl_1d_range get_io_reduce_sizes_input(idx_t inputSize, idx_t vectorSize, idx_t outputSize) const;

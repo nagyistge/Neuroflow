@@ -76,9 +76,6 @@
     <ClInclude Include="ocl_device_array2.h">
       <Filter>Ocl</Filter>
     </ClInclude>
-    <ClInclude Include="ocl_internal_context.h">
-      <Filter>Ocl</Filter>
-    </ClInclude>
     <ClInclude Include="ocl_device_array_management.h">
       <Filter>Ocl</Filter>
     </ClInclude>
@@ -181,6 +178,18 @@
     <ClInclude Include="typedefs.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="ocl_computation_context.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_cc_factory_adapter.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_cc_props.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="prop_def.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -212,9 +221,6 @@
     </ClCompile>
     <ClCompile Include="cpp_utils.cpp">
       <Filter>Cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="ocl_internal_context.cpp">
-      <Filter>Ocl</Filter>
     </ClCompile>
     <ClCompile Include="ocl_utils.cpp">
       <Filter>Ocl</Filter>
@@ -266,6 +272,15 @@
     </ClCompile>
     <ClCompile Include="version.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_cc_factory_adapter.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_computation_context.cpp">
+      <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_contexted.cpp">
+      <Filter>Ocl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
