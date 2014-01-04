@@ -7,27 +7,35 @@ namespace nf
     struct device_info
     {
         device_info() = delete;
-        device_info(const std::wstring& id, const std::wstring& name = L"", const std::wstring& platform = L"")
+        device_info(const std::wstring& id, const std::wstring& version, const std::wstring& name = L"", const std::wstring& platform = L"") :
+            _id(id),
+            _version(version),
+            _name(name),
+            _platform(platform)
         {
-            values = std::make_tuple(id, name, platform);
         }
 
         const std::wstring id() const
         {
-            return std::get<0>(values);
+            return _id;
+        }
+
+        const std::wstring version() const
+        {
+            return _version;
         }
 
         const std::wstring name() const
         {
-            return std::get<1>(values);
+            return _name;
         }
 
         const std::wstring platform() const
         {
-            return std::get<2>(values);
+            return _platform;
         }
 
     private:
-        std::tuple<std::wstring, std::wstring, std::wstring> values;
+        std::wstring _id, _version, _name, _platform;
     };
 }
