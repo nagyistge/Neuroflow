@@ -127,6 +127,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BOOST);$(OCLINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,7 +138,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(BOOSTLIBx86);$(OCLLIBx86)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>
@@ -156,6 +158,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(BOOST);$(OCLINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,7 +169,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(BOOSTLIBx64);$(OCLLIBx64)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>

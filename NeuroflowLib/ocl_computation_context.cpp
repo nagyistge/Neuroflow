@@ -19,18 +19,10 @@ _maxWorkGroupSize(_currentDevice.second.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()
 _maxWorkItemSizes(cl::NullRange),
 _alignBits(_currentDevice.second.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>())
 {
+    _queue = CommandQueue(_context, _currentDevice.second);
     prop_def pd(_properties, properties);
     _maxConnectionCount = pd.def<idx_t>(ocl_prop_max_connection_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
     _maxLayerCount = pd.def<idx_t>(ocl_prop_max_layer_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
-
-    auto _this = shared_this<ocl_computation_context>();
-    _deviceArrayMan = make_shared<nf::ocl_device_array_management>(_this);
-    _dataArrayFactory = make_shared<nf::ocl_data_array_factory>(_this);
-    _utils = make_shared<nf::ocl_utils>(_this);
-    _units = make_shared<nf::ocl_units>(_this);
-    _sizes = make_shared<nf::ocl_sizes>(_this);
-
-    _preferredWorkgroupSizeMul = _utils->get_preferred_workgroup_size_mul();
 }
 
 ocl_computation_context::cl_device_list_t ocl_computation_context::get_available_devices(cl_device_type type)
@@ -64,10 +56,6 @@ ocl_computation_context::cl_device_list_t ocl_computation_context::get_available
                     all.emplace_back(nf::device_info(create_device_id(wpn, d), v, get_device_name(d), wpn), d);
                 }
             }
-        }
-        catch (exception& ex)
-        {
-            throw;
         }
         catch (...)
         {
@@ -226,9 +214,12 @@ idx_t ocl_computation_context::max_layer_count() const
     return _maxLayerCount;
 }
 
-idx_t ocl_computation_context::preferred_workgroup_size_mul() const
+idx_t ocl_computation_context::preferred_workgroup_size_mul()
 {
-    assert(_preferredWorkgroupSizeMul > 0);
+    if (_preferredWorkgroupSizeMul == 0)
+    {
+        _preferredWorkgroupSizeMul = ocl_utils()->get_preferred_workgroup_size_mul();
+    }
     return _preferredWorkgroupSizeMul;
 }
 
@@ -244,40 +235,65 @@ idx_t ocl_computation_context::align_bits() const
 
 device_array_management_ptr ocl_computation_context::device_array_management()
 {
-    return static_pointer_cast<nf::device_array_management>(_deviceArrayMan);
+    return static_pointer_cast<nf::device_array_management>(ocl_device_array_management());
 }
 
 const ocl_device_array_management_ptr& ocl_computation_context::ocl_device_array_management()
 {
+    if (!_deviceArrayMan)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _deviceArrayMan = make_shared<nf::ocl_device_array_management>(_this);
+    }
     return _deviceArrayMan;
 }
 
 data_array_factory_ptr ocl_computation_context::data_array_factory()
 {
-    return static_pointer_cast<nf::data_array_factory>(_dataArrayFactory);
+    return static_pointer_cast<nf::data_array_factory>(ocl_data_array_factory());
 }
 
 const ocl_data_array_factory_ptr& ocl_computation_context::ocl_data_array_factory()
 {
+    if (!_dataArrayFactory)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _dataArrayFactory = make_shared<nf::ocl_data_array_factory>(_this);
+    }
     return _dataArrayFactory;
 }
 
 utils_ptr ocl_computation_context::utils()
 {
-    return static_pointer_cast<nf::utils>(_utils);
+    return static_pointer_cast<nf::utils>(ocl_utils());
 }
 
 const ocl_utils_ptr& ocl_computation_context::ocl_utils()
 {
+    if (!_utils)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _utils = make_shared<nf::ocl_utils>(_this);
+    }
     return _utils;
 }
 
-const ocl_units_ptr& ocl_computation_context::units() const
+const ocl_units_ptr& ocl_computation_context::units() 
 {
+    if (!_units)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _units = make_shared<nf::ocl_units>(_this);
+    }
     return _units;
 }
 
-const ocl_sizes_ptr& ocl_computation_context::sizes() const
+const ocl_sizes_ptr& ocl_computation_context::sizes()
 {
+    if (!_sizes)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _sizes = make_shared<nf::ocl_sizes>(_this);
+    }
     return _sizes;
 }
