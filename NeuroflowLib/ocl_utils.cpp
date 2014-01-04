@@ -174,7 +174,7 @@ void ocl_utils::add_mse(const ocl_data_array_ptr& desiredValues, const ocl_data_
     1);
 }
 
-void ocl_utils::div(const ocl_data_array_ptr& values, unsigned valueIndex, float byValue)
+void ocl_utils::div(const ocl_data_array_ptr& values, idx_t valueIndex, float byValue)
 {
     assert(valueIndex < values->size());
 
@@ -182,7 +182,7 @@ void ocl_utils::div(const ocl_data_array_ptr& values, unsigned valueIndex, float
     program,
     divName(1),
     1,
-    [&, valueIndex, byValue](Kernel& kernel)
+    [=](Kernel& kernel)
     {
     kernel.setArg(0, values->buffer());
     kernel.setArg(1, byValue);

@@ -12,11 +12,11 @@ namespace nfut
 	{
 	public:
 		
-        BEGIN_TEST_METHOD_ATTRIBUTE(zero)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_zero)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-		TEST_METHOD(zero)
+        TEST_METHOD(cpp_zero)
 		{
             try
             {
@@ -30,15 +30,91 @@ namespace nfut
             }
 		}
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(calculate_mse)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_zero_cpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL CPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_zero_cpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"CPU");
+                test_zero(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_zero_gpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL GPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_zero_gpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"GPU");
+                test_zero(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_calculate_mse)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(calculate_mse)
+        TEST_METHOD(cpp_calculate_mse)
         {
             try
             {
                 auto ctx = computation_context_factory::default().create_context(cpp_context);
+                test_calculate_mse(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_calculate_mse_cpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL CPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_calculate_mse_cpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"CPU");
+                test_calculate_mse(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_calculate_mse_gpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Utils")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL GPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_calculate_mse_gpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"GPU");
                 test_calculate_mse(ctx);
             }
             catch (exception& ex)
@@ -92,7 +168,7 @@ namespace nfut
             float mse = calc_mse(desired, current);
 
             supervised_batch batch;
-            auto resultValues = ctx->data_array_factory()->create(2);
+            auto resultValues = ctx->data_array_factory()->create(15, 8.0f);
 
             Assert::AreEqual(desired.size(), current.size());
             for (size_t i1 = 0; i1 < desired.size(); i1++)
@@ -112,14 +188,16 @@ namespace nfut
                 }
             }
 
-            vector<float> result(2);
+            vector<float> result(15);
 
             ctx->utils()->calculate_mse(batch, resultValues, 1);
 
             resultValues->read(0, result.size(), &result[0], 0).wait();
 
-            Assert::AreEqual(0.0f, result[0]);
-            Assert::AreEqual(mse, result[1]);
+            Assert::AreEqual(8.0f, result[0]);
+            Assert::IsTrue(abs(mse - result[1]) < 0.000001f);
+            Assert::AreEqual(8.0f, result[2]);
+            Assert::AreEqual(8.0f, result[14]);
         }
 
         float calc_mse(const vector<vector<vector<float>>>& desired, const vector<vector<vector<float>>>& current)

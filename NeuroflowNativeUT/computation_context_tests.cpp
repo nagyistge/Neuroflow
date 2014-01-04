@@ -21,11 +21,11 @@ namespace nfut
             Logger::WriteMessage(v.c_str());
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(get_cpp_devices)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_get_devices)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(get_cpp_devices)
+        TEST_METHOD(cpp_get_devices)
         {
             computation_context_factory factory;
             auto devices = factory.get_available_devices(cpp_context);
@@ -37,11 +37,11 @@ namespace nfut
             Assert::AreEqual(L"x86/x64", devices.front().platform().c_str());
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(create_cpp_device)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_create_device)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(create_cpp_device)
+        TEST_METHOD(cpp_create_device)
         {
             computation_context_factory factory;
             auto devices = factory.get_available_devices(cpp_context);
@@ -60,11 +60,11 @@ namespace nfut
             Assert::IsNotNull(ctx->utils().get());
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(get_ocl_devices)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_get_devices)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(get_ocl_devices)
+        TEST_METHOD(ocl_get_devices)
         {
             try
             {
@@ -80,11 +80,11 @@ namespace nfut
             }            
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(create_ocl_device)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_create_device)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
             END_TEST_METHOD_ATTRIBUTE()
-            TEST_METHOD(create_ocl_device)
+            TEST_METHOD(ocl_create_device)
         {
                 try
                 {

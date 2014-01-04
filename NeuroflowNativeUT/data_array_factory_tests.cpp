@@ -12,11 +12,11 @@ namespace nfut
 	{
 	public:
 		
-        BEGIN_TEST_METHOD_ATTRIBUTE(copy_cpp_data)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_copy_data)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Data Array")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(copy_cpp_data)
+        TEST_METHOD(cpp_copy_data)
 		{
             try
             {
@@ -30,12 +30,12 @@ namespace nfut
             }
 		}
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(copy_ocl_data_cpu)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_copy_data_cpu)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Data Array")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
-            TEST_METHOD_ATTRIBUTE(L"Device", L"CPU")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL CPU")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(copy_ocl_data_cpu)
+        TEST_METHOD(ocl_copy_data_cpu)
         {
             try
             {
@@ -49,12 +49,12 @@ namespace nfut
             }
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(copy_ocl_data_gpu)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_copy_data_gpu)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Data Array")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
-            TEST_METHOD_ATTRIBUTE(L"Device", L"GPU")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL GPU")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(copy_ocl_data_gpu)
+        TEST_METHOD(ocl_copy_data_gpu)
         {
             try
             {
