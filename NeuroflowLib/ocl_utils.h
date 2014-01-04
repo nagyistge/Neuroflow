@@ -36,6 +36,6 @@ namespace nf
         void zero(const cl::Buffer& buffer, idx_t size);
         idx_t get_preferred_workgroup_size_mul();
         void add_mse(const ocl_data_array_ptr& desiredValues, const ocl_data_array_ptr& currentValues, const ocl_data_array_ptr& mseValues, idx_t mseValueIndex);
-        void div(const ocl_data_array_ptr& values, unsigned valueIndex, float byValue);
+        void div(const ocl_data_array_ptr& values, idx_t valueIndex, float byValue);
     };
 }

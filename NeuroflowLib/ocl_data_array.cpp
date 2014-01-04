@@ -27,6 +27,7 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
 
     auto ctx = lock_context();
     auto tce = new task_completion_event<void>();
+    auto tceRet = *tce;
     try
     {
         Event e;
@@ -75,7 +76,7 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
         throw as_ocl_error(ex);
     }
 
-    return task<void>(*tce);
+    return task<void>(move(tceRet));
 }
 
 concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex)

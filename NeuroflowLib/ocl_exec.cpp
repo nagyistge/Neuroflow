@@ -19,7 +19,7 @@ const std::string& ocl_exec::get_kernel_name(idx_t vectorSize)
 void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, idx_t workItemSize)
 {
     ensure_kernel(program, kernelName, vectorSize, setupKernel);
-    do_execute(program, vectorSize, cl::NullRange, workItemSize > 1 ? cl::NDRange(workItemSize) : cl::NullRange, cl::NullRange);
+    do_execute(program, vectorSize, cl::NullRange, cl::NDRange(workItemSize), cl::NullRange);
 }
 
 void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const ocl_device_array_ptr& extent)
@@ -78,12 +78,5 @@ void ocl_exec::do_execute(const ocl_program_ptr& program, idx_t vectorSize, cons
 {
     auto ctx = lock_context();
     auto& k = get_named_kernel(vectorSize);
-    if (workItemSizes.dimensions() == 0 || workItemSizes.dimensions() == 1 && workItemSizes[0] == 1)
-    {
-        ctx->cl_queue().enqueueTask(k.kernel);
-    }
-    else
-    {
-        ctx->cl_queue().enqueueNDRangeKernel(k.kernel, workItemOffsets, workItemSizes, localSizes);
-    }
+    ctx->cl_queue().enqueueNDRangeKernel(k.kernel, workItemOffsets, workItemSizes, localSizes);
 }
