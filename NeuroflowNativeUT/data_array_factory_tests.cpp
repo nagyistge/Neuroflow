@@ -18,9 +18,55 @@ namespace nfut
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(copy_cpp_data)
 		{
-            auto ctx = computation_context_factory::default().create_context(cpp_context);
-            test_copy_data(ctx);
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(cpp_context);
+                test_copy_data(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
 		}
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(copy_ocl_data_cpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Data Array")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"CPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(copy_ocl_data_cpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"CPU");
+                test_copy_data(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(copy_ocl_data_gpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Data Array")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"GPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(copy_ocl_data_gpu)
+        {
+            try
+            {
+                auto ctx = computation_context_factory::default().create_context(ocl_context, L"GPU");
+                test_copy_data(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
 
     private:
 

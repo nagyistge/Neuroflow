@@ -23,8 +23,8 @@ namespace nf
         const cl::Device& cl_device() const;
         const cl::CommandQueue& cl_queue() const;
 
-        const ocl_units_ptr& units() const;
-        const ocl_sizes_ptr& sizes() const;
+        const ocl_units_ptr& units();
+        const ocl_sizes_ptr& sizes();
 
         bool is_cpu() const;
 
@@ -32,7 +32,7 @@ namespace nf
         idx_t max_work_group_size() const;
         idx_t max_connection_count() const;
         idx_t max_layer_count() const;
-        idx_t preferred_workgroup_size_mul() const;
+        idx_t preferred_workgroup_size_mul();
         const cl::NDRange& max_work_item_sizes() const;
         idx_t align_bits() const;
 

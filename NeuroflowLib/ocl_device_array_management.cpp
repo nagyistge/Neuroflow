@@ -84,7 +84,7 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float*
         return Buffer(
             ctx->cl_context(),
             flags,
-            sizeof(float)* sizeInBytes,
+            sizeInBytes,
             from);
     }
     catch (exception& ex)
