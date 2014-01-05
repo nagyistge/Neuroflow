@@ -13,7 +13,7 @@ std::list<device_info> cpp_cc_factory_adapter::get_available_devices()
     return move(result);
 }
 
-computation_context_ptr cpp_cc_factory_adapter::create_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties)
+computation_context_ptr cpp_cc_factory_adapter::create_context(const std::wstring& deviceHint, const optional_properties_t& properties)
 {
     return cpp_computation_context_ptr(new cpp_computation_context(deviceHint, properties));
 }

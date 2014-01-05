@@ -10,7 +10,7 @@
 USING;
 using namespace boost::algorithm;
 
-ocl_computation_context::ocl_computation_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties) :
+ocl_computation_context::ocl_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties) :
 _currentDevice(find_device(deviceHint)),
 _context(_currentDevice.second),
 _isCPU((_currentDevice.second.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),

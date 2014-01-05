@@ -7,7 +7,7 @@
 
 USING;
 
-cpp_computation_context::cpp_computation_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties) :
+cpp_computation_context::cpp_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties) :
 _deviceArrayMan(make_shared<cpp_device_array_management>()),
 _dataArrayFactory(make_shared<cpp_data_array_factory>()),
 _utils(make_shared<cpp_utils>()),
@@ -20,7 +20,7 @@ const nf::device_info& cpp_computation_context::device_info() const
     return _deviceInfo;
 }
 
-const boost::property_tree::ptree& cpp_computation_context::properties() const
+const properties_t& cpp_computation_context::properties() const
 {
     return _properties;
 }

@@ -2,11 +2,11 @@
 
 #include "ocl_nfdev.h"
 #include "device_array_pool.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 
 namespace nf
 {
-    struct ocl_device_array_pool : ocl_contexted, virtual device_array_pool
+    struct ocl_device_array_pool : weak_contexted<ocl_computation_context>, virtual device_array_pool
     {
         friend struct ocl_device_array;
 

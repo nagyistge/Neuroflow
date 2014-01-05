@@ -19,7 +19,7 @@ std::list<device_info> ocl_cc_factory_adapter::get_available_devices()
     }
 }
 
-computation_context_ptr ocl_cc_factory_adapter::create_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties)
+computation_context_ptr ocl_cc_factory_adapter::create_context(const std::wstring& deviceHint, const optional_properties_t& properties)
 {
     return ocl_computation_context_ptr(new ocl_computation_context(deviceHint, properties));
 }

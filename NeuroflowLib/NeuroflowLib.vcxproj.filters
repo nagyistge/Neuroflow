@@ -20,6 +20,9 @@
     <Filter Include="Lib">
       <UniqueIdentifier>{5a94e9e8-b409-41fd-8880-2272a1a856ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\NN">
+      <UniqueIdentifier>{bb314351-44b0-459c-92e8-0f132e86dcec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -74,9 +77,6 @@
       <Filter>Ocl</Filter>
     </ClInclude>
     <ClInclude Include="ocl_device_array_management.h">
-      <Filter>Ocl</Filter>
-    </ClInclude>
-    <ClInclude Include="ocl_contexted.h">
       <Filter>Ocl</Filter>
     </ClInclude>
     <ClInclude Include="ocl_conv.h">
@@ -193,6 +193,21 @@
     <ClInclude Include="get_vector_size.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="contexted.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="multilayer_perceptron.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="compute_activation.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="weak_contexted.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="neural_network_factory.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -282,11 +297,17 @@
     <ClCompile Include="ocl_computation_context.cpp">
       <Filter>Ocl</Filter>
     </ClCompile>
-    <ClCompile Include="ocl_contexted.cpp">
-      <Filter>Ocl</Filter>
-    </ClCompile>
     <ClCompile Include="ocl_units.cpp">
       <Filter>Ocl</Filter>
+    </ClCompile>
+    <ClCompile Include="multilayer_perceptron.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="neural_network_factory.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="computation_context.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

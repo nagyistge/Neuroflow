@@ -183,6 +183,8 @@
     <ClInclude Include="computation_context.h" />
     <ClInclude Include="computation_context_factory.h" />
     <ClInclude Include="cc_factory_adapter.h" />
+    <ClInclude Include="compute_activation.h" />
+    <ClInclude Include="contexted.h" />
     <ClInclude Include="cpp_cc_factory_adapter.h" />
     <ClInclude Include="cpp_computation_context.h" />
     <ClInclude Include="cpp_conv.h" />
@@ -202,6 +204,8 @@
     <ClInclude Include="device_info.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="get_vector_size.h" />
+    <ClInclude Include="multilayer_perceptron.h" />
+    <ClInclude Include="neural_network_factory.h" />
     <ClInclude Include="nf.h" />
     <ClInclude Include="nf_helpers.h" />
     <ClInclude Include="nfdev.h" />
@@ -210,7 +214,6 @@
     <ClInclude Include="ocl_cc_factory_adapter.h" />
     <ClInclude Include="ocl_cc_props.h" />
     <ClInclude Include="ocl_computation_context.h" />
-    <ClInclude Include="ocl_contexted.h" />
     <ClInclude Include="ocl_conv.h" />
     <ClInclude Include="ocl_data_array.h" />
     <ClInclude Include="ocl_data_array_factory.h" />
@@ -237,8 +240,10 @@
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="version.h" />
+    <ClInclude Include="weak_contexted.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="computation_context.cpp" />
     <ClCompile Include="computation_context_factory.cpp" />
     <ClCompile Include="cpp_cc_factory_adapter.cpp" />
     <ClCompile Include="cpp_computation_context.cpp" />
@@ -249,9 +254,10 @@
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
     <ClCompile Include="cpp_utils.cpp" />
+    <ClCompile Include="multilayer_perceptron.cpp" />
+    <ClCompile Include="neural_network_factory.cpp" />
     <ClCompile Include="ocl_cc_factory_adapter.cpp" />
     <ClCompile Include="ocl_computation_context.cpp" />
-    <ClCompile Include="ocl_contexted.cpp" />
     <ClCompile Include="ocl_data_array.cpp" />
     <ClCompile Include="ocl_data_array_factory.cpp" />
     <ClCompile Include="ocl_device_array.cpp" />

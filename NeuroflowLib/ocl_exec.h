@@ -1,12 +1,12 @@
 #pragma once
 
 #include "ocl_nfdev.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 #include "ocl_kernel_name.h"
 
 namespace nf
 {
-    struct ocl_exec : ocl_contexted
+    struct ocl_exec : weak_contexted<ocl_computation_context>
     {
         ocl_exec(const ocl_computation_context_wptr& context, const ocl_kernel_name& kernelName);
 

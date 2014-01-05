@@ -4,7 +4,7 @@
 USING;
 
 ocl_program_unit::ocl_program_unit(const ocl_computation_context_wptr& context, const std::wstring& name) :
-ocl_contexted(context),
+weak_contexted(context),
 _name(name)
 {
 }

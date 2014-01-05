@@ -9,7 +9,7 @@
 USING;
 
 ocl_device_array_management::ocl_device_array_management(const ocl_computation_context_wptr& context) :
-ocl_contexted(context)
+weak_contexted(context)
 {
 }
 
