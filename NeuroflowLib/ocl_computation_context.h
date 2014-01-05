@@ -18,6 +18,8 @@ namespace nf
         const ocl_data_array_factory_ptr& ocl_data_array_factory();
         utils_ptr utils() override;
         const ocl_utils_ptr& ocl_utils();
+        compute_activation_ptr compute_activation() override;
+        const ocl_compute_activation_ptr& ocl_compute_activation();
 
         const cl::Context& cl_context() const;
         const cl::Device& cl_device() const;
@@ -57,6 +59,7 @@ namespace nf
         ocl_device_array_management_ptr _deviceArrayMan;
         ocl_data_array_factory_ptr _dataArrayFactory;
         ocl_utils_ptr _utils;
+        ocl_compute_activation_ptr _computeActivation;
 
         ocl_units_ptr _units;
         ocl_sizes_ptr _sizes;

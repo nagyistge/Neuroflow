@@ -4,6 +4,7 @@
 #include "cpp_data_array_factory.h"
 #include "cpp_utils.h"
 #include "cpp_cc_factory_adapter.h"
+#include "cpp_compute_activation.h"
 
 USING;
 
@@ -11,6 +12,7 @@ cpp_computation_context::cpp_computation_context(const std::wstring& deviceHint,
 _deviceArrayMan(make_shared<cpp_device_array_management>()),
 _dataArrayFactory(make_shared<cpp_data_array_factory>()),
 _utils(make_shared<cpp_utils>()),
+_computeActivation(make_shared<cpp_compute_activation>()),
 _deviceInfo(cpp_cc_factory_adapter::only_device())
 {
 }
@@ -38,4 +40,9 @@ data_array_factory_ptr cpp_computation_context::data_array_factory()
 utils_ptr cpp_computation_context::utils()
 {
     return _utils;
+}
+
+compute_activation_ptr cpp_computation_context::compute_activation()
+{
+    return _computeActivation;
 }

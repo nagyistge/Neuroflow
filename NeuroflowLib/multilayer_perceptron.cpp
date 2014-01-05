@@ -3,12 +3,13 @@
 
 USING;
 
-multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& context, const optional_properties_t& properties) :
-contexted(context)
+multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& context, const multilayer_perceptron_props& properties) :
+contexted(context),
+_properties(properties)
 {
 }
 
-const properties_t multilayer_perceptron::properties() const
+const multilayer_perceptron_props& multilayer_perceptron::properties() const
 {
     return _properties;
 }

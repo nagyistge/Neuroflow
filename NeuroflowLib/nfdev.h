@@ -25,6 +25,9 @@
 #include "version.h"
 #include "nf_helpers.h"
 #include "get_vector_size.h"
+#include "finally.h"
 
 #define null nullptr
 #define USING using namespace std; using namespace nf; using namespace cl; using namespace concurrency;
+#define _item_t(container) decltype(*std::begin(container))
+#define _citem_t(container) decltype(*std::cbegin(container))
