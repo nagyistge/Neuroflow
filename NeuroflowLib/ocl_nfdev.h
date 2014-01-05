@@ -43,4 +43,7 @@ namespace nf
 
     struct ocl_sizes;
     typedef std::shared_ptr<ocl_sizes> ocl_sizes_ptr;
+
+    struct ocl_compute_activation;
+    typedef std::shared_ptr<ocl_compute_activation> ocl_compute_activation_ptr;
 }

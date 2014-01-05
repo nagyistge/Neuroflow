@@ -14,6 +14,7 @@ namespace nf
         device_array_management_ptr device_array_management() override;
         data_array_factory_ptr data_array_factory() override;
         utils_ptr utils() override;
+        compute_activation_ptr compute_activation() override;
 
     private:
         nf::device_info _deviceInfo;
@@ -22,6 +23,7 @@ namespace nf
         device_array_management_ptr _deviceArrayMan;
         data_array_factory_ptr _dataArrayFactory;
         utils_ptr _utils;
+        compute_activation_ptr _computeActivation;
 
         cpp_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties);
     };

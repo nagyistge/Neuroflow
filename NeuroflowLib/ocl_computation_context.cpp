@@ -6,6 +6,7 @@
 #include "ocl_utils.h"
 #include "ocl_units.h"
 #include "ocl_sizes.h"
+#include "ocl_compute_activation.h"
 
 USING;
 using namespace boost::algorithm;
@@ -296,4 +297,19 @@ const ocl_sizes_ptr& ocl_computation_context::sizes()
         _sizes = make_shared<nf::ocl_sizes>(_this);
     }
     return _sizes;
+}
+
+compute_activation_ptr ocl_computation_context::compute_activation()
+{
+    return static_pointer_cast<nf::compute_activation>(ocl_compute_activation());
+}
+
+const ocl_compute_activation_ptr& ocl_computation_context::ocl_compute_activation()
+{
+    if (!_computeActivation)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _computeActivation = make_shared<nf::ocl_compute_activation>(_this);
+    }
+    return _computeActivation;
 }

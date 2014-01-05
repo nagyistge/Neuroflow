@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "enum_flags.h"
 
 namespace nf
 {
@@ -51,7 +52,49 @@ namespace nf
     struct multilayer_perceptron;
     typedef std::shared_ptr<multilayer_perceptron> multilayer_perceptron_ptr;
 
+    struct layer;
+    typedef std::shared_ptr<layer> layer_ptr;
+    typedef std::function<bool(const layer_ptr&)> layer_visitor_func;
+
+    struct layer_behavior;
+    typedef std::shared_ptr<layer_behavior> layer_behavior_ptr;
+    typedef std::list<layer_behavior_ptr> layer_behavior_coll;
+
+    struct layer_description;
+    typedef std::shared_ptr<layer_description> layer_description_ptr;
+    typedef std::list<layer_description_ptr> layer_description_coll;
+
     struct supervised_batch;
     struct supervised_sample;
     struct supervised_sample_entry;
+
+    enum class weight_update_mode
+    {
+        offline,
+        online
+    };
+
+    enum class learning_algo_optimization_type
+    {
+        gradient_based, 
+        global
+    };
+
+    enum class gradient_computation_method
+    {
+        none,
+        feed_forward,
+        bptt,
+        rtlr
+    };
+
+    ENUM_FLAGS(flow_direction)
+    enum class flow_direction
+    {
+        none = 0,
+        one_way = 1 << 0,
+        two_way = 1 << 2,
+        one_way_to_source = 1 << 3,
+        all = one_way | two_way | one_way_to_source
+    };
 }

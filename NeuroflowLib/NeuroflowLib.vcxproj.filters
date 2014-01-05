@@ -23,6 +23,12 @@
     <Filter Include="Base\NN">
       <UniqueIdentifier>{bb314351-44b0-459c-92e8-0f132e86dcec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cpp\NN">
+      <UniqueIdentifier>{6070b760-634c-4437-bed2-af8b0cb767de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ocl\NN">
+      <UniqueIdentifier>{17a7821d-fc0b-4323-9902-451fc7ed3eeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -208,6 +214,36 @@
     <ClInclude Include="neural_network_factory.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_compute_activation.h">
+      <Filter>Cpp\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_compute_activation.h">
+      <Filter>Ocl\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="multilayer_perceptron_props.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="layer_behavior.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_behavior.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_learning_behavior.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="layer.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="layer_connections.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="finally.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="enum_flags.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -308,6 +344,27 @@
     </ClCompile>
     <ClCompile Include="computation_context.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_compute_activation.cpp">
+      <Filter>Cpp\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_compute_activation.cpp">
+      <Filter>Ocl\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="layer_behavior.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="learning_behavior.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="supervised_learning_behavior.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="layer_connections.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="layer.cpp">
+      <Filter>Base\NN</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

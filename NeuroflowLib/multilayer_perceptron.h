@@ -2,6 +2,7 @@
 
 #include "nfdev.h"
 #include "contexted.h"
+#include "multilayer_perceptron_props.h"
 
 namespace nf
 {
@@ -9,11 +10,11 @@ namespace nf
     {
         friend struct neural_network_factory;
 
-        const properties_t properties() const;
+        const multilayer_perceptron_props& properties() const;
 
     private:
-        multilayer_perceptron(const computation_context_ptr& context, const optional_properties_t& properties);
+        multilayer_perceptron(const computation_context_ptr& context, const multilayer_perceptron_props& properties);
 
-        properties_t _properties;
+        multilayer_perceptron_props _properties;
     };
 }
