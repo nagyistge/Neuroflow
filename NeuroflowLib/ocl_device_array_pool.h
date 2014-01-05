@@ -20,7 +20,7 @@ namespace nf
 
     private:
         cl::Buffer buffer;
-        idx_t endIndex;
+        idx_t endIndex = 0;
 
         idx_t reserve(idx_t size);
         cl::Buffer create_sub_buffer(idx_t beginOffset, idx_t size);
