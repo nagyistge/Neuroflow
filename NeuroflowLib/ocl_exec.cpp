@@ -6,38 +6,39 @@
 
 USING;
 
-ocl_exec::ocl_exec(const ocl_computation_context_wptr& context) :
-ocl_contexted(context)
+ocl_exec::ocl_exec(const ocl_computation_context_wptr& context, const ocl_kernel_name& kernelName) :
+ocl_contexted(context),
+kernelName(kernelName)
 {
 }
 
-const std::string& ocl_exec::get_kernel_name(idx_t vectorSize)
+const ocl_kernel_name& ocl_exec::kernel_name() const
 {
-    return get_named_kernel(vectorSize).kernelName;
+    return kernelName;
 }
 
-void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, idx_t workItemSize)
+void ocl_exec::execute(const ocl_program_ptr& program, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, idx_t workItemSize)
 {
-    ensure_kernel(program, kernelName, vectorSize, setupKernel);
-    do_execute(program, vectorSize, cl::NullRange, cl::NDRange(workItemSize), cl::NullRange);
+    ensure_kernel(program, vectorSize, setupKernel);
+    do_execute(vectorSize, cl::NullRange, cl::NDRange(workItemSize), cl::NullRange);
 }
 
-void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const ocl_device_array_ptr& extent)
+void ocl_exec::execute(const ocl_program_ptr& program, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const ocl_device_array_ptr& extent)
 {
-    ensure_kernel(program, kernelName, vectorSize, setupKernel);
-    do_execute(program, vectorSize, cl::NullRange, cl::NDRange(extent->size()), cl::NullRange);
+    ensure_kernel(program, vectorSize, setupKernel);
+    do_execute(vectorSize, cl::NullRange, cl::NDRange(extent->size()), cl::NullRange);
 }
 
-void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+void ocl_exec::execute(const ocl_program_ptr& program, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
-    ensure_kernel(program, kernelName, vectorSize, setupKernel);
-    do_execute(program, vectorSize, cl::NullRange, workItemSizes, localSizes);
+    ensure_kernel(program, vectorSize, setupKernel);
+    do_execute(vectorSize, cl::NullRange, workItemSizes, localSizes);
 }
 
-void ocl_exec::execute(const ocl_program_ptr& program, const std::string& kernelName, unsigned vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+void ocl_exec::execute(const ocl_program_ptr& program, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
-    ensure_kernel(program, kernelName, vectorSize, setupKernel);
-    do_execute(program, vectorSize, workItemOffsets, workItemSizes, localSizes);
+    ensure_kernel(program, vectorSize, setupKernel);
+    do_execute(vectorSize, workItemOffsets, workItemSizes, localSizes);
 }
 
 idx_t ocl_exec::vector_size_to_index(idx_t vectorSize) const
@@ -59,24 +60,24 @@ idx_t ocl_exec::vector_size_to_index(idx_t vectorSize) const
     }
 }
 
-ocl_exec::named_kernel& ocl_exec::get_named_kernel(idx_t vectorSize)
+Kernel& ocl_exec::get_kernel(idx_t vectorSize)
 {
-    idx_t index = vector_size_to_index(vectorSize);
-    kernels.resize(index + 1);
-    return kernels[index];
+    return kernels[vector_size_to_index(vectorSize)];
 }
 
-void ocl_exec::ensure_kernel(const ocl_program_ptr& program, const std::string& kernelName, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel)
+void ocl_exec::ensure_kernel(const ocl_program_ptr& program, idx_t vectorSize, const std::function<void(cl::Kernel&)>& setupKernel)
 {
-    auto& k = get_named_kernel(vectorSize);
-    if (k.kernelName.size() == 0) k.kernelName = kernelName;
-    if (k.kernel() == nullptr) k.kernel = program->create_kernel(kernelName);
-    setupKernel(k.kernel);
+    auto& k = get_kernel(vectorSize);
+    if (k() == nullptr)
+    {
+        k = program->create_kernel(kernelName(vectorSize));
+    }
+    setupKernel(k);
 }
 
-void ocl_exec::do_execute(const ocl_program_ptr& program, idx_t vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
+void ocl_exec::do_execute(idx_t vectorSize, const cl::NDRange& workItemOffsets, const cl::NDRange& workItemSizes, const cl::NDRange& localSizes)
 {
     auto ctx = lock_context();
-    auto& k = get_named_kernel(vectorSize);
-    ctx->cl_queue().enqueueNDRangeKernel(k.kernel, workItemOffsets, workItemSizes, localSizes);
+    auto& k = get_kernel(vectorSize);
+    ctx->cl_queue().enqueueNDRangeKernel(k, workItemOffsets, workItemSizes, localSizes);
 }

@@ -18,9 +18,9 @@ ocl_kernel_name ocl_utils::zeroFName = ocl_kernel_name("ZeroF");
 ocl_utils::ocl_utils(const ocl_computation_context_wptr& context) :
 ocl_contexted(context),
 generator((std::random_device()() << 16) | std::random_device()()),
-addExec(context),
-divExec(context),
-zeroFExec(context)
+addExec(context, addMSEName),
+divExec(context, divName),
+zeroFExec(context, zeroFName)
 {
     memset(z2.s, 0, sizeof(float)* 2);
     memset(z4.s, 0, sizeof(float)* 4);
@@ -161,7 +161,6 @@ void ocl_utils::add_mse(const ocl_data_array_ptr& desiredValues, const ocl_data_
 
     addExec.execute(
     program,
-    addMSEName(vectorSize),
     vectorSize,
     [&, vectorSize, mseValueIndex](Kernel& kernel)
     {
@@ -180,7 +179,6 @@ void ocl_utils::div(const ocl_data_array_ptr& values, idx_t valueIndex, float by
 
     divExec.execute(
     program,
-    divName(1),
     1,
     [=](Kernel& kernel)
     {
@@ -250,7 +248,6 @@ void ocl_utils::zero(const cl::Buffer& buffer, idx_t size)
         {
             zeroFExec.execute(
             program,
-            zeroFName(vectorSize),
             vectorSize,
             [&](Kernel& kernel)
             {

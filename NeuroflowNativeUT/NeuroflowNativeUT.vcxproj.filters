@@ -27,10 +27,10 @@
     <ClCompile Include="computation_context_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
-    <ClCompile Include="data_array_factory_tests.cpp">
+    <ClCompile Include="utils_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
-    <ClCompile Include="utils_tests.cpp">
+    <ClCompile Include="array_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
   </ItemGroup>

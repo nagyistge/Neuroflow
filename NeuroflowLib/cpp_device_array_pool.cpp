@@ -36,7 +36,11 @@ device_array2_ptr cpp_device_array_pool::create_array2(idx_t rowSize, idx_t colS
 void cpp_device_array_pool::allocate()
 {
     if (endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
-    if (!is_allocated()) internalArray = new float[endIndex];
+    if (!is_allocated())
+    {
+        internalArray = new float[endIndex];
+        memset(internalArray, 0, endIndex * sizeof(float));
+    }
 }
 
 void cpp_device_array_pool::zero()
