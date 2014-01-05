@@ -16,7 +16,7 @@ ocl_kernel_name ocl_utils::divName = ocl_kernel_name("Div");
 ocl_kernel_name ocl_utils::zeroFName = ocl_kernel_name("ZeroF");
 
 ocl_utils::ocl_utils(const ocl_computation_context_wptr& context) :
-ocl_contexted(context),
+weak_contexted(context),
 generator((std::random_device()() << 16) | std::random_device()()),
 addExec(context, addMSEName),
 divExec(context, divName),

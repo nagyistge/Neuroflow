@@ -7,7 +7,7 @@
 USING;
 
 ocl_exec::ocl_exec(const ocl_computation_context_wptr& context, const ocl_kernel_name& kernelName) :
-ocl_contexted(context),
+weak_contexted(context),
 kernelName(kernelName)
 {
 }

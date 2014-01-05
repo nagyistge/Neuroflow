@@ -8,6 +8,6 @@ namespace nf
     struct ocl_cc_factory_adapter : virtual cc_factory_adapter
     {
         std::list<device_info> get_available_devices() override;
-        computation_context_ptr create_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties) override;        
+        computation_context_ptr create_context(const std::wstring& deviceHint, const optional_properties_t& properties) override;
     };
 };

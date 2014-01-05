@@ -2,13 +2,13 @@
 
 #include "utils.h"
 #include "ocl_nfdev.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 #include "ocl_kernel_name.h"
 #include "ocl_exec.h"
 
 namespace nf
 {
-    struct ocl_utils : ocl_contexted, virtual utils
+    struct ocl_utils : weak_contexted<ocl_computation_context>, virtual utils
     {
         friend struct ocl_device_array_pool;
         friend struct ocl_computation_context;

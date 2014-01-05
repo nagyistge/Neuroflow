@@ -41,7 +41,7 @@ namespace nf
         typedef std::list<std::pair<nf::device_info, cl::Device>> cl_device_list_t;
 
         std::pair<nf::device_info, cl::Device> _currentDevice;
-        boost::property_tree::ptree _properties;
+        properties_t _properties;
         cl::CommandQueue _queue;
         cl::Context _context;
 
@@ -61,7 +61,7 @@ namespace nf
         ocl_units_ptr _units;
         ocl_sizes_ptr _sizes;
 
-        ocl_computation_context(const std::wstring& deviceHint, const boost::optional<boost::property_tree::ptree>& properties);
+        ocl_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties);
 
         static cl_device_list_t get_available_devices(cl_device_type type = CL_DEVICE_TYPE_ALL);
         static std::pair<nf::device_info, cl::Device> find_device(const std::wstring& deviceHint);

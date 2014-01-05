@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ocl_nfdev.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 
 namespace nf
 {
-    struct ocl_units : ocl_contexted
+    struct ocl_units : weak_contexted<ocl_computation_context>
     {
         ocl_units(const ocl_computation_context_wptr& context);
 

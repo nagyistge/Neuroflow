@@ -5,7 +5,7 @@
 USING;
 
 ocl_units::ocl_units(const ocl_computation_context_wptr& context) :
-ocl_contexted(context)
+weak_contexted(context)
 {
     auto ctx = lock_context();
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ocl_nfdev.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 
 namespace nf
 {
@@ -24,7 +24,7 @@ namespace nf
         std::pair<idx_t, idx_t> sizes;
     };
 
-    struct ocl_sizes : ocl_contexted
+    struct ocl_sizes : weak_contexted<ocl_computation_context>
     {
         ocl_sizes(const ocl_computation_context_wptr& context);
 

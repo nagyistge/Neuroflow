@@ -4,9 +4,9 @@
 
 USING;
 
-ocl_data_array::ocl_data_array(const ocl_computation_context_wptr& context, const cl::Buffer& buffer, bool isConst) :
+ocl_data_array::ocl_data_array(const ocl_computation_context_ptr& context, const cl::Buffer& buffer, bool isConst) :
 ocl_device_array(buffer),
-ocl_contexted(context),
+contexted(context),
 isConst(isConst)
 {
 }
@@ -25,7 +25,7 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
 
     verify_if_accessible();
 
-    auto ctx = lock_context();
+    auto& ctx = context();
     auto tce = new task_completion_event<void>();
     auto tceRet = *tce;
     try
@@ -88,7 +88,7 @@ concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBe
 
     verify_if_accessible();
 
-    auto ctx = lock_context();
+    auto& ctx = context();
     auto tce = new task_completion_event<void>();
     try
     {

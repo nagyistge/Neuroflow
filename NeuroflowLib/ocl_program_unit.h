@@ -1,13 +1,13 @@
 #pragma once
 
 #include "ocl_nfdev.h"
-#include "ocl_contexted.h"
+#include "weak_contexted.h"
 
 #define ADD_OCL_CODE(u, c) u->add_code(#c);
 
 namespace nf
 {
-    struct ocl_program_unit : ocl_contexted
+    struct ocl_program_unit : weak_contexted<ocl_computation_context>
     {
         ocl_program_unit(const ocl_computation_context_wptr& context, const std::wstring& name);
 

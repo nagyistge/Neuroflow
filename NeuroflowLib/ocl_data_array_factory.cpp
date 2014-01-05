@@ -7,7 +7,7 @@
 USING;
 
 ocl_data_array_factory::ocl_data_array_factory(const ocl_computation_context_wptr& context) :
-ocl_contexted(context)
+weak_contexted(context)
 {
 }
 
