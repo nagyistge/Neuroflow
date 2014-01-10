@@ -19,6 +19,7 @@
 #include <boost/optional.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
+#include <cpplinq.hpp>
 #include "nf_object.h"
 #include "typedefs.h"
 #include "error.h"
