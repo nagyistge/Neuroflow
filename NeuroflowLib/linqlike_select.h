@@ -32,7 +32,6 @@ namespace linqlike
         R& current() const override
         {
             if (!_value.is_initialized()) throw std::logic_error("Enumerator ended.");
-            auto& be = base_enum();
             return (R&)(*_value);
         }
 
