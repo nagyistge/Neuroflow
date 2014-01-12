@@ -29,6 +29,9 @@
     <Filter Include="Ocl\NN">
       <UniqueIdentifier>{17a7821d-fc0b-4323-9902-451fc7ed3eeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Linqlike">
+      <UniqueIdentifier>{86c234e0-b7d6-4376-8922-ac4e7b93ac91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -245,7 +248,19 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="linqlike.h">
-      <Filter>Base\NN</Filter>
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_from.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_base.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_where.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_select.h">
+      <Filter>Linqlike</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
