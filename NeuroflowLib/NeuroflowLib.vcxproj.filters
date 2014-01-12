@@ -244,6 +244,9 @@
     <ClInclude Include="enum_flags.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="linqlike.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

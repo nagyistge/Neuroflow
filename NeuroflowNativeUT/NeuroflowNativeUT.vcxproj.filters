@@ -33,6 +33,9 @@
     <ClCompile Include="array_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
+    <ClCompile Include="linqlike_tests.cpp">
+      <Filter>BaseTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
