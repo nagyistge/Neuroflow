@@ -27,6 +27,7 @@
 #include <boost/optional.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/iterator/iterator_facade.hpp>
 #include <cpplinq.hpp>
 #include "ocl.h"
 
