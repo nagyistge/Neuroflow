@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "linqlike.h"
+#include "linqlike2.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace linqlike;
+using namespace linqlike2;
 using namespace std;
 
 namespace NeuroflowNativeUT
@@ -11,7 +11,6 @@ namespace NeuroflowNativeUT
 	TEST_CLASS(linqlike_tests)
 	{
 	public:
-		
         BEGIN_TEST_METHOD_ATTRIBUTE(enumerable_iterators_test)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
         END_TEST_METHOD_ATTRIBUTE()
@@ -19,7 +18,25 @@ namespace NeuroflowNativeUT
 		{
             vector<int> values = { 1, 2, 3, 4, 5 };
 
+            stringstream ss;
             auto e = from_iterators(values.begin(), values.end());
+            for (int v : *e)
+            {
+                ss << to_string(v) << " ";
+            }
+
+            ss << "\n";
+
+            auto r = e.run();
+            std::for_each(begin(r), end(r),
+            [&](int v)
+            {
+                ss << to_string(v) << " ";
+            });
+
+            Logger::WriteMessage(ss.str().c_str());
+
+            /*auto e = from_iterators(values.begin(), values.end());
             auto ce = from_const_iterators(values.cbegin(), values.cend());
             auto ev = from(values);
             auto cev = from_const(values);
@@ -76,10 +93,10 @@ namespace NeuroflowNativeUT
                 ss << to_string(v) << " ";
             }
 
-            Logger::WriteMessage(ss.str().c_str());
+            Logger::WriteMessage(ss.str().c_str());*/
 		}
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(where_test)
+        /*BEGIN_TEST_METHOD_ATTRIBUTE(where_test)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(where_test)
@@ -112,28 +129,28 @@ namespace NeuroflowNativeUT
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(select_test)
         {
-                try
+            try
+            {
+                vector<int> values = { 1, 2, 3, 4, 5 };
+                auto q = from(values).select([=](int v) { return to_string(v * v); });
+                auto cq = from_const(values).select([=](const int v) { return to_string(v * v); });
+                stringstream ss;
+                for (auto v : q)
                 {
-                    vector<int> values = { 1, 2, 3, 4, 5 };
-                    auto q = from(values).select([=](int v) { return to_string(v * v); });
-                    auto cq = from_const(values).select([=](const int v) { return to_string(v * v); });
-                    stringstream ss;
-                    for (auto v : q)
-                    {
-                        ss << v << " ";
-                    }
-                    for (auto v : cq)
-                    {
-                        ss << v << " ";
-                    }
-                    Logger::WriteMessage(ss.str().c_str());
+                    ss << v << " ";
                 }
-                catch (exception& ex)
+                for (auto v : cq)
                 {
-                    Logger::WriteMessage(ex.what());
-                    throw;
+                    ss << v << " ";
                 }
+                Logger::WriteMessage(ss.str().c_str());
             }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }*/
 
 	};
 }
