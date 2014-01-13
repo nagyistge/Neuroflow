@@ -21,13 +21,15 @@
 #include <unordered_map>
 #include <ppltasks.h>
 #include <random>
+#include <type_traits>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/iterator/iterator_facade.hpp>
+#include <boost/coroutine/all.hpp>
+#include <boost/iterator.hpp>
 #include <cpplinq.hpp>
 #include "ocl.h"
 

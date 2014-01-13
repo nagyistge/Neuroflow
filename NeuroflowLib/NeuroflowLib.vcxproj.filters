@@ -262,6 +262,9 @@
     <ClInclude Include="linqlike_select.h">
       <Filter>Linqlike</Filter>
     </ClInclude>
+    <ClInclude Include="linqlike2.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
