@@ -12,6 +12,7 @@ namespace linqlike2
     {
         typedef typename boost::coroutines::coroutine<T> coro_t;
         typedef typename coro_t::pull_type pull_type;
+        typedef typename coro_t::push_type push_type;
         typedef typename std::function<pull_type()> pull_factory_t;
 
         explicit enumerable(typename pull_factory_t&& pullFactory) :
@@ -36,20 +37,16 @@ namespace linqlike2
     template <typename TIterator, typename T = typename TIterator::value_type>
     enumerable<T> from_iterators(const typename TIterator& begin, const typename TIterator& end)
     {
-        typedef typename enumerable<T>::coro_t coro_t;
-        auto b = begin;
-        auto e = end;
-        auto fact = [=]()
-        { 
-            return typename coro_t::pull_type([=](typename coro_t::push_type& sink)
+        return enumerable<T>([=]()
+        {
+            return typename enumerable<T>::pull_type([=](typename enumerable<T>::push_type& sink)
             {
-                std::for_each(b, e, [&](T& v)
+                std::for_each(begin, end, [&](T& v)
                 {
                     sink(v);
                 });
             });
-        };
-        return enumerable<T>(std::move(fact));
+        });
     }
 }
 
