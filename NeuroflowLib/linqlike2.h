@@ -48,5 +48,20 @@ namespace linqlike2
             });
         });
     }
+
+    template <typename TIterator, typename T = TIterator::value_type>
+    enumerable<T> from_const_iterators(const typename TIterator& begin, const typename TIterator& end)
+    {
+        return enumerable<T>([=]()
+        {
+            return typename enumerable<T>::pull_type([=](typename enumerable<T>::push_type& sink)
+            {
+                std::for_each(begin, end, [&](const T& v)
+                {
+                    sink(v);
+                });
+            });
+        });
+    }
 }
 
