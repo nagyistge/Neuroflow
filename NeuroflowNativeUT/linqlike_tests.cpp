@@ -36,6 +36,26 @@ namespace NeuroflowNativeUT
 
             Logger::WriteMessage(ss.str().c_str());
 
+            vector<const int> cvalues = { 1, 2, 3, 4, 5 };
+
+            stringstream css;
+            auto ce = from_const_iterators(cvalues.cbegin(), cvalues.cend());
+            for (const int v : *ce)
+            {
+                css << to_string(v) << " ";
+            }
+
+            css << "\n";
+
+            auto cr = ce.run();
+            std::for_each(cbegin(cr), cend(cr),
+                [&](const int v)
+            {
+                css << to_string(v) << " ";
+            });
+
+            Logger::WriteMessage(css.str().c_str());
+
             /*auto e = from_iterators(values.begin(), values.end());
             auto ce = from_const_iterators(values.cbegin(), values.cend());
             auto ev = from(values);
