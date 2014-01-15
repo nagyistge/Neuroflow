@@ -218,7 +218,11 @@
     <ClInclude Include="layer_behavior.h" />
     <ClInclude Include="layer_connections.h" />
     <ClInclude Include="learning_behavior.h" />
-    <ClInclude Include="linqlike2.h" />
+    <ClInclude Include="linqlike.h" />
+    <ClInclude Include="linqlike_base.h" />
+    <ClInclude Include="linqlike_from.h" />
+    <ClInclude Include="linqlike_select.h" />
+    <ClInclude Include="linqlike_where.h" />
     <ClInclude Include="multilayer_perceptron.h" />
     <ClInclude Include="multilayer_perceptron_props.h" />
     <ClInclude Include="neural_network_factory.h" />

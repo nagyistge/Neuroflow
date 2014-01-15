@@ -1,13 +1,11 @@
 #pragma once
 
 #include <boost/coroutine/all.hpp>
-#include <boost/iterator.hpp>
-#include <boost/optional.hpp>
 #include <type_traits>
 #include <functional>
 #include <iterator>
 
-namespace linqlike2
+namespace linqlike
 {
     template <typename T>
     struct enumerable
@@ -24,8 +22,8 @@ namespace linqlike2
             enumerable_iterator() { }
 
             explicit enumerable_iterator(pull_type&& pull) :
-            _pull(std::move(pull)),
-            _it(boost::begin(_pull))
+                _pull(std::move(pull)),
+                _it(boost::begin(_pull))
             {
             };
 
@@ -105,35 +103,4 @@ namespace linqlike2
     private:
         pull_factory_t _pullFactory;
     };
-
-    template <typename TIterator, typename T = typename TIterator::value_type>
-    enumerable<T> from_iterators(TIterator& begin, TIterator& end)
-    {
-        return enumerable<T>([=]()
-        {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& sink)
-            {
-                std::for_each(begin, end, [&](T& v)
-                {
-                    sink(v);
-                });
-            });
-        });
-    }
-
-    template <typename TIterator, typename T = typename TIterator::value_type>
-    enumerable<T> from_iterators(const TIterator& begin, const TIterator& end)
-    {
-        return enumerable<T>([=]()
-        {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& sink)
-            {
-                std::for_each(begin, end, [&](const T& v)
-                {
-                    sink(v);
-                });
-            });
-        });
-    }
 }
-
