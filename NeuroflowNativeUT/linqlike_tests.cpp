@@ -33,9 +33,11 @@ namespace NeuroflowNativeUT
                 ss << to_string(v) << " ";
             });
 
+            ss << "\n";
+
             Logger::WriteMessage(ss.str().c_str());
 
-            /*vector<const int> cvalues = { 1, 2, 3, 4, 5 };
+            vector<const int> cvalues = { 1, 2, 3, 4, 5 };
 
             stringstream css;
             auto ce = from_iterators(cvalues.cbegin(), cvalues.cend());
@@ -52,7 +54,7 @@ namespace NeuroflowNativeUT
                 css << to_string(v) << " ";
             });
 
-            Logger::WriteMessage(css.str().c_str());*/
+            Logger::WriteMessage(css.str().c_str());
 
             /*auto e = from_iterators(values.begin(), values.end());
             auto ce = from_const_iterators(values.cbegin(), values.cend());
