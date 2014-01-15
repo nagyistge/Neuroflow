@@ -10,17 +10,17 @@ namespace linqlike2
     template <typename T>
     struct enumerable
     {
-        typedef typename boost::coroutines::coroutine<T> coro_t;
+        typedef boost::coroutines::coroutine<T> coro_t;
         typedef typename coro_t::pull_type pull_type;
         typedef typename coro_t::push_type push_type;
-        typedef typename std::function<pull_type()> pull_factory_t;
+        typedef std::function<pull_type()> pull_factory_t;
 
-        explicit enumerable(typename pull_factory_t&& pullFactory) :
+        explicit enumerable(pull_factory_t&& pullFactory) :
             _pullFactory(std::move(pullFactory))
         {
         }
 
-        typename pull_type run() const
+        pull_type run() const
         {
             return _pullFactory();
         }
@@ -31,15 +31,15 @@ namespace linqlike2
         }
 
     private:
-        typename pull_factory_t _pullFactory;
+        pull_factory_t _pullFactory;
     };
 
     template <typename TIterator, typename T = typename TIterator::value_type>
-    enumerable<T> from_iterators(const typename TIterator& begin, const typename TIterator& end)
+    enumerable<T> from_iterators(TIterator& begin, TIterator& end)
     {
         return enumerable<T>([=]()
         {
-            return typename enumerable<T>::pull_type([=](typename enumerable<T>::push_type& sink)
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& sink)
             {
                 std::for_each(begin, end, [&](T& v)
                 {
@@ -49,12 +49,12 @@ namespace linqlike2
         });
     }
 
-    template <typename TIterator, typename T = TIterator::value_type>
-    enumerable<T> from_const_iterators(const typename TIterator& begin, const typename TIterator& end)
+    template <typename TIterator, typename T = typename TIterator::value_type>
+    enumerable<T> from_iterators(const TIterator& begin, const TIterator& end)
     {
         return enumerable<T>([=]()
         {
-            return typename enumerable<T>::pull_type([=](typename enumerable<T>::push_type& sink)
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& sink)
             {
                 std::for_each(begin, end, [&](const T& v)
                 {
