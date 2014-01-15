@@ -20,15 +20,14 @@ namespace NeuroflowNativeUT
 
             stringstream ss;
             auto e = from_iterators(values.begin(), values.end());
-            for (int v : *e)
+            for (int v : e)
             {
                 ss << to_string(v) << " ";
             }
 
             ss << "\n";
 
-            auto r = e.run();
-            std::for_each(begin(r), end(r),
+            std::for_each(begin(e), end(e),
             [&](int v)
             {
                 ss << to_string(v) << " ";
@@ -36,25 +35,24 @@ namespace NeuroflowNativeUT
 
             Logger::WriteMessage(ss.str().c_str());
 
-            vector<const int> cvalues = { 1, 2, 3, 4, 5 };
+            /*vector<const int> cvalues = { 1, 2, 3, 4, 5 };
 
             stringstream css;
             auto ce = from_iterators(cvalues.cbegin(), cvalues.cend());
-            for (const int& v : *ce)
+            for (const int& v : ce)
             {
                 css << to_string(v) << " ";
             }
 
             css << "\n";
 
-            auto cr = ce.run();
-            std::for_each(cbegin(cr), cend(cr),
+            std::for_each(ce.cbegin(), ce.cend(),
                 [&](int v)
             {
                 css << to_string(v) << " ";
             });
 
-            Logger::WriteMessage(css.str().c_str());
+            Logger::WriteMessage(css.str().c_str());*/
 
             /*auto e = from_iterators(values.begin(), values.end());
             auto ce = from_const_iterators(values.cbegin(), values.cend());
