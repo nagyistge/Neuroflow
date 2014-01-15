@@ -30,9 +30,10 @@ namespace linqlike2
             };
 
             enumerable_iterator(const enumerable_iterator& mit) : _it(mit._it) { }
-            enumerable_iterator operator=(const enumerable_iterator& mit)
+            enumerable_iterator& operator=(const enumerable_iterator& mit)
             {
-                return enumerable_iterator(*this);
+                _it = mit->_it;
+                return *this;
             }
 
             enumerable_iterator& operator++() { ++_it; return *this; }
@@ -58,9 +59,10 @@ namespace linqlike2
             };
 
             enumerable_const_iterator(const enumerable_const_iterator& mit) : _it(mit._it) { }
-            enumerable_const_iterator operator=(const enumerable_const_iterator& mit)
+            enumerable_const_iterator& operator=(const enumerable_const_iterator& mit)
             {
-                return enumerable_const_iterator(*this);
+                _it = mit->_it;
+                return *this;
             }
 
             enumerable_const_iterator& operator++() { ++_it; return *this; }
@@ -90,25 +92,15 @@ namespace linqlike2
             return enumerable_iterator();
         }
 
-        enumerable_const_iterator cbegin()
+        enumerable_const_iterator cbegin() const
         {
             return enumerable_const_iterator(_pullFactory());
         }
 
-        enumerable_const_iterator cend()
+        enumerable_const_iterator cend() const
         {
             return enumerable_const_iterator();
         }
-
-        /*pull_type run() const
-        {
-            return _pullFactory();
-        }
-
-        pull_type operator*() const
-        {
-            return run();
-        }*/
 
     private:
         pull_factory_t _pullFactory;
