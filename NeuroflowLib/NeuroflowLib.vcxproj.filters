@@ -247,21 +247,6 @@
     <ClInclude Include="enum_flags.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="linqlike.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_from.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_base.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_where.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_select.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
     <ClInclude Include="linqlike2.h">
       <Filter>Linqlike</Filter>
     </ClInclude>
