@@ -56,7 +56,7 @@ namespace NeuroflowNativeUT
             vector<const int> cvalues = { 1, 2, 3, 4, 5 };
 
             stringstream css;
-            auto ce = from_iterators(cvalues.cbegin(), cvalues.cend());
+            auto ce = from_iterators(cvalues.begin(), cvalues.end());
             for (const int& v : ce)
             {
                 css << to_string(v) << " ";
@@ -71,7 +71,7 @@ namespace NeuroflowNativeUT
 
             css << "\n";
 
-            std::for_each(ce.cbegin(), ce.cend(),
+            std::for_each(ce.begin(), ce.end(),
                 [&](int v)
             {
                 css << to_string(v) << " ";
@@ -80,7 +80,7 @@ namespace NeuroflowNativeUT
             css << "\n";
 
             ce = from(values);
-            std::for_each(ce.cbegin(), ce.cend(),
+            std::for_each(ce.begin(), ce.end(),
                 [&](int v)
             {
                 css << to_string(v) << " ";

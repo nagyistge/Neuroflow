@@ -25,22 +25,22 @@ namespace linqlike
     }
 
     template <typename T, typename F>
-    enumerable<T> operator|(const enumerable<T>& e, const _where<F>& w)
+    enumerable<T> operator|(enumerable<T>& e, const _where<F>& w)
     {
-        return enumerable<T>([=]()
+        return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield)
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                std::for_each(e.cbegin(), e.cend(), [&](const T& v)
+                for (auto& v : e)
                 {
                     if (w.pred()(v)) yield(v);
-                });
+                };
             });
         });
     }
 
     template <typename T, typename F>
-    enumerable<T> operator>>(const enumerable<T>& e, const _where<F>& w)
+    enumerable<T> operator>>(enumerable<T>& e, const _where<F>& w)
     {
         return e | w;
     }

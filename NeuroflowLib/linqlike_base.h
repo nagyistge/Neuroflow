@@ -46,35 +46,6 @@ namespace linqlike
             pull_iterator_t _it;
         };
 
-        struct enumerable_const_iterator : public std::iterator<std::input_iterator_tag, const pull_iterator_value_t>
-        {
-            enumerable_const_iterator() { }
-
-            explicit enumerable_const_iterator(pull_type&& pull) :
-                _pull(std::move(pull)),
-                _it(boost::begin(_pull))
-            {
-            };
-
-            enumerable_const_iterator(const enumerable_const_iterator& mit) : _it(mit._it) { }
-            enumerable_const_iterator& operator=(const enumerable_const_iterator& mit)
-            {
-                _it = mit->_it;
-                return *this;
-            }
-
-            enumerable_const_iterator& operator++() { ++_it; return *this; }
-            enumerable_const_iterator operator++(int) { enumerable_const_iterator tmp(*this); operator++(); return tmp; }
-            bool operator==(const enumerable_const_iterator& rhs) { return _it == rhs._it; }
-            bool operator!=(const enumerable_const_iterator& rhs) { return _it != rhs._it; }
-            const pull_iterator_value_t& operator*() { return *_it; }
-
-        private:
-
-            pull_type _pull;
-            pull_iterator_t _it;
-        };
-
         explicit enumerable(pull_factory_t&& pullFactory) :
             _pullFactory(std::move(pullFactory))
         {
@@ -88,16 +59,6 @@ namespace linqlike
         enumerable_iterator end()
         {
             return enumerable_iterator();
-        }
-
-        enumerable_const_iterator cbegin() const
-        {
-            return enumerable_const_iterator(_pullFactory());
-        }
-
-        enumerable_const_iterator cend() const
-        {
-            return enumerable_const_iterator();
         }
 
     private:
