@@ -52,14 +52,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9CAF66
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!_linqlike_bak", "!_linqlike_bak", "{F2FE5A1B-2E0D-443D-8658-38052823A1FE}"
-	ProjectSection(SolutionItems) = preProject
-		bak\linqlike_base.h = bak\linqlike_base.h
-		bak\linqlike_from.h = bak\linqlike_from.h
-		bak\linqlike_select.h = bak\linqlike_select.h
-		bak\linqlike_where.h = bak\linqlike_where.h
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms

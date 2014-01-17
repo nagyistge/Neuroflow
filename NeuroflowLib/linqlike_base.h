@@ -10,6 +10,7 @@ namespace linqlike
     template <typename T>
     struct enumerable
     {
+        typedef T value_type;
         typedef boost::coroutines::coroutine<T> coro_t;
         typedef typename coro_t::pull_type pull_type;
         typedef typename coro_t::push_type push_type;
@@ -57,16 +58,6 @@ namespace linqlike
         }
 
         enumerable_iterator end()
-        {
-            return enumerable_iterator();
-        }
-
-        enumerable_iterator cbegin() const
-        {
-            return enumerable_iterator(_pullFactory());
-        }
-
-        enumerable_iterator cend() const
         {
             return enumerable_iterator();
         }

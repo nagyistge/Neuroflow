@@ -19,76 +19,70 @@ namespace NeuroflowNativeUT
         TEST_METHOD(enumerable_iterators_test)
 		{
             vector<int> values = { 1, 2, 3, 4, 5 };
+            int target = 1 + 2 + 3 + 4 + 5;
+            int result = 0;
 
-            stringstream ss;
             auto e = from_iterators(values.begin(), values.end());
             for (int v : e)
             {
-                ss << to_string(v) << " ";
+                result += v;
             }
+            Assert::AreEqual(target, result);
 
-            ss << "\n";
-
+            result = 0;
             for (int v : from(values))
             {
-                ss << to_string(v) << " ";
+                result += v;
             }
+            Assert::AreEqual(target, result);
 
-            ss << "\n";
-
+            result = 0;
             std::for_each(begin(e), end(e),
             [&](int v)
             {
-                ss << to_string(v) << " ";
+                result += v;
             });
+            Assert::AreEqual(target, result);
 
-            ss << "\n";
-
+            result = 0;
             e = from(values);
-            std::for_each(begin(e), end(e),
-                [&](int v)
+            std::for_each(begin(e), end(e), [&](int v)
             {
-                ss << to_string(v) << " ";
+                result += v;
             });
-
-            ss << "\n";
-
-            Logger::WriteMessage(ss.str().c_str());
+            Assert::AreEqual(target, result);
 
             vector<const int> cvalues = { 1, 2, 3, 4, 5 };
 
-            stringstream css;
+            result = 0;
             auto ce = from_iterators(cvalues.begin(), cvalues.end());
             for (const int& v : ce)
             {
-                css << to_string(v) << " ";
+                result += v;
             }
+            Assert::AreEqual(target, result);
 
-            css << "\n";
-
+            result = 0; 
             for (const int& v : from(values))
             {
-                css << to_string(v) << " ";
+                result += v;
             }
+            Assert::AreEqual(target, result);
 
-            css << "\n";
-
-            std::for_each(ce.begin(), ce.end(),
-                [&](int v)
+            result = 0;
+            std::for_each(ce.begin(), ce.end(), [&](int v)
             {
-                css << to_string(v) << " ";
+                result += v;
             });
+            Assert::AreEqual(target, result);
 
-            css << "\n";
-
+            result = 0;
             ce = from(values);
-            std::for_each(ce.begin(), ce.end(),
-                [&](int v)
+            std::for_each(ce.begin(), ce.end(), [&](int v)
             {
-                css << to_string(v) << " ";
+                result += v;
             });
-
-            Logger::WriteMessage(css.str().c_str());
+            Assert::AreEqual(target, result);
 		}
 
         BEGIN_TEST_METHOD_ATTRIBUTE(where_test)
@@ -100,22 +94,27 @@ namespace NeuroflowNativeUT
             {
                 vector<int> values = { 1, 2, 3, 4, 5 };
                 vector<const int> cvalues = { 1, 2, 3, 4, 5 };
+                int target = 2 + 4;
+                int result = 0;
                 auto q = from(values) | where(l::_1 % 2 == 0);
                 auto cq = from(cvalues) >> where(l::_1 % 2 == 0);
-                stringstream ss;
                 for (auto& v : q)
                 {
-                    ss << to_string(v) << " ";
+                    result += v;
                 }
+                Assert::AreEqual(target, result);
+                result = 0;
                 for (auto v : q)
                 {
-                    ss << to_string(v) << " ";
+                    result += v;
                 }
+                Assert::AreEqual(target, result);
+                result = 0;
                 for (auto& v : cq)
                 {
-                    ss << to_string(v) << " ";
+                    result += v;
                 }
-                Logger::WriteMessage(ss.str().c_str());
+                Assert::AreEqual(target, result);
             }
             catch (exception& ex)
             {
@@ -132,18 +131,51 @@ namespace NeuroflowNativeUT
             try
             {
                 const vector<int> values = { 1, 2, 3, 4, 5 };
-                auto q = from(values) | select([=](const int& v) { return to_string(v * v); });
-                auto cq = from(values) >> select([=](const int& v) { return to_string(v * v); });
-                stringstream ss;
+                string target("12345");
+                string result;
+                auto q = from(values) | select([=](const int& v) { return to_string(v); });
+                auto cq = from(values) >> select([=](const int& v) { return to_string(v); });
+                result = "";
                 for (auto v : q)
                 {
-                    ss << v << " ";
+                    result += v;
                 }
+                Assert::AreEqual(target, result);
+                result = "";
                 for (auto v : cq)
                 {
-                    ss << v << " ";
+                    result += v;
                 }
-                Logger::WriteMessage(ss.str().c_str());
+                Assert::AreEqual(target, result);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(concat_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(concat_test)
+        {
+            try
+            {
+                vector<int> values1 = { 1, 2, 3, 4, 5 };
+                vector<int> values2 = { 6, 7, 8, 9, 10 };
+                    
+                vector<int> result;
+                for (auto v : from(values1) >> concat(values2))
+                {
+                    result.push_back(v);
+                }
+
+                Assert::AreEqual(10, (int)result.size());
+                Assert::AreEqual(1, result[0]);
+                Assert::AreEqual(2, result[1]);
+                Assert::AreEqual(9, result[8]);
+                Assert::AreEqual(10, result[9]);
             }
             catch (exception& ex)
             {
