@@ -24,4 +24,11 @@ namespace linqlike
     {
         return from_iterators(std::begin(coll), std::end(coll));
     }
+
+    template <typename TColl, typename TIterator = TColl::iterator, typename T = TColl::value_type>
+    enumerable<T> from(const TColl& coll)
+    {
+        auto& c = const_cast<TColl&>(coll); // We have to de-const the collection, because corutines doesn't support const iterators.
+        return from_iterators(std::begin(c), std::end(c));
+    }
 }
