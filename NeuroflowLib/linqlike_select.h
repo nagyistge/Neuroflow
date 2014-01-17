@@ -34,7 +34,7 @@ namespace linqlike
                 for (auto& v : e)
                 {
                     yield(s.tran()(v));
-                };
+                }
             });
         });
     }
