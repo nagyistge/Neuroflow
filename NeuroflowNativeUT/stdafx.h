@@ -31,4 +31,5 @@
 #include <boost/optional.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/lambda/lambda.hpp>
 #include "ocl.h"
