@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "linqlike.h"
+#include <boost/lambda/lambda.hpp>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace linqlike;
 using namespace std;
+namespace l = boost::lambda;
 
 namespace NeuroflowNativeUT
 {
@@ -56,7 +58,7 @@ namespace NeuroflowNativeUT
             vector<const int> cvalues = { 1, 2, 3, 4, 5 };
 
             stringstream css;
-            auto ce = from_iterators(cvalues.cbegin(), cvalues.cend());
+            auto ce = from_iterators(cvalues.begin(), cvalues.end());
             for (const int& v : ce)
             {
                 css << to_string(v) << " ";
@@ -71,7 +73,7 @@ namespace NeuroflowNativeUT
 
             css << "\n";
 
-            std::for_each(ce.cbegin(), ce.cend(),
+            std::for_each(ce.begin(), ce.end(),
                 [&](int v)
             {
                 css << to_string(v) << " ";
@@ -80,7 +82,7 @@ namespace NeuroflowNativeUT
             css << "\n";
 
             ce = from(values);
-            std::for_each(ce.cbegin(), ce.cend(),
+            std::for_each(ce.begin(), ce.end(),
                 [&](int v)
             {
                 css << to_string(v) << " ";
@@ -98,8 +100,8 @@ namespace NeuroflowNativeUT
             {
                 vector<int> values = { 1, 2, 3, 4, 5 };
                 vector<const int> cvalues = { 1, 2, 3, 4, 5 };
-                auto q = from(values) | where([](const int& v) { return v % 2 != 0; });
-                auto cq = from(cvalues) >> where([](const int& v) { return v % 2 != 0; });
+                auto q = from(values) | where(l::_1 % 2 == 0);
+                auto cq = from(cvalues) >> where(l::_1 % 2 == 0);
                 stringstream ss;
                 for (auto& v : q)
                 {
@@ -129,9 +131,9 @@ namespace NeuroflowNativeUT
         {
             try
             {
-                vector<int> values = { 1, 2, 3, 4, 5 };
-                auto q = from(values) | select([=](int v) { return to_string(v * v); });
-                auto cq = from(values) >> select([=](const int v) { return to_string(v * v); });
+                const vector<int> values = { 1, 2, 3, 4, 5 };
+                auto q = from(values) | select([=](const int& v) { return to_string(v * v); });
+                auto cq = from(values) >> select([=](const int& v) { return to_string(v * v); });
                 stringstream ss;
                 for (auto v : q)
                 {

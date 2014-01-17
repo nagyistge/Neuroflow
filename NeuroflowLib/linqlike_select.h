@@ -24,23 +24,23 @@ namespace linqlike
     }
 
     template <typename T, typename F>
-    auto operator|(const enumerable<T>& e, const _select<F>& s) -> enumerable<decltype(s.tran()(T()))>
+    auto operator|(enumerable<T>& e, const _select<F>& s) -> enumerable<decltype(s.tran()(T()))>
     {
         typedef decltype(s.tran()(T())) result_t;
-        return enumerable<result_t>([=]()
+        return enumerable<result_t>([=]() mutable
         {
-            return enumerable<result_t>::pull_type([=](enumerable<result_t>::push_type& yield)
+            return enumerable<result_t>::pull_type([=](enumerable<result_t>::push_type& yield) mutable
             {
-                std::for_each(e.cbegin(), e.cend(), [&](const T& v)
+                for (auto& v : e)
                 {
                     yield(s.tran()(v));
-                });
+                };
             });
         });
     }
 
     template <typename T, typename F>
-    auto operator>>(const enumerable<T>& e, const _select<F>& s) -> decltype(e | s)
+    auto operator>>(enumerable<T>& e, const _select<F>& s) -> decltype(e | s)
     {
         return e | s;
     }
