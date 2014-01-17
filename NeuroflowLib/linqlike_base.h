@@ -61,6 +61,16 @@ namespace linqlike
             return enumerable_iterator();
         }
 
+        enumerable_iterator cbegin() const
+        {
+            return enumerable_iterator(_pullFactory());
+        }
+
+        enumerable_iterator cend() const
+        {
+            return enumerable_iterator();
+        }
+
     private:
         pull_factory_t _pullFactory;
     };
