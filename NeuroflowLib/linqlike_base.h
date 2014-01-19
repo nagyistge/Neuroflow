@@ -17,6 +17,7 @@ namespace linqlike
         typedef std::function<pull_type()> pull_factory_t;
         typedef typename boost::range_iterator<pull_type>::type pull_iterator_t;
         typedef typename std::iterator_traits<pull_iterator_t>::value_type pull_iterator_value_t;
+        typedef pull_iterator_t iterator;
 
         struct enumerable_iterator : public std::iterator<std::input_iterator_tag, pull_iterator_value_t>
         {
