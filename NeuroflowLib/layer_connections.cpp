@@ -100,15 +100,11 @@ void layer_connections::clear()
     _otherLayers.clear();
 }
 
-void layer_connections::visit_connected_layers(flow_direction direction, const layer_visitor_func& visitor) const
+layers_t layer_connections::connected_layers(flow_direction direction) const
 {
-    for (auto& layer : _otherLayers)
-    {
-        if (int(layer.first & direction) != 0)
-        {
-            if (!visitor(layer.second)) return;
-        }
-    }
+    return from(_otherLayers) >> 
+    where([=](const other_layer_t& layer) { return int(layer.first & direction) != 0; }) >>
+    select([](const other_layer_t& layer) -> layer_ptr { return layer.second; });
 }
 
 void layer_connections::with_other_side_update_suppressed(const layer_ptr& layer, const std::function<void()>& method)

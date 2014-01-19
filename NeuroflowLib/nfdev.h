@@ -20,7 +20,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cpplinq.hpp>
-//#include "linqlike.h"
+#include "linqlike.h"
 #include "nf_object.h"
 #include "typedefs.h"
 #include "error.h"
@@ -29,7 +29,9 @@
 #include "get_vector_size.h"
 #include "finally.h"
 
+namespace linq = linqlike;
+
 #define null nullptr
-#define USING using namespace std; using namespace nf; using namespace cl; using namespace concurrency;
+#define USING using namespace std; using namespace nf; using namespace cl; using namespace concurrency; using namespace linq;
 #define _item_t(container) decltype(*std::begin(container))
 #define _citem_t(container) decltype(*std::cbegin(container))

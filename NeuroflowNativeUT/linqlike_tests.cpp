@@ -184,5 +184,27 @@ namespace NeuroflowNativeUT
             }
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(any_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(any_test)
+        {
+            try
+            {
+                vector<int> values1 = { 1, 2, 3, 4, 5 };
+                vector<int> values2;
+
+                Assert::IsTrue(from(values1) >> any());
+                Assert::IsFalse(from(values2) >> any());
+                Assert::IsTrue(from(values1) >> where([](int v) { return v == 1; }) >> any());
+                Assert::IsFalse(from(values1) >> where([](int v) { return v == 1000; }) >> any());
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
 	};
 }

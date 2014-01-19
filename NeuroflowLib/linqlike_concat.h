@@ -10,14 +10,15 @@ namespace linqlike
         typedef typename TColl::value_type value_type;
         typedef enumerable<value_type> enumerable_t;
 
-        explicit _concat(TColl& coll) : _other(from(coll)) { }
+        explicit _concat(TColl& coll) : _coll(&coll) { }
 
-        enumerable_t& other()
+        TColl& coll()
         {
-            return _other;
+            return *_coll;
         }
+
     private:
-        enumerable_t _other;
+        TColl* _coll;
     };
 
     template <typename TColl>
@@ -38,7 +39,7 @@ namespace linqlike
                 {
                     yield(v);
                 }
-                for (auto& v : s.other())
+                for (auto& v : s.coll())
                 {
                     yield(v);
                 }

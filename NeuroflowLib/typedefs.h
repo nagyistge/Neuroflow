@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "enum_flags.h"
+#include "linqlike.h"
 
 namespace nf
 {
@@ -97,4 +98,7 @@ namespace nf
         one_way_to_source = 1 << 3,
         all = one_way | two_way | one_way_to_source
     };
+
+    typedef std::pair<flow_direction, layer_ptr> other_layer_t;
+    typedef linqlike::enumerable<layer_ptr> layers_t;
 }
