@@ -33,22 +33,8 @@ layer_connections& layer::output_connections()
 
 bool layer::has_recurrent_connections() const
 {
-    /*bool has = false;
-    _inputConnections.visit_connected_layers(flow_direction::one_way_to_source | flow_direction::two_way,
-    [&](const layer_ptr& layer)
-    {
-        has = true;
-        return false;
-    });
-    if (has) return true;
-    _outputConnections.visit_connected_layers(flow_direction::one_way_to_source | flow_direction::two_way,
-    [&](const layer_ptr& layer)
-    {
-        has = true;
-        return false;
-    });
-    return has;*/
-    return null;
+    return (from(_inputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way)) >> any())
+        || (from(_outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way)) >> any());
 }
 
 layers_t layer::input_layers(const layer_visitor_func& visitor) const
