@@ -33,20 +33,20 @@ layer_connections& layer::output_connections()
 
 bool layer::has_recurrent_connections() const
 {
-    return (_inputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) >> any())
-        || (_outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) >> any());
+    return _inputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) | any()
+        || _outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) | any();
 }
 
 layers_t layer::input_layers(const layer_visitor_func& visitor) const
 {
     return _inputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
-        >> concat(_outputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
+        | concat(_outputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
 }
 
 layers_t layer::output_layers(const layer_visitor_func& visitor) const
 {
     return _outputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
-        >> concat(_inputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
+        | concat(_inputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
 }
 
 layer_ptr layer::get_input_layer(idx_t connectionIndex) const
