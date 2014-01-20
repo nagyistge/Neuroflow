@@ -104,7 +104,7 @@ layers_t layer_connections::connected_layers(flow_direction direction) const
 {
     return from(_otherLayers) >> 
     where([=](const other_layer_t& layer) { return int(layer.first & direction) != 0; }) >>
-    select([](const other_layer_t& layer) -> layer_ptr { return layer.second; });
+    select([](const other_layer_t& layer) { return layer.second; });
 }
 
 void layer_connections::with_other_side_update_suppressed(const layer_ptr& layer, const std::function<void()>& method)
