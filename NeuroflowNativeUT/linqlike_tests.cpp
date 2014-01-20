@@ -216,7 +216,7 @@ namespace NeuroflowNativeUT
                 vector<int> values1 = { 0, 1, 2, 3, 4, 5 };
                 
                 ::size_t sum1 = 0, sum2 = 0;
-                for (auto& x : from(values1) >> row_num())
+                for (auto& x : from(values1) | row_num())
                 {
                     sum1 += x.row_num();
                     sum2 += x.value();
