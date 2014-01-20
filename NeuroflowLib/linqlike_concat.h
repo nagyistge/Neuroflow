@@ -48,7 +48,7 @@ namespace linqlike
     }
 
     template <typename T, typename TColl>
-    auto operator>>(enumerable<T>& e, _concat<TColl>& s) -> decltype(e | s)
+    auto operator>>(enumerable<T>& e, _concat<TColl>& s)
     {
         return e | s;
     }

@@ -24,7 +24,7 @@ namespace linqlike
     }
 
     template <typename T, typename F>
-    auto operator|(enumerable<T>& e, const _select<F>& s) -> enumerable<decltype(s.tran()(T()))>
+    auto operator|(enumerable<T>& e, const _select<F>& s)
     {
         typedef decltype(s.tran()(T())) result_t;
         return enumerable<result_t>([=]() mutable
@@ -40,7 +40,7 @@ namespace linqlike
     }
 
     template <typename T, typename F>
-    auto operator>>(enumerable<T>& e, const _select<F>& s) -> decltype(e | s)
+    auto operator>>(enumerable<T>& e, const _select<F>& s)
     {
         return e | s;
     }

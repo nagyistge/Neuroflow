@@ -6,3 +6,4 @@
 #include "linqlike_select.h"
 #include "linqlike_concat.h"
 #include "linqlike_any.h"
+#include "linqlike_row_num.h"

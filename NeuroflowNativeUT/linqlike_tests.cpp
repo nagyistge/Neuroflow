@@ -206,5 +206,30 @@ namespace NeuroflowNativeUT
             }
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(row_num_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(row_num_test)
+        {
+            try
+            {
+                vector<int> values1 = { 0, 1, 2, 3, 4, 5 };
+                
+                ::size_t sum1 = 0, sum2 = 0;
+                for (auto& x : from(values1) >> row_num())
+                {
+                    sum1 += x.row_num();
+                    sum2 += x.value();
+                }
+
+                Assert::AreEqual(sum1, sum2);
+                Assert::AreEqual(0 + 1 + 2 + 3 + 4 + 5, (int)sum1);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
 	};
 }
