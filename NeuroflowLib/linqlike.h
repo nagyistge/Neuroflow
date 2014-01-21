@@ -7,3 +7,5 @@
 #include "linqlike_concat.h"
 #include "linqlike_any.h"
 #include "linqlike_row_num.h"
+#include "linqlike_first.h"
+#include "linqlike_first_or_default.h"
