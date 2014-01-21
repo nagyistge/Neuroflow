@@ -27,15 +27,15 @@ namespace linqlike
         return _concat<TColl>(other);
     }
 
-    template <typename T, typename TColl>
-    enumerable<typename TColl::value_type> operator|(enumerable<T>& e, _concat<TColl>& s)
+    template <typename TColl1, typename TColl2, typename T = TColl2::value_type>
+    enumerable<T> operator|(TColl1& coll, _concat<TColl2>& s)
     {
-        typedef typename _concat<TColl>::enumerable_t enumerable_t;
-        return enumerable_t([=]() mutable
+        TColl1* pcoll = &coll;
+        return enumerable<T>([=]() mutable
         {
-            return enumerable_t::pull_type([=](enumerable_t::push_type& yield) mutable
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                for (auto& v : e)
+                for (auto& v : *pcoll)
                 {
                     yield(v);
                 }
@@ -45,11 +45,5 @@ namespace linqlike
                 }
             });
         });
-    }
-
-    template <typename T, typename TColl>
-    auto operator>>(enumerable<T>& e, _concat<TColl>& s)
-    {
-        return e | s;
     }
 }

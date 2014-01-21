@@ -8,6 +8,12 @@
 namespace linqlike
 {
     template <typename T>
+    T _peek()
+    {
+        throw std::runtime_error("Do not call this method.");
+    };
+
+    template <typename T>
     struct enumerable
     {
         typedef T value_type;

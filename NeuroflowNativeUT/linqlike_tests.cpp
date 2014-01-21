@@ -30,23 +30,8 @@ namespace NeuroflowNativeUT
             Assert::AreEqual(target, result);
 
             result = 0;
-            for (int v : from(values))
-            {
-                result += v;
-            }
-            Assert::AreEqual(target, result);
-
-            result = 0;
             std::for_each(begin(e), end(e),
             [&](int v)
-            {
-                result += v;
-            });
-            Assert::AreEqual(target, result);
-
-            result = 0;
-            e = from(values);
-            std::for_each(begin(e), end(e), [&](int v)
             {
                 result += v;
             });
@@ -62,22 +47,7 @@ namespace NeuroflowNativeUT
             }
             Assert::AreEqual(target, result);
 
-            result = 0; 
-            for (const int& v : from(values))
-            {
-                result += v;
-            }
-            Assert::AreEqual(target, result);
-
             result = 0;
-            std::for_each(ce.begin(), ce.end(), [&](int v)
-            {
-                result += v;
-            });
-            Assert::AreEqual(target, result);
-
-            result = 0;
-            ce = from(values);
             std::for_each(ce.begin(), ce.end(), [&](int v)
             {
                 result += v;
@@ -96,8 +66,8 @@ namespace NeuroflowNativeUT
                 vector<const int> cvalues = { 1, 2, 3, 4, 5 };
                 int target = 2 + 4;
                 int result = 0;
-                auto q = from(values) | where(l::_1 % 2 == 0);
-                auto cq = from(cvalues) >> where(l::_1 % 2 == 0);
+                auto q = values | where(l::_1 % 2 == 0);
+                auto cq = cvalues | where(l::_1 % 2 == 0);
                 for (auto& v : q)
                 {
                     result += v;
@@ -133,8 +103,8 @@ namespace NeuroflowNativeUT
                 const vector<int> values = { 1, 2, 3, 4, 5 };
                 string target("12345");
                 string result;
-                auto q = from(values) | select([=](const int& v) { return to_string(v); });
-                auto cq = from(values) >> select([=](const int& v) { return to_string(v); });
+                auto q = values | select([=](const int& v) { return to_string(v); });
+                auto cq = values | select([=](const int& v) { return to_string(v); });
                 result = "";
                 for (auto v : q)
                 {
@@ -166,7 +136,7 @@ namespace NeuroflowNativeUT
                 vector<int> values2 = { 6, 7, 8, 9, 10 };
                     
                 vector<int> result;
-                for (auto v : from(values1) >> concat(values2))
+                for (auto v : values1 | concat(values2))
                 {
                     result.push_back(v);
                 }
@@ -191,13 +161,13 @@ namespace NeuroflowNativeUT
         {
             try
             {
-                vector<int> values1 = { 1, 2, 3, 4, 5 };
+                const vector<int> values1 = { 1, 2, 3, 4, 5 };
                 vector<int> values2;
 
-                Assert::IsTrue(from(values1) >> any());
-                Assert::IsFalse(from(values2) >> any());
-                Assert::IsTrue(from(values1) >> where([](int v) { return v == 1; }) >> any());
-                Assert::IsFalse(from(values1) >> where([](int v) { return v == 1000; }) >> any());
+                Assert::IsTrue(values1 | any());
+                Assert::IsFalse(values2 | any());
+                Assert::IsTrue(values1 | where([](int v) { return v == 1; }) | any());
+                Assert::IsFalse(values2 | where([](int v) { return v == 1000; }) | any());
             }
             catch (exception& ex)
             {
@@ -216,7 +186,7 @@ namespace NeuroflowNativeUT
                 vector<int> values1 = { 0, 1, 2, 3, 4, 5 };
                 
                 ::size_t sum1 = 0, sum2 = 0;
-                for (auto& x : from(values1) | row_num())
+                for (auto& x : values1 | row_num())
                 {
                     sum1 += x.row_num();
                     sum2 += x.value();

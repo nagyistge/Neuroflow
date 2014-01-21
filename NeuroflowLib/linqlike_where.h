@@ -24,24 +24,19 @@ namespace linqlike
         return _where<F>(pred);
     }
 
-    template <typename T, typename F>
-    enumerable<T> operator|(enumerable<T>& e, const _where<F>& w)
+    template <typename TColl, typename F, typename T = TColl::value_type>
+    enumerable<T> operator|(TColl& coll, const _where<F>& w)
     {
+        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                for (auto& v : e)
+                for (auto& v : *pcoll)
                 {
                     if (w.pred()(v)) yield(v);
                 };
             });
         });
-    }
-
-    template <typename T, typename F>
-    enumerable<T> operator>>(enumerable<T>& e, const _where<F>& w)
-    {
-        return e | w;
     }
 }
