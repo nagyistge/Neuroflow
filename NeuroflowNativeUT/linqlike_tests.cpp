@@ -201,5 +201,69 @@ namespace NeuroflowNativeUT
                 throw;
             }
         }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(first_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(first_test)
+        {
+            try
+            {
+                vector<int> values = { 0, 1, 2, 3, 4, 5 };
+
+                int f = values | where([](int v) { return v % 2 != 0; }) | first();
+
+                Assert::AreEqual(1, f);
+
+                f = values | first([](int v) { return v > 3; });
+
+                Assert::AreEqual(4, f);
+
+                values.clear();
+
+                try
+                {
+                    f = values | first();
+                    Assert::Fail(L"Previous method should have failed.");
+                }
+                catch (runtime_error&)
+                {
+                }
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(first_or_default_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(first_or_default_test)
+        {
+            try
+            {
+                vector<int> values = { 2, 1, 2, 3, 4, 5 };
+
+                int f = values | where([](int v) { return v % 2 != 0; }) | first_or_default();
+
+                Assert::AreEqual(1, f);
+
+                f = values | first_or_default([](int v) { return v > 3; });
+
+                Assert::AreEqual(4, f);
+
+                values.clear();
+
+                f = values | first_or_default();
+                Assert::AreEqual(0, f);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
 	};
 }
