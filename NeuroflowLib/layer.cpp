@@ -37,13 +37,13 @@ bool layer::has_recurrent_connections() const
         || _outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) | any();
 }
 
-layers_t layer::input_layers(const layer_visitor_func& visitor) const
+layers_t layer::input_layers() const
 {
     return _inputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
         | concat(_outputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
 }
 
-layers_t layer::output_layers(const layer_visitor_func& visitor) const
+layers_t layer::output_layers() const
 {
     return _outputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
         | concat(_inputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
@@ -51,38 +51,24 @@ layers_t layer::output_layers(const layer_visitor_func& visitor) const
 
 layer_ptr layer::get_input_layer(idx_t connectionIndex) const
 {
-    /*int idx = 0;
-    layer_ptr result;
-    visit_input_layers(
-    [&](const layer_ptr& layer)
-    {
-        if (idx++ == connectionIndex)
-        {
-            result = layer;
-            return false;
-        }
-        return true;
-    });
+    auto result = input_layers()
+        | row_num()
+        | where([=](row_numbered<layer_ptr> obj) { return obj.row_num() == connectionIndex; })
+        | select([](row_numbered<layer_ptr> obj) { return obj.value(); })
+        | first_or_default();
+
     if (!result) throw_logic_error("Input layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
-    return result;*/
-    return null;
+    return result;
 }
 
 layer_ptr layer::get_output_layer(idx_t connectionIndex) const
 {
-    /*int idx = 0;
-    layer_ptr result;
-    visit_output_layers(
-    [&](const layer_ptr& layer)
-    {
-        if (idx++ == connectionIndex)
-        {
-            result = layer;
-            return false;
-        }
-        return true;
-    });
-    if (!result) throw_logic_error("Output layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
-    return result;*/
-    return null;
+    auto result = output_layers()
+        | row_num()
+        | where([=](row_numbered<layer_ptr> obj) { return obj.row_num() == connectionIndex; })
+        | select([](row_numbered<layer_ptr> obj) { return obj.value(); })
+        | first_or_default();
+
+    if (!result) throw_logic_error("Input layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
+    return result;
 }
