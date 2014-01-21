@@ -14,8 +14,8 @@ namespace nf
         layer_connections& input_connections();
         layer_connections& output_connections();
         bool has_recurrent_connections() const;
-        layers_t input_layers(const layer_visitor_func& visitor) const;
-        layers_t output_layers(const layer_visitor_func& visitor) const;
+        layers_t input_layers() const;
+        layers_t output_layers() const;
         layer_ptr get_input_layer(idx_t connectionIndex) const;
         layer_ptr get_output_layer(idx_t connectionIndex) const;
 
