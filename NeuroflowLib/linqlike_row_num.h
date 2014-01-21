@@ -44,25 +44,20 @@ namespace linqlike
     {
     };
 
-    template <typename T>
-    enumerable<row_numbered<T>> operator|(enumerable<T>& e, const row_num& rowNum)
+    template <typename TColl, typename T = TColl::value_type>
+    enumerable<row_numbered<T>> operator|(TColl& coll, const row_num& rowNum)
     {
+        TColl* pcoll = &coll;
         return enumerable<row_numbered<T>>([=]() mutable
         {
             return  enumerable<row_numbered<T>>::pull_type([=](enumerable<row_numbered<T>>::push_type& yield) mutable
             {
                 ::size_t rowNum = 0;
-                for (auto& v : e)
+                for (auto& v : *pcoll)
                 {
                     yield(row_numbered<T>(rowNum++, v));
                 }
             });
         });
-    }
-
-    template <typename T>
-    enumerable<row_numbered<T>> operator>>(enumerable<T>& e, const row_num& rowNum)
-    {
-        return e | rowNum;
     }
 }

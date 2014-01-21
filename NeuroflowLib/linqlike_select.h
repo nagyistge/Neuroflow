@@ -23,25 +23,20 @@ namespace linqlike
         return _select<F>(tran);
     }
 
-    template <typename T, typename F>
-    auto operator|(enumerable<T>& e, const _select<F>& s)
+    template <typename TColl, typename F, typename T = TColl::value_type>
+    auto operator|(TColl& coll, const _select<F>& s)
     {
-        typedef decltype(s.tran()(T())) result_t;
+        typedef decltype(s.tran()(_peek<T>())) result_t;
+        TColl* pcoll = &coll;
         return enumerable<result_t>([=]() mutable
         {
             return enumerable<result_t>::pull_type([=](enumerable<result_t>::push_type& yield) mutable
             {
-                for (auto& v : e)
+                for (auto& v : *pcoll)
                 {
                     yield(s.tran()(v));
                 }
             });
         });
-    }
-
-    template <typename T, typename F>
-    auto operator>>(enumerable<T>& e, const _select<F>& s)
-    {
-        return e | s;
     }
 }
