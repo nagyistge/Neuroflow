@@ -265,5 +265,46 @@ namespace NeuroflowNativeUT
                 throw;
             }
         }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(order_by_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(order_by_test)
+    {
+            try
+            {
+                vector<int> values1 = { 2, 1, 2, 7, -1, 5 };
+                vector<int> values2;
+
+                auto e = values1 | order_by(dir::asc);
+                values2.assign(e.begin(), e.end());
+
+                Assert::AreEqual(values1.size(), values2.size());
+                Assert::AreEqual(-1, values2.front());
+                Assert::AreEqual(7, values2.back());
+
+                values2.clear();
+                e = values1 | order_by(dir::desc);
+                values2.assign(e.begin(), e.end());
+
+                Assert::AreEqual(values1.size(), values2.size());
+                Assert::AreEqual(-1, values2.back());
+                Assert::AreEqual(7, values2.front());
+
+                values2.clear();
+                e = values1 | order_by([](int v1, int v2) { return v2 < v1; });
+                values2.assign(e.begin(), e.end());
+
+                Assert::AreEqual(values1.size(), values2.size());
+                Assert::AreEqual(-1, values2.back());
+                Assert::AreEqual(7, values2.front());
+
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
 	};
 }

@@ -53,8 +53,8 @@ layer_ptr layer::get_input_layer(idx_t connectionIndex) const
 {
     auto result = input_layers()
         | row_num()
-        | where([=](row_numbered<layer_ptr> obj) { return obj.row_num() == connectionIndex; })
-        | select([](row_numbered<layer_ptr> obj) { return obj.value(); })
+        | where([=](row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
+        | select([](row_numbered<layer_ptr>& obj) { return obj.value(); })
         | first_or_default();
 
     if (!result) throw_logic_error("Input layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
@@ -65,10 +65,10 @@ layer_ptr layer::get_output_layer(idx_t connectionIndex) const
 {
     auto result = output_layers()
         | row_num()
-        | where([=](row_numbered<layer_ptr> obj) { return obj.row_num() == connectionIndex; })
-        | select([](row_numbered<layer_ptr> obj) { return obj.value(); })
+        | where([=](row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
+        | select([](row_numbered<layer_ptr>& obj) { return obj.value(); })
         | first_or_default();
 
-    if (!result) throw_logic_error("Input layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
+    if (!result) throw_logic_error("Output layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
     return result;
 }

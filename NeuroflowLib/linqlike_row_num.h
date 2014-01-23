@@ -1,6 +1,7 @@
 #pragma once
 
 #include "linqlike_base.h"
+#include "linqlike_select.h"
 
 namespace linqlike
 {

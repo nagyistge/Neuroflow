@@ -224,6 +224,7 @@
     <ClInclude Include="learning_behavior.h" />
     <ClInclude Include="linqlike_first.h" />
     <ClInclude Include="linqlike_first_or_default.h" />
+    <ClInclude Include="linqlike_order_by.h" />
     <ClInclude Include="linqlike_row_num.h" />
     <ClInclude Include="linqlike.h" />
     <ClInclude Include="linqlike_any.h" />
