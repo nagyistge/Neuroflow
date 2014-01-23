@@ -277,6 +277,9 @@
     <ClInclude Include="linqlike_first_or_default.h">
       <Filter>Linqlike</Filter>
     </ClInclude>
+    <ClInclude Include="linqlike_order_by.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
