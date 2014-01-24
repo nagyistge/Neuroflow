@@ -280,6 +280,12 @@
     <ClInclude Include="linqlike_order_by.h">
       <Filter>Linqlike</Filter>
     </ClInclude>
+    <ClInclude Include="linqlike_group_by.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_sort.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

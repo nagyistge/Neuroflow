@@ -266,17 +266,17 @@ namespace NeuroflowNativeUT
             }
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(order_by_test)
+        BEGIN_TEST_METHOD_ATTRIBUTE(ordering_test)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(order_by_test)
+        TEST_METHOD(ordering_test)
     {
             try
             {
                 vector<int> values1 = { 2, 1, 2, 7, -1, 5 };
                 vector<int> values2;
 
-                auto e = values1 | order_by(dir::asc);
+                auto e = values1 | sort(dir::asc);
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -284,7 +284,7 @@ namespace NeuroflowNativeUT
                 Assert::AreEqual(7, values2.back());
 
                 values2.clear();
-                e = values1 | order_by(dir::desc);
+                e = values1 | sort(dir::desc);
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -292,13 +292,27 @@ namespace NeuroflowNativeUT
                 Assert::AreEqual(7, values2.front());
 
                 values2.clear();
-                e = values1 | order_by([](int v1, int v2) { return v2 < v1; });
+                e = values1 | sort([](int v1, int v2) { return v2 < v1; });
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
                 Assert::AreEqual(-1, values2.back());
                 Assert::AreEqual(7, values2.front());
 
+                /*struct t
+                {
+                    int p1, p2;
+                };
+                vector<t> ts1 = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 } };
+                vector<t> ts2;
+
+                auto e2 = ts1 | order_by([](t& v1, t& v2) { return v1.p1 < v2.p1; }).then_by([](t& v1, t& v2) { return v1.p2 > v2.p2; });
+                ts2.assign(e2.begin(), e2.end());
+                Assert::AreEqual(ts1.size(), ts2.size());
+                Assert::AreEqual(1, ts2.front().p1);
+                Assert::AreEqual(4, ts2.front().p2);
+                Assert::AreEqual(2, ts2.back().p1);
+                Assert::AreEqual(11, ts2.back().p2);*/
             }
             catch (exception& ex)
             {
