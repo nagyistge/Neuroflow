@@ -13,6 +13,13 @@ namespace linqlike
         throw std::runtime_error("Do not call this method.");
     };
 
+    enum class dir
+    {
+        asc, desc
+    };
+
+    struct _dummy { };
+
     template <typename T>
     struct enumerable
     {

@@ -8,94 +8,66 @@
 
 namespace linqlike
 {
-    enum class dir
-    {
-        asc, desc
-    };
-
-    template <typename T>
+    template <typename F>
     struct _order_by
     {
-        explicit _order_by(dir direction) : _direction(direction) { }
-        explicit _order_by(const T& comparer) : _comparer(comparer) { }
-
-        const boost::optional<T>& comparer() const
+        explicit _order_by(const F& selectValue, dir direction) :
+            _selectValue(selectValue),
+            _direction(direction)
         {
-            return _comparer;
         }
 
-        const boost::optional<dir> direction() const
+        const F& selectValue() const
+        {
+            return _selectValue;
+        }
+
+        dir direction() const
         {
             return _direction;
         }
 
     private:
-        boost::optional<T> _comparer;
-        boost::optional<dir> _direction;
+        F _selectValue;
+        dir _direction;
     };
 
-    inline _order_by<int> order_by(dir direction)
+    template <typename F>
+    struct _then_by : _order_by<F>
     {
-        return _order_by<int>(direction);
+        explicit _then_by(const F& selectValue, dir direction) :
+            _order_by(selectValue, direction)
+        {
+        }
+    };
+
+    template <typename T, typename F>
+    struct ordered_enumerable : enumerable<T>
+    {
+        ordered_enumerable(pull_factory_t&& pullFactory, const _order_by<F>& orderBy) :
+            enumerable<T>(std::move(pullFactory)),
+            _orderBy(orderBy)
+        {
+        }
+
+        const _order_by<F> order_by() const
+        {
+            return _orderBy;
+        }
+
+    private:
+        _order_by<F> _orderBy;
+    };
+
+    template <typename F>
+    _order_by<F> order_by(const F& tran, dir direction = dir::asc)
+    {
+        return _order_by<F>(tran);
     }
 
     template <typename F>
-    auto order_by(const F& comparer)
+    _then_by<F> then_by(const F& tran, dir direction = dir::asc)
     {
-        return _order_by<F>(comparer);
-    }
-
-    template <typename TColl, typename T = TColl::value_type>
-    enumerable<T> operator|(TColl& coll, const _order_by<int>& orderBy)
-    {
-        TColl* pcoll = &coll;
-        return enumerable<T>([=]() mutable
-        {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
-            {
-                if (orderBy.direction())
-                {
-                    std::vector<std::reference_wrapper<T>> values;
-                    for (auto& v : *pcoll) values.push_back(std::ref(v));
-
-                    if (*orderBy.direction() == dir::asc)
-                    {
-                        std::sort(values.begin(), values.end());
-                    }
-                    else
-                    {
-                        std::sort(values.begin(), values.end(), std::greater<std::reference_wrapper<T>>());
-                    }
-
-                    for (auto& v : values)
-                    {
-                        yield(v);
-                    }
-                }
-            });
-        });
-    }
-
-    template <typename TColl, typename TComp, typename T = TColl::value_type>
-    enumerable<T> operator|(TColl& coll, const _order_by<TComp>& orderBy)
-    {
-        TColl* pcoll = &coll;
-        return enumerable<T>([=]() mutable
-        {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
-            {
-                if (orderBy.comparer())
-                {
-                    std::vector<std::reference_wrapper<T>> values;
-                    for (auto& v : *pcoll) values.push_back(std::ref(v));
-                    auto comp = [=](std::reference_wrapper<T>& v1, std::reference_wrapper<T>& v2) { return (*(orderBy.comparer()))(v1, v2); };
-                    std::sort(values.begin(), values.end(), comp);
-                    for (auto& v : values)
-                    {
-                        yield(v);
-                    }
-                }
-            });
-        });
+        return _then_by<F>(tran);
     }
 }

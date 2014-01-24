@@ -224,6 +224,7 @@
     <ClInclude Include="learning_behavior.h" />
     <ClInclude Include="linqlike_first.h" />
     <ClInclude Include="linqlike_first_or_default.h" />
+    <ClInclude Include="linqlike_group_by.h" />
     <ClInclude Include="linqlike_order_by.h" />
     <ClInclude Include="linqlike_row_num.h" />
     <ClInclude Include="linqlike.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="linqlike_base.h" />
     <ClInclude Include="linqlike_from.h" />
     <ClInclude Include="linqlike_select.h" />
+    <ClInclude Include="linqlike_sort.h" />
     <ClInclude Include="linqlike_where.h" />
     <ClInclude Include="linqlike_concat.h" />
     <ClInclude Include="multilayer_perceptron.h" />

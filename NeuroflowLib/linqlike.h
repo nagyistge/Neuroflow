@@ -10,3 +10,5 @@
 #include "linqlike_first.h"
 #include "linqlike_first_or_default.h"
 #include "linqlike_order_by.h"
+#include "linqlike_group_by.h"
+#include "linqlike_sort.h"
