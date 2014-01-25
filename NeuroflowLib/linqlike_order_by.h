@@ -183,4 +183,174 @@ namespace linqlike
             });
         });
     }
+
+    template <typename TColl, typename F1, typename F2, typename F3, typename T = TColl::value_type>
+    auto operator|(TColl& coll, const _order_by<F1, F2, F3, _dummy>& orderBy)
+    {
+        TColl* pcoll = &coll;
+        return enumerable<T>([=]() mutable
+        {
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            {
+                typedef std::reference_wrapper<T> ref_t;
+                typedef std::function<int(ref_t, ref_t)> comp_t;
+
+                std::vector<ref_t> values;
+                for (auto& v : *pcoll) values.push_back(std::ref(v));
+
+                auto& selectValueF1 = (*orderBy.select_value_1()).first;
+                auto& selectValueD1 = (*orderBy.select_value_1()).second;
+                auto& selectValueF2 = (*orderBy.select_value_2()).first;
+                auto& selectValueD2 = (*orderBy.select_value_2()).second;
+                auto& selectValueF3 = (*orderBy.select_value_3()).first;
+                auto& selectValueD3 = (*orderBy.select_value_3()).second;
+
+                comp_t comparer1 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF1(v1.get());
+                    auto cv2 = selectValueF1(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD1 == dir::desc)
+                {
+                    comparer1 = [=](ref_t v1, ref_t v2) { return -comparer1(v1, v2); };
+                }
+
+                comp_t comparer2 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF2(v1.get());
+                    auto cv2 = selectValueF2(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD2 == dir::desc)
+                {
+                    comparer2 = [=](ref_t v1, ref_t v2) { return -comparer2(v1, v2); };
+                }
+
+                comp_t comparer3 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF3(v1.get());
+                    auto cv2 = selectValueF3(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD3 == dir::desc)
+                {
+                    comparer3 = [=](ref_t v1, ref_t v2) { return -comparer3(v1, v2); };
+                }
+
+                auto comparer = [=](ref_t v1, ref_t v2)
+                {
+                    int c = comparer1(v1, v2);
+                    if (c < 0) return true;
+                    if (c > 0) return false;
+                    c = comparer2(v1, v2);
+                    if (c < 0) return true;
+                    if (c > 0) return false;
+                    c = comparer3(v1, v2);
+                    if (c < 0) return true;
+                    return false;
+                };
+
+                std::sort(values.begin(), values.end(), comparer);
+
+                for (auto& v : values)
+                {
+                    yield(v);
+                }
+            });
+        });
+    }
+
+    template <typename TColl, typename F1, typename F2, typename F3, typename F4, typename T = TColl::value_type>
+    auto operator|(TColl& coll, const _order_by<F1, F2, F3, F4>& orderBy)
+    {
+        TColl* pcoll = &coll;
+        return enumerable<T>([=]() mutable
+        {
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            {
+                typedef std::reference_wrapper<T> ref_t;
+                typedef std::function<int(ref_t, ref_t)> comp_t;
+
+                std::vector<ref_t> values;
+                for (auto& v : *pcoll) values.push_back(std::ref(v));
+
+                auto& selectValueF1 = (*orderBy.select_value_1()).first;
+                auto& selectValueD1 = (*orderBy.select_value_1()).second;
+                auto& selectValueF2 = (*orderBy.select_value_2()).first;
+                auto& selectValueD2 = (*orderBy.select_value_2()).second;
+                auto& selectValueF3 = (*orderBy.select_value_3()).first;
+                auto& selectValueD3 = (*orderBy.select_value_3()).second;
+                auto& selectValueF4 = (*orderBy.select_value_4()).first;
+                auto& selectValueD4 = (*orderBy.select_value_4()).second;
+
+                comp_t comparer1 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF1(v1.get());
+                    auto cv2 = selectValueF1(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD1 == dir::desc)
+                {
+                    comparer1 = [=](ref_t v1, ref_t v2) { return -comparer1(v1, v2); };
+                }
+
+                comp_t comparer2 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF2(v1.get());
+                    auto cv2 = selectValueF2(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD2 == dir::desc)
+                {
+                    comparer2 = [=](ref_t v1, ref_t v2) { return -comparer2(v1, v2); };
+                }
+
+                comp_t comparer3 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF3(v1.get());
+                    auto cv2 = selectValueF3(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD3 == dir::desc)
+                {
+                    comparer3 = [=](ref_t v1, ref_t v2) { return -comparer3(v1, v2); };
+                }
+
+                comp_t comparer4 = [=](ref_t v1, ref_t v2)
+                {
+                    auto cv1 = selectValueF4(v1.get());
+                    auto cv2 = selectValueF4(v2.get());
+                    return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
+                };
+                if (selectValueD4 == dir::desc)
+                {
+                    comparer4 = [=](ref_t v1, ref_t v2) { return -comparer4(v1, v2); };
+                }
+
+                auto comparer = [=](ref_t v1, ref_t v2)
+                {
+                    int c = comparer1(v1, v2);
+                    if (c < 0) return true;
+                    if (c > 0) return false;
+                    c = comparer2(v1, v2);
+                    if (c < 0) return true;
+                    if (c > 0) return false;
+                    c = comparer3(v1, v2);
+                    if (c < 0) return true;
+                    if (c > 0) return false;
+                    c = comparer4(v1, v2);
+                    if (c < 0) return true;
+                    return false;
+                };
+
+                std::sort(values.begin(), values.end(), comparer);
+
+                for (auto& v : values)
+                {
+                    yield(v);
+                }
+            });
+        });
+    }
 }

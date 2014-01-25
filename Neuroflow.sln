@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroflow", "Neuroflow\Neuroflow.csproj", "{EB83BF8D-63AD-4D0F-9F1C-686A4F04475C}"
 EndProject
@@ -166,9 +166,7 @@ Global
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|Win32.Build.0 = Debug|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x64.ActiveCfg = Debug|x64
-		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x64.Build.0 = Debug|x64
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x86.ActiveCfg = Debug|Win32
-		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Debug|x86.Build.0 = Debug|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{D8C45AC1-FEB7-4465-98A2-D868168330F3}.Release|Win32.ActiveCfg = Release|Win32
