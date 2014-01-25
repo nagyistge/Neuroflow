@@ -286,6 +286,12 @@
     <ClInclude Include="linqlike_sort.h">
       <Filter>Linqlike</Filter>
     </ClInclude>
+    <ClInclude Include="linqlike_to_vector.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="linqlike_to_list.h">
+      <Filter>Linqlike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

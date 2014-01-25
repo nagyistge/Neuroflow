@@ -12,3 +12,5 @@
 #include "linqlike_order_by.h"
 #include "linqlike_group_by.h"
 #include "linqlike_sort.h"
+#include "linqlike_to_vector.h"
+#include "linqlike_to_list.h"
