@@ -8,9 +8,9 @@
 namespace linqlike
 {
     template <typename T>
-    T _sniff()
+    T _wat()
     {
-        throw std::runtime_error("Do not call this method.");
+        throw std::runtime_error("wat");
     };
 
     enum class dir

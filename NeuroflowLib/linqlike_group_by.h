@@ -1,8 +1,6 @@
 #pragma once
 
 #include "linqlike_base.h"
-#include "linqlike_from.h"
-#include "linqlike_select.h"
 #include <boost/optional.hpp>
 
 namespace linqlike
@@ -78,7 +76,7 @@ namespace linqlike
     template <typename TColl, typename F, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _group_by<F, _dummy>& groupdBy)
     {
-        typedef decltype(groupdBy.select_key()(_sniff<T>())) key_t;
+        typedef decltype(groupdBy.select_key()(_wat<T>())) key_t;
         typedef grouping<key_t, T> grouping_t;
         TColl* pcoll = &coll;
         return enumerable<grouping_t>([=]() mutable
@@ -117,8 +115,8 @@ namespace linqlike
     template <typename TColl, typename FK, typename FV, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _group_by<FK, FV>& groupdBy)
     {
-        typedef decltype(groupdBy.select_key()(_sniff<T>())) key_t;
-        typedef decltype(groupdBy.select_value()(_sniff<T>())) value_t;
+        typedef decltype(groupdBy.select_key()(_wat<T>())) key_t;
+        typedef decltype(groupdBy.select_value()(_wat<T>())) value_t;
         typedef grouping<key_t, value_t> grouping_t;
         TColl* pcoll = &coll;
         return enumerable<grouping_t>([=]() mutable
