@@ -26,7 +26,7 @@ namespace linqlike
     template <typename TColl, typename F, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _select<F>& s)
     {
-        typedef decltype(s.tran()(_peek<T>())) result_t;
+        typedef decltype(s.tran()(_sniff<T>())) result_t;
         TColl* pcoll = &coll;
         return enumerable<result_t>([=]() mutable
         {
