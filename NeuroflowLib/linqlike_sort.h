@@ -48,18 +48,19 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
+                typedef std::reference_wrapper<T> ref_t;
                 if (orderBy.direction())
                 {
-                    std::vector<std::reference_wrapper<T>> values;
+                    std::vector<ref_t> values;
                     for (auto& v : *pcoll) values.push_back(std::ref(v));
 
                     if (*orderBy.direction() == dir::asc)
                     {
-                        std::sort(values.begin(), values.end());
+                        std::sort(values.begin(), values.end(), [](ref_t v1, ref_t v2) { return v1.get() < v2.get(); });
                     }
                     else
                     {
-                        std::sort(values.begin(), values.end(), std::greater<std::reference_wrapper<T>>());
+                        std::sort(values.begin(), values.end(), [](ref_t v1, ref_t v2) { return v2.get() < v1.get(); });
                     }
 
                     for (auto& v : values)
@@ -79,11 +80,12 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
+                typedef std::reference_wrapper<T> ref_t;
                 if (orderBy.comparer())
                 {
-                    std::vector<std::reference_wrapper<T>> values;
+                    std::vector<ref_t> values;
                     for (auto& v : *pcoll) values.push_back(std::ref(v));
-                    auto comp = [=](std::reference_wrapper<T>& v1, std::reference_wrapper<T>& v2) { return (*(orderBy.comparer()))(v1, v2); };
+                    auto comp = [=](ref_t v1, ref_t v2) { return (*(orderBy.comparer()))(v1.get(), v2.get()); };
                     std::sort(values.begin(), values.end(), comp);
                     for (auto& v : values)
                     {

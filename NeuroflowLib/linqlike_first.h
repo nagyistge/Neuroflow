@@ -18,9 +18,9 @@ namespace linqlike
         boost::optional<F> _pred;
     };
 
-    inline _first<int> first()
+    inline _first<_dummy> first()
     {
-        return _first<int>();
+        return _first<_dummy>();
     }
 
     template <typename F>
@@ -35,7 +35,7 @@ namespace linqlike
     }
 
     template <typename TColl, typename T = TColl::value_type>
-    T operator|(TColl& coll, const _first<int>& f)
+    T operator|(TColl& coll, const _first<_dummy>& f)
     {
         for (auto& v : coll)
         {
