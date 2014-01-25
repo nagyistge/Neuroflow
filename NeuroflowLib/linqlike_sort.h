@@ -48,24 +48,23 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
                 if (orderBy.direction())
                 {
-                    std::vector<ref_t> values;
-                    for (auto& v : *pcoll) values.push_back(std::ref(v));
+                    std::vector<T*> values;
+                    for (auto& v : *pcoll) values.push_back(&v);
 
                     if (*orderBy.direction() == dir::asc)
                     {
-                        std::sort(values.begin(), values.end(), [](ref_t v1, ref_t v2) { return v1.get() < v2.get(); });
+                        std::sort(values.begin(), values.end(), [](T* v1, T* v2) { return *v1 < *v2; });
                     }
                     else
                     {
-                        std::sort(values.begin(), values.end(), [](ref_t v1, ref_t v2) { return v2.get() < v1.get(); });
+                        std::sort(values.begin(), values.end(), [](T* v1, T* v2) { return *v2 < *v1; });
                     }
 
-                    for (auto& v : values)
+                    for (auto v : values)
                     {
-                        yield(v);
+                        yield(*v);
                     }
                 }
             });
@@ -80,16 +79,15 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
                 if (orderBy.comparer())
                 {
-                    std::vector<ref_t> values;
-                    for (auto& v : *pcoll) values.push_back(std::ref(v));
-                    auto comp = [=](ref_t v1, ref_t v2) { return (*(orderBy.comparer()))(v1.get(), v2.get()); };
+                    std::vector<T*> values;
+                    for (auto& v : *pcoll) values.push_back(&v);
+                    auto comp = [=](T* v1, T* v2) { return (*(orderBy.comparer()))(*v1, *v2); };
                     std::sort(values.begin(), values.end(), comp);
-                    for (auto& v : values)
+                    for (auto v : values)
                     {
-                        yield(v);
+                        yield(*v);
                     }
                 }
             });

@@ -371,7 +371,42 @@ namespace NeuroflowNativeUT
                     for (auto& v : g.values())
                     {
                         lcount++;
-                        lsum += v->p2;
+                        lsum += v.p2;
+                    }
+
+                    switch (g.key())
+                    {
+                        case 1:
+                            Assert::AreEqual(3, lcount);
+                            Assert::AreEqual(4 + -1 + 21, lsum);
+                            break;
+                        case 2:
+                            Assert::AreEqual(2, lcount);
+                            Assert::AreEqual(1 + 11, lsum);
+                            break;
+                        case 5:
+                            Assert::AreEqual(1, lcount);
+                            Assert::AreEqual(11, lsum);
+                            break;
+                        default:
+                            Assert::Fail(L"This ain't gonna happen.");
+                    }
+                }
+                Assert::AreEqual(3, count);
+                Assert::AreEqual(1 + 2 + 5, sum);
+
+                auto e2 = ts1 | group_by([](t& v) { return v.p1; }, [](t& v) { return v.p2; });
+                count = 0, sum = 0;
+                for (auto& g : e2)
+                {
+                    count++;
+                    sum += g.key();
+
+                    int lcount = 0, lsum = 0;
+                    for (int v : g.values())
+                    {
+                        lcount++;
+                        lsum += v;
                     }
 
                     switch (g.key())
