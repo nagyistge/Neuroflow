@@ -25,7 +25,6 @@ namespace linqlike
 
     template <typename TColl, typename F, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _select<F>& s) 
-        //-> enumerable<decltype(s.tran()(_sniff<T>()))> // TODO: Remove this VS hack if there will be better C++14 support!
     {
         typedef decltype(s.tran()(_sniff<T>())) result_t;
         TColl* pcoll = &coll;

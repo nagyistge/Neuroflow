@@ -96,28 +96,26 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
-
-                std::vector<ref_t> values;
-                for (auto& v : *pcoll) values.push_back(std::ref(v));
+                std::vector<T*> values;
+                for (auto& v : *pcoll) values.push_back(&v);
                 
                 auto& selectValueF = (*orderBy.select_value_1()).first;
                 auto& selectValueD = (*orderBy.select_value_1()).second;
-                std::function<bool(ref_t, ref_t)> comparer;
+                std::function<bool(T*, T*)> comparer;
                 if (selectValueD == dir::asc)
                 {
-                    comparer = [=](ref_t v1, ref_t v2) { return selectValueF(v1.get()) < selectValueF(v2.get()); };
+                    comparer = [=](T* v1, T* v2) { return selectValueF(*v1) < selectValueF(*v2); };
                 }
                 else
                 {
-                    comparer = [=](ref_t v1, ref_t v2) { return selectValueF(v2.get()) < selectValueF(v1.get()); };
+                    comparer = [=](T* v1, T* v2) { return selectValueF(*v2) < selectValueF(*v1); };
                 }
 
                 std::sort(values.begin(), values.end(), comparer);
 
-                for (auto& v : values)
+                for (auto v : values)
                 {
-                    yield(v);
+                    yield(*v);
                 }
             });
         });
@@ -131,40 +129,39 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
-                typedef std::function<int(ref_t, ref_t)> comp_t;
+                typedef std::function<int(T*, T*)> comp_t;
 
-                std::vector<ref_t> values;
-                for (auto& v : *pcoll) values.push_back(std::ref(v));
+                std::vector<T*> values;
+                for (auto& v : *pcoll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;
                 auto& selectValueF2 = (*orderBy.select_value_2()).first;
                 auto& selectValueD2 = (*orderBy.select_value_2()).second;
                 
-                comp_t comparer1 = [=](ref_t v1, ref_t v2)
+                comp_t comparer1 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF1(v1.get());
-                    auto cv2 = selectValueF1(v2.get());
+                    auto cv1 = selectValueF1(*v1);
+                    auto cv2 = selectValueF1(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD1 == dir::desc)
                 {
-                    comparer1 = [=](ref_t v1, ref_t v2) { return -comparer1(v1, v2); };
+                    comparer1 = [=](T* v1, T* v2) { return -comparer1(v1, v2); };
                 }
 
-                comp_t comparer2 = [=](ref_t v1, ref_t v2)
+                comp_t comparer2 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF2(v1.get());
-                    auto cv2 = selectValueF2(v2.get());
+                    auto cv1 = selectValueF2(*v1);
+                    auto cv2 = selectValueF2(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD2 == dir::desc)
                 {
-                    comparer2 = [=](ref_t v1, ref_t v2) { return -comparer2(v1, v2); };
+                    comparer2 = [=](T* v1, T* v2) { return -comparer2(v1, v2); };
                 }
 
-                auto comparer = [=](ref_t v1, ref_t v2)
+                auto comparer = [=](T* v1, T* v2)
                 {
                     int c = comparer1(v1, v2);
                     if (c < 0) return true;
@@ -176,9 +173,9 @@ namespace linqlike
 
                 std::sort(values.begin(), values.end(), comparer);
 
-                for (auto& v : values)
+                for (auto v : values)
                 {
-                    yield(v);
+                    yield(*v);
                 }
             });
         });
@@ -192,11 +189,10 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
-                typedef std::function<int(ref_t, ref_t)> comp_t;
+                typedef std::function<int(T*, T*)> comp_t;
 
-                std::vector<ref_t> values;
-                for (auto& v : *pcoll) values.push_back(std::ref(v));
+                std::vector<T*> values;
+                for (auto& v : *pcoll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;
@@ -205,40 +201,40 @@ namespace linqlike
                 auto& selectValueF3 = (*orderBy.select_value_3()).first;
                 auto& selectValueD3 = (*orderBy.select_value_3()).second;
 
-                comp_t comparer1 = [=](ref_t v1, ref_t v2)
+                comp_t comparer1 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF1(v1.get());
-                    auto cv2 = selectValueF1(v2.get());
+                    auto cv1 = selectValueF1(*v1);
+                    auto cv2 = selectValueF1(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD1 == dir::desc)
                 {
-                    comparer1 = [=](ref_t v1, ref_t v2) { return -comparer1(v1, v2); };
+                    comparer1 = [=](T* v1, T* v2) { return -comparer1(v1, v2); };
                 }
 
-                comp_t comparer2 = [=](ref_t v1, ref_t v2)
+                comp_t comparer2 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF2(v1.get());
-                    auto cv2 = selectValueF2(v2.get());
+                    auto cv1 = selectValueF2(*v1);
+                    auto cv2 = selectValueF2(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD2 == dir::desc)
                 {
-                    comparer2 = [=](ref_t v1, ref_t v2) { return -comparer2(v1, v2); };
+                    comparer2 = [=](T* v1, T* v2) { return -comparer2(v1, v2); };
                 }
 
-                comp_t comparer3 = [=](ref_t v1, ref_t v2)
+                comp_t comparer3 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF3(v1.get());
-                    auto cv2 = selectValueF3(v2.get());
+                    auto cv1 = selectValueF3(*v1);
+                    auto cv2 = selectValueF3(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD3 == dir::desc)
                 {
-                    comparer3 = [=](ref_t v1, ref_t v2) { return -comparer3(v1, v2); };
+                    comparer3 = [=](T* v1, T* v2) { return -comparer3(v1, v2); };
                 }
 
-                auto comparer = [=](ref_t v1, ref_t v2)
+                auto comparer = [=](T* v1, T* v2)
                 {
                     int c = comparer1(v1, v2);
                     if (c < 0) return true;
@@ -253,9 +249,9 @@ namespace linqlike
 
                 std::sort(values.begin(), values.end(), comparer);
 
-                for (auto& v : values)
+                for (auto v : values)
                 {
-                    yield(v);
+                    yield(*v);
                 }
             });
         });
@@ -269,11 +265,10 @@ namespace linqlike
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                typedef std::reference_wrapper<T> ref_t;
-                typedef std::function<int(ref_t, ref_t)> comp_t;
+                typedef std::function<int(T*, T*)> comp_t;
 
-                std::vector<ref_t> values;
-                for (auto& v : *pcoll) values.push_back(std::ref(v));
+                std::vector<T*> values;
+                for (auto& v : *pcoll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;
@@ -284,51 +279,51 @@ namespace linqlike
                 auto& selectValueF4 = (*orderBy.select_value_4()).first;
                 auto& selectValueD4 = (*orderBy.select_value_4()).second;
 
-                comp_t comparer1 = [=](ref_t v1, ref_t v2)
+                comp_t comparer1 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF1(v1.get());
-                    auto cv2 = selectValueF1(v2.get());
+                    auto cv1 = selectValueF1(*v1);
+                    auto cv2 = selectValueF1(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD1 == dir::desc)
                 {
-                    comparer1 = [=](ref_t v1, ref_t v2) { return -comparer1(v1, v2); };
+                    comparer1 = [=](T* v1, T* v2) { return -comparer1(v1, v2); };
                 }
 
-                comp_t comparer2 = [=](ref_t v1, ref_t v2)
+                comp_t comparer2 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF2(v1.get());
-                    auto cv2 = selectValueF2(v2.get());
+                    auto cv1 = selectValueF2(*v1);
+                    auto cv2 = selectValueF2(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD2 == dir::desc)
                 {
-                    comparer2 = [=](ref_t v1, ref_t v2) { return -comparer2(v1, v2); };
+                    comparer2 = [=](T* v1, T* v2) { return -comparer2(v1, v2); };
                 }
 
-                comp_t comparer3 = [=](ref_t v1, ref_t v2)
+                comp_t comparer3 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF3(v1.get());
-                    auto cv2 = selectValueF3(v2.get());
+                    auto cv1 = selectValueF3(*v1);
+                    auto cv2 = selectValueF3(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD3 == dir::desc)
                 {
-                    comparer3 = [=](ref_t v1, ref_t v2) { return -comparer3(v1, v2); };
+                    comparer3 = [=](T* v1, T* v2) { return -comparer3(v1, v2); };
                 }
 
-                comp_t comparer4 = [=](ref_t v1, ref_t v2)
+                comp_t comparer4 = [=](T* v1, T* v2)
                 {
-                    auto cv1 = selectValueF4(v1.get());
-                    auto cv2 = selectValueF4(v2.get());
+                    auto cv1 = selectValueF4(*v1);
+                    auto cv2 = selectValueF4(*v2);
                     return cv1 == cv2 ? 0 : (cv1 < cv2 ? -1 : 1);
                 };
                 if (selectValueD4 == dir::desc)
                 {
-                    comparer4 = [=](ref_t v1, ref_t v2) { return -comparer4(v1, v2); };
+                    comparer4 = [=](T* v1, T* v2) { return -comparer4(v1, v2); };
                 }
 
-                auto comparer = [=](ref_t v1, ref_t v2)
+                auto comparer = [=](T* v1, T* v2)
                 {
                     int c = comparer1(v1, v2);
                     if (c < 0) return true;
@@ -346,9 +341,9 @@ namespace linqlike
 
                 std::sort(values.begin(), values.end(), comparer);
 
-                for (auto& v : values)
+                for (auto v : values)
                 {
-                    yield(v);
+                    yield(*v);
                 }
             });
         });
