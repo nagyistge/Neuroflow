@@ -15,4 +15,5 @@
 #include "device_info.h"
 #include "supervised_batch.h"
 #include "utils.h"
-#include "ocl_cc_props.h"
+#include "props.h"
+#include "ocl_props.h"

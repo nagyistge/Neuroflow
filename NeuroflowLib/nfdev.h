@@ -20,7 +20,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cpplinq.hpp>
-#include "linqlike.h"
 #include "nf_object.h"
 #include "typedefs.h"
 #include "error.h"
@@ -28,6 +27,7 @@
 #include "nf_helpers.h"
 #include "get_vector_size.h"
 #include "finally.h"
+#include "props.h"
 
 namespace linq = linqlike;
 

@@ -190,9 +190,6 @@
     <ClInclude Include="ocl_cc_factory_adapter.h">
       <Filter>Ocl</Filter>
     </ClInclude>
-    <ClInclude Include="ocl_cc_props.h">
-      <Filter>Ocl</Filter>
-    </ClInclude>
     <ClInclude Include="prop_def.h">
       <Filter>Base</Filter>
     </ClInclude>
@@ -222,9 +219,6 @@
     </ClInclude>
     <ClInclude Include="ocl_compute_activation.h">
       <Filter>Ocl\NN</Filter>
-    </ClInclude>
-    <ClInclude Include="multilayer_perceptron_props.h">
-      <Filter>Base\NN</Filter>
     </ClInclude>
     <ClInclude Include="layer_behavior.h">
       <Filter>Base\NN</Filter>
@@ -291,6 +285,15 @@
     </ClInclude>
     <ClInclude Include="linqlike_to_list.h">
       <Filter>Linqlike</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_props.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="props.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="enum_to_string.h">
+      <Filter>Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

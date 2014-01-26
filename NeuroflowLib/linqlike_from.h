@@ -33,4 +33,16 @@ namespace linqlike
             });
         });
     }
+
+    template <typename TColl, typename T = typename TColl::value_type>
+    enumerable<T> from(TColl& coll)
+    {
+        return from_iterators(std::begin(coll), std::end(coll));
+    }
+
+    template <typename TColl, typename T = typename TColl::value_type>
+    enumerable<T> from(const TColl& coll)
+    {
+        return from_iterators(std::cbegin(coll), std::cend(coll));
+    }
 }

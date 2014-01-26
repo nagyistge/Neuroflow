@@ -2,7 +2,6 @@
 
 #include "nfdev.h"
 #include "weak_contexted.h"
-#include "multilayer_perceptron_props.h"
 
 namespace nf
 {
@@ -10,7 +9,12 @@ namespace nf
     {
         neural_network_factory(const computation_context_wptr& context);
 
-        multilayer_perceptron_ptr create_multilayer_perceptron();
-        multilayer_perceptron_ptr create_multilayer_perceptron(const multilayer_perceptron_props& properties);
+        multilayer_perceptron_ptr create_multilayer_perceptron(const layers_t& layers, const optional_properties_t& properties = null);
+
+        template <typename TColl>
+        multilayer_perceptron_ptr create_multilayer_perceptron(const TColl& layeCollection, const optional_properties_t& properties = null)
+        {
+            return create_multilayer_perceptron(from(layeCollection), properties);
+        }
     };
 }

@@ -15,14 +15,54 @@ namespace nf
         template <typename T>
         T def(std::string propId, T defaultValue, std::function<bool(T)> validator)
         {
+            return def(propId, defaultValue, validator);
+        }
+
+        template <typename T>
+        T def(std::string propId, T defaultValue, boost::optional<std::function<bool(T)>> validator = null)
+        {
             if (overrides)
             {
                 auto v = overrides->get_optional<T>(propId);
-                if (v) propsToExtend.put(propId, *v);
-                if (!validator(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
-                return *v;
+                if (v)
+                {
+                    if (validator && !(*validator)(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    propsToExtend.put(propId, *v);                    
+                    return *v;
+                }
             }
             propsToExtend.put(propId, defaultValue);
+            return defaultValue;
+        }
+
+        template <typename T>
+        T defEnum(std::string propId, T defaultValue, std::function<bool(T)> validator)
+        {
+            return defEnum(propID, defaultValue, validator);
+        }
+
+        template <typename T>
+        T defEnum(std::string propId, T defaultValue, boost::optional<std::function<bool(T)>> validator = null)
+        {
+            if (overrides)
+            {
+                auto v = overrides->get_optional<T>(propId);
+                if (v)
+                {
+                    if (validator && !(*validator)(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    propsToExtend.put(propId, *v);
+                    return *v;
+                }
+                auto sv = overrides->get_optional<std::string>(propId);
+                if (sv)
+                {
+                    T enumV = string_to_enum<T>(*sv);
+                    if (validator && !(*validator)(enumV)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    propsToExtend.put(propId, *sv);                    
+                    return enumV;
+                }
+            }
+            propsToExtend.put(propId, enum_to_string(defaultValue));
             return defaultValue;
         }
 
