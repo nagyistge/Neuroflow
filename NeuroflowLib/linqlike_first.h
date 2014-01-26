@@ -37,23 +37,37 @@ namespace linqlike
     template <typename TColl, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first<_dummy>& f)
     {
-        for (auto& v : coll)
+        T* result;
         {
-            return v;
-        };
-        _throw_seq_empty();
+            for (auto& v : coll)
+            {
+                result = &v;
+                goto ok;
+            };
+            _throw_seq_empty();
+        }
+
+    ok:
+        return *result;
     }
 
     template <typename TColl, typename F, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first<F>& f)
     {
-        for (auto& v : coll)
+        T* result;
         {
-            if ((*f.pred())(v))
+            for (auto& v : coll)
             {
-                return v;
+                if ((*f.pred())(v))
+                {
+                    result = &v;
+                    goto ok;
+                }
             }
-        };
+        }
         _throw_seq_empty();
+
+    ok:
+        return *result;
     }
 }
