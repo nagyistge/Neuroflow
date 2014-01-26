@@ -62,6 +62,9 @@ namespace nf
     typedef std::shared_ptr<layer_behavior> layer_behavior_ptr;
     typedef std::list<layer_behavior_ptr> layer_behavior_coll;
 
+    struct supervised_learning_behavior;
+    typedef std::shared_ptr<supervised_learning_behavior> supervised_learning_behavior_ptr;
+
     struct layer_description;
     typedef std::shared_ptr<layer_description> layer_description_ptr;
     typedef std::list<layer_description_ptr> layer_description_coll;
