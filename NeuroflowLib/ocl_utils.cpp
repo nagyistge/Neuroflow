@@ -16,11 +16,11 @@ ocl_kernel_name ocl_utils::divName = ocl_kernel_name("Div");
 ocl_kernel_name ocl_utils::zeroFName = ocl_kernel_name("ZeroF");
 
 ocl_utils::ocl_utils(const ocl_computation_context_wptr& context) :
-weak_contexted(context),
-generator((std::random_device()() << 16) | std::random_device()()),
-addExec(context, addMSEName),
-divExec(context, divName),
-zeroFExec(context, zeroFName)
+    weak_contexted(context),
+    generator((std::random_device()() << 16) | std::random_device()()),
+    addExec(context, addMSEName),
+    divExec(context, divName),
+    zeroFExec(context, zeroFName)
 {
     memset(z2.s, 0, sizeof(float)* 2);
     memset(z4.s, 0, sizeof(float)* 4);
@@ -40,7 +40,7 @@ void ocl_utils::build()
     // Zero
     ADD_OCL_CODE(program,
 
-    kernel void ZeroF$(global float$* buffer, int size)
+    kernel void ZeroF$(global float$* buffer, unsigned size)
     {
         int block = size / get_global_size(0) + (size % get_global_size(0) != 0 ? 1 : 0);
         int idx = get_global_id(0) * block;
@@ -166,9 +166,9 @@ void ocl_utils::add_mse(const ocl_data_array_ptr& desiredValues, const ocl_data_
     {
     kernel.setArg(0, desiredValues->buffer());
     kernel.setArg(1, currentValues->buffer());
-    kernel.setArg(2, desiredValuesSize / vectorSize);
+    kernel.setArg(2, (unsigned)(desiredValuesSize / vectorSize));
     kernel.setArg(3, mseValues->buffer());
-    kernel.setArg(4, mseValueIndex);
+    kernel.setArg(4, (unsigned)mseValueIndex);
     },
     1);
 }
@@ -252,7 +252,7 @@ void ocl_utils::zero(const cl::Buffer& buffer, idx_t size)
             [&](Kernel& kernel)
             {
                 kernel.setArg(0, buffer);
-                kernel.setArg(1, size / vectorSize);
+                kernel.setArg(1, (unsigned)(size / vectorSize));
             },
             ctx->sizes()->get_optimal_global_size(size, vectorSize));
         }

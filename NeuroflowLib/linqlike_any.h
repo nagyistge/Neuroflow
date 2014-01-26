@@ -11,6 +11,10 @@ namespace linqlike
     template <typename TColl>
     bool operator|(TColl& coll, const any& a)
     {
-        return std::begin(coll) != std::end(coll);
+        bool result;
+        {
+            result = std::begin(coll) != std::end(coll);
+        }
+        return result;
     }
 }

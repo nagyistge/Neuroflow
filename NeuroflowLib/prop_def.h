@@ -13,20 +13,20 @@ namespace nf
         }
 
         template <typename T>
-        T def(std::string propId, T defaultValue, std::function<bool(T)> validator)
+        T def(std::string propId, T defaultValue)
         {
-            return def(propId, defaultValue, validator);
+            return def<T>(propId, defaultValue, [](T x){ return true; });
         }
 
         template <typename T>
-        T def(std::string propId, T defaultValue, boost::optional<std::function<bool(T)>> validator = null)
+        T def(std::string propId, T defaultValue, std::function<bool(T)> validator)
         {
             if (overrides)
             {
                 auto v = overrides->get_optional<T>(propId);
                 if (v)
                 {
-                    if (validator && !(*validator)(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    if (!validator(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
                     propsToExtend.put(propId, *v);                    
                     return *v;
                 }
@@ -36,20 +36,20 @@ namespace nf
         }
 
         template <typename T>
-        T defEnum(std::string propId, T defaultValue, std::function<bool(T)> validator)
+        T defEnum(std::string propId, T defaultValue)
         {
-            return defEnum(propID, defaultValue, validator);
+            return defEnum<T>(propId, defaultValue, [](T x){ return true; });
         }
 
         template <typename T>
-        T defEnum(std::string propId, T defaultValue, boost::optional<std::function<bool(T)>> validator = null)
+        T defEnum(std::string propId, T defaultValue, std::function<bool(T)> validator)
         {
             if (overrides)
             {
                 auto v = overrides->get_optional<T>(propId);
                 if (v)
                 {
-                    if (validator && !(*validator)(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    if (!validator(*v)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
                     propsToExtend.put(propId, *v);
                     return *v;
                 }
@@ -57,7 +57,7 @@ namespace nf
                 if (sv)
                 {
                     T enumV = string_to_enum<T>(*sv);
-                    if (validator && !(*validator)(enumV)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
+                    if (!validator(enumV)) throw_invalid_argument(std::string(std::string("Invalid property value for '") + propId + "'."));
                     propsToExtend.put(propId, *sv);                    
                     return enumV;
                 }
