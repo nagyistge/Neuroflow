@@ -3,6 +3,7 @@
 #include <memory>
 #include "enum_flags.h"
 #include "linqlike.h"
+#include "enum_to_string.h"
 
 namespace nf
 {
@@ -69,18 +70,21 @@ namespace nf
     struct supervised_sample;
     struct supervised_sample_entry;
 
+    ENUM_STRINGS(weight_update_mode, "offline", "online")
     enum class weight_update_mode
     {
         offline,
         online
     };
 
+    ENUM_STRINGS(learning_algo_optimization_type, "gradient_based", "global")
     enum class learning_algo_optimization_type
     {
         gradient_based, 
         global
     };
 
+    ENUM_STRINGS(gradient_computation_method, "none", "feed_forward", "bptt", "rtlr")
     enum class gradient_computation_method
     {
         none,

@@ -211,6 +211,7 @@
     <ClInclude Include="device_array_pool.h" />
     <ClInclude Include="device_info.h" />
     <ClInclude Include="enum_flags.h" />
+    <ClInclude Include="enum_to_string.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="finally.h" />
     <ClInclude Include="get_vector_size.h" />
@@ -234,7 +235,6 @@
     <ClInclude Include="linqlike_where.h" />
     <ClInclude Include="linqlike_concat.h" />
     <ClInclude Include="multilayer_perceptron.h" />
-    <ClInclude Include="multilayer_perceptron_props.h" />
     <ClInclude Include="neural_network_factory.h" />
     <ClInclude Include="nf.h" />
     <ClInclude Include="nf_helpers.h" />
@@ -242,7 +242,7 @@
     <ClInclude Include="cpp_nfdev.h" />
     <ClInclude Include="ocl.h" />
     <ClInclude Include="ocl_cc_factory_adapter.h" />
-    <ClInclude Include="ocl_cc_props.h" />
+    <ClInclude Include="ocl_props.h" />
     <ClInclude Include="ocl_computation_context.h" />
     <ClInclude Include="ocl_compute_activation.h" />
     <ClInclude Include="ocl_conv.h" />
@@ -262,6 +262,7 @@
     <ClInclude Include="ocl_sizes.h" />
     <ClInclude Include="ocl_units.h" />
     <ClInclude Include="ocl_utils.h" />
+    <ClInclude Include="props.h" />
     <ClInclude Include="prop_def.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
