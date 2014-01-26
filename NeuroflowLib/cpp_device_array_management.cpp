@@ -5,7 +5,7 @@
 #include "cpp_device_array2.h"
 #include "cpp_device_array_pool.h"
 
-USING;
+USING
 
 device_array_ptr cpp_device_array_management::create_array(bool copyOptimized, idx_t size)
 {

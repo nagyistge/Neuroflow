@@ -14,7 +14,7 @@ namespace linqlike
         explicit _sort(dir direction) : _direction(direction) { }
         explicit _sort(const T& comparer) : _comparer(comparer) { }
 
-        const boost::optional<T>& comparer() const
+        boost::optional<T>& comparer()
         {
             return _comparer;
         }
@@ -35,7 +35,7 @@ namespace linqlike
     }
 
     template <typename F>
-    auto sort(const F& comparer)
+    auto sort(F& comparer)
     {
         return _sort<F>(comparer);
     }
@@ -72,7 +72,7 @@ namespace linqlike
     }
 
     template <typename TColl, typename TComp, typename T = TColl::value_type>
-    enumerable<T> operator|(TColl& coll, const _sort<TComp>& orderBy)
+    enumerable<T> operator|(TColl& coll, _sort<TComp>& orderBy)
     {
         TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
@@ -83,7 +83,7 @@ namespace linqlike
                 {
                     std::vector<T*> values;
                     for (auto& v : *pcoll) values.push_back(&v);
-                    auto comp = [=](T* v1, T* v2) { return (*(orderBy.comparer()))(*v1, *v2); };
+                    auto comp = [=](T* v1, T* v2) mutable { return (*(orderBy.comparer()))(*v1, *v2); };
                     std::sort(values.begin(), values.end(), comp);
                     for (auto v : values)
                     {

@@ -8,7 +8,7 @@
 #include "ocl_sizes.h"
 #include "ocl_compute_activation.h"
 
-USING;
+USING
 using namespace boost::algorithm;
 
 ocl_computation_context::ocl_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties) :

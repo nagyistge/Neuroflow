@@ -4,7 +4,7 @@
 #include "ocl_program.h"
 #include "ocl_computation_context.h"
 
-USING;
+USING
 
 ocl_exec::ocl_exec(const ocl_computation_context_wptr& context, const ocl_kernel_name& kernelName) :
 weak_contexted(context),

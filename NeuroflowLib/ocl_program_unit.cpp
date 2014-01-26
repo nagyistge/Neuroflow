@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ocl_program_unit.h"
 
-USING;
+USING
 
 ocl_program_unit::ocl_program_unit(const ocl_computation_context_wptr& context, const std::wstring& name) :
 weak_contexted(context),

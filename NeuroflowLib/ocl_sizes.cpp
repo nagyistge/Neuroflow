@@ -2,7 +2,7 @@
 #include "ocl_sizes.h"
 #include "ocl_computation_context.h"
 
-USING;
+USING
 
 ocl_sizes::ocl_sizes(const ocl_computation_context_wptr& context) :
 weak_contexted(context)

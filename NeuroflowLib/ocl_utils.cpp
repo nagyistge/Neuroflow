@@ -9,7 +9,7 @@
 #include "ocl_sizes.h"
 #include "ocl_data_array.h"
 
-USING;
+USING
 
 ocl_kernel_name ocl_utils::addMSEName = ocl_kernel_name("AddMSE");
 ocl_kernel_name ocl_utils::divName = ocl_kernel_name("Div");

@@ -295,6 +295,9 @@
     <ClInclude Include="enum_to_string.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="layer_order_comparer.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -415,6 +418,9 @@
       <Filter>Base\NN</Filter>
     </ClCompile>
     <ClCompile Include="layer.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="layer_order_comparer.cpp">
       <Filter>Base\NN</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,7 +6,7 @@
 #include "cpp_cc_factory_adapter.h"
 #include "cpp_compute_activation.h"
 
-USING;
+USING
 
 cpp_computation_context::cpp_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties) :
 _deviceArrayMan(make_shared<cpp_device_array_management>()),

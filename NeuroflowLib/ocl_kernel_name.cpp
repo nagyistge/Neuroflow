@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ocl_kernel_name.h"
 
-USING;
+USING
 
 ocl_kernel_name::ocl_kernel_name(const char* name)
 {

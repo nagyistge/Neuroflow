@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "supervised_sample.h"
 
-USING;
+USING
 
 supervised_sample::supervised_sample(const supervised_sample_entry& entry)
 {

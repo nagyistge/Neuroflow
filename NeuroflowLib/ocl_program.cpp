@@ -3,7 +3,7 @@
 #include "ocl_computation_context.h"
 #include "device_info.h"
 
-USING;
+USING
 using namespace boost::filesystem;
 
 ocl_program::ocl_program(const ocl_computation_context_wptr& context, const std::wstring& name) :

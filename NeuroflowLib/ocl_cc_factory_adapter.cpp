@@ -2,7 +2,7 @@
 #include "ocl_cc_factory_adapter.h"
 #include "ocl_computation_context.h"
 
-USING;
+USING
 
 std::list<device_info> ocl_cc_factory_adapter::get_available_devices()
 {
