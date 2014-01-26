@@ -2,7 +2,7 @@
 #include "layer_connections.h"
 #include "layer.h"
 
-USING;
+USING
 
 layer_connections::layer_connections(layer_connections::connection_type type) :
 _type(type)

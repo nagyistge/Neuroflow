@@ -12,5 +12,6 @@ namespace linqlike
     {
         std::list<T> result;
         result.assign(std::begin(coll), std::end(coll));
+        return std::move(result);
     }
 }

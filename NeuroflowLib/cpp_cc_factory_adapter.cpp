@@ -2,7 +2,7 @@
 #include "cpp_cc_factory_adapter.h"
 #include "cpp_computation_context.h"
 
-USING;
+USING
 
 device_info cpp_cc_factory_adapter::onlyDevice(L"cpp_st", L"1.0", L"C++ Single Threaded", L"x86/x64");
 

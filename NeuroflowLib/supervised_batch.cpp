@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "supervised_batch.h"
 
-USING;
+USING
 
 supervised_batch::supervised_batch(const supervised_sample& sample)
 {

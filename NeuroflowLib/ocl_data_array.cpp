@@ -2,7 +2,7 @@
 #include "ocl_data_array.h"
 #include "ocl_computation_context.h"
 
-USING;
+USING
 
 ocl_data_array::ocl_data_array(const ocl_computation_context_ptr& context, const cl::Buffer& buffer, bool isConst) :
 ocl_device_array(buffer),

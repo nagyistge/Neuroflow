@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "layer_behavior.h"
 
-USING;
+USING
 
 bool layer_behavior::equals(const layer_behavior_ptr& other) const
 {

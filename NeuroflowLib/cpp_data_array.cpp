@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "cpp_data_array.h"
 
-USING;
+USING
 
 cpp_data_array::cpp_data_array(float* internalArray, idx_t arraySize, bool isConst) :
 cpp_device_array(internalArray, arraySize),

@@ -4,7 +4,7 @@
 #include "cpp_cc_factory_adapter.h"
 #include "ocl_cc_factory_adapter.h"
 
-USING;
+USING
 
 computation_context_factory computation_context_factory::_default = computation_context_factory();
 

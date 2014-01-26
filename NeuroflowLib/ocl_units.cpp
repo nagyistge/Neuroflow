@@ -2,7 +2,7 @@
 #include "ocl_units.h"
 #include "ocl_program_unit.h"
 
-USING;
+USING
 
 ocl_units::ocl_units(const ocl_computation_context_wptr& context) :
 weak_contexted(context)

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ocl_compute_activation.h"
 
-USING;
+USING
 
 ocl_compute_activation::ocl_compute_activation(const ocl_computation_context_wptr& context) :
 weak_contexted(context)

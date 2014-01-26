@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "layer.h"
 
-USING;
+USING
 
 layer::layer(idx_t size) :
 _inputConnections(layer_connections::connection_type::input),

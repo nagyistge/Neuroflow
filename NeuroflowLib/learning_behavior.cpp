@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "learning_behavior.h"
 
-USING;
+USING
 
 bool learning_behavior::props_equals(const layer_behavior_ptr& other) const
 {

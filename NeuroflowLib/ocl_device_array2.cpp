@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ocl_device_array2.h"
 
-USING;
+USING
 
 ocl_device_array2::ocl_device_array2(const cl::Buffer& buffer, idx_t size1) :
 ocl_device_array(buffer),

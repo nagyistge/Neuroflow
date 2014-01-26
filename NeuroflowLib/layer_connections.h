@@ -14,6 +14,7 @@ namespace nf
         void add(const layer_ptr& layer, flow_direction direction);
         bool remove(const layer_ptr& layer);
         void clear();
+        layers_t connected_layers(flow_direction direction) const;
 
     private:
         enum class connection_type { input, output };
@@ -27,7 +28,6 @@ namespace nf
 
         void init(const layer_ptr& connectedLayer);
         bool must_init() const;
-        layers_t connected_layers(flow_direction direction) const;
         void with_other_side_update_suppressed(const layer_ptr& layer, const std::function<void()>& method);
     };
 }

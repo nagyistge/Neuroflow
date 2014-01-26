@@ -4,7 +4,7 @@
 #include "ocl_device_array_management.h"
 #include "ocl_computation_context.h"
 
-USING;
+USING
 
 ocl_data_array_factory::ocl_data_array_factory(const ocl_computation_context_wptr& context) :
 weak_contexted(context)

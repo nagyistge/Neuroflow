@@ -2,7 +2,7 @@
 #include "cpp_device_array.h"
 #include "cpp_device_array_pool.h"
 
-USING;
+USING
 
 cpp_device_array::cpp_device_array(float* internalArray, idx_t arraySize) :
 internalArray(internalArray),

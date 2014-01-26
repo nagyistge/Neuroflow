@@ -2,7 +2,7 @@
 #include "computation_context.h"
 #include "neural_network_factory.h"
 
-USING;
+USING
 
 const neural_network_factory_ptr& computation_context::neural_network_factory()
 {

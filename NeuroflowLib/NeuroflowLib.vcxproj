@@ -218,6 +218,7 @@
     <ClInclude Include="layer.h" />
     <ClInclude Include="layer_behavior.h" />
     <ClInclude Include="layer_connections.h" />
+    <ClInclude Include="layer_order_comparer.h" />
     <ClInclude Include="learning_behavior.h" />
     <ClInclude Include="linqlike_first.h" />
     <ClInclude Include="linqlike_first_or_default.h" />
@@ -291,6 +292,7 @@
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="layer_behavior.cpp" />
     <ClCompile Include="layer_connections.cpp" />
+    <ClCompile Include="layer_order_comparer.cpp" />
     <ClCompile Include="learning_behavior.cpp" />
     <ClCompile Include="multilayer_perceptron.cpp" />
     <ClCompile Include="neural_network_factory.cpp" />

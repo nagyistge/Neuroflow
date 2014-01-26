@@ -2,7 +2,7 @@
 #include "cpp_data_array_factory.h"
 #include "cpp_data_array.h"
 
-USING;
+USING
 
 data_array_ptr cpp_data_array_factory::create(idx_t size, float fill)
 {
