@@ -190,7 +190,7 @@ namespace NeuroflowNativeUT
             }
         }
 
-        /*BEGIN_TEST_METHOD_ATTRIBUTE(any_test)
+        BEGIN_TEST_METHOD_ATTRIBUTE(any_test)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(any_test)
@@ -274,7 +274,7 @@ namespace NeuroflowNativeUT
                 Logger::WriteMessage(ex.what());
                 throw;
             }
-        }*/
+        }
 
         BEGIN_TEST_METHOD_ATTRIBUTE(ordering_test)
             TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
