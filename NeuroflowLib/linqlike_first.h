@@ -37,37 +37,54 @@ namespace linqlike
     template <typename TColl, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first<_dummy>& f)
     {
-        T* result;
+#if (_MSC_VER && _DEBUG)
+        typedef typename TColl::iterator iterator;
+        bool found = false;
+        iterator result;
+        for (auto it = std::begin(coll); it != std::end(coll); it++)
         {
-            for (auto& v : coll)
+            if (!found)
             {
-                result = &v;
-                goto ok;
-            };
-            _throw_seq_empty();
+                result = it;
+                found = true;
+            }
         }
+        if (found) return *result; else _throw_seq_empty();
+#else
+        for (auto& v : coll)
+        {
+            return v;
+        };
+        _throw_seq_empty();
+#endif
 
-    ok:
-        return *result;
     }
 
     template <typename TColl, typename F, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first<F>& f)
     {
-        T* result;
+#if (_MSC_VER && _DEBUG)
+        typedef typename TColl::iterator iterator;
+        bool found = false;
+        iterator result;
+        for (auto it = std::begin(coll); it != std::end(coll); it++)
         {
-            for (auto& v : coll)
+            if (!found && (*f.pred())(*it))
             {
-                if ((*f.pred())(v))
-                {
-                    result = &v;
-                    goto ok;
-                }
+                result = it;
+                found = true;
+            }
+        }
+        if (found) return *result; else _throw_seq_empty();
+#else
+        for (auto& v : coll)
+        {
+            if ((*f.pred())(v))
+            {
+                return v;
             }
         }
         _throw_seq_empty();
-
-    ok:
-        return *result;
+#endif
     }
 }

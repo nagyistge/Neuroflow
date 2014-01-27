@@ -29,29 +29,29 @@ namespace linqlike
         typedef typename coro_t::push_type push_type;
         typedef std::function<pull_type()> pull_factory_t;
         typedef typename boost::range_iterator<pull_type>::type pull_iterator_t;
-        typedef pull_iterator_t iterator;
 
-        struct enumerable_iterator : public std::iterator<std::input_iterator_tag, value_type>
+        struct iterator : public std::iterator<std::input_iterator_tag, value_type>
         {
-            enumerable_iterator() { }
+            iterator() { }
 
-            explicit enumerable_iterator(pull_type&& pull) :
+            explicit iterator(pull_type&& pull) :
                 _pull(std::move(pull)),
                 _it(boost::begin(_pull))
             {
             };
 
-            enumerable_iterator(const enumerable_iterator& mit) : _it(mit._it) { }
-            enumerable_iterator& operator=(const enumerable_iterator& mit)
+            iterator(const iterator& mit) : _it(mit._it) { }
+
+            iterator& operator=(const iterator& mit)
             {
-                _it = mit->_it;
+                _it = mit._it;
                 return *this;
             }
 
-            enumerable_iterator& operator++() { ++_it; return *this; }
-            enumerable_iterator operator++(int) { enumerable_iterator tmp(*this); operator++(); return tmp; }
-            bool operator==(const enumerable_iterator& rhs) { return _it == rhs._it; }
-            bool operator!=(const enumerable_iterator& rhs) { return !(*this == rhs); }
+            iterator& operator++() { ++_it; return *this; }
+            iterator operator++(int) { iterator tmp(*this); operator++(); return tmp; }
+            bool operator==(const iterator& rhs) { return _it == rhs._it; }
+            bool operator!=(const iterator& rhs) { return !(*this == rhs); }
             value_type& operator*() { return *_it; }
 
         private:
@@ -65,14 +65,14 @@ namespace linqlike
         {
         }
 
-        enumerable_iterator begin()
+        iterator begin()
         {
-            return enumerable_iterator(_pullFactory());
+            return iterator(_pullFactory());
         }
 
-        enumerable_iterator end()
+        iterator end()
         {
-            return enumerable_iterator();
+            return iterator();
         }
 
     private:

@@ -126,7 +126,7 @@ pair<nf::device_info, cl::Device> ocl_computation_context::find_device(const std
 
         stringstream error;
         error << "Device '";
-        error << deviceHint.c_str();
+        error << string(deviceHint.begin(), deviceHint.end());
         error << "' is not found.";
         throw_runtime_error(error.str().c_str());
     }
