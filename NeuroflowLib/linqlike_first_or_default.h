@@ -18,9 +18,9 @@ namespace linqlike
         boost::optional<F> _pred;
     };
 
-    inline _first_or_default<int> first_or_default()
+    inline _first_or_default<_dummy> first_or_default()
     {
-        return _first_or_default<int>();
+        return _first_or_default<_dummy>();
     }
 
     template <typename F>
@@ -30,39 +30,55 @@ namespace linqlike
     }
 
     template <typename TColl, typename T = TColl::value_type>
-    T operator|(TColl& coll, const _first_or_default<int>& f)
+    T operator|(TColl& coll, const _first_or_default<_dummy>& f)
     {
-        T* result;
+#if (_MSC_VER && _DEBUG)
+        typedef typename TColl::iterator iterator;
+        bool found = false;
+        iterator result;
+        for (auto it = std::begin(coll); it != std::end(coll); it++)
         {
-            for (auto& v : coll)
+            if (!found)
             {
-                result = &v;
-                goto ok;
+                result = it;
+                found = true;
             }
         }
+        if (found) return *result; else return T();
+#else
+        for (auto& v : coll)
+        {
+            return v;
+        }
         return T();
-
-    ok:
-        return *result;
+#endif
     }
 
     template <typename TColl, typename F, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first_or_default<F>& f)
     {
-        T* result;
+#if (_MSC_VER && _DEBUG)
+        typedef typename TColl::iterator iterator;
+        bool found = false;
+        iterator result;
+        for (auto it = std::begin(coll); it != std::end(coll); it++)
         {
-            for (auto& v : coll)
+            if (!found && (*f.pred())(*it))
             {
-                if ((*f.pred())(v))
-                {
-                    result = &v;
-                    goto ok;
-                }
+                result = it;
+                found = true;
+            }
+        }
+        if (found) return *result; else return T();
+#else
+        for (auto& v : coll)
+        {
+            if ((*f.pred())(v))
+            {
+                return v;
             }
         }
         return T();
-
-    ok:
-        return *result;
+#endif
     }
 }
