@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\cpplinq.2013.08.10\build\native\cpplinq.props" Condition="Exists('..\packages\cpplinq.2013.08.10\build\native\cpplinq.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -77,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>,,\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Xm500 </AdditionalOptions>
     </ClCompile>
@@ -103,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>,,\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Xm500 </AdditionalOptions>
     </ClCompile>
@@ -131,7 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>,,\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -163,7 +162,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>,,\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -220,21 +219,7 @@
     <ClInclude Include="layer_connections.h" />
     <ClInclude Include="layer_order_comparer.h" />
     <ClInclude Include="learning_behavior.h" />
-    <ClInclude Include="linqlike_first.h" />
-    <ClInclude Include="linqlike_first_or_default.h" />
-    <ClInclude Include="linqlike_group_by.h" />
-    <ClInclude Include="linqlike_order_by.h" />
-    <ClInclude Include="linqlike_row_num.h" />
-    <ClInclude Include="linqlike.h" />
-    <ClInclude Include="linqlike_any.h" />
-    <ClInclude Include="linqlike_base.h" />
-    <ClInclude Include="linqlike_from.h" />
-    <ClInclude Include="linqlike_select.h" />
-    <ClInclude Include="linqlike_sort.h" />
-    <ClInclude Include="linqlike_to_list.h" />
-    <ClInclude Include="linqlike_to_vector.h" />
-    <ClInclude Include="linqlike_where.h" />
-    <ClInclude Include="linqlike_concat.h" />
+    <ClInclude Include="libs.h" />
     <ClInclude Include="multilayer_perceptron.h" />
     <ClInclude Include="neural_network_factory.h" />
     <ClInclude Include="nf.h" />
@@ -324,12 +309,8 @@
     <ClCompile Include="supervised_sample_entry.cpp" />
     <ClCompile Include="version.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-    <Import Project="..\packages\cpplinq.2013.08.10\build\native\cpplinq.targets" Condition="Exists('..\packages\cpplinq.2013.08.10\build\native\cpplinq.targets')" />
   </ImportGroup>
 </Project>

@@ -6,10 +6,12 @@
 #pragma once
 
 #include "targetver.h"
-#include "libs.h"
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+// Headers for CppUnitTest
+#include "CppUnitTest.h"
 
-
-
-// TODO: reference additional headers your program requires here
+#include <boost/coroutine/all.hpp>
+#include <type_traits>
+#include <functional>
+#include <iterator>
+#include <boost/phoenix.hpp>

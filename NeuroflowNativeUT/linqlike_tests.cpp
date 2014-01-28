@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "linqlike.h"
+#include <linqlike.h>
 #include <boost/lambda/lambda.hpp>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

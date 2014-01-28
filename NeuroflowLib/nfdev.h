@@ -1,25 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <sstream>
-#include <exception>
-#include <string>
-#include <tuple>
-#include <functional>
-#include <list>
-#include <unordered_set>
-#include <unordered_map>
-#include <ppltasks.h>
-#include <random>
-#include <algorithm>
-#include <boost/algorithm/string.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/optional.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/lexical_cast.hpp>
-#include <cpplinq.hpp>
+#include "libs.h"
 #include "nf_object.h"
 #include "typedefs.h"
 #include "error.h"
