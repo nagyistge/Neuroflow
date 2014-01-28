@@ -4,9 +4,15 @@
 USING
 
 layer::layer(idx_t size) :
+_size(size),
 _inputConnections(layer_connections::connection_type::input),
 _outputConnections(layer_connections::connection_type::output)
 {
+}
+
+idx_t layer::size() const
+{
+    return _size;
 }
 
 layer_description_coll& layer::descriptions()

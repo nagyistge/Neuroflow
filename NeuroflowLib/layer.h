@@ -9,6 +9,7 @@ namespace nf
     {
         layer(idx_t size);
 
+        idx_t size() const;
         layer_description_coll& descriptions();
         layer_behavior_coll& behaviors();
         layer_connections& input_connections();
@@ -20,6 +21,7 @@ namespace nf
         layer_ptr get_output_layer(idx_t connectionIndex) const;
 
     private:
+        idx_t _size;
         layer_description_coll _descriptions;
         layer_behavior_coll _behaviors;
         layer_connections _inputConnections;

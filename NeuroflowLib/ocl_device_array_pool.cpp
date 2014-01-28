@@ -8,14 +8,15 @@
 
 USING
 
-ocl_device_array_pool::ocl_device_array_pool(const ocl_computation_context_wptr& context) :
-weak_contexted(context)
+ocl_device_array_pool::ocl_device_array_pool(const ocl_computation_context_wptr& context, bool copyOptimized) :
+weak_contexted(context),
+_copyOptimized(copyOptimized)
 {
 }
 
 bool ocl_device_array_pool::is_allocated() const
 {
-    return buffer() != null;
+    return _buffer() != null;
 }
 
 device_array_ptr ocl_device_array_pool::create_array(idx_t size)
@@ -32,8 +33,8 @@ void ocl_device_array_pool::allocate()
 {
     auto ctx = lock_context();
 
-    if (endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
-    if (!is_allocated()) buffer = ctx->ocl_device_array_management()->create_buffer(CL_MEM_HOST_NO_ACCESS, endIndex);
+    if (_endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
+    if (!is_allocated()) _buffer = ctx->ocl_device_array_management()->create_buffer(_copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS, _endIndex);
 }
 
 void ocl_device_array_pool::zero()
@@ -41,9 +42,9 @@ void ocl_device_array_pool::zero()
     auto ctx = lock_context();
 
     if (!is_allocated()) throw_logic_error("Cannot zero out an unallocated pool.");
-    idx_t fsize = endIndex / sizeof(float);
-    assert(endIndex % sizeof(float) == 0);
-    ctx->ocl_utils()->zero(buffer, fsize);
+    idx_t fsize = _endIndex / sizeof(float);
+    assert(_endIndex % sizeof(float) == 0);
+    ctx->ocl_utils()->zero(_buffer, fsize);
 }
 
 idx_t ocl_device_array_pool::reserve(idx_t size)
@@ -51,14 +52,14 @@ idx_t ocl_device_array_pool::reserve(idx_t size)
     auto ctx = lock_context();
 
     if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
-    if (endIndex != 0)
+    if (_endIndex != 0)
     {
         idx_t align = ctx->align_bits(); // bits
         align /= 8; // bytes
-        while (endIndex % align != 0) endIndex++;
+        while (_endIndex % align != 0) _endIndex++;
     }
-    idx_t beginIndex = endIndex;
-    endIndex += size * sizeof(float);
+    idx_t beginIndex = _endIndex;
+    _endIndex += size * sizeof(float);
     return beginIndex;
 }
 
@@ -68,5 +69,5 @@ cl::Buffer ocl_device_array_pool::create_sub_buffer(idx_t beginOffset, idx_t siz
     cl_buffer_region r;
     r.origin = beginOffset;
     r.size = size * sizeof(float);
-    return buffer.createSubBuffer(CL_MEM_HOST_NO_ACCESS, CL_BUFFER_CREATE_TYPE_REGION, &r);
+    return _buffer.createSubBuffer(_copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS, CL_BUFFER_CREATE_TYPE_REGION, &r);
 }

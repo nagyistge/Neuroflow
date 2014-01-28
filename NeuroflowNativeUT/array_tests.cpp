@@ -151,7 +151,7 @@ namespace nfut
         {
             array<float, 100> values;
             
-            auto pool = ctx->device_array_management()->create_pool();
+            auto pool = ctx->device_array_management()->create_pool(true);
             auto a1 = pool->create_array2(10, 10);
             auto a2 = pool->create_array(100);
             auto da = ctx->data_array_factory()->create(100, 9.9f);

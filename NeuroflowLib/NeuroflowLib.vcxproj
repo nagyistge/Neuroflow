@@ -206,6 +206,8 @@
     <ClInclude Include="data_array_factory.h" />
     <ClInclude Include="device_array.h" />
     <ClInclude Include="device_array2.h" />
+    <ClInclude Include="device_array2_group.h" />
+    <ClInclude Include="device_array_group.h" />
     <ClInclude Include="device_array_management.h" />
     <ClInclude Include="device_array_pool.h" />
     <ClInclude Include="device_info.h" />
@@ -250,6 +252,7 @@
     <ClInclude Include="ocl_utils.h" />
     <ClInclude Include="props.h" />
     <ClInclude Include="prop_def.h" />
+    <ClInclude Include="rtlr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
     <ClInclude Include="supervised_learning_behavior.h" />
@@ -274,6 +277,8 @@
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
     <ClCompile Include="cpp_utils.cpp" />
+    <ClCompile Include="device_array2_group.cpp" />
+    <ClCompile Include="device_array_group.cpp" />
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="layer_behavior.cpp" />
     <ClCompile Include="layer_connections.cpp" />

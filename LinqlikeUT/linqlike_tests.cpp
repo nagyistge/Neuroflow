@@ -193,6 +193,8 @@ namespace LinqlikeUT
                 Assert::IsFalse(values2 | any());
                 Assert::IsTrue(values1 | where([](int v) { return v == 1; }) | any());
                 Assert::IsFalse(values2 | where([](int v) { return v == 1000; }) | any());
+                Assert::IsTrue(values1 | any([](int v) { return v == 1; }));
+                Assert::IsFalse(values2 | any([](int v) { return v == 1000; }));
             }
             catch (exception& ex)
             {
@@ -501,6 +503,29 @@ namespace LinqlikeUT
                 Logger::WriteMessage(ex.what());
                 throw;
             }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(size_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(size_test)
+        {
+                try
+                {
+                    vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
+
+                    Assert::AreEqual(ts.size(), ts | size());
+                    Assert::AreEqual(ts.size() - 1, ts | size([](t& v) { return v.p2 != 21; }));
+
+                    ts.clear();
+
+                    Assert::AreEqual(ts.size(), ts | size());
+                }
+                catch (exception& ex)
+                {
+                    Logger::WriteMessage(ex.what());
+                    throw;
+                }
         }
 	};
 }

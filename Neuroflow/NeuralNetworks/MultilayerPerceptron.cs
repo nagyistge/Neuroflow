@@ -160,6 +160,27 @@ namespace Neuroflow.NeuralNetworks
             get { return biases ?? (biases = new Dictionary<int, IDeviceArray>()); }
         }
 
+        IDeviceArrayPool errorsPool;
+
+        internal IDeviceArrayPool ErrorsPool
+        {
+            get { return errorsPool ?? (errorsPool = Adapter.DeviceArrayManagement.CreatePool()); }
+        }
+
+        Dictionary<int, IDeviceArray> errors;
+
+        internal Dictionary<int, IDeviceArray> Errors
+        {
+            get { return errors ?? (errors = new Dictionary<int, IDeviceArray>()); }
+        }
+
+        Dictionary<Tuple<int, int>, IDeviceArray2> weights;
+
+        internal Dictionary<Tuple<int, int>, IDeviceArray2> Weights
+        {
+            get { return weights ?? (weights = new Dictionary<Tuple<int, int>, IDeviceArray2>()); }
+        }
+
         IDeviceArrayPool gradientsPool;
 
         internal IDeviceArrayPool GradientsPool
@@ -186,27 +207,6 @@ namespace Neuroflow.NeuralNetworks
         internal Dictionary<int, IDeviceArray> BiasGradientSums
         {
             get { return biasGradientSums ?? (biasGradientSums = new Dictionary<int, IDeviceArray>()); }
-        }
-
-        IDeviceArrayPool errorsPool;
-
-        internal IDeviceArrayPool ErrorsPool
-        {
-            get { return errorsPool ?? (errorsPool = Adapter.DeviceArrayManagement.CreatePool()); }
-        }
-
-        Dictionary<int, IDeviceArray> errors;
-
-        internal Dictionary<int, IDeviceArray> Errors
-        {
-            get { return errors ?? (errors = new Dictionary<int, IDeviceArray>()); }
-        }
-
-        Dictionary<Tuple<int, int>, IDeviceArray2> weights;
-
-        internal Dictionary<Tuple<int, int>, IDeviceArray2> Weights
-        {
-            get { return weights ?? (weights = new Dictionary<Tuple<int, int>, IDeviceArray2>()); }
         }
 
         Dictionary<Tuple<int, int>, IDeviceArray2> gradients;

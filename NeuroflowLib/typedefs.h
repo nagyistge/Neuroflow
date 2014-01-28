@@ -80,9 +80,10 @@ namespace nf
         online
     };
 
-    ENUM_STRINGS(learning_algo_optimization_type, "gradient_based", "global")
+    ENUM_STRINGS(learning_algo_optimization_type, "none", "gradient_based", "global")
     enum class learning_algo_optimization_type
     {
+        none,
         gradient_based, 
         global
     };

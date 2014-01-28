@@ -17,3 +17,4 @@
 #include "linqlike_of_type.h"
 #include "linqlike_cast.h"
 #include "linqlike_to_map.h"
+#include "linqlike_size.h"

@@ -10,7 +10,7 @@ namespace nf
     {
         friend struct ocl_device_array;
 
-        ocl_device_array_pool(const ocl_computation_context_wptr& context);
+        ocl_device_array_pool(const ocl_computation_context_wptr& context, bool copyOptimized);
 
         bool is_allocated() const override;
         device_array_ptr create_array(idx_t size) override;
@@ -19,8 +19,9 @@ namespace nf
         void zero() override;
 
     private:
-        cl::Buffer buffer;
-        idx_t endIndex = 0;
+        bool _copyOptimized;
+        cl::Buffer _buffer;
+        idx_t _endIndex = 0;
 
         idx_t reserve(idx_t size);
         cl::Buffer create_sub_buffer(idx_t beginOffset, idx_t size);
