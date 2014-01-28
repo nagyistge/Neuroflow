@@ -34,7 +34,7 @@ void cpp_device_array_management::copy(device_array_ptr from, idx_t fromIndex, d
     memcpy(toCpp->ptr() + toIndex, fromCpp->ptr() + fromIndex, size * sizeof(float));
 }
 
-device_array_pool_ptr cpp_device_array_management::create_pool()
+device_array_pool_ptr cpp_device_array_management::create_pool(bool copyOptimized)
 {
     return make_shared<cpp_device_array_pool>();
 }

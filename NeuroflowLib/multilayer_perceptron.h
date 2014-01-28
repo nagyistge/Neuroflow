@@ -2,6 +2,9 @@
 
 #include "nfdev.h"
 #include "contexted.h"
+#include "device_array_group.h"
+#include "device_array2_group.h"
+#include "rtlr.h"
 
 namespace nf
 {
@@ -19,6 +22,11 @@ namespace nf
             idx_t index;
             bool is_online, is_offline;
             learning_algo_optimization_type optimization_type;
+
+            bool operator==(const layer_info& other) const
+            {
+                return index == other.index;
+            }
         };
 
         friend struct neural_network_factory;
@@ -31,8 +39,42 @@ namespace nf
     private:
         multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties);
 
+        void create_structure(std::map<idx_t, layer_info>& infos);
+        idx_t get_layer_index(const layer_ptr& layer);
+
         properties_t _properties;
-        nf::gradient_computation_method _gradient_computation_method;
+        nf::gradient_computation_method _gradientComputationMethod;
         ordered_layers_t _layers;
+        bool _isTrainingEnabled;
+        bool _isGradientsCalculated;
+        bool _doBackpropagate;
+        bool _doFFBP;
+        bool _doBPTT;
+        bool _doRTLR;
+        bool _isRecurrent;
+        bool _calculateGlobalOnlineError;
+        bool _calculateGlobalOfflineError;
+        bool _isTrainingInitialized;
+        rtlr _rtlr;
+        device_array_ptr _netInput;
+        device_array_ptr _netOutput;
+        device_array_ptr _globalOfflineError;
+        device_array_ptr _globalOnlineError;
+        nf_object_ptr _calculateGlobalErrorState;
+        std::list<nf_object_ptr> _computationStates;
+        nf_object_ptr _setOutputState;
+        device_array_management_ptr _daMan;
+        compute_activation_ptr _computeActivation;
+        device_array_pool_ptr _gradientsPool;
+        device_array_pool_ptr _gradientSumsPool;
+        device_array_group _outputs;
+        device_array_group _netValueDerivates;
+        device_array_group _biases;
+        device_array_group _errors;
+        device_array2_group _weights;
+        device_array_group _biasGradients;
+        device_array_group _biasGradientSums;
+        device_array2_group _gradients;
+        device_array2_group _gradientSums;
     };
 }

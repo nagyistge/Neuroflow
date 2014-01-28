@@ -253,6 +253,15 @@
     <ClInclude Include="libs.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="device_array2_group.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="rtlr.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="device_array_group.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -377,6 +386,12 @@
     </ClCompile>
     <ClCompile Include="layer_order_comparer.cpp">
       <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="device_array_group.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="device_array2_group.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

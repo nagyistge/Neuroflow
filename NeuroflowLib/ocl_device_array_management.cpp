@@ -42,9 +42,9 @@ void ocl_device_array_management::copy(device_array_ptr from, idx_t fromIndex, d
     }
 }
 
-device_array_pool_ptr ocl_device_array_management::create_pool()
+device_array_pool_ptr ocl_device_array_management::create_pool(bool copyOptimized)
 {
-    return make_shared<ocl_device_array_pool>(lock_context());
+    return make_shared<ocl_device_array_pool>(lock_context(), copyOptimized);
 }
 
 cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t sizeInBytes, float fill)
