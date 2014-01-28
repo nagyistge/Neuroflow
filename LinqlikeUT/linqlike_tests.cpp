@@ -1,30 +1,19 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "utility.h"
 #include <linqlike.h>
-#include <boost/lambda/lambda.hpp>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace linqlike;
 using namespace std;
-namespace l = boost::lambda;
 
-namespace NeuroflowNativeUT
+namespace LinqlikeUT
 {
 	TEST_CLASS(linqlike_tests)
 	{
-        struct t
-        {
-            int p1, p2;
-
-            bool operator==(const t& other) const
-            {
-                return p1 == other.p1 && p2 == other.p2;
-            }
-        };
-
 	public:
         BEGIN_TEST_METHOD_ATTRIBUTE(enumerable_iterators_test)
-            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linq")
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(enumerable_iterators_test)
 		{
@@ -76,8 +65,8 @@ namespace NeuroflowNativeUT
                 vector<const int> cvalues = { 1, 2, 3, 4, 5 };
                 int target = 2 + 4;
                 int result = 0;
-                auto q = values | where(l::_1 % 2 == 0);
-                auto cq = cvalues | where(l::_1 % 2 == 0);
+                auto q = values | where([](int v) { return v % 2 == 0; });
+                auto cq = cvalues | where([](int v) { return v % 2 == 0; });
                 for (auto& v : q)
                 {
                     result += v;
@@ -429,6 +418,83 @@ namespace NeuroflowNativeUT
                 }
                 Assert::AreEqual(3, count);
                 Assert::AreEqual(1 + 2 + 5, sum);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cast_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cast_test)
+        {
+            try
+            {
+                vector<int> values = { 2, 1, 2, 3, 4, 5 };
+
+                short f = values | where([](int v) { return v % 2 != 0; }) | scast<short>() | first_or_default();
+
+                Assert::AreEqual((short)1, f);
+
+                vector<shared_ptr<t>> ts;
+                ts.push_back(make_shared<t2>(11, 12, 13));
+                ts.push_back(make_shared<t2>(1, 2, 3));
+                ts.push_back(make_shared<t2>(4, 5, 6));
+                
+                int count = 0;
+                for (auto v : ts | dcast<t2>())
+                {
+                    count++;
+                }
+                Assert::AreEqual(3, count);
+
+                ts.clear();
+
+                ts.push_back(make_shared<t>(1, 2));
+                ts.push_back(make_shared<t2>(11, 12, 13));
+                ts.push_back(make_shared<t2>(1, 2, 3));
+                ts.push_back(make_shared<t2>(4, 5, 6));
+
+                auto t = ts | of_type<t2>() | first();
+
+                Assert::IsNotNull(t.get());
+                Assert::AreEqual(11, t->p1);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(to_map_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(to_map_test)
+        {
+            try
+            {
+                vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
+
+                auto map1 = ts | to_map([](t& v) { return v.p1; });
+
+                Assert::AreEqual((::size_t)3, map1.size());
+                int sum = 0;
+                for (auto& p : map1)
+                {
+                    sum += p.first;
+                }
+                Assert::AreEqual(1 + 2 + 5, sum);
+
+                auto map2 = ts | to_map([](t& v) { return v.p2; }, [](t& v) { return v.p1; });
+                Assert::AreEqual((::size_t)5, map2.size());
+                for (auto& p : map2)
+                {
+                    Assert::IsTrue(p.second == 1 || p.second == 2 || p.second == 5);
+                }
             }
             catch (exception& ex)
             {

@@ -24,5 +24,4 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/coroutine/all.hpp>
 #include <boost/iterator.hpp>
-#include <boost/phoenix.hpp>
 #include "ocl.h"
