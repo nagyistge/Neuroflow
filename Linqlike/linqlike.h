@@ -14,3 +14,6 @@
 #include "linqlike_sort.h"
 #include "linqlike_to_vector.h"
 #include "linqlike_to_list.h"
+#include "linqlike_of_type.h"
+#include "linqlike_cast.h"
+#include "linqlike_to_map.h"

@@ -16,9 +16,32 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     _layers = layers | sort(layer_order_comparer()) | row_num() | to_vector();
 
+    // It supposed to be cool, but looks like shit because of MSVC.    
+#if (_MSC_VER)
     auto infos = _layers
-        | select([](row_numbered<layer_ptr>& l) { return make_pair(l, dynamic_pointer_cast<supervised_learning_behavior>(l.value()->behaviors() | first_or_default())); })
-        | where([](pair<row_numbered<layer_ptr>, supervised_learning_behavior_ptr>& r) { return r.second != null; });
+        | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), l.value()->behaviors() | dcast<supervised_learning_behavior>() | first_or_default()); })
+        | where([](pair<idx_t, supervised_learning_behavior_ptr>& r) { return r.second != null; })
+        | select([](pair<idx_t, supervised_learning_behavior_ptr>& r)
+    { 
+        return layer_info(
+            r.first, 
+            r.second->weight_update_mode() == weight_update_mode::online, // is_online
+            r.second->weight_update_mode() == weight_update_mode::offline, // is_offline
+            r.second->optimization_type()); 
+    });
+#else
+    auto infos = _layers
+        | select([](auto& l) { return make_pair(l.row_num(), l.value()->behaviors() | dcast<supervised_learning_behavior>() | first_or_default()); })
+        | where([](auto& r) { return r.second != null; })
+        | select([](auto& r)
+    {
+        return layer_info(
+            r.first,
+            r.second->weight_update_mode() == weight_update_mode::online, // is_online
+            r.second->weight_update_mode() == weight_update_mode::offline, // is_offline
+            r.second->optimization_type());
+    });
+#endif
 }
 
 const boost::property_tree::ptree& multilayer_perceptron::properties() const

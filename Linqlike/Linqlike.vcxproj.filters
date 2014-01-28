@@ -16,5 +16,8 @@
     <ClInclude Include="linqlike_to_list.h" />
     <ClInclude Include="linqlike_to_vector.h" />
     <ClInclude Include="linqlike_where.h" />
+    <ClInclude Include="linqlike_of_type.h" />
+    <ClInclude Include="linqlike_cast.h" />
+    <ClInclude Include="linqlike_to_map.h" />
   </ItemGroup>
 </Project>
