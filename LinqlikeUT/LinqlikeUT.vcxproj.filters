@@ -6,17 +6,18 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="VS">
-      <UniqueIdentifier>{b8522b9d-3a35-48e4-bfd9-586fc20eece1}</UniqueIdentifier>
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="BaseTests">
-      <UniqueIdentifier>{03462d59-d530-4833-8443-0d1277e97370}</UniqueIdentifier>
+    <Filter Include="LinqlikeTests">
+      <UniqueIdentifier>{59b30528-7abd-471e-a6e9-3e8ea15b52b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="stdafx.h">
       <Filter>VS</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="targetver.h">
       <Filter>VS</Filter>
     </ClInclude>
   </ItemGroup>
@@ -24,14 +25,11 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>VS</Filter>
     </ClCompile>
-    <ClCompile Include="computation_context_tests.cpp">
-      <Filter>BaseTests</Filter>
+    <ClCompile Include="..\NeuroflowNativeUT\linqlike_phoenix_tests.cpp">
+      <Filter>LinqlikeTests</Filter>
     </ClCompile>
-    <ClCompile Include="utils_tests.cpp">
-      <Filter>BaseTests</Filter>
-    </ClCompile>
-    <ClCompile Include="array_tests.cpp">
-      <Filter>BaseTests</Filter>
+    <ClCompile Include="..\NeuroflowNativeUT\linqlike_tests.cpp">
+      <Filter>LinqlikeTests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

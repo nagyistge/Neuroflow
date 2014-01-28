@@ -29,9 +29,6 @@
     <Filter Include="Ocl\NN">
       <UniqueIdentifier>{17a7821d-fc0b-4323-9902-451fc7ed3eeb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Linqlike">
-      <UniqueIdentifier>{86c234e0-b7d6-4376-8922-ac4e7b93ac91}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -241,51 +238,6 @@
     <ClInclude Include="enum_flags.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="linqlike.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_from.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_base.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_where.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_select.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_concat.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_any.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_row_num.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_first.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_first_or_default.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_order_by.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_group_by.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_sort.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_to_vector.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
-    <ClInclude Include="linqlike_to_list.h">
-      <Filter>Linqlike</Filter>
-    </ClInclude>
     <ClInclude Include="ocl_props.h">
       <Filter>Ocl</Filter>
     </ClInclude>
@@ -297,6 +249,9 @@
     </ClInclude>
     <ClInclude Include="layer_order_comparer.h">
       <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="libs.h">
+      <Filter>Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -423,8 +378,5 @@
     <ClCompile Include="layer_order_comparer.cpp">
       <Filter>Base\NN</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

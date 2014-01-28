@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <linqlike.h>
 #include "enum_flags.h"
-#include "linqlike.h"
 #include "enum_to_string.h"
 
 namespace nf
