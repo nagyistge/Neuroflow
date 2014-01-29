@@ -35,6 +35,18 @@ namespace nf
 
         const boost::property_tree::ptree& properties() const;
         gradient_computation_method gradient_computation_method() const;
+        idx_t max_bptt_iterations() const;
+        idx_t input_size() const;
+        idx_t output_size() const;
+        idx_t number_of_weights() const;
+        void get_weights(const data_array_ptr& to) const;
+        void set_weights(const data_array_ptr& from);
+        void compute(const data_array_ptr& input, const data_array_ptr& output);
+        void compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs);
+        void train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs);
+        void train(const supervised_sample_entry& sampleEntry);
+        void train(const supervised_sample& sample);
+        void train(const supervised_batch& batch);
 
     private:
         multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties);
@@ -44,6 +56,7 @@ namespace nf
 
         properties_t _properties;
         nf::gradient_computation_method _gradientComputationMethod;
+        idx_t _maxBpttIterations;
         ordered_layers_t _layers;
         bool _isTrainingEnabled;
         bool _isGradientsCalculated;
@@ -76,5 +89,6 @@ namespace nf
         device_array_group _biasGradientSums;
         device_array2_group _gradients;
         device_array2_group _gradientSums;
+        device_array_ptr _bpttNetInputs;
     };
 }

@@ -7,6 +7,9 @@
 #include "layer.h"
 #include "device_array_management.h"
 #include "computation_context.h"
+#include "device_array.h"
+#include "device_array2.h"
+#include "data_array.h"
 
 USING
 
@@ -28,6 +31,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 {
     prop_def pd(_properties, properties);
     _gradientComputationMethod = pd.defEnum(prop_gradient_computation_method, gradient_computation_method::feed_forward);
+    _maxBpttIterations = pd.def<idx_t>(prop_max_bptt_iterations, idx_t(0), [](idx_t v) { return v >= 0; });
 
     _layers = layers | sort(layer_order_comparer()) | row_num() | to_vector();
 
@@ -63,6 +67,15 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     if (_isRecurrent && _isGradientsCalculated && !(_doBPTT || _doRTLR)) throw_logic_error("Recurrent Multilayer Perceptron cannot be trained by Feed Forward gradient computation algorithms.");
 
+    if (_doBPTT)
+    {
+        if (_maxBpttIterations <= 0) throw_invalid_argument("Max BPTT iterations must be greater than zero.");
+    }
+    else
+    {
+        _maxBpttIterations = 0;
+    }
+
     create_structure(infos);
     
     /*create_compute();
@@ -80,6 +93,26 @@ nf::gradient_computation_method multilayer_perceptron::gradient_computation_meth
     return _gradientComputationMethod;
 }
 
+idx_t multilayer_perceptron::max_bptt_iterations() const
+{
+    return _maxBpttIterations;
+}
+
+idx_t multilayer_perceptron::input_size() const
+{
+    return _layers.front().value()->size();
+}
+
+idx_t multilayer_perceptron::output_size() const
+{
+    return _layers.back().value()->size();
+}
+
+idx_t multilayer_perceptron::number_of_weights() const
+{
+    return _weights.size() + _biases.size();
+}
+
 void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
 {
     for (idx_t lidx = 0; lidx < _layers.size(); lidx++)
@@ -91,12 +124,16 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
         auto& layer = _layers[lidx];
         idx_t layerSize = layer.value()->size();
 
-        if (!isInput)
+        if (isInput)
+        {
+            if (_doBPTT) _bpttNetInputs = _daMan->create_array(false, input_size() * _maxBpttIterations);
+        }
+        else
         {
             // Output:
             if (!isOutput)
             {
-                _outputs.add(lidx, layerSize);
+                _outputs.add(lidx, layerSize * _maxBpttIterations);
             }
 
             // Net Value Derivates:
@@ -148,11 +185,6 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
                     _gradientSums.add(key, inputLayer->size(), layer.value()->size());
                 }
             }
-
-            if (_doBPTT)
-            {
-                throw_logic_error("Not implemented. TODO: make outputs (and inputs those are outputs) large enough to hold iterations data, and step offset.");
-            }
         }
     }
 }
@@ -163,4 +195,28 @@ idx_t multilayer_perceptron::get_layer_index(const layer_ptr& layer)
         | where([=](row_numbered<layer_ptr>& l) { return l.value() == layer; })
         | select([](row_numbered<layer_ptr>& l) { return l.row_num(); })
         | first();
+}
+
+void multilayer_perceptron::get_weights(const data_array_ptr& to) const
+{
+    verify_arg(to != null, "Argument 'to' is null.");
+
+    idx_t sIdx = 0;
+
+    for (auto& bias : _biases.get_arrays())
+    {
+        _daMan->copy(bias, 0, to, sIdx, bias->size());
+        sIdx += bias->size();
+    }
+
+    for (auto& weight : _weights.get_arrays())
+    {
+        _daMan->copy(weight, 0, to, sIdx, weight->size());
+        sIdx += weight->size();
+    }
+}
+
+void multilayer_perceptron::set_weights(const data_array_ptr& from)
+{
+    verify_arg(from != null, "Argument 'from' is null.");
 }

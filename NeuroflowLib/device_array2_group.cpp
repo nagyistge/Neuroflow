@@ -29,3 +29,13 @@ void device_array2_group::zero()
 {
     _pool->zero();
 }
+
+idx_t device_array2_group::size() const
+{
+    return _arrays | select([](const pair<const key_t, device_array2_ptr>& i) { return i.second->size(); }) | sum();
+}
+
+linq::enumerable<device_array2*> device_array2_group::get_arrays() const
+{
+    return _arrays | select([](const pair<const key_t, device_array2_ptr>& i) { return i.second.get(); });
+}

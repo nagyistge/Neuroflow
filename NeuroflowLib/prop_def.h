@@ -19,7 +19,7 @@ namespace nf
         }
 
         template <typename T>
-        T def(std::string propId, T defaultValue, std::function<bool(T)> validator)
+        T def(std::string propId, T defaultValue, const std::function<bool(T)>& validator)
         {
             if (overrides)
             {
@@ -42,7 +42,7 @@ namespace nf
         }
 
         template <typename T>
-        T defEnum(std::string propId, T defaultValue, std::function<bool(T)> validator)
+        T defEnum(std::string propId, T defaultValue, const std::function<bool(T)>& validator)
         {
             if (overrides)
             {

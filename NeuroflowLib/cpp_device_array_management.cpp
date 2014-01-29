@@ -22,7 +22,7 @@ device_array2_ptr cpp_device_array_management::create_array2(bool copyOptimized,
     return make_shared<cpp_device_array2>(rowSize, colSize);
 }
 
-void cpp_device_array_management::copy(device_array_ptr from, idx_t fromIndex, device_array_ptr to, idx_t toIndex, idx_t size)
+void cpp_device_array_management::copy(const device_array_ptr& from, idx_t fromIndex, const device_array_ptr& to, idx_t toIndex, idx_t size)
 {
     verify_arg(fromIndex >= 0, "fromIndex");
     verify_arg(toIndex >= 0, "toIndex");
