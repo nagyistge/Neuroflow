@@ -527,5 +527,22 @@ namespace LinqlikeUT
                     throw;
                 }
         }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(sum_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(sum_test)
+        {
+            try
+            {
+                vector<int> values = { 2, 1, 2, 3, 4, 5 };
+                Assert::AreEqual(2 + 1 + 2 + 3 + 4 + 5, values | sum());
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
 	};
 }

@@ -84,7 +84,7 @@ idx_t ocl_utils::get_preferred_workgroup_size_mul()
     return (idx_t)k.getWorkGroupInfo<CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE>(ctx->cl_device());
 }
 
-void ocl_utils::randomize_uniform(device_array_ptr deviceArray, float min, float max)
+void ocl_utils::randomize_uniform(const device_array_ptr& deviceArray, float min, float max)
 {
     auto ctx = lock_context();
 
@@ -112,7 +112,7 @@ void ocl_utils::randomize_uniform(device_array_ptr deviceArray, float min, float
     }
 }
 
-void ocl_utils::calculate_mse(supervised_batch& batch, data_array_ptr dataArray, idx_t valueIndex)
+void ocl_utils::calculate_mse(supervised_batch& batch, const data_array_ptr& dataArray, idx_t valueIndex)
 {
     auto ctx = lock_context();
 
@@ -190,7 +190,7 @@ void ocl_utils::div(const ocl_data_array_ptr& values, idx_t valueIndex, float by
     NullRange);
 }
 
-void ocl_utils::zero(device_array_ptr deviceArray)
+void ocl_utils::zero(const device_array_ptr& deviceArray)
 {
     zero(to_ocl(deviceArray, false)->buffer(), deviceArray->size());
 }

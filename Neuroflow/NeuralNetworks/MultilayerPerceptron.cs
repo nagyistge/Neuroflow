@@ -1307,22 +1307,19 @@ namespace Neuroflow.NeuralNetworks
 
         void DoGetWeights(Data.DataArray values)
         {
-            var valuesArray = values as DataArray;
-            if (valuesArray == null) throw new InvalidOperationException("Unsupported data array type.");
-
             int sIdx = 0;
             var man = Adapter.DeviceArrayManagement;
 
             foreach (var currentBiases in Biases.Values)
             {
-                man.Copy(currentBiases, 0, valuesArray, sIdx, currentBiases.Size);
+                man.Copy(currentBiases, 0, values, sIdx, currentBiases.Size);
 
                 sIdx += currentBiases.Size;
             }
 
             foreach (var currentWeights in Weights.Values)
             {
-                man.Copy(currentWeights, 0, valuesArray, sIdx, currentWeights.Size);
+                man.Copy(currentWeights, 0, values, sIdx, currentWeights.Size);
 
                 sIdx += currentWeights.Size;
             }
@@ -1330,22 +1327,19 @@ namespace Neuroflow.NeuralNetworks
 
         void DoSetWeights(Data.DataArray values)
         {
-            var valuesArray = values as DataArray;
-            if (valuesArray == null) throw new InvalidOperationException("Unsupported data array type.");
-
             int sIdx = 0;
             var man = Adapter.DeviceArrayManagement;
 
             foreach (var currentBiases in Biases.Values)
             {
-                man.Copy(valuesArray, sIdx, currentBiases, 0, currentBiases.Size);
+                man.Copy(values, sIdx, currentBiases, 0, currentBiases.Size);
 
                 sIdx += currentBiases.Size;
             }
 
             foreach (var currentWeights in Weights.Values)
             {
-                man.Copy(valuesArray, sIdx, currentWeights, 0, currentWeights.Size);
+                man.Copy(values, sIdx, currentWeights, 0, currentWeights.Size);
 
                 sIdx += currentWeights.Size;
             }

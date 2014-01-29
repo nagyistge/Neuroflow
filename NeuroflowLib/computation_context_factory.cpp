@@ -19,7 +19,7 @@ const computation_context_factory& computation_context_factory::default()
     return _default;
 }
 
-void computation_context_factory::register_type(const wchar_t* typeId, cc_factory_adapter_ptr adapter)
+void computation_context_factory::register_type(const wchar_t* typeId, const cc_factory_adapter_ptr& adapter)
 {
     adapters.insert(make_pair(wstring(typeId), adapter));
 }

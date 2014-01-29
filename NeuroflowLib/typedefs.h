@@ -35,6 +35,7 @@ namespace nf
 
     struct data_array;
     typedef std::shared_ptr<data_array> data_array_ptr;
+    typedef std::vector<data_array_ptr> data_array_collection_t;
 
     struct data_array_factory;
     typedef std::shared_ptr<data_array_factory> data_array_factory_ptr;
@@ -68,6 +69,12 @@ namespace nf
     struct layer_description;
     typedef std::shared_ptr<layer_description> layer_description_ptr;
     typedef std::list<layer_description_ptr> layer_description_coll;
+
+    struct device_array_group;
+    typedef std::shared_ptr<device_array_group> device_array_group_ptr;
+
+    struct device_array2_group;
+    typedef std::shared_ptr<device_array2_group> device_array2_group_ptr;
 
     struct supervised_batch;
     struct supervised_sample;

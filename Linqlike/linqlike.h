@@ -18,3 +18,4 @@
 #include "linqlike_cast.h"
 #include "linqlike_to_map.h"
 #include "linqlike_size.h"
+#include "linqlike_sum.h"

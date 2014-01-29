@@ -11,13 +11,13 @@ generator((std::random_device()() << 16) | std::random_device()())
 {
 }
 
-void cpp_utils::zero(device_array_ptr deviceArray)
+void cpp_utils::zero(const device_array_ptr& deviceArray)
 {
     auto& cppArray = to_cpp(deviceArray, false);
     memset(cppArray->ptr(), 0, sizeof(float)* cppArray->size());
 }
 
-void cpp_utils::randomize_uniform(device_array_ptr deviceArray, float min, float max)
+void cpp_utils::randomize_uniform(const device_array_ptr& deviceArray, float min, float max)
 {
     auto& cppArray = to_cpp(deviceArray, false);
     uniform_real_distribution<float> uniform_distribution(min, max);
@@ -27,7 +27,7 @@ void cpp_utils::randomize_uniform(device_array_ptr deviceArray, float min, float
     for (idx_t i = 0; i < size; i++) p[i] = randF();
 }
 
-void cpp_utils::calculate_mse(supervised_batch& batch, data_array_ptr dataArray, idx_t valueIndex)
+void cpp_utils::calculate_mse(supervised_batch& batch, const data_array_ptr& dataArray, idx_t valueIndex)
 {
     verify_arg(dataArray != null, "dataArray");
     verify_arg(valueIndex >= 0 && valueIndex < dataArray->size(), "valueIndex");
