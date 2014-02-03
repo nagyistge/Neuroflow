@@ -27,12 +27,11 @@ namespace linqlike
     auto operator|(TColl& coll, const _select<F>& s) 
     {
         typedef decltype(s.tran()(_wat<T>())) result_t;
-        TColl* pcoll = &coll;
         return enumerable<result_t>([=]() mutable
         {
             return enumerable<result_t>::pull_type([=](enumerable<result_t>::push_type& yield) mutable
             {
-                for (auto& v : *pcoll)
+                for (auto& v : coll)
                 {
                     yield(s.tran()(v));
                 }
