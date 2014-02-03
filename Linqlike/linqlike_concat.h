@@ -30,12 +30,11 @@ namespace linqlike
     template <typename TColl1, typename TColl2, typename T = TColl2::value_type>
     enumerable<T> operator|(TColl1& coll, _concat<TColl2>& s)
     {
-        TColl1* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                for (auto& v : *pcoll)
+                for (auto& v : coll)
                 {
                     yield(v);
                 }
