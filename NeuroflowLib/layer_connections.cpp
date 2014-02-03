@@ -102,7 +102,7 @@ void layer_connections::clear()
 
 layers_t layer_connections::connected_layers(flow_direction direction) const
 {
-    return _otherLayers 
+    return from(_otherLayers)
         | where([=](const other_layer_t& layer) { return int(layer.first & direction) != 0; })
         | select([](const other_layer_t& layer) { return layer.second; });
 }
