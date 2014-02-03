@@ -17,3 +17,7 @@
 #include "utils.h"
 #include "props.h"
 #include "ocl_props.h"
+#include "layer.h"
+#include "neural_network_factory.h"
+#include "multilayer_perceptron.h"
+#include "layer_connections.h"

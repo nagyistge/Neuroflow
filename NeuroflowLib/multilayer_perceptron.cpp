@@ -219,4 +219,18 @@ void multilayer_perceptron::get_weights(const data_array_ptr& to) const
 void multilayer_perceptron::set_weights(const data_array_ptr& from)
 {
     verify_arg(from != null, "Argument 'from' is null.");
+
+    idx_t sIdx = 0;
+
+    for (auto& bias : _biases.get_arrays())
+    {
+        _daMan->copy(from, sIdx, bias, 0, bias->size());
+        sIdx += bias->size();
+    }
+
+    for (auto& weight : _weights.get_arrays())
+    {
+        _daMan->copy(from, sIdx, weight, 0, weight->size());
+        sIdx += weight->size();
+    }
 }
