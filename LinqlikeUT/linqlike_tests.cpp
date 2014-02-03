@@ -65,8 +65,8 @@ namespace LinqlikeUT
                 vector<const int> cvalues = { 1, 2, 3, 4, 5 };
                 int target = 2 + 4;
                 int result = 0;
-                auto q = values | where([](int v) { return v % 2 == 0; });
-                auto cq = cvalues | where([](int v) { return v % 2 == 0; });
+                auto q = from(values) | where([](int v) { return v % 2 == 0; });
+                auto cq = from(cvalues) | where([](int v) { return v % 2 == 0; });
                 for (auto& v : q)
                 {
                     result += v;
@@ -102,8 +102,8 @@ namespace LinqlikeUT
                 const vector<int> values = { 1, 2, 3, 4, 5 };
                 string target("12345");
                 string result;
-                auto q = values | select([=](const int& v) { return to_string(v); });
-                auto cq = values | select([=](const int& v) { return to_string(v); });
+                auto q = from(values) | select([=](const int& v) { return to_string(v); });
+                auto cq = from(values) | select([=](const int& v) { return to_string(v); });
                 result = "";
                 for (auto v : q)
                 {
@@ -135,7 +135,7 @@ namespace LinqlikeUT
                 vector<int> values2 = { 6, 7, 8, 9, 10 };
                     
                 vector<int> result;
-                for (auto v : values1 | concat(values2))
+                for (auto v : from(values1) | concat(values2))
                 {
                     result.push_back(v);
                 }
@@ -163,7 +163,7 @@ namespace LinqlikeUT
                 vector<int> values1 = { 0, 1, 2, 3, 4, 5 };
                 
                 ::size_t sum1 = 0, sum2 = 0;
-                for (auto& x : values1 | row_num())
+                for (auto& x : from(values1) | row_num())
                 {
                     sum1 += x.row_num();
                     sum2 += x.value();
@@ -189,12 +189,12 @@ namespace LinqlikeUT
                 const vector<int> values1 = { 1, 2, 3, 4, 5 };
                 vector<int> values2;
 
-                Assert::IsTrue(values1 | any());
-                Assert::IsFalse(values2 | any());
-                Assert::IsTrue(values1 | where([](int v) { return v == 1; }) | any());
-                Assert::IsFalse(values2 | where([](int v) { return v == 1000; }) | any());
-                Assert::IsTrue(values1 | any([](int v) { return v == 1; }));
-                Assert::IsFalse(values2 | any([](int v) { return v == 1000; }));
+                Assert::IsTrue(from(values1) | any());
+                Assert::IsFalse(from(values2) | any());
+                Assert::IsTrue(from(values1) | where([](int v) { return v == 1; }) | any());
+                Assert::IsFalse(from(values2) | where([](int v) { return v == 1000; }) | any());
+                Assert::IsTrue(from(values1) | any([](int v) { return v == 1; }));
+                Assert::IsFalse(from(values2) | any([](int v) { return v == 1000; }));
             }
             catch (exception& ex)
             {
@@ -212,11 +212,11 @@ namespace LinqlikeUT
             {
                 vector<int> values = { 0, 1, 2, 3, 4, 5 };
 
-                int f = values | where([](int v) { return v % 2 != 0; }) | first();
+                int f = from(values) | where([](int v) { return v % 2 != 0; }) | first();
 
                 Assert::AreEqual(1, f);
 
-                f = values | first([](int v) { return v > 3; });
+                f = from(values) | first([](int v) { return v > 3; });
 
                 Assert::AreEqual(4, f);
 
@@ -224,7 +224,7 @@ namespace LinqlikeUT
 
                 try
                 {
-                    f = values | first();
+                    f = from(values) | first();
                     Assert::Fail(L"Previous method should have failed.");
                 }
                 catch (runtime_error&)
@@ -247,17 +247,17 @@ namespace LinqlikeUT
             {
                 vector<int> values = { 2, 1, 2, 3, 4, 5 };
 
-                int f = values | where([](int v) { return v % 2 != 0; }) | first_or_default();
+                int f = from(values) | where([](int v) { return v % 2 != 0; }) | first_or_default();
 
                 Assert::AreEqual(1, f);
 
-                f = values | first_or_default([](int v) { return v > 3; });
+                f = from(values) | first_or_default([](int v) { return v > 3; });
 
                 Assert::AreEqual(4, f);
 
                 values.clear();
 
-                f = values | first_or_default();
+                f = from(values) | first_or_default();
                 Assert::AreEqual(0, f);
             }
             catch (exception& ex)
@@ -277,7 +277,7 @@ namespace LinqlikeUT
                 vector<int> values1 = { 2, 1, 1, 1, 2, 7, -1, 5 };
                 vector<int> values2;
 
-                auto e = values1 | sort(dir::asc);
+                auto e = from(values1) | sort(dir::asc);
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -285,7 +285,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(7, values2.back());
 
                 values2.clear();
-                e = values1 | sort(dir::desc);
+                e = from(values1) | sort(dir::desc);
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -293,7 +293,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(7, values2.front());
 
                 values2.clear();
-                e = values1 | sort([](int v1, int v2) { return v2 < v1; });
+                e = from(values1) | sort([](int v1, int v2) { return v2 < v1; });
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -301,7 +301,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(7, values2.front());
 
                 values2.clear();
-                e = values1 | order_by([](int v) { return v; });
+                e = from(values1) | order_by([](int v) { return v; });
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -309,7 +309,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(7, values2.back());
 
                 values2.clear();
-                e = values1 | order_by([](int v) { return v; }, dir::desc);
+                e = from(values1) | order_by([](int v) { return v; }, dir::desc);
                 values2.assign(e.begin(), e.end());
 
                 Assert::AreEqual(values1.size(), values2.size());
@@ -319,7 +319,7 @@ namespace LinqlikeUT
                 vector<t> ts1 = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 } };
                 vector<t> ts2;
 
-                auto e2 = ts1 | order_by([](t& v) { return v.p1; }, dir::asc, [](t& v) { return v.p2; }, dir::desc);
+                auto e2 = from(ts1) | order_by([](t& v) { return v.p1; }, dir::asc, [](t& v) { return v.p2; }, dir::desc);
                 ts2.assign(e2.begin(), e2.end());
                 Assert::AreEqual(ts1.size(), ts2.size());
                 Assert::AreEqual(1, ts2.front().p1);
@@ -327,7 +327,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(2, ts2.back().p1);
                 Assert::AreEqual(1, ts2.back().p2);
 
-                e2 = ts1 | order_by([](t& v) { return v.p1; }, dir::desc, [](t& v) { return v.p2; }, dir::asc);
+                e2 = from(ts1) | order_by([](t& v) { return v.p1; }, dir::desc, [](t& v) { return v.p2; }, dir::asc);
                 ts2.assign(e2.begin(), e2.end());
                 Assert::AreEqual(ts1.size(), ts2.size());
                 Assert::AreEqual(2, ts2.front().p1);
@@ -351,7 +351,7 @@ namespace LinqlikeUT
             {
                 vector<t> ts1 = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
 
-                auto e = ts1 | group_by([](t& v) { return v.p1; });
+                auto e = from(ts1) | group_by([](t& v) { return v.p1; });
                 int count = 0, sum = 0;
                 for (auto& g : e)
                 {
@@ -386,7 +386,7 @@ namespace LinqlikeUT
                 Assert::AreEqual(3, count);
                 Assert::AreEqual(1 + 2 + 5, sum);
 
-                auto e2 = ts1 | group_by([](t& v) { return v.p1; }, [](t& v) { return v.p2; });
+                auto e2 = from(ts1) | group_by([](t& v) { return v.p1; }, [](t& v) { return v.p2; });
                 count = 0, sum = 0;
                 for (auto& g : e2)
                 {
@@ -437,7 +437,7 @@ namespace LinqlikeUT
             {
                 vector<int> values = { 2, 1, 2, 3, 4, 5 };
 
-                short f = values | where([](int v) { return v % 2 != 0; }) | scast<short>() | first_or_default();
+                short f = from(values) | where([](int v) { return v % 2 != 0; }) | scast<short>() | first_or_default();
 
                 Assert::AreEqual((short)1, f);
 
@@ -447,7 +447,7 @@ namespace LinqlikeUT
                 ts.push_back(make_shared<t2>(4, 5, 6));
                 
                 int count = 0;
-                for (auto v : ts | dcast<t2>())
+                for (auto v : from(ts) | dcast<t2>())
                 {
                     count++;
                 }
@@ -460,7 +460,7 @@ namespace LinqlikeUT
                 ts.push_back(make_shared<t2>(1, 2, 3));
                 ts.push_back(make_shared<t2>(4, 5, 6));
 
-                auto t = ts | of_type<t2>() | first();
+                auto t = from(ts) | of_type<t2>() | first();
 
                 Assert::IsNotNull(t.get());
                 Assert::AreEqual(11, t->p1);
@@ -481,7 +481,7 @@ namespace LinqlikeUT
             {
                 vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
 
-                auto map1 = ts | to_map([](t& v) { return v.p1; });
+                auto map1 = from(ts) | to_map([](t& v) { return v.p1; });
 
                 Assert::AreEqual((::size_t)3, map1.size());
                 int sum = 0;
@@ -491,7 +491,7 @@ namespace LinqlikeUT
                 }
                 Assert::AreEqual(1 + 2 + 5, sum);
 
-                auto map2 = ts | to_map([](t& v) { return v.p2; }, [](t& v) { return v.p1; });
+                auto map2 = from(ts) | to_map([](t& v) { return v.p2; }, [](t& v) { return v.p1; });
                 Assert::AreEqual((::size_t)5, map2.size());
                 for (auto& p : map2)
                 {
@@ -514,12 +514,12 @@ namespace LinqlikeUT
                 {
                     vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
 
-                    Assert::AreEqual(ts.size(), ts | size());
-                    Assert::AreEqual(ts.size() - 1, ts | size([](t& v) { return v.p2 != 21; }));
+                    Assert::AreEqual(ts.size(), from(ts) | size());
+                    Assert::AreEqual(ts.size() - 1, from(ts) | size([](t& v) { return v.p2 != 21; }));
 
                     ts.clear();
 
-                    Assert::AreEqual(ts.size(), ts | size());
+                    Assert::AreEqual(ts.size(), from(ts) | size());
                 }
                 catch (exception& ex)
                 {
@@ -536,7 +536,7 @@ namespace LinqlikeUT
             try
             {
                 vector<int> values = { 2, 1, 2, 3, 4, 5 };
-                Assert::AreEqual(2 + 1 + 2 + 3 + 4 + 5, values | sum());
+                Assert::AreEqual(2 + 1 + 2 + 3 + 4 + 5, from(values) | sum());
             }
             catch (exception& ex)
             {

@@ -29,45 +29,15 @@ namespace linqlike
         boost::optional<dir> _direction;
     };
 
-    inline _sort<int> sort(dir direction)
+    inline _sort<_dummy> sort(dir direction)
     {
-        return _sort<int>(direction);
+        return _sort<_dummy>(direction);
     }
 
     template <typename F>
-    auto sort(F& comparer)
+    _sort<F> sort(F& comparer)
     {
         return _sort<F>(comparer);
-    }
-
-    template <typename TColl, typename T = TColl::value_type>
-    enumerable<T> operator|(TColl& coll, const _sort<int>& orderBy)
-    {
-        return enumerable<T>([=]() mutable
-        {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
-            {
-                if (orderBy.direction())
-                {
-                    std::vector<T*> values;
-                    for (auto& v : coll) values.push_back(&v);
-
-                    if (*orderBy.direction() == dir::asc)
-                    {
-                        std::sort(values.begin(), values.end(), [](T* v1, T* v2) { return *v1 < *v2; });
-                    }
-                    else
-                    {
-                        std::sort(values.begin(), values.end(), [](T* v1, T* v2) { return *v2 < *v1; });
-                    }
-
-                    for (auto v : values)
-                    {
-                        yield(*v);
-                    }
-                }
-            });
-        });
     }
 
     template <typename TColl, typename TComp, typename T = TColl::value_type>
@@ -79,13 +49,43 @@ namespace linqlike
             {
                 if (orderBy.comparer())
                 {
-                    std::vector<T*> values;
-                    for (auto& v : coll) values.push_back(&v);
-                    auto comp = [=](T* v1, T* v2) mutable { return (*(orderBy.comparer()))(*v1, *v2); };
+                    std::vector<T> values;
+                    for (auto& v : coll) values.push_back(v);
+                    auto comp = [=](T& v1, T& v2) mutable { return (*(orderBy.comparer()))(v1, v2); };
                     std::sort(values.begin(), values.end(), comp);
-                    for (auto v : values)
+                    for (auto& v : values)
                     {
-                        yield(*v);
+                        yield(v);
+                    }
+                }
+            });
+        });
+    }
+
+    template <typename TColl, typename T = TColl::value_type>
+    enumerable<T> operator|(TColl& coll, _sort<_dummy>& orderBy)
+    {
+        return enumerable<T>([=]() mutable
+        {
+            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            {
+                if (orderBy.direction())
+                {
+                    std::vector<T> values;
+                    for (auto& v : coll) values.push_back(v);
+
+                    if (*orderBy.direction() == dir::asc)
+                    {
+                        std::sort(values.begin(), values.end(), [](T& v1, T& v2) { return v1 < v2; });
+                    }
+                    else
+                    {
+                        std::sort(values.begin(), values.end(), [](T& v1, T& v2) { return v2 < v1; });
+                    }
+
+                    for (auto& v : values)
+                    {
+                        yield(v);
                     }
                 }
             });
