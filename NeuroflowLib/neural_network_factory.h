@@ -12,9 +12,9 @@ namespace nf
         multilayer_perceptron_ptr create_multilayer_perceptron(layers_t& layers, const optional_properties_t& properties = null);
 
         template <typename TColl>
-        multilayer_perceptron_ptr create_multilayer_perceptron(const TColl& layeCollection, const optional_properties_t& properties = null)
+        multilayer_perceptron_ptr create_multilayer_perceptron(const TColl& layerCollection, const optional_properties_t& properties = null)
         {
-            return create_multilayer_perceptron(from(layeCollection), properties);
+            return create_multilayer_perceptron(linq::from(layerCollection), properties);
         }
     };
 }

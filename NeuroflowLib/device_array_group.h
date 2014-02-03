@@ -14,7 +14,7 @@ namespace nf
         const device_array_ptr& get(key_t idx) const;
         void zero();
         idx_t size() const;
-        linq::enumerable<device_array*> get_arrays() const;
+        linq::enumerable<device_array_ptr> get_arrays() const;
 
     private:
         device_array_pool_ptr _pool;

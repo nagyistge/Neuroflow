@@ -33,5 +33,8 @@
     <ClCompile Include="array_tests.cpp">
       <Filter>BaseTests</Filter>
     </ClCompile>
+    <ClCompile Include="multilayer_perceptron_tests.cpp">
+      <Filter>BaseTests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
