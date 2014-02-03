@@ -91,13 +91,12 @@ namespace linqlike
     template <typename TColl, typename F, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _order_by<F, _dummy, _dummy, _dummy>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
                 std::vector<T*> values;
-                for (auto& v : *pcoll) values.push_back(&v);
+                for (auto& v : coll) values.push_back(&v);
                 
                 auto& selectValueF = (*orderBy.select_value_1()).first;
                 auto& selectValueD = (*orderBy.select_value_1()).second;
@@ -124,7 +123,6 @@ namespace linqlike
     template <typename TColl, typename F1, typename F2, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _order_by<F1, F2, _dummy, _dummy>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
@@ -132,7 +130,7 @@ namespace linqlike
                 typedef std::function<int(T*, T*)> comp_t;
 
                 std::vector<T*> values;
-                for (auto& v : *pcoll) values.push_back(&v);
+                for (auto& v : coll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;
@@ -184,7 +182,6 @@ namespace linqlike
     template <typename TColl, typename F1, typename F2, typename F3, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _order_by<F1, F2, F3, _dummy>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
@@ -192,7 +189,7 @@ namespace linqlike
                 typedef std::function<int(T*, T*)> comp_t;
 
                 std::vector<T*> values;
-                for (auto& v : *pcoll) values.push_back(&v);
+                for (auto& v : coll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;
@@ -260,7 +257,6 @@ namespace linqlike
     template <typename TColl, typename F1, typename F2, typename F3, typename F4, typename T = TColl::value_type>
     auto operator|(TColl& coll, const _order_by<F1, F2, F3, F4>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
@@ -268,7 +264,7 @@ namespace linqlike
                 typedef std::function<int(T*, T*)> comp_t;
 
                 std::vector<T*> values;
-                for (auto& v : *pcoll) values.push_back(&v);
+                for (auto& v : coll) values.push_back(&v);
 
                 auto& selectValueF1 = (*orderBy.select_value_1()).first;
                 auto& selectValueD1 = (*orderBy.select_value_1()).second;

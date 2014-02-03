@@ -78,7 +78,6 @@ namespace linqlike
     {
         typedef decltype(groupdBy.select_key()(_wat<T>())) key_t;
         typedef grouping<key_t, T> grouping_t;
-        TColl* pcoll = &coll;
         return enumerable<grouping_t>([=]() mutable
         {
             return enumerable<grouping_t>::pull_type([=](enumerable<grouping_t>::push_type& yield) mutable
@@ -87,7 +86,7 @@ namespace linqlike
                 typedef typename map_t::value_type map_value_t;
                 map_t map;
                 auto& selectKey = groupdBy.select_key();
-                for (auto& v : *pcoll)
+                for (auto& v : coll)
                 {
                     map.insert(map_value_t(selectKey(v), v));
                 }
@@ -118,7 +117,6 @@ namespace linqlike
         typedef decltype(groupdBy.select_key()(_wat<T>())) key_t;
         typedef decltype(groupdBy.select_value()(_wat<T>())) value_t;
         typedef grouping<key_t, value_t> grouping_t;
-        TColl* pcoll = &coll;
         return enumerable<grouping_t>([=]() mutable
         {
             return enumerable<grouping_t>::pull_type([=](enumerable<grouping_t>::push_type& yield) mutable
@@ -128,7 +126,7 @@ namespace linqlike
                 map_t map;
                 auto& selectKey = groupdBy.select_key();
                 auto& selectValue = groupdBy.select_value();
-                for (auto& v : *pcoll)
+                for (auto& v : coll)
                 {
                     map.insert(map_value_t(selectKey(v), selectValue(v)));
                 }

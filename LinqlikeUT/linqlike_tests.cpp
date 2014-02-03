@@ -13,7 +13,7 @@ namespace LinqlikeUT
 	{
 	public:
         BEGIN_TEST_METHOD_ATTRIBUTE(enumerable_iterators_test)
-            TEST_METHOD_ATTRIBUTE(L"Category", L"Linq")
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(enumerable_iterators_test)
 		{

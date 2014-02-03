@@ -43,7 +43,6 @@ namespace linqlike
     template <typename TColl, typename T = TColl::value_type>
     enumerable<T> operator|(TColl& coll, const _sort<int>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
@@ -51,7 +50,7 @@ namespace linqlike
                 if (orderBy.direction())
                 {
                     std::vector<T*> values;
-                    for (auto& v : *pcoll) values.push_back(&v);
+                    for (auto& v : coll) values.push_back(&v);
 
                     if (*orderBy.direction() == dir::asc)
                     {
@@ -74,7 +73,6 @@ namespace linqlike
     template <typename TColl, typename TComp, typename T = TColl::value_type>
     enumerable<T> operator|(TColl& coll, _sort<TComp>& orderBy)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
@@ -82,7 +80,7 @@ namespace linqlike
                 if (orderBy.comparer())
                 {
                     std::vector<T*> values;
-                    for (auto& v : *pcoll) values.push_back(&v);
+                    for (auto& v : coll) values.push_back(&v);
                     auto comp = [=](T* v1, T* v2) mutable { return (*(orderBy.comparer()))(*v1, *v2); };
                     std::sort(values.begin(), values.end(), comp);
                     for (auto v : values)

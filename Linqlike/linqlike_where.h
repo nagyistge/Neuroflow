@@ -27,12 +27,11 @@ namespace linqlike
     template <typename TColl, typename F, typename T = TColl::value_type>
     enumerable<T> operator|(TColl& coll, const _where<F>& w)
     {
-        TColl* pcoll = &coll;
         return enumerable<T>([=]() mutable
         {
             return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
             {
-                for (auto& v : *pcoll)
+                for (auto& v : coll)
                 {
                     if (w.pred()(v)) yield(v);
                 };
