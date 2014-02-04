@@ -37,7 +37,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     // It supposed to be cool, but looks like shit because of MSVC.    
     auto infos = _layers
-    | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), l.value()->behaviors() | dcast<supervised_learning_behavior>() | first_or_default()); })
+    | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), from(l.value()->behaviors()) | dcast<supervised_learning_behavior>() | first_or_default()); })
     | select([](pair<idx_t, supervised_learning_behavior_ptr>& r)
     { 
         return layer_info(
@@ -133,7 +133,7 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
             // Output:
             if (!isOutput)
             {
-                _outputs.add(lidx, layerSize * _maxBpttIterations);
+                _outputs.add(lidx, _doBPTT ? layerSize * _maxBpttIterations : layerSize);
             }
 
             // Net Value Derivates:

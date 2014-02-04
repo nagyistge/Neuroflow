@@ -16,6 +16,8 @@
 #include <ppltasks.h>
 #include <random>
 #include <type_traits>
+#include <map>
+#include <unordered_map>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>

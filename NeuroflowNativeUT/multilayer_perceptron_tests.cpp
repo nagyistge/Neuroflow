@@ -55,6 +55,8 @@ namespace NeuroflowNativeUT
                 make_layer(4),
                 make_layer(1)
             };
+            layers[0]->output_connections().add_one_way(layers[1]);
+            layers[1]->output_connections().add_one_way(layers[2]);
             auto mlp = ctx->neural_network_factory()->create_multilayer_perceptron(layers);
             idx_t numWeights = mlp->number_of_weights();
             Assert::AreEqual(idx_t((2 * 4 + 4) + (4 * 1 + 1)), numWeights);

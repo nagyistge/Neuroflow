@@ -109,7 +109,7 @@ layers_t layer_connections::connected_layers(flow_direction direction) const
 
 void layer_connections::with_other_side_update_suppressed(const layer_ptr& layer, const std::function<void()>& method)
 {
-    if (_suppressOtherSideUpdate)
+    if (!_suppressOtherSideUpdate)
     {
         layer->input_connections()._suppressOtherSideUpdate = true;
         layer->output_connections()._suppressOtherSideUpdate = true;

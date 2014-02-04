@@ -32,10 +32,10 @@ void device_array_group::zero()
 
 idx_t device_array_group::size() const
 {
-    return from(_arrays) | select([](pair<const idx_t, device_array_ptr>& i) { return i.second->size(); }) | sum();
+    return from(_arrays) | select([](pair<key_t, device_array_ptr*>& i) { return (*i.second)->size(); }) | sum();
 }
 
 linq::enumerable<device_array_ptr> device_array_group::get_arrays() const
 {
-    return from(_arrays) | select([](pair<const key_t, device_array_ptr>& i) { return i.second; });
+    return from(_arrays) | select([](pair<key_t, device_array_ptr*>& i) { return (*i.second); });
 }
