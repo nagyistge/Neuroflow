@@ -19,7 +19,8 @@ _size2(size2)
 {
     assert(size1 > 0);
     assert(size2 > 0);
-    assert(beginIndex >= 0 && beginIndex < size());
+    assert(beginIndex >= 0);
+    assert(pool != null);
 }
 
 idx_t cpp_device_array2::size1() const

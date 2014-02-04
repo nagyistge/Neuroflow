@@ -10,15 +10,15 @@ namespace linqlike
         typedef typename TColl::value_type value_type;
         typedef enumerable<value_type> enumerable_t;
 
-        explicit _concat(TColl& coll) : _coll(&coll) { }
+        explicit _concat(TColl& coll) : _coll(coll) { }
 
         TColl& coll()
         {
-            return *_coll;
+            return _coll;
         }
 
     private:
-        TColl* _coll;
+        TColl _coll;
     };
 
     template <typename TColl>

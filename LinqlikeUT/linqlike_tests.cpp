@@ -135,7 +135,7 @@ namespace LinqlikeUT
                 vector<int> values2 = { 6, 7, 8, 9, 10 };
                     
                 vector<int> result;
-                for (auto v : from(values1) | concat(values2))
+                for (auto v : from(values1) | concat(from(values2)))
                 {
                     result.push_back(v);
                 }

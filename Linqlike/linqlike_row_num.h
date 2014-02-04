@@ -31,14 +31,14 @@ namespace linqlike
             return _row_num;
         }
 
-        T& value() const
+        const T& value() const
         {
             return _value;
         }
 
     private:
         ::size_t _row_num;
-        T& _value;
+        T _value;
     };
 
     struct row_num
