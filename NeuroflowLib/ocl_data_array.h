@@ -12,8 +12,8 @@ namespace nf
         ocl_data_array(const ocl_computation_context_ptr& context, const cl::Buffer& buffer, bool isConst);
 
         bool is_const() const;
-        concurrency::task<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex);
-        concurrency::task<void> write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex);
+        boost::shared_future<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex);
+        boost::shared_future<void> write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex);
 
     private:
         bool isConst;

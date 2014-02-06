@@ -14,7 +14,7 @@ bool cpp_data_array::is_const() const
     return isConst;
 }
 
-concurrency::task<void> cpp_data_array::read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) 
+boost::shared_future<void> cpp_data_array::read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) 
 {
     verify_arg(sourceBeginIndex >= 0, "sourceBeginIndex");
     verify_arg(count > 0, "count");
@@ -28,7 +28,7 @@ concurrency::task<void> cpp_data_array::read(idx_t sourceBeginIndex, idx_t count
     return create_do_nothing_task();
 }
 
-concurrency::task<void> cpp_data_array::write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex)
+boost::shared_future<void> cpp_data_array::write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex)
 {
     verify_arg(sourceBeginIndex >= 0, "sourceBeginIndex");
     verify_arg(count > 0, "count");

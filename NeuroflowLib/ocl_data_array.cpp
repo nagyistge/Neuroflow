@@ -16,7 +16,7 @@ bool ocl_data_array::is_const() const
     return isConst;
 }
 
-concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex)
+boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex)
 {
     verify_arg(sourceBeginIndex >= 0, "sourceBeginIndex");
     verify_arg(count > 0, "count");
@@ -26,8 +26,8 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
     verify_if_accessible();
 
     auto& ctx = context();
-    auto tce = new task_completion_event<void>();
-    auto tceRet = *tce;
+    auto promise = new boost::promise<void>();
+    auto future = boost::shared_future<void>(promise->get_future());
     try
     {
         Event e;
@@ -46,40 +46,40 @@ concurrency::task<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t count
         CL_COMPLETE,
         [](cl_event event, cl_int status, void* userData)
         {
-            auto tce = (task_completion_event<void>*)userData;
+            auto promise = (boost::promise<void>*)userData;
             try
             {
                 if (status == CL_COMPLETE)
                 {
                     // Done
-                    tce->set();
+                    promise->set_value();
                 }
                 else
                 {
                     // Error
-                    tce->set_exception(ocl_error(status, "Cannot read memory."));
+                    promise->set_exception(ocl_error(status, "Cannot read memory."));
                 }
             }
             catch (...)
             {
                 OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
             }
-            delete tce; 
+            delete promise;
         },
-        tce);
+        promise);
 
         queue.flush();
     }
     catch (exception& ex)
     {
-        delete tce;
+        delete promise;
         throw as_ocl_error(ex);
     }
 
-    return task<void>(move(tceRet));
+    return future;
 }
 
-concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex)
+boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex)
 {
     verify_arg(sourceBeginIndex >= 0, "sourceBeginIndex");
     verify_arg(count > 0, "count");
@@ -89,7 +89,8 @@ concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBe
     verify_if_accessible();
 
     auto& ctx = context();
-    auto tce = new task_completion_event<void>();
+    auto promise = new boost::promise<void>();
+    auto future = boost::shared_future<void>(promise->get_future());
     try
     {
         Event e;
@@ -108,37 +109,37 @@ concurrency::task<void> ocl_data_array::write(float* sourceArray, idx_t sourceBe
         CL_COMPLETE,
         [](cl_event event, cl_int status, void* userData)
         {
-            auto tce = (task_completion_event<void>*)userData;
+            auto promise = (boost::promise<void>*)userData;
             try
             {
                 if (status == CL_COMPLETE)
                 {
                     // Done
-                    tce->set();
+                    promise->set_value();
                 }
                 else
                 {
                     // Error
-                    tce->set_exception(ocl_error(status, "Cannot read memory."));
+                    promise->set_exception(ocl_error(status, "Cannot read memory."));
                 }
             }
             catch (...)
             {
                 OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
             }
-            delete tce;
+            delete promise;
         },
-        tce);
+        promise);
 
         queue.flush();
     }
     catch (exception& ex)
     {
-        delete tce;
+        delete promise;
         throw as_ocl_error(ex);
     }
 
-    return task<void>(*tce);
+    return future;
 }
 
 void ocl_data_array::verify_if_accessible() const

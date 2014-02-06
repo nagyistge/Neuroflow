@@ -1,23 +1,23 @@
 #pragma once
 
-#include <ppltasks.h>
+#include <boost/thread.hpp>
 
 namespace nf
 {
     template <typename T>
-    concurrency::task<T> create_task_from_value(T value)
+    boost::shared_future<T> create_task_from_value(T value)
     {
-        using namespace concurrency;
-        auto comp = task_completion_event<T>();
-        comp.set(value);
-        return task<T>(comp);
+        using namespace boost;
+        auto comp = promise<T>();
+        comp.set_value(value);
+        return comp.get_future();
     }
 
-    inline concurrency::task<void> create_do_nothing_task()
+    inline boost::shared_future<void> create_do_nothing_task()
     {
-        using namespace concurrency;
-        auto comp = task_completion_event<void>();
-        comp.set();
-        return task<void>(comp);
+        using namespace boost;
+        auto comp = promise<void>();
+        comp.set_value();
+        return comp.get_future();
     }
 }

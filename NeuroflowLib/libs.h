@@ -13,7 +13,6 @@
 #include <algorithm>
 #include <unordered_set>
 #include <unordered_map>
-#include <ppltasks.h>
 #include <random>
 #include <type_traits>
 #include <map>
@@ -26,4 +25,5 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/coroutine/all.hpp>
 #include <boost/iterator.hpp>
+#include <boost/thread.hpp>
 #include "ocl.h"
