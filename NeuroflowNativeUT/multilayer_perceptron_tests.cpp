@@ -42,13 +42,40 @@ namespace NeuroflowNativeUT
             Assert::AreEqual(idx_t(2), sorted[2].row_num());
         }
 		
-        BEGIN_TEST_METHOD_ATTRIBUTE(get_and_set_weights_test)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_get_and_set_weights)
             TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
             END_TEST_METHOD_ATTRIBUTE()
-		TEST_METHOD(get_and_set_weights_test)
+		TEST_METHOD(cpp_get_and_set_weights)
 		{
             auto ctx = computation_context_factory().create_context(cpp_context);
+            do_get_and_set_weights(ctx);
+		}
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_get_and_set_weights_cpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL CPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_get_and_set_weights_cpu)
+        {
+            auto ctx = computation_context_factory().create_context(ocl_context, L"CPU");
+            do_get_and_set_weights(ctx);
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(ocl_get_and_set_weights_gpu)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"OCL")
+            TEST_METHOD_ATTRIBUTE(L"Device", L"OCL GPU")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(ocl_get_and_set_weights_gpu)
+        {
+            auto ctx = computation_context_factory().create_context(ocl_context, L"GPU");
+            do_get_and_set_weights(ctx);
+        }
+
+        void do_get_and_set_weights(const computation_context_ptr& ctx)
+        {
             vector<layer_ptr> layers =
             {
                 make_layer(2),
@@ -57,10 +84,22 @@ namespace NeuroflowNativeUT
             };
             layers[0]->output_connections().add_one_way(layers[1]);
             layers[1]->output_connections().add_one_way(layers[2]);
+
             auto mlp = ctx->neural_network_factory()->create_multilayer_perceptron(layers);
             idx_t numWeights = mlp->number_of_weights();
             Assert::AreEqual(idx_t((2 * 4 + 4) + (4 * 1 + 1)), numWeights);
-		}
+
+            auto weights = ctx->data_array_factory()->create(numWeights);
+            vector<float> weightValues(numWeights);
+            weights->read(0, numWeights, &weightValues[0], 0).wait();
+            for (float v : weightValues) Assert::AreEqual(0.0f, v);
+
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
+            weights->write(&weightValues[0], 0, numWeights, 0).wait();
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.99f;
+            weights->read(0, numWeights, &weightValues[0], 0).wait();
+            for (float v : weightValues) Assert::AreEqual(0.11f, v);
+        }
 
 	};
 }
