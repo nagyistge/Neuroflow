@@ -11,8 +11,8 @@ namespace nf
         cpp_data_array(float* internalArray, idx_t arraySize, bool isConst);
 
         bool is_const() const override;
-        concurrency::task<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) override;
-        concurrency::task<void> write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex) override;
+        boost::shared_future<void> read(idx_t sourceBeginIndex, idx_t count, float* targetPtr, idx_t targetBeginIndex) override;
+        boost::shared_future<void> write(float* sourceArray, idx_t sourceBeginIndex, idx_t count, idx_t targetBeginIndex) override;
 
     private:
         bool isConst;

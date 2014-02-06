@@ -55,7 +55,7 @@ cl::Program ocl_program::compile()
     path verPath(fns.str());
     create_directory(verPath);
 
-    concurrency::create_task([=]()
+    boost::thread([=]()
     {
         vector<path> del;
         for (auto p = directory_iterator(kernelPath); p != directory_iterator(); p++)
