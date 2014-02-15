@@ -336,6 +336,16 @@ namespace Neuroflow.NeuralNetworks
             Compute(new DataArrayCollection(inputs), new DataArrayCollection(outputs));
         }
 
+        public void Compute(DataArrayCollection inputs, DataArrayCollection outputs)
+        {
+            Args.Requires(() => inputs, () => inputs != null);
+            Args.Requires(() => outputs, () => outputs != null);
+            Args.Requires(() => inputs, () => inputs.Count > 0);
+            Args.Requires(() => inputs, () => inputs.Count == outputs.Count);
+
+            DoCompute(inputs, outputs);
+        }
+
         public void Train(DataArray input, DataArray desiredOutputs, DataArray actualOutputs)
         {
             Train(new SupervisedSample(input, desiredOutputs, actualOutputs));
@@ -351,16 +361,6 @@ namespace Neuroflow.NeuralNetworks
         public void Train(SupervisedSample sample)
         {
             Train(new SupervisedBatch(sample));
-        }
-
-        public void Compute(DataArrayCollection inputs, DataArrayCollection outputs)
-        {
-            Args.Requires(() => inputs, () => inputs != null);
-            Args.Requires(() => outputs, () => outputs != null);
-            Args.Requires(() => inputs, () => inputs.Count > 0);
-            Args.Requires(() => inputs, () => inputs.Count == outputs.Count);
-
-            DoCompute(inputs, outputs);
         }
 
         public void Train(SupervisedBatch batch)

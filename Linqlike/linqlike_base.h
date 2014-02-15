@@ -48,6 +48,14 @@ namespace linqlike
                 return *this;
             }
 
+            iterator(iterator&& other) : _it(std::move(other._it)) { }
+
+            iterator& operator=(iterator&& other)
+            {
+                _it = std::move(other._it);
+                return *this;
+            }
+
             iterator& operator++() { ++_it; return *this; }
             iterator operator++(int) { iterator tmp(*this); operator++(); return tmp; }
             bool operator==(const iterator& rhs) { return _it == rhs._it; }

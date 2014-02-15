@@ -186,6 +186,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="activation_description.h" />
     <ClInclude Include="computation_context.h" />
     <ClInclude Include="computation_context_factory.h" />
     <ClInclude Include="cc_factory_adapter.h" />
@@ -219,9 +220,11 @@
     <ClInclude Include="layer.h" />
     <ClInclude Include="layer_behavior.h" />
     <ClInclude Include="layer_connections.h" />
+    <ClInclude Include="layer_description.h" />
     <ClInclude Include="layer_order_comparer.h" />
     <ClInclude Include="learning_behavior.h" />
     <ClInclude Include="libs.h" />
+    <ClInclude Include="mlp_forward_node.h" />
     <ClInclude Include="multilayer_perceptron.h" />
     <ClInclude Include="neural_network_factory.h" />
     <ClInclude Include="nf.h" />
@@ -263,8 +266,10 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="weak_contexted.h" />
+    <ClInclude Include="weighted_inputs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="activation_description.cpp" />
     <ClCompile Include="computation_context.cpp" />
     <ClCompile Include="computation_context_factory.cpp" />
     <ClCompile Include="cpp_cc_factory_adapter.cpp" />

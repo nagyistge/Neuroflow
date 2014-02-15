@@ -11,5 +11,6 @@ namespace nf
         ocl_compute_activation(const ocl_computation_context_wptr& context);
 
         nf_object_ptr create_operation_context() override;
+        void compute_forward(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes) override { }
     };
 }

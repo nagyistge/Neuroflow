@@ -10,6 +10,7 @@
 #include "device_array.h"
 #include "device_array2.h"
 #include "data_array.h"
+#include "activation_description.h"
 
 USING
 
@@ -233,4 +234,12 @@ void multilayer_perceptron::set_weights(const data_array_ptr& from)
         _daMan->copy(from, sIdx, weight, 0, weight->size());
         sIdx += weight->size();
     }
+}
+
+activation_description multilayer_perceptron::get_activation_desc(idx_t layerIndex)
+{
+    auto& layer = _layers[layerIndex];
+    auto desc = layer.value()->descriptions() | dcast<activation_description>() | first_or_default();
+    if (!desc) throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
+    return *desc;
 }
