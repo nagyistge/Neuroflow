@@ -15,12 +15,12 @@ idx_t layer::size() const
     return _size;
 }
 
-layer_description_coll& layer::descriptions()
+layer_description_coll_t& layer::descriptions()
 {
     return _descriptions;
 }
 
-layer_behavior_coll& layer::behaviors()
+layer_behavior_coll_t& layer::behaviors()
 {
     return _behaviors;
 }

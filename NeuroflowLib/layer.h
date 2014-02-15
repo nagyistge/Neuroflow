@@ -10,8 +10,8 @@ namespace nf
         layer(idx_t size);
 
         idx_t size() const;
-        layer_description_coll& descriptions();
-        layer_behavior_coll& behaviors();
+        layer_description_coll_t& descriptions();
+        layer_behavior_coll_t& behaviors();
         layer_connections& input_connections();
         layer_connections& output_connections();
         bool has_recurrent_connections() const;
@@ -22,8 +22,8 @@ namespace nf
 
     private:
         idx_t _size;
-        layer_description_coll _descriptions;
-        layer_behavior_coll _behaviors;
+        layer_description_coll_t _descriptions;
+        layer_behavior_coll_t _behaviors;
         layer_connections _inputConnections;
         layer_connections _outputConnections;
     };

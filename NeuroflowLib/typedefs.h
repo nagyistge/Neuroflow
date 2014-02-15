@@ -23,6 +23,7 @@ namespace nf
 
     struct device_array;
     typedef std::shared_ptr<device_array> device_array_ptr;
+    typedef std::function<device_array_ptr()> get_device_array_ptr_t;
 
     struct device_array2;
     typedef std::shared_ptr<device_array2> device_array2_ptr;
@@ -57,18 +58,18 @@ namespace nf
 
     struct layer;
     typedef std::shared_ptr<layer> layer_ptr;
-    typedef std::function<bool(const layer_ptr&)> layer_visitor_func;
 
     struct layer_behavior;
     typedef std::shared_ptr<layer_behavior> layer_behavior_ptr;
-    typedef std::list<layer_behavior_ptr> layer_behavior_coll;
+    typedef std::list<layer_behavior_ptr> layer_behavior_coll_t;
 
     struct supervised_learning_behavior;
     typedef std::shared_ptr<supervised_learning_behavior> supervised_learning_behavior_ptr;
 
     struct layer_description;
     typedef std::shared_ptr<layer_description> layer_description_ptr;
-    typedef std::list<layer_description_ptr> layer_description_coll;
+    typedef std::list<layer_description_ptr> layer_description_coll_t;
+    struct activation_description;
 
     struct device_array_group;
     typedef std::shared_ptr<device_array_group> device_array_group_ptr;
@@ -79,6 +80,8 @@ namespace nf
     struct supervised_batch;
     struct supervised_sample;
     struct supervised_sample_entry;
+
+    struct mlp_forward_node;
 
     ENUM_STRINGS(weight_update_mode, "offline", "online")
     enum class weight_update_mode
@@ -116,4 +119,11 @@ namespace nf
 
     typedef std::pair<flow_direction, layer_ptr> other_layer_t;
     typedef linqlike::enumerable<layer_ptr> layers_t;
+
+    ENUM_STRINGS(activation_function, "sigmoid", "linear")
+    enum class activation_function
+    {
+        sigmoid,
+        linear
+    };
 }

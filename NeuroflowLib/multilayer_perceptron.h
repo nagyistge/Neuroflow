@@ -5,6 +5,7 @@
 #include "device_array_group.h"
 #include "device_array2_group.h"
 #include "rtlr.h"
+#include "activation_description.h"
 
 namespace nf
 {
@@ -51,9 +52,6 @@ namespace nf
     private:
         multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties);
 
-        void create_structure(std::map<idx_t, layer_info>& infos);
-        idx_t get_layer_index(const layer_ptr& layer);
-
         properties_t _properties;
         nf::gradient_computation_method _gradientComputationMethod;
         idx_t _maxBpttIterations;
@@ -90,5 +88,9 @@ namespace nf
         device_array2_group _gradients;
         device_array2_group _gradientSums;
         device_array_ptr _bpttNetInputs;
+
+        void create_structure(std::map<idx_t, layer_info>& infos);
+        idx_t get_layer_index(const layer_ptr& layer);
+        activation_description get_activation_desc(idx_t layerIndex);
     };
 }
