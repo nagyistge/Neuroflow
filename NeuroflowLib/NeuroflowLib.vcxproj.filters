@@ -405,8 +405,5 @@
     <ClCompile Include="device_array2_group.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="activation_description.cpp">
-      <Filter>Base\NN</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

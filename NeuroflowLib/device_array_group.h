@@ -10,8 +10,8 @@ namespace nf
 
         device_array_group(const device_array_pool_ptr& pool);
 
-        const device_array_ptr& add(key_t idx, idx_t size);
-        const device_array_ptr& get(key_t idx) const;
+        const device_array_ptr& add(const key_t& idx, idx_t size);
+        const device_array_ptr& get(const key_t& idx) const;
         void zero();
         idx_t size() const;
         linq::enumerable<device_array_ptr> get_arrays() const;

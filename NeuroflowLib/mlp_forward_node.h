@@ -10,7 +10,8 @@ namespace nf
     {
         activation_description activation;
         std::vector<weighted_inputs> in;
-        device_array_ptr out;
+        get_device_array_ptr_t out;
+        device_array_ptr bias;
         device_array_ptr derivate;
     };
 };

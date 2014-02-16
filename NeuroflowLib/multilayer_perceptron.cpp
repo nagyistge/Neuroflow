@@ -11,6 +11,8 @@
 #include "device_array2.h"
 #include "data_array.h"
 #include "activation_description.h"
+#include "mlp_forward_node.h"
+#include "compute_activation.h"
 
 USING
 
@@ -28,7 +30,9 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _biasGradients(_gradientsPool),
     _biasGradientSums(_gradientSumsPool),
     _gradients(_gradientsPool),
-    _gradientSums(_gradientSumsPool)
+    _gradientSums(_gradientSumsPool),
+    _inputsExt(1),
+    _outputsExt(1)
 {
     prop_def pd(_properties, properties);
     _gradientComputationMethod = pd.defEnum(prop_gradient_computation_method, gradient_computation_method::feed_forward);
@@ -78,8 +82,9 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     }
 
     create_structure(infos);
+    create_compute();
     
-    /*create_compute();
+    /*
     create_train_init();
     create_train(infos);*/
 }
@@ -116,77 +121,109 @@ idx_t multilayer_perceptron::number_of_weights() const
 
 void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
 {
-    for (idx_t lidx = 0; lidx < _layers.size(); lidx++)
+    for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
     {
         auto& learningInfo = infos.find(lidx)->second;
-        bool isInput = lidx == 0;
         bool isOutput = lidx == _layers.size() - 1;
 
         auto& layer = _layers[lidx];
         idx_t layerSize = layer.value()->size();
 
-        if (isInput)
+        // Output:
+        if (!isOutput)
         {
-            if (_doBPTT) _bpttNetInputs = _daMan->create_array(false, input_size() * _maxBpttIterations);
+            _outputs.add(lidx, _doBPTT ? layerSize * _maxBpttIterations : layerSize);
         }
-        else
+
+        // Net Value Derivates:
+        if (_doRTLR)
         {
-            // Output:
-            if (!isOutput)
-            {
-                _outputs.add(lidx, _doBPTT ? layerSize * _maxBpttIterations : layerSize);
-            }
+            _netValueDerivates.add(lidx, layerSize);
+        }
 
-            // Net Value Derivates:
-            if (_doRTLR)
-            {
-                _netValueDerivates.add(lidx, layerSize);
-            }
+        // Bias:
+        _biases.add(lidx, layerSize);
 
-            // Bias:
-            _biases.add(lidx, layerSize);
+        // For gradients:
+        if (_doBackpropagate)
+        {
+            // Errors:
+            _errors.add(lidx, layerSize);
+        }
 
-            // For gradients:
-            if (_doBackpropagate)
-            {
-                // Errors:
-                _errors.add(lidx, layerSize);
-            }
+        if (learningInfo.is_offline || _doBPTT)
+        {
+            // Bias Gradients:
+            _biasGradients.add(lidx, layerSize);
+        }
 
-            if (learningInfo.is_offline || _doBPTT)
+        if (learningInfo.is_offline)
+        {
+            // Bias Gradient Sums:
+            _biasGradientSums.add(lidx, layerSize);
+        }
+
+        idx_t inputLayersSize = layer.value()->input_layers() | size();
+        for (idx_t iidx = 0; iidx < inputLayersSize; iidx++)
+        {
+            auto inputLayer = layer.value()->get_input_layer(iidx);
+            auto key = make_pair(get_layer_index(inputLayer), lidx);
+
+            // Weights
+            _weights.add(key, inputLayer->size(), layer.value()->size());
+
+            if (learningInfo.is_online || _doBPTT)
             {
-                // Bias Gradients:
-                _biasGradients.add(lidx, layerSize);
+                // Gradients:
+                _gradients.add(key, inputLayer->size(), layer.value()->size());
             }
 
             if (learningInfo.is_offline)
             {
-                // Bias Gradient Sums:
-                _biasGradientSums.add(lidx, layerSize);
-            }
-
-            idx_t inputLayersSize = layer.value()->input_layers() | size();
-            for (idx_t iidx = 0; iidx < inputLayersSize; iidx++)
-            {
-                auto inputLayer = layer.value()->get_input_layer(iidx);
-                auto key = make_pair(get_layer_index(inputLayer), lidx);
-
-                // Weights
-                _weights.add(key, inputLayer->size(), layer.value()->size());
-
-                if (learningInfo.is_online || _doBPTT)
-                {
-                    // Gradients:
-                    _gradients.add(key, inputLayer->size(), layer.value()->size());
-                }
-
-                if (learningInfo.is_offline)
-                {
-                    // Gradient Sums:
-                    _gradientSums.add(key, inputLayer->size(), layer.value()->size());
-                }
+                // Gradient Sums:
+                _gradientSums.add(key, inputLayer->size(), layer.value()->size());
             }
         }
+    }
+}
+
+void multilayer_perceptron::create_compute()
+{
+    vector<mlp_forward_node> nodes(_layers.size() - 1);
+    for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
+    {
+        auto& layer = _layers[lidx];
+        auto& node = nodes[lidx - 1];
+        
+        for (auto& inputConnectedLayer : layer.value()->input_layers())
+        {
+            idx_t inputIndex = get_layer_index(inputConnectedLayer);
+            auto key = make_pair(inputIndex, lidx);
+            node.in.emplace_back([=](){ return get_net_values(inputIndex); }, _weights.get(key));
+        }
+
+        node.activation = get_activation_desc(lidx);
+        node.bias = _biases.get(lidx);
+        node.out = [=](){ return get_net_values(lidx); };
+        if (_doRTLR) node.derivate = _netValueDerivates.get(lidx);
+    }
+
+    if (_doRTLR)
+    {
+        throw_logic_error("RTLR is not implemented.");
+    }
+    else if (_doBPTT)
+    {
+        throw_logic_error("BPTT is not implemented.");
+    }
+    else
+    {
+        computeFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes)
+        {
+            _computeActivation->compute_forward(ctx, nodes, (idx_t)0);
+        },
+        move(_computeActivation->create_operation_context()),
+        move(nodes));
     }
 }
 
@@ -242,4 +279,56 @@ activation_description multilayer_perceptron::get_activation_desc(idx_t layerInd
     auto desc = layer.value()->descriptions() | dcast<activation_description>() | first_or_default();
     if (!desc) throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
     return *desc;
+}
+
+const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) const
+{
+    if (layerIndex == 0)
+    {
+        return _netInputs;
+    }
+    else if (layerIndex == _layers.size() - 1)
+    {
+        return _netOutputs;
+    }
+    else
+    {
+        // TODO: This is a map access, should be optimized later.
+        return _outputs.get(layerIndex); 
+    }
+}
+
+void multilayer_perceptron::compute(const data_array_ptr& inputs, const data_array_ptr& outputs)
+{
+    verify_arg(inputs != null, "Argument 'inputs' is null.");
+    verify_arg(outputs != null, "Argument 'outputs' is null.");
+    _inputsExt[0] = inputs;
+    _outputsExt[0] = outputs;
+    do_compute(_inputsExt, _outputsExt);
+}
+
+void multilayer_perceptron::compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
+{
+    verify_arg(!inputs.empty(), "Argument 'inputs' is empty.");
+    verify_arg(!outputs.empty(), "Argument 'outputs' is empty.");
+    verify_arg(inputs.size() == outputs.size(), "Argument collections sizes are not match.");
+    do_compute(inputs, outputs);
+}
+
+void multilayer_perceptron::do_compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
+{
+    idx_t size = inputs.size();
+    for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i], outputs[i]);
+}
+
+void multilayer_perceptron::compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs)
+{
+    setup_net_values(inputs, outputs);
+    computeFunc();
+}
+
+void multilayer_perceptron::setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs)
+{
+    _netInputs = inputs;
+    _netOutputs = outputs;
 }
