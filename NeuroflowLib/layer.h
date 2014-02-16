@@ -28,8 +28,28 @@ namespace nf
         layer_connections _outputConnections;
     };
 
-    inline layer_ptr make_layer(idx_t size)
+    template<typename... Args>
+    void add_layer_args(const layer_ptr& layer, Args... args) { }
+
+    template<typename... Args>
+    void add_layer_args(const layer_ptr& layer, const layer_description_ptr& arg1, Args... args) 
+    { 
+        if (arg1) layer->descriptions().push_back(arg1);
+        add_layer_args(layer, args...);
+    }
+
+    template<typename... Args>
+    void add_layer_args(const layer_ptr& layer, const layer_behavior_ptr& arg1, Args... args)
     {
-        return std::make_shared<layer>(size);
+        if (arg1) layer->behaviors().push_back(arg1);
+        add_layer_args(layer, args...);
+    }
+
+    template<typename... Args>
+    layer_ptr make_layer(idx_t size, Args... args)
+    {
+        auto l = std::make_shared<layer>(size);
+        add_layer_args(l, args...);
+        return move(l);
     }
 }

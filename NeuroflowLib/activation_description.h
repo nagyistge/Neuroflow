@@ -31,4 +31,9 @@ namespace nf
         activation_function _function = activation_function::sigmoid;
         float _alpha = 1.7f;
     };
+
+    inline layer_description_ptr make_activation_description(activation_function function, float alpha)
+    {
+        return std::make_shared<activation_description>(function, alpha);
+    }
 }
