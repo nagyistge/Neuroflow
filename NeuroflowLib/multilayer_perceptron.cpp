@@ -30,9 +30,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _biasGradients(_gradientsPool),
     _biasGradientSums(_gradientSumsPool),
     _gradients(_gradientsPool),
-    _gradientSums(_gradientSumsPool),
-    _inputsExt(1),
-    _outputsExt(1)
+    _gradientSums(_gradientSumsPool)
 {
     prop_def pd(_properties, properties);
     _gradientComputationMethod = pd.defEnum(prop_gradient_computation_method, gradient_computation_method::feed_forward);
@@ -301,9 +299,8 @@ void multilayer_perceptron::compute(const data_array_ptr& inputs, const data_arr
 {
     verify_arg(inputs != null, "Argument 'inputs' is null.");
     verify_arg(outputs != null, "Argument 'outputs' is null.");
-    _inputsExt[0] = inputs;
-    _outputsExt[0] = outputs;
-    do_compute(_inputsExt, _outputsExt);
+
+    compute_sample_entry(inputs, outputs);
 }
 
 void multilayer_perceptron::compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
@@ -311,11 +308,7 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
     verify_arg(!inputs.empty(), "Argument 'inputs' is empty.");
     verify_arg(!outputs.empty(), "Argument 'outputs' is empty.");
     verify_arg(inputs.size() == outputs.size(), "Argument collections sizes are not match.");
-    do_compute(inputs, outputs);
-}
 
-void multilayer_perceptron::do_compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
-{
     idx_t size = inputs.size();
     for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i], outputs[i]);
 }

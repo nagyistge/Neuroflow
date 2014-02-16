@@ -15,12 +15,12 @@ weak_contexted(context)
 
 device_array_ptr ocl_device_array_management::create_array(bool copyOptimized, idx_t size)
 {
-    return make_shared<ocl_device_array>(create_buffer((copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS), size * sizeof(float)));
+    return make_shared<ocl_device_array>(create_buffer((copyOptimized ? CL_MEM_ALLOC_HOST_PTR : CL_MEM_HOST_NO_ACCESS), size * sizeof(float)));
 }
 
 device_array2_ptr ocl_device_array_management::create_array2(bool copyOptimized, idx_t rowSize, idx_t colSize)
 {
-    return make_shared<ocl_device_array2>(create_buffer((copyOptimized ? 0 : CL_MEM_HOST_NO_ACCESS), rowSize * colSize * sizeof(float)), rowSize);
+    return make_shared<ocl_device_array2>(create_buffer((copyOptimized ? CL_MEM_ALLOC_HOST_PTR : CL_MEM_HOST_NO_ACCESS), rowSize * colSize * sizeof(float)), rowSize);
 }
 
 void ocl_device_array_management::copy(const device_array_ptr& from, idx_t fromIndex, const device_array_ptr& to, idx_t toIndex, idx_t size)

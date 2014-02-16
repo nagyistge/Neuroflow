@@ -274,6 +274,9 @@
     <ClInclude Include="activation_description.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_compute_activation_forward.h">
+      <Filter>Cpp\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -404,6 +407,12 @@
     </ClCompile>
     <ClCompile Include="device_array2_group.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_compute_activation_forward.cpp">
+      <Filter>Cpp\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="mlp_forward_node.cpp">
+      <Filter>Base\NN</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

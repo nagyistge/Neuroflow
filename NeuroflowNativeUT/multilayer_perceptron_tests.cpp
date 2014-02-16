@@ -98,7 +98,85 @@ namespace NeuroflowNativeUT
             }
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpu_compute)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpu_compute)
+        {
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_compute(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
         void do_get_and_set_weights(const computation_context_ptr& ctx)
+        {
+            auto mlp = create_mlp(ctx);
+            idx_t numWeights = mlp->number_of_weights();
+            auto weights = ctx->data_array_factory()->create(numWeights);
+            vector<float> weightValues(numWeights);
+            mlp->get_weights(weights);
+            weights->read(0, numWeights, &weightValues[0], 0).wait();
+            for (float v : weightValues) Assert::AreEqual(0.0f, v);
+
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
+            weights->write(&weightValues[0], 0, numWeights, 0).wait();
+            mlp->set_weights(weights);
+
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.99f;
+            weights->write(&weightValues[0], 0, numWeights, 0).wait();
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.0f;
+            weights->read(0, numWeights, &weightValues[0], 0).wait();
+            for (float v : weightValues) Assert::AreEqual(0.99f, v);
+
+            mlp->get_weights(weights);
+            weights->read(0, numWeights, &weightValues[0], 0).wait();
+            for (float v : weightValues) Assert::AreEqual(0.11f, v);
+        }
+
+        void do_compute(const computation_context_ptr& ctx)
+        {
+            auto mlp = create_mlp(ctx);
+            idx_t numWeights = mlp->number_of_weights();
+            auto weights = ctx->data_array_factory()->create(numWeights);
+            vector<float> weightValues(numWeights);
+            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
+            weights->write(&weightValues[0], 0, numWeights, 0).wait();
+            mlp->set_weights(weights);
+
+            idx_t inputsSize = mlp->input_size();
+            auto inputs = ctx->data_array_factory()->create(inputsSize);
+            vector<float> inputValues(inputsSize);
+            for (idx_t i = 0; i < inputsSize; i++) inputValues[i] = 0.22f;
+            inputs->write(&inputValues[0], 0, inputsSize, 0).wait();
+
+            idx_t outputsSize = mlp->output_size();
+            auto outputs = ctx->data_array_factory()->create(outputsSize);
+            vector<float> outputValues(outputsSize);
+            
+            outputs->read(0, outputsSize, &outputValues[0], 0).wait();
+            for (idx_t i = 0; i < outputsSize; i++)
+            {
+                Assert::AreEqual(0.0f, outputValues[i]);
+            }
+
+            mlp->compute(inputs, outputs);
+
+            outputs->read(0, outputsSize, &outputValues[0], 0).wait();
+            for (idx_t i = 0; i < outputsSize; i++)
+            {
+                Assert::AreNotEqual(0.0f, outputValues[i]);
+            }
+        }
+
+        multilayer_perceptron_ptr create_mlp(const computation_context_ptr& ctx)
         {
             vector<layer_ptr> layers =
             {
@@ -113,17 +191,7 @@ namespace NeuroflowNativeUT
             idx_t numWeights = mlp->number_of_weights();
             Assert::AreEqual(idx_t((2 * 4 + 4) + (4 * 1 + 1)), numWeights);
 
-            auto weights = ctx->data_array_factory()->create(numWeights);
-            vector<float> weightValues(numWeights);
-            weights->read(0, numWeights, &weightValues[0], 0).wait();
-            for (float v : weightValues) Assert::AreEqual(0.0f, v);
-
-            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
-            weights->write(&weightValues[0], 0, numWeights, 0).wait();
-            for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.99f;
-            weights->read(0, numWeights, &weightValues[0], 0).wait();
-            for (float v : weightValues) Assert::AreEqual(0.11f, v);
+            return move(mlp);
         }
-
 	};
 }

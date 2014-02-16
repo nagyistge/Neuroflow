@@ -1,5 +1,7 @@
 #pragma once
 
+#include "nf_helpers.h"
+
 namespace nf
 {
     inline idx_t get_vector_size(idx_t size)
@@ -24,27 +26,27 @@ namespace nf
     {
         idx_t s1 = get_vector_size(size1, size2);
         idx_t s2 = get_vector_size(size2, size3);
-        return s1 < s2 ? s1 : s2;
+        return nfmin(s1, s2);
     }
 
     inline idx_t get_vector_size(idx_t size1, idx_t size2, idx_t size3, idx_t size4)
     {
         idx_t s1 = get_vector_size(size1, size2, size3);
         idx_t s2 = get_vector_size(size3, size4);
-        return s1 < s2 ? s1 : s2;
+        return nfmin(s1, s2);
     }
 
     inline idx_t get_vector_size(idx_t size1, idx_t size2, idx_t size3, idx_t size4, idx_t size5)
     {
         idx_t s1 = get_vector_size(size1, size2, size3, size4);
         idx_t s2 = get_vector_size(size4, size5);
-        return s1 < s2 ? s1 : s2;
+        return nfmin(s1, s2);
     }
 
     inline idx_t get_vector_size(idx_t size1, idx_t size2, idx_t size3, idx_t size4, idx_t size5, idx_t size6)
     {
         idx_t s1 = get_vector_size(size1, size2, size3, size4, size5);
         idx_t s2 = get_vector_size(size5, size6);
-        return s1 < s2 ? s1 : s2;
+        return nfmin(s1, s2);
     }
 }
