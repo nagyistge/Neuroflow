@@ -14,15 +14,13 @@ device_array_group::device_array_group(const device_array_pool_ptr& pool) :
 
 const device_array_ptr& device_array_group::add(const key_t& idx, idx_t size)
 {
-    _arrays.insert(make_pair(idx, _pool->create_array(size)));
-    return _arrays.find(idx)->second;
+    if (idx >= _arrays.size()) _arrays.resize(idx + 1);
+    return _arrays[idx] = _pool->create_array(size);
 }
 
 const device_array_ptr& device_array_group::get(const key_t& idx) const
 {
-    auto it = _arrays.find(idx);
-    if (it == _arrays.end()) throw_invalid_argument("Argument 'idx' is out of range.");
-    return it->second;
+    return _arrays.at(idx);
 }
 
 void device_array_group::zero()
@@ -32,10 +30,10 @@ void device_array_group::zero()
 
 idx_t device_array_group::size() const
 {
-    return from(_arrays) | select([](pair<key_t, device_array_ptr*>& i) { return (*i.second)->size(); }) | sum();
+    return from(_arrays) | where([](device_array_ptr& a) { return (bool)a; }) | select([](device_array_ptr& a) { return a->size(); }) | sum();
 }
 
 linq::enumerable<device_array_ptr> device_array_group::get_arrays() const
 {
-    return from(_arrays) | select([](pair<key_t, device_array_ptr*>& i) { return (*i.second); });
+    return from(_arrays) | where([](device_array_ptr& a) { return (bool)a; });
 }

@@ -24,6 +24,7 @@ namespace nf
     struct device_array;
     typedef std::shared_ptr<device_array> device_array_ptr;
     typedef std::function<device_array_ptr()> get_device_array_ptr_t;
+    typedef std::vector<device_array_ptr> device_array_collection_t;
 
     struct device_array2;
     typedef std::shared_ptr<device_array2> device_array2_ptr;

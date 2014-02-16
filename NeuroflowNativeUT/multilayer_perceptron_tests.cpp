@@ -48,8 +48,16 @@ namespace NeuroflowNativeUT
             END_TEST_METHOD_ATTRIBUTE()
 		TEST_METHOD(cpp_get_and_set_weights)
 		{
-            auto ctx = computation_context_factory().create_context(cpp_context);
-            do_get_and_set_weights(ctx);
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_get_and_set_weights(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
 		}
 
         BEGIN_TEST_METHOD_ATTRIBUTE(ocl_get_and_set_weights_cpu)
@@ -59,8 +67,16 @@ namespace NeuroflowNativeUT
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(ocl_get_and_set_weights_cpu)
         {
-            auto ctx = computation_context_factory().create_context(ocl_context, L"CPU");
-            do_get_and_set_weights(ctx);
+            try
+            {
+                auto ctx = computation_context_factory().create_context(ocl_context, L"CPU");
+                do_get_and_set_weights(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
         }
 
         BEGIN_TEST_METHOD_ATTRIBUTE(ocl_get_and_set_weights_gpu)
@@ -70,8 +86,16 @@ namespace NeuroflowNativeUT
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(ocl_get_and_set_weights_gpu)
         {
-            auto ctx = computation_context_factory().create_context(ocl_context, L"GPU");
-            do_get_and_set_weights(ctx);
+            try
+            {
+                auto ctx = computation_context_factory().create_context(ocl_context, L"GPU");
+                do_get_and_set_weights(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
         }
 
         void do_get_and_set_weights(const computation_context_ptr& ctx)
@@ -79,8 +103,8 @@ namespace NeuroflowNativeUT
             vector<layer_ptr> layers =
             {
                 make_layer(2),
-                make_layer(4),
-                make_layer(1)
+                make_layer(4, make_activation_description(activation_function::sigmoid, 1.7f)),
+                make_layer(1, make_activation_description(activation_function::linear, 1.1f))
             };
             layers[0]->output_connections().add_one_way(layers[1]);
             layers[1]->output_connections().add_one_way(layers[2]);

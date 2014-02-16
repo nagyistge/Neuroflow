@@ -18,6 +18,6 @@ namespace nf
 
     private:
         device_array_pool_ptr _pool;
-        std::map<key_t, device_array_ptr> _arrays;
+        device_array_collection_t _arrays;
     };
 }

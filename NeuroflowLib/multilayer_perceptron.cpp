@@ -293,7 +293,6 @@ const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) 
     }
     else
     {
-        // TODO: This is a map access, should be optimized later.
         return _outputs.get(layerIndex); 
     }
 }
