@@ -13,5 +13,7 @@ namespace nf
         get_device_array_ptr_t out;
         device_array_ptr bias;
         device_array_ptr derivate;
+        
+        idx_t size() const;
     };
 };

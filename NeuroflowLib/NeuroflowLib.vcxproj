@@ -195,6 +195,7 @@
     <ClInclude Include="cpp_cc_factory_adapter.h" />
     <ClInclude Include="cpp_computation_context.h" />
     <ClInclude Include="cpp_compute_activation.h" />
+    <ClInclude Include="cpp_compute_activation_forward.h" />
     <ClInclude Include="cpp_conv.h" />
     <ClInclude Include="cpp_data_array.h" />
     <ClInclude Include="cpp_data_array_factory.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="cpp_cc_factory_adapter.cpp" />
     <ClCompile Include="cpp_computation_context.cpp" />
     <ClCompile Include="cpp_compute_activation.cpp" />
+    <ClCompile Include="cpp_compute_activation_forward.cpp" />
     <ClCompile Include="cpp_data_array.cpp" />
     <ClCompile Include="cpp_data_array_factory.cpp" />
     <ClCompile Include="cpp_device_array.cpp" />
@@ -288,6 +290,7 @@
     <ClCompile Include="layer_connections.cpp" />
     <ClCompile Include="layer_order_comparer.cpp" />
     <ClCompile Include="learning_behavior.cpp" />
+    <ClCompile Include="mlp_forward_node.cpp" />
     <ClCompile Include="multilayer_perceptron.cpp" />
     <ClCompile Include="neural_network_factory.cpp" />
     <ClCompile Include="ocl_cc_factory_adapter.cpp" />

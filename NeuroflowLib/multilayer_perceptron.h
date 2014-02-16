@@ -87,8 +87,6 @@ namespace nf
         device_array_group _biasGradientSums;
         device_array2_group _gradients;
         device_array2_group _gradientSums;
-        data_array_collection_t _inputsExt;
-        data_array_collection_t _outputsExt;
         std::function<void()> computeFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);
@@ -96,7 +94,6 @@ namespace nf
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
         const device_array_ptr& get_net_values(idx_t layerIndex) const;
-        void do_compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs);
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
     };

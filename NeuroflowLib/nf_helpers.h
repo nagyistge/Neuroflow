@@ -20,4 +20,16 @@ namespace nf
         comp.set_value();
         return comp.get_future();
     }
+
+    template<typename T>
+    T nfmin(T value1, T value2)
+    {
+        return value1 < value2 ? value1 : value2;
+    }
+
+    template<typename T>
+    T nfmax(T value1, T value2)
+    {
+        return value1 > value2 ? value1 : value2;
+    }
 }
