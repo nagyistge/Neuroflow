@@ -42,7 +42,7 @@ namespace nf
         idx_t number_of_weights() const;
         void get_weights(const data_array_ptr& to) const;
         void set_weights(const data_array_ptr& from);
-        void compute(const data_array_ptr& input, const data_array_ptr& output);
+        void compute(const data_array_ptr& inputs, const data_array_ptr& outputs);
         void compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs);
         void train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs);
         void train(const supervised_sample_entry& sampleEntry);
@@ -67,8 +67,8 @@ namespace nf
         bool _calculateGlobalOfflineError;
         bool _isTrainingInitialized;
         rtlr _rtlr;
-        device_array_ptr _netInput;
-        device_array_ptr _netOutput;
+        device_array_ptr _netInputs;
+        device_array_ptr _netOutputs;
         device_array_ptr _globalOfflineError;
         device_array_ptr _globalOnlineError;
         nf_object_ptr _calculateGlobalErrorState;
@@ -87,10 +87,17 @@ namespace nf
         device_array_group _biasGradientSums;
         device_array2_group _gradients;
         device_array2_group _gradientSums;
-        device_array_ptr _bpttNetInputs;
+        data_array_collection_t _inputsExt;
+        data_array_collection_t _outputsExt;
+        std::function<void()> computeFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);
+        void create_compute();
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
+        const device_array_ptr& get_net_values(idx_t layerIndex) const;
+        void do_compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs);
+        void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
+        void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
     };
 }

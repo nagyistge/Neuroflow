@@ -12,13 +12,13 @@ device_array2_group::device_array2_group(const device_array_pool_ptr& pool) :
     if (!_pool) throw_invalid_argument("Pool is null.");
 }
 
-const device_array2_ptr& device_array2_group::add(key_t idx, idx_t rowSize, idx_t colSize)
+const device_array2_ptr& device_array2_group::add(const key_t& idx, idx_t rowSize, idx_t colSize)
 {
     _arrays.insert(make_pair(idx, _pool->create_array2(rowSize, colSize)));
     return _arrays.find(idx)->second;
 }
 
-const device_array2_ptr& device_array2_group::get(key_t idx) const
+const device_array2_ptr& device_array2_group::get(const key_t& idx) const
 {
     auto it = _arrays.find(idx);
     if (it == _arrays.end()) throw_invalid_argument("Argument 'idx' is out of range.");

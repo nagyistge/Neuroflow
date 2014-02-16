@@ -269,7 +269,6 @@
     <ClInclude Include="weighted_inputs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="activation_description.cpp" />
     <ClCompile Include="computation_context.cpp" />
     <ClCompile Include="computation_context_factory.cpp" />
     <ClCompile Include="cpp_cc_factory_adapter.cpp" />
