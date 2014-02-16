@@ -1,5 +1,7 @@
 #pragma once
 
+#define BOOST_THREAD_PROVIDES_FUTURE_CONTINUATION
+
 #include <memory>
 #include <vector>
 #include <sstream>
