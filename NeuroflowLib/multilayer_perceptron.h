@@ -97,7 +97,7 @@ namespace nf
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
         const device_array_ptr& get_net_values(idx_t layerIndex) const;
-        const device_array_ptr& get_net_desired_outputs(idx_t layerIndex) const;
+        const device_array_ptr& get_net_desired_outputs() const;
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
     };
