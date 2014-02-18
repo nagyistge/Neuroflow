@@ -225,6 +225,7 @@
     <ClInclude Include="layer_order_comparer.h" />
     <ClInclude Include="learning_behavior.h" />
     <ClInclude Include="libs.h" />
+    <ClInclude Include="mlp_backward_node.h" />
     <ClInclude Include="mlp_forward_node.h" />
     <ClInclude Include="multilayer_perceptron.h" />
     <ClInclude Include="neural_network_factory.h" />
@@ -260,6 +261,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
     <ClInclude Include="supervised_learning_behavior.h" />
+    <ClInclude Include="supervised_outputs.h" />
     <ClInclude Include="supervised_sample.h" />
     <ClInclude Include="supervised_sample_entry.h" />
     <ClInclude Include="targetver.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="weak_contexted.h" />
+    <ClInclude Include="weighted_errors.h" />
     <ClInclude Include="weighted_inputs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -290,6 +293,7 @@
     <ClCompile Include="layer_connections.cpp" />
     <ClCompile Include="layer_order_comparer.cpp" />
     <ClCompile Include="learning_behavior.cpp" />
+    <ClCompile Include="mlp_backward_node.cpp" />
     <ClCompile Include="mlp_forward_node.cpp" />
     <ClCompile Include="multilayer_perceptron.cpp" />
     <ClCompile Include="neural_network_factory.cpp" />

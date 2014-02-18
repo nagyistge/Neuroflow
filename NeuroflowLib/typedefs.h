@@ -83,6 +83,7 @@ namespace nf
     struct supervised_sample_entry;
 
     struct mlp_forward_node;
+    struct mlp_backward_node;
 
     ENUM_STRINGS(weight_update_mode, "offline", "online")
     enum class weight_update_mode
@@ -126,5 +127,13 @@ namespace nf
     {
         sigmoid,
         linear
+    };
+
+    ENUM_STRINGS(gradient_computation_formula, "ff", "bptt_phase1", "bptt_phase2")
+    enum class gradient_computation_formula
+    {
+        ff,
+        bptt_phase1,
+        bptt_phase2
     };
 }

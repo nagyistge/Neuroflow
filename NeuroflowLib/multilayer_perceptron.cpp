@@ -12,6 +12,7 @@
 #include "data_array.h"
 #include "activation_description.h"
 #include "mlp_forward_node.h"
+#include "mlp_backward_node.h"
 #include "compute_activation.h"
 
 USING
@@ -81,10 +82,11 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     create_structure(infos);
     create_compute();
+    create_train(infos);
     
     /*
     create_train_init();
-    create_train(infos);*/
+    */
 }
 
 const boost::property_tree::ptree& multilayer_perceptron::properties() const
@@ -216,12 +218,94 @@ void multilayer_perceptron::create_compute()
     }
     else
     {
-        computeFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes)
+        computeFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
         {
-            _computeActivation->compute_forward(ctx, nodes, (idx_t)0);
+            _computeActivation->compute_forward(ctx, nodes, offset);
         },
         move(_computeActivation->create_operation_context()),
-        move(nodes));
+        move(nodes),
+        _1);
+    }
+}
+
+void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
+{
+    if (_doBackpropagate)
+    {
+        /*
+        activation_description activation;
+        std::vector<get_device_array_ptr_t> in;
+        std::vector<device_array2_ptr> gradients;
+        std::vector<device_array2_ptr> gradient_sums;
+        get_device_array_ptr_t out;
+        device_array_ptr bias_gradients;
+        device_array_ptr bias_gradient_sums;
+        std::vector<weighted_errors> lower_errors;
+        */
+        vector<mlp_backward_node> nodes(_layers.size() - 1);
+        for (idx_t lidx = _layers.size() - 1, nodeidx = 0; lidx >= 1; lidx--, nodeidx++)
+        {
+            auto& layer = _layers[lidx];
+            auto& node = nodes[nodeidx];
+            auto& learningInfo = infos.find(lidx)->second;
+            if (!learningInfo.is_offline && !learningInfo.is_online) continue;
+
+            for (auto& inputConnectedLayer : layer.value()->input_layers())
+            {
+                idx_t inputIndex = get_layer_index(inputConnectedLayer);
+                auto key = make_pair(inputIndex, lidx);
+                if (_doFFBP)
+                {
+                    node.in.push_back([=]() { return get_net_values(inputIndex); });
+                }
+                else if (_doBPTT)
+                {
+                    node.in.push_back([=]()
+                    {
+                        throw_runtime_error("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
+                    });
+                }
+                if (learningInfo.is_online || _doBPTT) node.gradients.push_back(_gradients.get(key));
+                if (learningInfo.is_offline) node.gradient_sums.push_back(_gradientSums.get(key));
+            }
+
+            if (nodeidx == 0)
+            {
+                // Last layer
+                node.net_outputs = supervised_outputs([=](){ return get_net_values(lidx); }, get_net_desired_outputs);
+            }
+            else
+            {
+                for (auto& outputConnectedLayer : layer.value()->output_layers())
+                {
+                    idx_t outputIndex = get_layer_index(outputConnectedLayer);
+                    auto key = make_pair(lidx, outputIndex);
+                    node.lower_errors.emplace_back(_errors.get(outputIndex), _weights.get(key));
+                }
+            }
+
+            node.activation = get_activation_desc(lidx);
+
+            if (learningInfo.is_online || _doBPTT) node.bias_gradients = _biasGradients.get(lidx);
+            if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
+        }
+
+        trainFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf)
+        {
+            _computeActivation->compute_backward(ctx, nodes, offset, gcf);
+        },
+        move(_computeActivation->create_operation_context()),
+        move(nodes),
+        _1,
+        _2);
+    }
+    else if (_doRTLR)
+    {
+        _rtlr.initialize(this);
+    }
+    if (_calculateGlobalOnlineError || _calculateGlobalOfflineError)
+    {
+        throw_runtime_error("Not implemented!");
     }
 }
 
@@ -295,6 +379,11 @@ const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) 
     }
 }
 
+const device_array_ptr& multilayer_perceptron::get_net_desired_outputs(idx_t layerIndex) const
+{
+    return _netDesiredOutputs;
+}
+
 void multilayer_perceptron::compute(const data_array_ptr& inputs, const data_array_ptr& outputs)
 {
     verify_arg(inputs != null, "Argument 'inputs' is null.");
@@ -316,7 +405,7 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
 void multilayer_perceptron::compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs)
 {
     setup_net_values(inputs, outputs);
-    computeFunc();
+    computeFunc((idx_t)0);
 }
 
 void multilayer_perceptron::setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs)

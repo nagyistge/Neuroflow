@@ -277,6 +277,15 @@
     <ClInclude Include="cpp_compute_activation_forward.h">
       <Filter>Cpp\NN</Filter>
     </ClInclude>
+    <ClInclude Include="weighted_errors.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="mlp_backward_node.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_outputs.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -412,6 +421,9 @@
       <Filter>Cpp\NN</Filter>
     </ClCompile>
     <ClCompile Include="mlp_forward_node.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="mlp_backward_node.cpp">
       <Filter>Base\NN</Filter>
     </ClCompile>
   </ItemGroup>
