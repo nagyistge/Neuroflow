@@ -16,6 +16,7 @@
 #include "compute_activation.h"
 
 USING
+namespace ph = std::placeholders;
 
 multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties) :
     contexted(context),
@@ -218,13 +219,13 @@ void multilayer_perceptron::create_compute()
     }
     else
     {
-        computeFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
+        computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
         {
             _computeActivation->compute_forward(ctx, nodes, offset);
         },
         move(_computeActivation->create_operation_context()),
         move(nodes),
-        _1);
+        ph::_1);
     }
 }
 
@@ -263,6 +264,7 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
                     node.in.push_back([=]()
                     {
                         throw_runtime_error("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
+                        return get_net_values(inputIndex);
                     });
                 }
                 if (learningInfo.is_online || _doBPTT) node.gradients.push_back(_gradients.get(key));
@@ -272,7 +274,7 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
             if (nodeidx == 0)
             {
                 // Last layer
-                node.net_outputs = supervised_outputs([=](){ return get_net_values(lidx); }, get_net_desired_outputs);
+                node.net_outputs = supervised_outputs([=](){ return get_net_values(lidx); }, [=]() { return get_net_desired_outputs(); });
             }
             else
             {
@@ -290,14 +292,14 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
             if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
         }
 
-        trainFunc = bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf)
+        trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf)
         {
             _computeActivation->compute_backward(ctx, nodes, offset, gcf);
         },
         move(_computeActivation->create_operation_context()),
         move(nodes),
-        _1,
-        _2);
+        ph::_1,
+        ph::_2);
     }
     else if (_doRTLR)
     {
@@ -379,7 +381,7 @@ const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) 
     }
 }
 
-const device_array_ptr& multilayer_perceptron::get_net_desired_outputs(idx_t layerIndex) const
+const device_array_ptr& multilayer_perceptron::get_net_desired_outputs() const
 {
     return _netDesiredOutputs;
 }
