@@ -9,10 +9,13 @@ namespace nf
     struct cpp_compute_activation : virtual compute_activation
     {
         nf_object_ptr create_operation_context() override;
+        
         void compute_forward(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset) override
         {
             forward.compute(context, nodes, offset);
         }
+
+        void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) override { }
 
     private:
         cpp_compute_activation_forward forward;
