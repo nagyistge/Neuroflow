@@ -4,5 +4,8 @@
 
 namespace nf
 {
-    struct rtlr { };
+    struct rtlr 
+    {
+        void initialize(multilayer_perceptron* mlp) { }
+    };
 }

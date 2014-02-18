@@ -69,6 +69,7 @@ namespace nf
         rtlr _rtlr;
         device_array_ptr _netInputs;
         device_array_ptr _netOutputs;
+        device_array_ptr _netDesiredOutputs;
         device_array_ptr _globalOfflineError;
         device_array_ptr _globalOnlineError;
         nf_object_ptr _calculateGlobalErrorState;
@@ -87,13 +88,16 @@ namespace nf
         device_array_group _biasGradientSums;
         device_array2_group _gradients;
         device_array2_group _gradientSums;
-        std::function<void()> computeFunc;
+        std::function<void(idx_t)> computeFunc;
+        std::function<void(idx_t, gradient_computation_formula)> trainFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
+        void create_train(std::map<idx_t, layer_info>& infos);
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
         const device_array_ptr& get_net_values(idx_t layerIndex) const;
+        const device_array_ptr& get_net_desired_outputs(idx_t layerIndex) const;
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
     };
