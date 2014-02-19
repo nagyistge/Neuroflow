@@ -6,7 +6,7 @@ namespace nf
 {
     struct cpp_compute_activation_forward
     {
-        void compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset);
+        void compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset) const;
 
     private:
         inline static float sigmoid(float value, float alpha);

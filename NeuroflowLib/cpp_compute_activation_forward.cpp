@@ -6,37 +6,41 @@
 
 USING
 
-void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset)
+void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset) const
 {
     for (auto& node : nodes)
     {
         auto outputs = dynamic_cast<cpp_device_array*>(node.out().get());
+        assert(outputs);
         float* pOutputs = outputs->ptr();
         idx_t inputLayersCount = node.in.size();
         idx_t layerSize = node.size();
+        float alpha = node.activation.alpha();
         for (idx_t valueIdx = 0; valueIdx < layerSize; valueIdx++)
         {
             float sum = 0.0f;
-            for (idx_t inputLayerIdx = 0; inputLayerIdx < inputLayersCount; inputLayerIdx++)
+            for (auto& weightedInput : node.in)
             {
-                auto weights = dynamic_cast<cpp_device_array2*>(node.in[inputLayerIdx].weights().get());
-                auto inputs = dynamic_cast<cpp_device_array*>(node.in[inputLayerIdx].inputs()().get());
+                auto weights = dynamic_cast<cpp_device_array2*>(weightedInput.weights().get());
+                auto inputs = dynamic_cast<cpp_device_array*>(weightedInput.inputs()().get());
+                assert(weights);
+                assert(inputs);
                 idx_t inputsSize = inputs->size();
                 float* pInputs = inputs->ptr();
                 float* pWeights = weights->ptr();
                 for (idx_t inputIdx = 0; inputIdx < inputsSize; inputIdx++)
                 {
-                    sum += pInputs[inputIdx] * pWeights[inputsSize * valueIdx + inputIdx];
+                    sum += pInputs[inputIdx] * pWeights[get_index2(inputIdx, valueIdx, inputsSize)];
                 }
             }
 
             if (node.activation.function() == activation_function::sigmoid)
             {
-                pOutputs[valueIdx] = sigmoid(sum, node.activation.alpha());
+                pOutputs[valueIdx] = sigmoid(sum, alpha);
             }
             else // Linear
             {
-                pOutputs[valueIdx] = linear(sum, node.activation.alpha());
+                pOutputs[valueIdx] = linear(sum, alpha);
             }
         }
     }

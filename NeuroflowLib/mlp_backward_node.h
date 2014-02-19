@@ -13,10 +13,14 @@ namespace nf
         std::vector<get_device_array_ptr_t> in;
         std::vector<device_array2_ptr> gradients;
         std::vector<device_array2_ptr> gradient_sums;
-        get_device_array_ptr_t out;
+        
         device_array_ptr bias_gradients;
         device_array_ptr bias_gradient_sums;
+
+        get_device_array_ptr_t out;
+        device_array_ptr errors;
         std::vector<weighted_errors> lower_errors;
+
         boost::optional<supervised_outputs> net_outputs;
 
         idx_t size() const;
