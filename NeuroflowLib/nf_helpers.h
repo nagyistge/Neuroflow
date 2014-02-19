@@ -5,12 +5,10 @@
 namespace nf
 {
     template <typename T>
-    boost::shared_future<T> create_task_from_value(T value)
+    inline boost::shared_future<T> create_task_from_value(T value)
     {
         using namespace boost;
-        auto comp = promise<T>();
-        comp.set_value(value);
-        return comp.get_future();
+        return make_ready_future<T>(value).share();
     }
 
     inline boost::shared_future<void> create_do_nothing_task()
@@ -22,14 +20,20 @@ namespace nf
     }
 
     template<typename T>
-    T nfmin(T value1, T value2)
+    inline T nfmin(T value1, T value2)
     {
         return value1 < value2 ? value1 : value2;
     }
 
     template<typename T>
-    T nfmax(T value1, T value2)
+    inline T nfmax(T value1, T value2)
     {
         return value1 > value2 ? value1 : value2;
+    }
+
+    template<typename T>
+    inline T get_index2(T i1, T i2, T size1)
+    {
+        return i2 * size1 + i1;
     }
 }

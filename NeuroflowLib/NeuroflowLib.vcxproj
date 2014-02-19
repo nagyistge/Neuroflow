@@ -195,6 +195,7 @@
     <ClInclude Include="cpp_cc_factory_adapter.h" />
     <ClInclude Include="cpp_computation_context.h" />
     <ClInclude Include="cpp_compute_activation.h" />
+    <ClInclude Include="cpp_compute_activation_backward.h" />
     <ClInclude Include="cpp_compute_activation_forward.h" />
     <ClInclude Include="cpp_conv.h" />
     <ClInclude Include="cpp_data_array.h" />
@@ -278,6 +279,7 @@
     <ClCompile Include="cpp_cc_factory_adapter.cpp" />
     <ClCompile Include="cpp_computation_context.cpp" />
     <ClCompile Include="cpp_compute_activation.cpp" />
+    <ClCompile Include="cpp_compute_activation_backward.cpp" />
     <ClCompile Include="cpp_compute_activation_forward.cpp" />
     <ClCompile Include="cpp_data_array.cpp" />
     <ClCompile Include="cpp_data_array_factory.cpp" />

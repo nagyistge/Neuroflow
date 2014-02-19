@@ -233,16 +233,6 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
 {
     if (_doBackpropagate)
     {
-        /*
-        activation_description activation;
-        std::vector<get_device_array_ptr_t> in;
-        std::vector<device_array2_ptr> gradients;
-        std::vector<device_array2_ptr> gradient_sums;
-        get_device_array_ptr_t out;
-        device_array_ptr bias_gradients;
-        device_array_ptr bias_gradient_sums;
-        std::vector<weighted_errors> lower_errors;
-        */
         vector<mlp_backward_node> nodes(_layers.size() - 1);
         for (idx_t lidx = _layers.size() - 1, nodeidx = 0; lidx >= 1; lidx--, nodeidx++)
         {
@@ -284,10 +274,11 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
                     auto key = make_pair(lidx, outputIndex);
                     node.lower_errors.emplace_back(_errors.get(outputIndex), _weights.get(key));
                 }
+                node.out = [=](){ return get_net_values(lidx); };
             }
 
             node.activation = get_activation_desc(lidx);
-
+            node.errors = _errors.get(lidx);            
             if (learningInfo.is_online || _doBPTT) node.bias_gradients = _biasGradients.get(lidx);
             if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
         }

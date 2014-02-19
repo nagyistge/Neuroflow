@@ -6,24 +6,24 @@ namespace nf
 {
     struct supervised_outputs
     {
-        supervised_outputs(const get_device_array_ptr_t& netOutputs, const get_device_array_ptr_t& netDesiredOutputs) :
-            _netOutputs(netOutputs),
-            _netDesiredOutputs(netDesiredOutputs)
+        supervised_outputs(const get_device_array_ptr_t& Outputs, const get_device_array_ptr_t& DesiredOutputs) :
+            _outputs(Outputs),
+            _desiredOutputs(DesiredOutputs)
         {
         }
 
-        const get_device_array_ptr_t& net_outputs() const
+        const get_device_array_ptr_t& outputs() const
         {
-            return _netOutputs;
+            return _outputs;
         }
 
-        const get_device_array_ptr_t& net_desired_outputs() const
+        const get_device_array_ptr_t& desired_outputs() const
         {
-            return _netDesiredOutputs;
+            return _desiredOutputs;
         }
 
     private:
-        get_device_array_ptr_t _netOutputs;
-        get_device_array_ptr_t _netDesiredOutputs;
+        get_device_array_ptr_t _outputs;
+        get_device_array_ptr_t _desiredOutputs;
     };
 }

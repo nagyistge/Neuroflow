@@ -3,6 +3,7 @@
 #include "cpp_nfdev.h"
 #include "compute_activation.h"
 #include "cpp_compute_activation_forward.h"
+#include "cpp_compute_activation_backward.h"
 
 namespace nf
 {
@@ -15,9 +16,13 @@ namespace nf
             forward.compute(context, nodes, offset);
         }
 
-        void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) override { }
+        void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) override
+        {
+            backward.compute(context, nodes, offset, gcf);
+        }
 
     private:
         cpp_compute_activation_forward forward;
+        cpp_compute_activation_backward backward;
     };
 }
