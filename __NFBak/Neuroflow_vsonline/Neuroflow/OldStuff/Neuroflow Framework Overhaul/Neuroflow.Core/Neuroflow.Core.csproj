@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2D1A335C-7E2F-407B-9360-D303E9F53593}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neuroflow.Core</RootNamespace>
+    <AssemblyName>Neuroflow.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Preconditions</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\Selection\BorderSelectionAlgorithm.cs" />
+    <Compile Include="Algorithms\Selection\GaussianSelectionAlgorithm.cs" />
+    <Compile Include="Algorithms\Selection\ISelectionAlgorithm.cs" />
+    <Compile Include="Algorithms\Selection\SelectionAlgorithm.cs" />
+    <Compile Include="Algorithms\Selection\SelectionDirection.cs" />
+    <Compile Include="ComponentModel\FreeDisplayNameAttribute.cs" />
+    <Compile Include="ComponentModel\InitValueAttribute.cs" />
+    <Compile Include="ComponentModel\PropertyCategories.cs" />
+    <Compile Include="ComputationAPI\ComputationBlock.cs" />
+    <Compile Include="ComputationAPI\ComputationBuilder.cs" />
+    <Compile Include="ComputationAPI\ComputationHandle.cs" />
+    <Compile Include="ComputationAPI\Rtl.cs" />
+    <Compile Include="ComputationAPI\ResetDoubleValues.cs" />
+    <Compile Include="ComputationAPI\ValueReference.cs" />
+    <Compile Include="ComputationAPI\ValueSpace.cs" />
+    <Compile Include="Imaging\ImageBuffer.cs" />
+    <Compile Include="_CommonIntf\IReset.cs" />
+    <Compile Include="Serialization\KnownAttribute.cs" />
+    <Compile Include="Vectors\BatchExecutionResult.cs" />
+    <Compile Include="Vectors\BatchingStrategies\BatchingStrategy.cs" />
+    <Compile Include="Vectors\BatchingStrategies\GaussianBatchingStrategy.cs" />
+    <Compile Include="Vectors\BatchingStrategies\MonteCarloBatchingStrategy.cs" />
+    <Compile Include="Vectors\BatchingStrategies\OptimizationBatchingStrategy.cs" />
+    <Compile Include="ComputationAPI\ComputationInterface.cs" />
+    <Compile Include="ComputationAPI\IComputationUnit.cs" />
+    <Compile Include="ComputationAPI\IInterfaced.cs" />
+    <Compile Include="Vectors\IterationRepeatPars.cs" />
+    <Compile Include="Vectors\VectorFlowExecution.cs" />
+    <Compile Include="Vectors\VectorFlow.cs" />
+    <Compile Include="Vectors\VectorFlowBatch.cs" />
+    <Compile Include="Vectors\VectorFlowBatchExecution.cs" />
+    <Compile Include="Vectors\VectorFlowEntry.cs" />
+    <Compile Include="_Helpers\CloneHelper.cs" />
+    <Compile Include="_Helpers\TypeExtensions.cs" />
+    <Compile Include="_Range\DoubleRange.cs" />
+    <Compile Include="_Helpers\Factory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_Range\IntRange.cs" />
+    <Compile Include="_Range\IRange.cs" />
+    <Compile Include="_Helpers\RandomGenerator.cs" />
+    <Compile Include="_Helpers\Registry.cs" />
+    <Compile Include="xmlns.cs" />
+    <Compile Include="_Helpers\Statistics.cs" />
+    <Compile Include="_Threading\ISynchronized.cs" />
+    <Compile Include="_Threading\SyncContext.cs" />
+    <Compile Include="_Threading\SynchronizedObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_Collections\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

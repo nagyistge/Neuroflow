@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroflow.ComputationAPI.Moles</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MComputationBlock">
+            <summary>Mole type of <see cref="T:Neuroflow.ComputationAPI.ComputationBlock"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationBlock.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationBlock.#ctor(Neuroflow.ComputationAPI.ComputationBlock)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationBlock.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationBlock.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AddComputationBlock">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.Add(Neuroflow.ComputationAPI.ComputationBlock)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AddReferenceType">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.AddReference(System.Type)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AddString">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.Add(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.CodeBuilderGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.CodeBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.CodeBuilderSetStringBuilder">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.CodeBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.Constructor">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.ConstructorInt32">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.#ctor(System.Int32)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.IsEmptyGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.IsEmpty"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.NamespacesGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.Namespaces"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.NamespacesSetHashSetOfString">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.Namespaces"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.ReferencesGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.References"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.ReferencesSetHashSetOfAssembly">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.References"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.TimeFrameGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.TimeFrame"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.TimeFrameSetInt32">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.TimeFrame"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock._InvariantMethod">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.$InvariantMethod$"/>
+            </summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.AddComputationBlock">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.Add(Neuroflow.ComputationAPI.ComputationBlock)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.AddReferenceType">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.AddReference(System.Type)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.AddString">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.Add(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.CodeBuilderGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.CodeBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.CodeBuilderSetStringBuilder">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.CodeBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.IsEmptyGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.IsEmpty"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.NamespacesGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.Namespaces"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.NamespacesSetHashSetOfString">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.Namespaces"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.ReferencesGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.References"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.ReferencesSetHashSetOfAssembly">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.References"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.TimeFrameGet">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.TimeFrame"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances.TimeFrameSetInt32">
+            <summary>Sets the mole of <see cref="P:Neuroflow.ComputationAPI.ComputationBlock.TimeFrame"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationBlock.AllInstances._InvariantMethod">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationBlock.$InvariantMethod$"/>
+            </summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MComputationHandle">
+            <summary>Mole type of <see cref="T:Neuroflow.ComputationAPI.ComputationHandle"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationHandle.#ctor(Neuroflow.ComputationAPI.ComputationHandle)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationHandle.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MComputationHandle.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationHandle.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MComputationHandle.ConstructorIntPtr">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ComputationHandle.#ctor(System.IntPtr)"/>
+            </summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MComputationHandle.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MRtl">
+            <summary>Mole type of <see cref="T:Neuroflow.ComputationAPI.Rtl"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MRtl.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MRtl.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MRtl.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MRtl.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.MValueSpace">
+            <summary>Mole type of <see cref="T:Neuroflow.ComputationAPI.ValueSpace"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MValueSpace.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MValueSpace.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.MValueSpace.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MValueSpace.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MValueSpace.FastGetValueSpaceOfDoubleInt32">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ValueSpace.FastGet(Neuroflow.ComputationAPI.ValueSpace`1{System.Double},System.Int32)"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.MValueSpace.FastSetValueSpaceOfDoubleInt32Double">
+            <summary>Sets the mole of <see cref="M:Neuroflow.ComputationAPI.ValueSpace.FastSet(Neuroflow.ComputationAPI.ValueSpace`1{System.Double},System.Int32,System.Double)"/>
+            </summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.SComputationHandle">
+            <summary>Stub type of <see cref="T:Neuroflow.ComputationAPI.ComputationHandle"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SComputationHandle.#ctor(System.IntPtr)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SComputationHandle.CreateObjRef(System.Type)">
+            <summary>Sets the stub of <see cref="M:System.MarshalByRefObject.CreateObjRef(System.Type)"/>
+            </summary>
+        </member>
+        <member name="F:Neuroflow.ComputationAPI.Moles.SComputationHandle.CreateObjRefType">
+            <summary>Sets the stub of <see cref="M:System.MarshalByRefObject.CreateObjRef(System.Type)"/>
+            </summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SComputationHandle.InitializeLifetimeService">
+            <summary>Sets the stub of <see cref="M:System.MarshalByRefObject.InitializeLifetimeService"/>
+            </summary>
+        </member>
+        <member name="F:Neuroflow.ComputationAPI.Moles.SComputationHandle.InitializeLifetimeService01">
+            <summary>Sets the stub of <see cref="M:System.MarshalByRefObject.InitializeLifetimeService"/>
+            </summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SComputationHandle.InitializeStub">
+            <summary>Initializes a new instance of type SComputationHandle</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SComputationHandle.Run">
+            <summary>Sets the stub of <see cref="M:Neuroflow.ComputationAPI.ComputationHandle.Run"/>
+            </summary>
+        </member>
+        <member name="F:Neuroflow.ComputationAPI.Moles.SComputationHandle.Run01">
+            <summary>Sets the stub of <see cref="M:Neuroflow.ComputationAPI.ComputationHandle.Run"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.SComputationHandle.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.SComputationHandle.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Neuroflow.ComputationAPI.Moles.SIInterfaced">
+            <summary>Stub type of <see cref="T:Neuroflow.ComputationAPI.IInterfaced"/>
+            .</summary>
+        </member>
+        <member name="M:Neuroflow.ComputationAPI.Moles.SIInterfaced.#ctor">
+            <summary>Initializes a new instance of type SIInterfaced</summary>
+        </member>
+        <member name="F:Neuroflow.ComputationAPI.Moles.SIInterfaced.InputInterfaceLengthGet">
+            <summary>Sets the stub of <see cref="P:Neuroflow.ComputationAPI.IInterfaced.InputInterfaceLength"/>
+            </summary>
+        </member>
+        <member name="F:Neuroflow.ComputationAPI.Moles.SIInterfaced.OutputInterfaceLengthGet">
+            <summary>Sets the stub of <see cref="P:Neuroflow.ComputationAPI.IInterfaced.OutputInterfaceLength"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.SIInterfaced.ncapi::Neuroflow#ComputationAPI#IInterfaced#InputInterfaceLength">
+            <summary>Sets the stub of <see cref="P:Neuroflow.ComputationAPI.IInterfaced.InputInterfaceLength"/>
+            </summary>
+        </member>
+        <member name="P:Neuroflow.ComputationAPI.Moles.SIInterfaced.ncapi::Neuroflow#ComputationAPI#IInterfaced#OutputInterfaceLength">
+            <summary>Sets the stub of <see cref="P:Neuroflow.ComputationAPI.IInterfaced.OutputInterfaceLength"/>
+            </summary>
+        </member>
+    </members>
+</doc>
