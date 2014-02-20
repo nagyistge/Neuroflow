@@ -1,0 +1,19 @@
+﻿<sap:ActivityDesigner x:Class="Neuroflow.Design.ActivityDesigners.UnorderedBatcherDesigner"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
+    xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation"
+                      xmlns:controls="clr-namespace:Neuroflow.Design.ActivityDesigners.Controls"
+                      xmlns:sac="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation">
+
+
+    <Grid>
+        <controls:ExpandedView IsExpanded="{Binding ShowExpanded, Mode=OneWay}">
+            <StackPanel>
+                <controls:ActivityWithResultPresenter ModelItem="{Binding ModelItem}" PropertyName="BatchingStrategy"/>
+                <controls:ActivityDelegatePresenter ActivityDelegate="{Binding ModelItem.GetNextVectors}"/>
+                <controls:ActivityDelegatePresenter ActivityDelegate="{Binding ModelItem.DoReinitializeVectorProvider}"/>
+            </StackPanel>
+        </controls:ExpandedView>
+    </Grid>
+</sap:ActivityDesigner>

@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9EB30E0A-B087-4ED3-83C7-4FCA289DABE5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neuroflow.Networks</RootNamespace>
+    <AssemblyName>Neuroflow.Networks</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsInferRequires>False</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestEnsures>False</CodeContractsSuggestEnsures>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsDisjunctiveRequires>False</CodeContractsDisjunctiveRequires>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;AVG _QUEUE _ERRORSSET</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Preconditions</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;AVG _QUEUE _ERRORSSET</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;AVG _QUEUE _ERRORSSET</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Neural\Managed\ManagedNeuralComputationContext.cs" />
+    <Compile Include="Neural\Managed\ValueBuffer.cs" />
+    <Compile Include="Neural\Managed\PValuePropagator.cs" />
+    <Compile Include="Neural\Managed\WeightAccessor.cs" />
+    <Compile Include="Neural\Learning\Managed\AlopexBAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\GaussianHistoryAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\QSAAlgorithm.cs" />
+    <Compile Include="Neural\Learning\ErrorVectorStack.cs" />
+    <Compile Include="Neural\Learning\_Rules\AlopexBRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\GaussianHistoryRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\QSARule.cs" />
+    <Compile Include="Neural\NeuralComputationContext.cs" />
+    <Compile Include="Neural\NNInitParameters.cs" />
+    <Compile Include="Neural\NNStructuralElement.cs" />
+    <Compile Include="Neural\RecurrentOptions.cs" />
+    <Compile Include="Neural\_Architectures\NeuralNetworkArchitecture.cs" />
+    <Compile Include="Neural\Managed\ManagedNNInitParameters.cs" />
+    <Compile Include="Neural\_Architectures\StandardMultilayerArchitecture.cs" />
+    <Compile Include="Neural\Managed\ErrorValueAccess.cs" />
+    <Compile Include="Neural\Managed\ForwardComputationMethod.cs" />
+    <Compile Include="Neural\Managed\InputValueAccess.cs" />
+    <Compile Include="Neural\_Layers\UpperLayerInfo.cs" />
+    <Compile Include="Neural\_Layers\ActivationLayer.cs" />
+    <Compile Include="Neural\BackprogrationMode.cs" />
+    <Compile Include="Neural\_Layers\ConnectedLayer.cs" />
+    <Compile Include="Neural\_Layers\ConnectedLayerGroups.cs" />
+    <Compile Include="Neural\_Layers\ConnectableLayer.cs" />
+    <Compile Include="Neural\_Layers\InputLayer.cs" />
+    <Compile Include="Neural\_Layers\LearningLayer.cs" />
+    <Compile Include="Neural\Learning\Training.cs" />
+    <Compile Include="Neural\Learning\Validation.cs" />
+    <Compile Include="Neural\Learning\Managed\AutoAdjustedGradientDescentAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\GradientDescentAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\SignChangesAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\WeightRelatedValues.cs" />
+    <Compile Include="Neural\Learning\_Rules\ForwardLearningRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\IHasLearningRules.cs" />
+    <Compile Include="Neural\Learning\_Rules\AutoAdjustedGradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\ErrorBasedLearningRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\GradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\LearningLayerGroup.cs" />
+    <Compile Include="Neural\Learning\_Rules\LearningRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\LearningLayerGroups.cs" />
+    <Compile Include="Neural\Learning\_Rules\LocalAdaptiveGradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\NoisedWeightInitializationRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\SCGRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\SignChangesRule.cs" />
+    <Compile Include="Neural\Learning\_Rules\WeightDecay.cs" />
+    <Compile Include="Neural\Learning\Managed\ErrorBasedLearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\ForwardLearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\LearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\Managed\NoisedWeightInitializationAlgorithm.cs" />
+    <Compile Include="Neural\_Layers\UnitIndexTable.cs" />
+    <Compile Include="Neural\_Vectors\IndexSet.cs" />
+    <Compile Include="Neural\_Vectors\INeuralVectorFlowProvider.cs" />
+    <Compile Include="Neural\_Vectors\IUnorderedNeuralVectorFlowProvider.cs" />
+    <Compile Include="Neural\_Vectors\NeuralVectorFlow.cs" />
+    <Compile Include="Neural\_Vectors\NeuralVectorFlowBatch.cs" />
+    <Compile Include="Neural\_Vectors\UnorderedNeuralVectorFlowProvider.cs" />
+    <Compile Include="Neural\NeuralNetworkResetTarget.cs" />
+    <Compile Include="Neural\_Vectors\NeuralSupervisedBatchExecution.cs" />
+    <Compile Include="Neural\Managed\ActivationLayerBackwardCompute.cs" />
+    <Compile Include="Neural\Managed\ActivationLayerForwardCompute.cs" />
+    <Compile Include="Neural\Managed\LayerBackwardCompute.cs" />
+    <Compile Include="Neural\Managed\LayerForwardCompute.cs" />
+    <Compile Include="Neural\Managed\ManagedNeuralNetwork.cs" />
+    <Compile Include="Neural\NeuralNetwork.cs" />
+    <Compile Include="Neural\_Layers\Layer.cs" />
+    <Compile Include="Neural\_Layers\LayerLinkCollection.cs" />
+    <Compile Include="Neural\_Layers\LayerOrderComparer.cs" />
+    <Compile Include="Neural\_Layers\LinkType.cs" />
+    <Compile Include="Neural\_Layers\GroupedLayers.cs" />
+    <Compile Include="Neural\_Layers\WeightedValueBuffer.cs" />
+    <Compile Include="Neural\_AF\ActivationFunction.cs" />
+    <Compile Include="Neural\_AF\LinearActivationFunction.cs" />
+    <Compile Include="Neural\_AF\SigmoidActivationFunction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroflow.Core\Neuroflow.Core.csproj">
+      <Project>{E2D86FD1-227B-4E8D-8C34-9892C953D923}</Project>
+      <Name>Neuroflow.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

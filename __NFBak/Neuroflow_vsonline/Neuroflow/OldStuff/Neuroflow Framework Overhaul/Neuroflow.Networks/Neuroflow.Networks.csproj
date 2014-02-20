@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{827BBA8D-A1B3-4B72-AD85-D59EE87650B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neuroflow.Networks</RootNamespace>
+    <AssemblyName>Neuroflow.Networks</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Preconditions</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComputationalNetwork.cs" />
+    <Compile Include="ComputationConnection.cs" />
+    <Compile Include="ComputationNetworkItem.cs" />
+    <Compile Include="ComputationNode.cs" />
+    <Compile Include="ConnectionEntry.cs" />
+    <Compile Include="ConnectionIndex.cs" />
+    <Compile Include="NetworkDefinition.cs" />
+    <Compile Include="Neural\IResetableNeuralNetworkItem.cs" />
+    <Compile Include="Neural\Learning\AutoAdjustedGradientDescentAlgorithm.cs" />
+    <Compile Include="Neural\Learning\AutoAdjustedGradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\LocalAdaptiveGradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\SCGAlgorithm.cs" />
+    <Compile Include="Neural\Learning\SCGRule.cs" />
+    <Compile Include="Neural\Learning\SignChangesAlgorithm.cs" />
+    <Compile Include="Neural\Learning\SignChangesRule.cs" />
+    <Compile Include="Neural\Learning\StreamedTraining.cs" />
+    <Compile Include="Neural\Learning\Training.cs" />
+    <Compile Include="Neural\Learning\UnorderedTraining.cs" />
+    <Compile Include="Neural\Learning\Validation.cs" />
+    <Compile Include="Neural\_Arch\StandardMultilayerArchitecture.cs" />
+    <Compile Include="Neural\_Vectors\IndexSet.cs" />
+    <Compile Include="Neural\Learning\BackwardLearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\BackwardLearningRule.cs" />
+    <Compile Include="Neural\Learning\ForwardLearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\GradientDescentAlgorithm.cs" />
+    <Compile Include="Neural\Learning\GradientDescentRule.cs" />
+    <Compile Include="Neural\Learning\IHasLearningRules.cs" />
+    <Compile Include="Neural\Learning\LearningAlgorithm.cs" />
+    <Compile Include="Neural\Learning\LearningRule.cs" />
+    <Compile Include="Neural\Learning\NoisedWeightInitializationAlgorithm.cs" />
+    <Compile Include="Neural\Learning\NoisedWeightInitializationRule.cs" />
+    <Compile Include="Neural\Learning\WeightDecay.cs" />
+    <Compile Include="Neural\_Vectors\INeuralVectorFlowProvider.cs" />
+    <Compile Include="Neural\_Vectors\IUnorderedNeuralVectorFlowProvider.cs" />
+    <Compile Include="Neural\_Vectors\NeuralVectorFlow.cs" />
+    <Compile Include="Neural\_Vectors\NeuralVectorFlowBatch.cs" />
+    <Compile Include="Neural\_Arch\MultilayerArchitecture.cs" />
+    <Compile Include="Neural\_Arch\NeuralLayerDefinition.cs" />
+    <Compile Include="Neural\_Arch\NeuralConnectionDefinition.cs" />
+    <Compile Include="Neural\_Arch\NeuralNetworkLayersDefinition.cs" />
+    <Compile Include="Neural\_Arch\WiredArchitecture.cs" />
+    <Compile Include="Neural\_Arch\Architecture.cs" />
+    <Compile Include="Neural\_AF\ActivationFunction.cs" />
+    <Compile Include="Neural\ActivationNeuron.cs" />
+    <Compile Include="Neural\_AF\LinearActivationFunction.cs" />
+    <Compile Include="Neural\NeuralConnection.cs" />
+    <Compile Include="Neural\NeuralNetwork.cs" />
+    <Compile Include="Neural\NeuralNode.cs" />
+    <Compile Include="Neural\_AF\SigmoidActivationFunction.cs" />
+    <Compile Include="Neural\Synapse.cs" />
+    <Compile Include="Neural\_Vectors\NeuralVectorFlowBatchExecution.cs" />
+    <Compile Include="Neural\_Vectors\UnorderedNeuralVectorFlowProvider.cs" />
+    <Compile Include="NodeEntry.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroflow.Core\Neuroflow.Core.csproj">
+      <Project>{2D1A335C-7E2F-407B-9360-D303E9F53593}</Project>
+      <Name>Neuroflow.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
