@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2E57B492-458A-495C-B960-B8CCF04B782F}</ProjectGuid>
+    <ProjectTypeGuids>{32f31d43-81cc-4c15-9de6-3fc5453562b6};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NeoComp.Activities</RootNamespace>
+    <AssemblyName>NeoComp.Activities</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Activities.Presentation" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Internal\SerializableCache.cs" />
+    <Compile Include="NeuralNetworks\ActivationFunctions\ActivationFunctionBlueprint.cs" />
+    <Compile Include="NeuralNetworks\ActivationNeuronFactoryBlueprint.cs" />
+    <Compile Include="Blueprint.cs" />
+    <Compile Include="CollectionBlueprint.cs" />
+    <Compile Include="ComputationContext.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\GradientDescentRuleBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\LearningRuleBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\LearningRuleCollectionBlueprint.cs" />
+    <Compile Include="NeuralNetworks\ActivationFunctions\LinearActivationFunctionBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\MultimodeGradientRuleBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\NoisedWeightInitializationRuleBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\SCGRuleBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\BatchingStrategyFactoryBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\MonteCarloBatchingStrategyFactoryBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\StreamedTrainingBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\TrainingBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\TrainingIteration.cs" />
+    <Compile Include="NeuralNetworks\Learning\UnorderedBatcher.cs" />
+    <Compile Include="NeuralNetworks\Learning\UnorderedTrainingBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\ValidationIteration.cs" />
+    <Compile Include="NeuralNetworks\Learning\Batcher.cs" />
+    <Compile Include="NeuralNetworks\Learning\StreamBatcher.cs" />
+    <Compile Include="NeuralNetworks\NeuralNetworkBlueprint.cs" />
+    <Compile Include="NeuralNetworks\NeuralComputationConnectionFactoryBlueprint.cs" />
+    <Compile Include="NeuralNetworks\NeuralOperationNodeFactoryBlueprint.cs" />
+    <Compile Include="NeuralNetworks\NeuralConnectionFactoryBlueprint.cs" />
+    <Compile Include="NeuralNetworks\ActivationFunctions\SigmoidActivationFunctionBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Learning\Algorithms\WeightDecayBlueprint.cs" />
+    <Compile Include="NeuralNetworks\Architectures\WiredNeuralNetworkBlueprint.cs" />
+    <Compile Include="NeuralNetworks\SynapseBlueprint.cs" />
+    <Compile Include="_Attributes\DefaultExpressionAttribute.cs" />
+    <Compile Include="_Attributes\BlueprintFuncAttribute.cs" />
+    <Compile Include="NativeActivityWithVariables.cs" />
+    <Compile Include="Internal\Helpers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyCategories.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NeoComp.Activities.Design\NeoComp.Activities.Design.csproj">
+      <Project>{52005861-9A45-4B33-8556-A11F9CFE42C1}</Project>
+      <Name>NeoComp.Activities.Design</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NeoComp.Core\NeoComp.Core.csproj">
+      <Project>{E5E43A08-F672-4433-96FD-53687BECBD44}</Project>
+      <Name>NeoComp.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

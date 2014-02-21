@@ -1,0 +1,293 @@
+﻿<Activity mc:Ignorable="sap" x:Class="WFTestConsole.Workflow1" sap:VirtualizedContainerService.HintSize="544,2780" mva:VisualBasic.Settings="Assembly references and imported namespaces for internal implementation" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="clr-namespace:Microsoft.VisualBasic;assembly=System" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:n="clr-namespace:NeoComp;assembly=NeoComp.Core" xmlns:na="clr-namespace:NeoComp.Activities;assembly=NeoComp.Activities" xmlns:nan="clr-namespace:NeoComp.Activities.NeuralNetworks;assembly=NeoComp.Activities" xmlns:nana="clr-namespace:NeoComp.Activities.NeuralNetworks.Architectures;assembly=NeoComp.Activities" xmlns:nana1="clr-namespace:NeoComp.Activities.NeuralNetworks.ActivationFunctions;assembly=NeoComp.Activities" xmlns:nanl="clr-namespace:NeoComp.Activities.NeuralNetworks.Learning;assembly=NeoComp.Activities" xmlns:nanla="clr-namespace:NeoComp.Activities.NeuralNetworks.Learning.Algorithms;assembly=NeoComp.Activities" xmlns:nc="clr-namespace:NeoComp.Computations;assembly=NeoComp" xmlns:nc1="clr-namespace:NeoComp.ComputationalNetworks;assembly=NeoComp" xmlns:nc2="clr-namespace:NeoComp.ComputationalNetworks;assembly=NeoComp.Core" xmlns:nc3="clr-namespace:NeoComp.Computations;assembly=NeoComp.Core" xmlns:nc4="clr-namespace:NeoComp.Collections;assembly=NeoComp.Core" xmlns:nn="clr-namespace:NeoComp.NeuralNetworks;assembly=NeoComp" xmlns:nn1="clr-namespace:NeoComp.Networks;assembly=NeoComp" xmlns:nn2="clr-namespace:NeoComp.NeuralNetworks;assembly=NeoComp.Core" xmlns:nna="clr-namespace:NeoComp.NeuralNetworks.Architectures;assembly=NeoComp" xmlns:nna1="clr-namespace:NeoComp.NeuralNetworks.ActivationFunctions;assembly=NeoComp" xmlns:nna2="clr-namespace:NeoComp.NeuralNetworks.ActivationFunctions;assembly=NeoComp.Core" xmlns:nnl="clr-namespace:NeoComp.NeuralNetworks.Learning;assembly=NeoComp" xmlns:nnl1="clr-namespace:NeoComp.NeuralNetworks.Learning;assembly=NeoComp.Core" xmlns:nnla="clr-namespace:NeoComp.NeuralNetworks.Learning.Algorithms;assembly=NeoComp" xmlns:nnla1="clr-namespace:NeoComp.NeuralNetworks.Learning.Algorithms;assembly=NeoComp.Core" xmlns:no="clr-namespace:NeoComp.Optimizations;assembly=NeoComp.Core" xmlns:nob="clr-namespace:NeoComp.Optimizations.BatchingStrategies;assembly=NeoComp.Core" xmlns:non="clr-namespace:NeoComp.Optimizations.NeuralNetworks;assembly=NeoComp.Core" xmlns:nt="clr-namespace:NeoComp.Threading;assembly=NeoComp" xmlns:nt1="clr-namespace:NeoComp.Threading;assembly=NeoComp.Core" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:s1="clr-namespace:System;assembly=System" xmlns:s2="clr-namespace:System;assembly=System.Xml" xmlns:s3="clr-namespace:System;assembly=System.Core" xmlns:s4="clr-namespace:System;assembly=System.ServiceModel" xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities" xmlns:sad="clr-namespace:System.Activities.Debugger;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System" xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.ServiceModel" xmlns:scg2="clr-namespace:System.Collections.Generic;assembly=System.Core" xmlns:scg3="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:sl="clr-namespace:System.Linq;assembly=System.Core" xmlns:ssa="clr-namespace:System.ServiceModel.Activities;assembly=System.ServiceModel.Activities" xmlns:st="clr-namespace:System.Text;assembly=mscorlib" xmlns:w="clr-namespace:WFTestConsole" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <sap:WorkflowViewStateService.ViewState>
+    <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+      <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+    </scg3:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence sad:XamlDebuggerXmlReader.FileName="C:\Users\unbornchikken\Documents\Visual Studio 2010\Projects\NeoComp\NeoComp 1.0\WFTestConsole\Workflow1.xaml" sap:VirtualizedContainerService.HintSize="504,2740">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="nnl1:Training" Name="training" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg3:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence DisplayName="Create Training" sap:VirtualizedContainerService.HintSize="482,1544">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="nnla1:LearningRule[]" Name="rules" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        </scg3:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <nanla:LearningRuleCollectionBlueprint DisplayName="Learning Rules" sap:VirtualizedContainerService.HintSize="385,597" ItemResultName="learningRuleItemResult" Result="[rules]">
+        <nanla:LearningRuleCollectionBlueprint.Activities>
+          <nanla:NoisedWeightInitializationRuleBlueprint DisplayName="Noised Weight Init." sap:VirtualizedContainerService.HintSize="263,266" IsEnabled="[True]" Noise="[0.5]" Result="[learningRuleItemResult]">
+            <nanla:NoisedWeightInitializationRuleBlueprint.GroupID>
+              <InArgument x:TypeArguments="x:Int32" />
+            </nanla:NoisedWeightInitializationRuleBlueprint.GroupID>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="Behavior:IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="Math:IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="Weight Decay:IsExpanded">True</x:Boolean>
+              </scg3:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <nanla:NoisedWeightInitializationRuleBlueprint.WeightDecay>
+              <ActivityFunc x:TypeArguments="nnla1:WeightDecay">
+                <ActivityFunc.Result>
+                  <DelegateOutArgument x:TypeArguments="nnla1:WeightDecay" Name="weightDecayResult" />
+                </ActivityFunc.Result>
+              </ActivityFunc>
+            </nanla:NoisedWeightInitializationRuleBlueprint.WeightDecay>
+          </nanla:NoisedWeightInitializationRuleBlueprint>
+          <nanla:SCGRuleBlueprint DisplayName="SCG" sap:VirtualizedContainerService.HintSize="263,204" IsEnabled="[True]" Result="[learningRuleItemResult]">
+            <nanla:SCGRuleBlueprint.GroupID>
+              <InArgument x:TypeArguments="x:Int32" />
+            </nanla:SCGRuleBlueprint.GroupID>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="Behavior:IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="Weight Decay:IsExpanded">True</x:Boolean>
+              </scg3:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <nanla:SCGRuleBlueprint.WeightDecay>
+              <ActivityFunc x:TypeArguments="nnla1:WeightDecay">
+                <ActivityFunc.Result>
+                  <DelegateOutArgument x:TypeArguments="nnla1:WeightDecay" Name="weightDecayResult" />
+                </ActivityFunc.Result>
+              </ActivityFunc>
+            </nanla:SCGRuleBlueprint.WeightDecay>
+          </nanla:SCGRuleBlueprint>
+        </nanla:LearningRuleCollectionBlueprint.Activities>
+      </nanla:LearningRuleCollectionBlueprint>
+      <nanl:UnorderedTrainingBlueprint DisplayName="Unordered Training" sap:VirtualizedContainerService.HintSize="385,783" MaxIterations="[10]" MinIterations="[5]" Result="[training]">
+        <nanl:UnorderedTrainingBlueprint.NeuralNetwork>
+          <ActivityFunc x:TypeArguments="nn2:NeuralNetwork">
+            <ActivityFunc.Result>
+              <DelegateOutArgument x:TypeArguments="nn2:NeuralNetwork" Name="neuralNetworkResult" />
+            </ActivityFunc.Result>
+            <nana:WiredNeuralNetworkBlueprint VariableName="{x:Null}" DisplayName="Wired Neural Network" sap:VirtualizedContainerService.HintSize="359,594" InputInterfaceLength="[ImgNoiseInit.FFInputInterfaceLenght]" IsRecurrent="[False]" NodeCount="[ImgNoiseInit.NeuronCount]" OutputInterfaceLength="[1]" Result="[neuralNetworkResult]">
+              <nana:WiredNeuralNetworkBlueprint.CollectorNodeFactory>
+                <ActivityFunc x:TypeArguments="n:IFactory(nc2:OperationNode(x:Double))">
+                  <ActivityFunc.Result>
+                    <DelegateOutArgument x:TypeArguments="n:IFactory(nc2:OperationNode(x:Double))" Name="collectorNodeFactoryResult" />
+                  </ActivityFunc.Result>
+                  <nan:ActivationNeuronFactoryBlueprint DisplayName="Activation Neuron" sap:VirtualizedContainerService.HintSize="333,82" Result="[collectorNodeFactoryResult]">
+                    <nan:ActivationNeuronFactoryBlueprint.ActivationFunction>
+                      <ActivityFunc x:TypeArguments="nna2:IActivationFunction">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="nna2:IActivationFunction" Name="activationFunctionResult" />
+                        </ActivityFunc.Result>
+                        <nana1:LinearActivationFunctionBlueprint Alpha="[1.05]" DisplayName="Linear Activation Function" sap:VirtualizedContainerService.HintSize="224,98" Result="[activationFunctionResult]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="Math:IsExpanded">True</x:Boolean>
+                            </scg3:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </nana1:LinearActivationFunctionBlueprint>
+                      </ActivityFunc>
+                    </nan:ActivationNeuronFactoryBlueprint.ActivationFunction>
+                    <nan:ActivationNeuronFactoryBlueprint.LearningRules>
+                      <ActivityFunc x:TypeArguments="nnla1:LearningRule[]">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="nnla1:LearningRule[]" Name="learningRulesResult" />
+                        </ActivityFunc.Result>
+                        <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="nnla1:LearningRule[]">[learningRulesResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="nnla1:LearningRule[]">[rules]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityFunc>
+                    </nan:ActivationNeuronFactoryBlueprint.LearningRules>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="Activation Function:IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="Learning Rules:IsExpanded">True</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </nan:ActivationNeuronFactoryBlueprint>
+                </ActivityFunc>
+              </nana:WiredNeuralNetworkBlueprint.CollectorNodeFactory>
+              <nana:WiredNeuralNetworkBlueprint.ConnectionFactory>
+                <ActivityFunc x:TypeArguments="n:IFactory(nc2:ComputationConnection(x:Double))">
+                  <ActivityFunc.Result>
+                    <DelegateOutArgument x:TypeArguments="n:IFactory(nc2:ComputationConnection(x:Double))" Name="connectionFactoryResult" />
+                  </ActivityFunc.Result>
+                  <nan:SynapseBlueprint DisplayName="Synapse" sap:VirtualizedContainerService.HintSize="333,59" Result="[connectionFactoryResult]">
+                    <nan:SynapseBlueprint.LearningRules>
+                      <ActivityFunc x:TypeArguments="nnla1:LearningRule[]">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="nnla1:LearningRule[]" Name="learningRulesResult" />
+                        </ActivityFunc.Result>
+                        <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="nnla1:LearningRule[]">[learningRulesResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="nnla1:LearningRule[]">[rules]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityFunc>
+                    </nan:SynapseBlueprint.LearningRules>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        <x:Boolean x:Key="Learning Rules:IsExpanded">True</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </nan:SynapseBlueprint>
+                </ActivityFunc>
+              </nana:WiredNeuralNetworkBlueprint.ConnectionFactory>
+              <nana:WiredNeuralNetworkBlueprint.NodeFactory>
+                <ActivityFunc x:TypeArguments="n:IFactory(nc2:OperationNode(x:Double))">
+                  <ActivityFunc.Result>
+                    <DelegateOutArgument x:TypeArguments="n:IFactory(nc2:OperationNode(x:Double))" Name="nodeFactoryResult" />
+                  </ActivityFunc.Result>
+                  <nan:ActivationNeuronFactoryBlueprint DisplayName="Activation Neuron" sap:VirtualizedContainerService.HintSize="333,82" Result="[nodeFactoryResult]">
+                    <nan:ActivationNeuronFactoryBlueprint.ActivationFunction>
+                      <ActivityFunc x:TypeArguments="nna2:IActivationFunction">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="nna2:IActivationFunction" Name="activationFunctionResult" />
+                        </ActivityFunc.Result>
+                        <nana1:SigmoidActivationFunctionBlueprint Alpha="[1.05]" DisplayName="Sigmoid Activation Function" sap:VirtualizedContainerService.HintSize="242,98" Result="[activationFunctionResult]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="Math:IsExpanded">True</x:Boolean>
+                            </scg3:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </nana1:SigmoidActivationFunctionBlueprint>
+                      </ActivityFunc>
+                    </nan:ActivationNeuronFactoryBlueprint.ActivationFunction>
+                    <nan:ActivationNeuronFactoryBlueprint.LearningRules>
+                      <ActivityFunc x:TypeArguments="nnla1:LearningRule[]">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="nnla1:LearningRule[]" Name="learningRulesResult" />
+                        </ActivityFunc.Result>
+                        <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="nnla1:LearningRule[]">[learningRulesResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="nnla1:LearningRule[]">[rules]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityFunc>
+                    </nan:ActivationNeuronFactoryBlueprint.LearningRules>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="Activation Function:IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="Learning Rules:IsExpanded">True</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </nan:ActivationNeuronFactoryBlueprint>
+                </ActivityFunc>
+              </nana:WiredNeuralNetworkBlueprint.NodeFactory>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="Architecture:IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="Connection Factory:IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="Node Factory:IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="Collector Node Factory:IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg3:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </nana:WiredNeuralNetworkBlueprint>
+          </ActivityFunc>
+        </nanl:UnorderedTrainingBlueprint.NeuralNetwork>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="Behavior:IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="Neural Network:IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg3:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </nanl:UnorderedTrainingBlueprint>
+    </Sequence>
+    <na:ComputationContext DisplayName="Computation Context" sap:VirtualizedContainerService.HintSize="482,1032">
+      <na:ComputationContext.Body>
+        <DoWhile sap:VirtualizedContainerService.HintSize="464,992" Condition="True">
+          <Sequence sap:VirtualizedContainerService.HintSize="438,872">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg3:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <nanl:TrainingIteration DisplayName="Training Iteration" sap:VirtualizedContainerService.HintSize="314,748" Result="[result]" Training="[training]">
+              <nanl:TrainingIteration.GetNextBatch>
+                <ActivityFunc x:TypeArguments="non:NeuralBatch">
+                  <ActivityFunc.Result>
+                    <DelegateOutArgument x:TypeArguments="non:NeuralBatch" Name="batchResult" />
+                  </ActivityFunc.Result>
+                  <nanl:UnorderedBatcher BatchSize="[200]" DisplayName="Unordered Batcher" sap:VirtualizedContainerService.HintSize="278,626" ItemCount="[provider.ItemCount]" LastResult="[result]" ReinitializationFrequency="[500]" Result="[batchResult]" UseCache="[True]">
+                    <nanl:UnorderedBatcher.GetBatchingStrategyFactory>
+                      <ActivityFunc x:TypeArguments="n:IFactory(nob:BatchingStrategy)">
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="n:IFactory(nob:BatchingStrategy)" Name="strategyFactoryResult" />
+                        </ActivityFunc.Result>
+                        <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="n:IFactory(nob:BatchingStrategy)">[strategyFactoryResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="n:IFactory(nob:BatchingStrategy)">[New GaussianBatchingStrategy(0.5).AsFactory()]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityFunc>
+                    </nanl:UnorderedBatcher.GetBatchingStrategyFactory>
+                    <nanl:UnorderedBatcher.GetNextVectors>
+                      <ActivityFunc x:TypeArguments="non:IndexSet, non:NeuralVectors[]">
+                        <ActivityFunc.Argument>
+                          <DelegateInArgument x:TypeArguments="non:IndexSet" Name="indexSet" />
+                        </ActivityFunc.Argument>
+                        <ActivityFunc.Result>
+                          <DelegateOutArgument x:TypeArguments="non:NeuralVectors[]" Name="vectorsResult" />
+                        </ActivityFunc.Result>
+                        <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="non:NeuralVectors[]">[vectorsResult]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="non:NeuralVectors[]">[provider.GetNextVectors(indexSet).ToArray()]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityFunc>
+                    </nanl:UnorderedBatcher.GetNextVectors>
+                    <nanl:UnorderedBatcher.ReinitializeVectorProvider>
+                      <ActivityAction>
+                        <InvokeMethod sap:VirtualizedContainerService.HintSize="242,130" MethodName="Reinitialize">
+                          <InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="non:IUnorderedNeuralVectorsProvider">[provider]</InArgument>
+                          </InvokeMethod.TargetObject>
+                        </InvokeMethod>
+                      </ActivityAction>
+                    </nanl:UnorderedBatcher.ReinitializeVectorProvider>
+                  </nanl:UnorderedBatcher>
+                </ActivityFunc>
+              </nanl:TrainingIteration.GetNextBatch>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg3:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </nanl:TrainingIteration>
+          </Sequence>
+        </DoWhile>
+      </na:ComputationContext.Body>
+      <na:ComputationContext.Variables>
+        <Variable x:TypeArguments="non:IUnorderedNeuralVectorsProvider" Default="[ImgNoiseInit.FFProvider]" Name="provider" />
+        <Variable x:TypeArguments="no:BatchExecutionResult" Name="result" />
+      </na:ComputationContext.Variables>
+    </na:ComputationContext>
+  </Sequence>
+</Activity>
