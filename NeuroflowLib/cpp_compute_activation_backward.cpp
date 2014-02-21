@@ -7,22 +7,23 @@
 
 USING
 
-void cpp_compute_activation_backward::compute(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) const
+void cpp_compute_activation_backward::compute(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) const
 {
     for (auto& node : nodes)
     {
         if (node.is_last())
         {
-            compute_last(node, offset, gcf);
+            compute_last(node, offset);
         }
         else if (node.lower_errors.size() != 0)
         {
-            compute_inner(node, offset, gcf);
+            compute_inner(node, offset);
         }
+        compute_gradients(node, offset, gcf, internalIterationCount);
     }
 }
 
-void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t offset, gradient_computation_formula gcf) const
+void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t offset) const
 {
     assert(node.net_outputs);
     auto outputs = dynamic_cast<cpp_device_array*>(node.net_outputs->outputs()().get());
@@ -55,7 +56,7 @@ void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node
     }
 }
 
-void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& node, idx_t offset, gradient_computation_formula gcf) const
+void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& node, idx_t offset) const
 {
     assert(node.lower_errors.size() > 0);
     auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
@@ -96,6 +97,183 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
         else
         {
             pErrors[valueIdx] = sum * alpha;
+        }
+    }
+}
+
+void cpp_compute_activation_backward::compute_gradients(const mlp_backward_node& node, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) const
+{
+    switch (gcf)
+    {
+        case gradient_computation_formula::ff:
+            compute_gradients_ff(node, offset);
+            break;
+        case gradient_computation_formula::bptt_phase1:
+            compute_gradients_bpttp1(node, offset);
+            break;
+        case gradient_computation_formula::bptt_phase2:
+            compute_gradients_bpttp2(node, offset, internalIterationCount);
+            break;
+    }
+}
+
+void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_node& node, idx_t offset) const
+{
+    bool hasGradients = node.has_gradients();
+    bool hasGradientSums = node.has_gradient_sums();
+    assert(hasGradients || hasGradientSums);
+    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    assert(errors);
+    float* pErrors = errors->ptr();
+    idx_t size = errors->size();
+
+    float* pBiasGradients = null;
+    float* pBiasGradientSums = null;
+    if (hasGradients)
+    {
+        auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+        assert(biasGradients);
+        pBiasGradients = biasGradients->ptr();
+    }
+    if (hasGradientSums)
+    {
+        auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
+        assert(biasGradientSums);
+        pBiasGradients = biasGradientSums->ptr();
+    }
+
+    for (idx_t valueIdx = 0; valueIdx < size; valueIdx++)
+    {
+        if (hasGradients) pBiasGradients[valueIdx] = pErrors[valueIdx];
+        if (hasGradientSums) pBiasGradientSums[valueIdx] += pErrors[valueIdx];
+
+        idx_t inputLayersCount = node.in.size();
+        for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
+        {
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            assert(inputs);
+            float* pInputs = inputs->ptr();
+            idx_t inputSize = inputs->size();
+            if (hasGradients && hasGradientSums)
+            {
+                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                assert(gradients);
+                float* pGradients = gradients->ptr();
+                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                assert(gradientSums);
+                float* pGradientSums = gradientSums->ptr();
+
+                for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+                {
+                    idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    pGradientSums[gidx] += (pGradients[gidx] = pInputs[inputIndex] * pErrors[valueIdx]);
+                }
+            }
+        }
+    }
+}
+
+void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backward_node& node, idx_t offset) const
+{
+    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    assert(errors);
+    float* pErrors = errors->ptr();
+    idx_t size = errors->size();
+
+    auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+    assert(biasGradients);
+    float* pBiasGradients = biasGradients->ptr();
+
+    for (idx_t valueIdx = 0; valueIdx < size; valueIdx++)
+    {
+        pBiasGradients[valueIdx] += pErrors[valueIdx];
+
+        idx_t inputLayersCount = node.in.size();
+        for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
+        {
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            assert(inputs);
+            float* pInputs = inputs->ptr();
+            idx_t inputSize = inputs->size();
+            auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+            assert(gradients);
+            float* pGradients = gradients->ptr();
+
+            for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+            {
+                idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                pGradients[gidx] += pInputs[inputIndex] * pErrors[valueIdx];
+            }
+        }
+    }
+}
+
+void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backward_node& node, idx_t offset, idx_t internalIterationCount) const
+{
+    bool hasGradients = node.has_gradients();
+    bool hasGradientSums = node.has_gradient_sums();
+    assert(hasGradients || hasGradientSums);
+    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    assert(errors);
+    float* pErrors = errors->ptr();
+    idx_t size = errors->size();
+    float by = internalIterationCount;
+
+    auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+    assert(biasGradients);
+    float* pBiasGradients = biasGradients->ptr();
+
+    float* pBiasGradientSums = null;
+    if (hasGradientSums)
+    {
+        auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
+        assert(biasGradientSums);
+        pBiasGradients = biasGradientSums->ptr();
+    }
+
+    for (idx_t valueIdx = 0; valueIdx < size; valueIdx++)
+    {
+        pBiasGradients[valueIdx] += pErrors[valueIdx];
+        pBiasGradients[valueIdx] /= by;
+        if (hasGradientSums) pBiasGradientSums[valueIdx] += pBiasGradients[valueIdx];
+
+        idx_t inputLayersCount = node.in.size();
+        for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
+        {
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            assert(inputs);
+            float* pInputs = inputs->ptr();
+            idx_t inputSize = inputs->size();
+            if (hasGradientSums)
+            {
+                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                assert(gradients);
+                float* pGradients = gradients->ptr();
+                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                assert(gradientSums);
+                float* pGradientSums = gradientSums->ptr();
+
+                for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+                {
+                    idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    pGradients[gidx] += pInputs[inputIndex] * pErrors[valueIdx];
+                    pGradients[gidx] /= by;
+                    pGradientSums[gidx] += pGradients[gidx];
+                }
+            }
+            else
+            {
+                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                assert(gradients);
+                float* pGradients = gradients->ptr();
+
+                for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+                {
+                    idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    pGradients[gidx] += pInputs[inputIndex] * pErrors[valueIdx];
+                    pGradients[gidx] /= by;
+                }
+            }
         }
     }
 }

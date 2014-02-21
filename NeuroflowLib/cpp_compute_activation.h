@@ -16,9 +16,9 @@ namespace nf
             forward.compute(context, nodes, offset);
         }
 
-        void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) override
+        void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) override
         {
-            backward.compute(context, nodes, offset, gcf);
+            backward.compute(context, nodes, offset, gcf, internalIterationCount);
         }
 
     private:

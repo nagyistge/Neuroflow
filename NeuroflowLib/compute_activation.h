@@ -8,6 +8,6 @@ namespace nf
     {
         virtual nf_object_ptr create_operation_context() = 0;
         virtual void compute_forward(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset) = 0;
-        virtual void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf) = 0;
+        virtual void compute_backward(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) = 0;
     };
 }
