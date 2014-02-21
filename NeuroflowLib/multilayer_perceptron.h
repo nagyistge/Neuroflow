@@ -88,7 +88,7 @@ namespace nf
         device_array_group _biasGradientSums;
         device_array2_group _gradients;
         device_array2_group _gradientSums;
-        std::function<void(idx_t)> computeFunc;
+        std::function<void(idx_t)> _computeFunc;
         std::function<void(idx_t, gradient_computation_formula, idx_t)> trainFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);

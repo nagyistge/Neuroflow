@@ -219,7 +219,7 @@ void multilayer_perceptron::create_compute()
     }
     else
     {
-        computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
+        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
         {
             _computeActivation->compute_forward(ctx, nodes, offset);
         },
@@ -399,7 +399,7 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
 void multilayer_perceptron::compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs)
 {
     setup_net_values(inputs, outputs);
-    computeFunc((idx_t)0);
+    _computeFunc((idx_t)0);
 }
 
 void multilayer_perceptron::setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs)
