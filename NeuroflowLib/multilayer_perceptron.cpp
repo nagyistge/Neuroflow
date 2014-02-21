@@ -283,14 +283,15 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
             if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
         }
 
-        trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf)
+        trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t inItIdx)
         {
-            _computeActivation->compute_backward(ctx, nodes, offset, gcf);
+            _computeActivation->compute_backward(ctx, nodes, offset, gcf, inItIdx);
         },
         move(_computeActivation->create_operation_context()),
         move(nodes),
         ph::_1,
-        ph::_2);
+        ph::_2,
+        ph::_3);
     }
     else if (_doRTLR)
     {
