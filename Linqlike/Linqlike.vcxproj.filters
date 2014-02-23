@@ -22,5 +22,7 @@
     <ClInclude Include="linqlike_size.h" />
     <ClInclude Include="linqlike_sum.h" />
     <ClInclude Include="linqlike_distinct.h" />
+    <ClInclude Include="linqlike_cross_join.h" />
+    <ClInclude Include="linqlike_select_many.h" />
   </ItemGroup>
 </Project>

@@ -447,5 +447,8 @@
     <ClCompile Include="gradient_descent_learning_rule.cpp">
       <Filter>Base\NN\Learning</Filter>
     </ClCompile>
+    <ClCompile Include="randomize_weights_uniform.cpp">
+      <Filter>Base\NN\LearningInit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

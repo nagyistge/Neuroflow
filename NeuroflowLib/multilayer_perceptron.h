@@ -11,25 +11,6 @@ namespace nf
 {
     struct multilayer_perceptron : contexted<computation_context>, virtual nf_object
     {
-        struct layer_info
-        {
-            layer_info(idx_t index, bool isOnline, bool isOffline, learning_algo_optimization_type optimization_type) : 
-                index(index), 
-                is_online(isOnline), 
-                is_offline(isOffline),
-                optimization_type(optimization_type)
-            { }
-
-            idx_t index;
-            bool is_online, is_offline;
-            learning_algo_optimization_type optimization_type;
-
-            bool operator==(const layer_info& other) const
-            {
-                return index == other.index;
-            }
-        };
-
         friend struct neural_network_factory;
 
         typedef std::vector<linq::row_numbered<layer_ptr>> ordered_layers_t;
@@ -50,6 +31,25 @@ namespace nf
         void train(const supervised_batch& batch);
 
     private:
+        struct layer_info
+        {
+            layer_info(idx_t index, bool isOnline, bool isOffline, learning_algo_optimization_type optimization_type) :
+                index(index),
+                is_online(isOnline),
+                is_offline(isOffline),
+                optimization_type(optimization_type)
+            { }
+
+            idx_t index;
+            bool is_online, is_offline;
+            learning_algo_optimization_type optimization_type;
+
+            bool operator==(const layer_info& other) const
+            {
+                return index == other.index;
+            }
+        };
+
         multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties);
 
         properties_t _properties;
@@ -94,6 +94,7 @@ namespace nf
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
         void create_train(std::map<idx_t, layer_info>& infos);
+        void create_algos();
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
         const device_array_ptr& get_net_values(idx_t layerIndex) const;

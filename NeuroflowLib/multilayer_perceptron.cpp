@@ -42,7 +42,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     // It supposed to be cool, but looks like shit because of MSVC.    
     auto infos = _layers
-    | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), from(l.value()->behaviors()) | dcast<supervised_learning_behavior>() | first_or_default()); })
+    | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), from(l.value()->behaviors()) | of_type<supervised_learning_behavior>() | first_or_default()); })
     | select([](pair<idx_t, supervised_learning_behavior_ptr>& r)
     { 
         return layer_info(
@@ -301,6 +301,25 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
     {
         throw_runtime_error("Not implemented!");
     }
+    create_algos();
+}
+
+void multilayer_perceptron::create_algos()
+{
+    auto learningLayers = _layers | 
+    select_many([](row_numbered<layer_ptr>& l)
+    { 
+        return from(l.value()->behaviors()) |
+            of_type<supervised_learning_behavior>() |
+            select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
+    }) |
+    group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
+    {
+        return b.value();
+    }, [](row_numbered<supervised_learning_behavior_ptr>& b)
+    {
+        return b.row_num();
+    });
 }
 
 idx_t multilayer_perceptron::get_layer_index(const layer_ptr& layer)
@@ -352,7 +371,7 @@ void multilayer_perceptron::set_weights(const data_array_ptr& from)
 activation_description multilayer_perceptron::get_activation_desc(idx_t layerIndex)
 {
     auto& layer = _layers[layerIndex];
-    auto desc = layer.value()->descriptions() | dcast<activation_description>() | first_or_default();
+    auto desc = from(layer.value()->descriptions()) | of_type<activation_description>() | first_or_default();
     if (!desc) throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
     return *desc;
 }

@@ -94,7 +94,7 @@ namespace linqlike
                 boost::optional<key_t> current;
                 for (auto& v : map)
                 {
-                    if (v.first != current)
+                    if (!(v.first == current))
                     {
                         std::vector<T> items;
                         auto range = map.equal_range(v.first);
@@ -112,7 +112,7 @@ namespace linqlike
     }
 
     template <typename TColl, typename FK, typename FV, typename T = TColl::value_type>
-    auto operator|(TColl& coll, const _group_by<FK, FV>& groupdBy)
+    auto operator|(TColl& coll, const _group_by<FK, FV>& groupdBy) -> enumerable<grouping<decltype(groupdBy.select_key()(_wat<T>())), decltype(groupdBy.select_value()(_wat<T>()))>>
     {
         typedef decltype(groupdBy.select_key()(_wat<T>())) key_t;
         typedef decltype(groupdBy.select_value()(_wat<T>())) value_t;
@@ -134,7 +134,7 @@ namespace linqlike
                 boost::optional<key_t> current;
                 for (auto& v : map)
                 {
-                    if (v.first != current)
+                    if (!(v.first == current))
                     {
                         std::vector<value_t> items;
                         auto range = map.equal_range(v.first);
