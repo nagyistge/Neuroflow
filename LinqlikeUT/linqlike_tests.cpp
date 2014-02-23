@@ -544,5 +544,43 @@ namespace LinqlikeUT
                 throw;
             }
         }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(distinct_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(distinct_test)
+        {
+                try
+                {
+                    vector<int> values = { 2, 1, 2, 3, 4, 5, 5, 1, 4, 3, 10 };
+                    vector<int> desiredValues = { 2, 1, 3, 4, 5, 10 };
+                    
+                    vector<int> distinctValues = from(values) | distinct() | to_vector();
+
+                    Assert::AreEqual(desiredValues.size(), distinctValues.size());
+
+                    for (size_t i = 0; i < desiredValues.size(); i++)
+                    {
+                        Assert::AreEqual(desiredValues[i], distinctValues[i]);
+                    }
+
+                    vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
+                    vector<t> desiredTs = { { 2, 1 }, { 1, 4 }, { 5, 11 } };
+
+                    vector<t> distinctTs = from(ts) | distinct([](const t& t1, const t& t2) { return t1.p1 == t2.p1; }) | to_vector();
+
+                    Assert::AreEqual(desiredTs.size(), distinctTs.size());
+
+                    for (size_t i = 0; i < desiredTs.size(); i++)
+                    {
+                        Assert::IsTrue(desiredTs[i] == distinctTs[i]);
+                    }
+                }
+                catch (exception& ex)
+                {
+                    Logger::WriteMessage(ex.what());
+                    throw;
+                }
+        }
 	};
 }

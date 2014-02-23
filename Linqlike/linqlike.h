@@ -19,3 +19,4 @@
 #include "linqlike_to_map.h"
 #include "linqlike_size.h"
 #include "linqlike_sum.h"
+#include "linqlike_distinct.h"
