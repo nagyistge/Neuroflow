@@ -21,5 +21,6 @@
     <ClInclude Include="linqlike_to_map.h" />
     <ClInclude Include="linqlike_size.h" />
     <ClInclude Include="linqlike_sum.h" />
+    <ClInclude Include="linqlike_distinct.h" />
   </ItemGroup>
 </Project>
