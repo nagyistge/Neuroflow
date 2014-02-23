@@ -29,6 +29,12 @@
     <Filter Include="Ocl\NN">
       <UniqueIdentifier>{17a7821d-fc0b-4323-9902-451fc7ed3eeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\NN\LearningInit">
+      <UniqueIdentifier>{c8663f74-1c9d-43c4-abba-b6a87db455e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\NN\Learning">
+      <UniqueIdentifier>{4dfcc3b6-f489-402c-9384-dfda01339a58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -220,12 +226,6 @@
     <ClInclude Include="layer_behavior.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
-    <ClInclude Include="learning_behavior.h">
-      <Filter>Base\NN</Filter>
-    </ClInclude>
-    <ClInclude Include="supervised_learning_behavior.h">
-      <Filter>Base\NN</Filter>
-    </ClInclude>
     <ClInclude Include="layer.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
@@ -288,6 +288,21 @@
     </ClInclude>
     <ClInclude Include="cpp_compute_activation_backward.h">
       <Filter>Cpp\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_behavior.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_learning_behavior.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="gradient_descent_learning_rule.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_init_behavior.h">
+      <Filter>Base\NN\LearningInit</Filter>
+    </ClInclude>
+    <ClInclude Include="randomize_weights_uniform.h">
+      <Filter>Base\NN\LearningInit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -396,15 +411,6 @@
     <ClCompile Include="ocl_compute_activation.cpp">
       <Filter>Ocl\NN</Filter>
     </ClCompile>
-    <ClCompile Include="layer_behavior.cpp">
-      <Filter>Base\NN</Filter>
-    </ClCompile>
-    <ClCompile Include="learning_behavior.cpp">
-      <Filter>Base\NN</Filter>
-    </ClCompile>
-    <ClCompile Include="supervised_learning_behavior.cpp">
-      <Filter>Base\NN</Filter>
-    </ClCompile>
     <ClCompile Include="layer_connections.cpp">
       <Filter>Base\NN</Filter>
     </ClCompile>
@@ -431,6 +437,15 @@
     </ClCompile>
     <ClCompile Include="cpp_compute_activation_backward.cpp">
       <Filter>Cpp\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="layer_behavior.cpp">
+      <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="supervised_learning_behavior.cpp">
+      <Filter>Base\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="gradient_descent_learning_rule.cpp">
+      <Filter>Base\NN\Learning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

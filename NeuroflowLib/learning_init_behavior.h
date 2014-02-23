@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct learning_behavior : layer_behavior
+    struct learning_init_behavior : layer_behavior
     {
     };
 }

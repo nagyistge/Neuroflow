@@ -219,12 +219,14 @@
     <ClInclude Include="error.h" />
     <ClInclude Include="finally.h" />
     <ClInclude Include="get_vector_size.h" />
+    <ClInclude Include="gradient_descent_learning_rule.h" />
     <ClInclude Include="layer.h" />
     <ClInclude Include="layer_behavior.h" />
     <ClInclude Include="layer_connections.h" />
     <ClInclude Include="layer_description.h" />
     <ClInclude Include="layer_order_comparer.h" />
     <ClInclude Include="learning_behavior.h" />
+    <ClInclude Include="learning_init_behavior.h" />
     <ClInclude Include="libs.h" />
     <ClInclude Include="mlp_backward_node.h" />
     <ClInclude Include="mlp_forward_node.h" />
@@ -258,6 +260,7 @@
     <ClInclude Include="ocl_utils.h" />
     <ClInclude Include="props.h" />
     <ClInclude Include="prop_def.h" />
+    <ClInclude Include="randomize_weights_uniform.h" />
     <ClInclude Include="rtlr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
@@ -290,11 +293,11 @@
     <ClCompile Include="cpp_utils.cpp" />
     <ClCompile Include="device_array2_group.cpp" />
     <ClCompile Include="device_array_group.cpp" />
+    <ClCompile Include="gradient_descent_learning_rule.cpp" />
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="layer_behavior.cpp" />
     <ClCompile Include="layer_connections.cpp" />
     <ClCompile Include="layer_order_comparer.cpp" />
-    <ClCompile Include="learning_behavior.cpp" />
     <ClCompile Include="mlp_backward_node.cpp" />
     <ClCompile Include="mlp_forward_node.cpp" />
     <ClCompile Include="multilayer_perceptron.cpp" />

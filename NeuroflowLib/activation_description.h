@@ -22,15 +22,30 @@ namespace nf
             return _function;
         }
 
+        void function(activation_function function)
+        {
+            _function = function;
+        }
+
         float alpha() const
         {
             return _alpha;
+        }
+
+        void alpha(float alpha)
+        {
+            _alpha = alpha;
         }
 
     private:
         activation_function _function = activation_function::sigmoid;
         float _alpha = 1.7f;
     };
+
+    inline layer_description_ptr make_activation_description()
+    {
+        return std::make_shared<activation_description>();
+    }
 
     inline layer_description_ptr make_activation_description(activation_function function, float alpha)
     {
