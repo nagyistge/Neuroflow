@@ -7,9 +7,6 @@ namespace linqlike
     template <typename TColl>
     struct _concat
     {
-        typedef typename TColl::value_type value_type;
-        typedef enumerable<value_type> enumerable_t;
-
         explicit _concat(TColl& coll) : _coll(coll) { }
 
         TColl& coll()

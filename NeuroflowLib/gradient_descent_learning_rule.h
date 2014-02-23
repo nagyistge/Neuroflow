@@ -55,7 +55,7 @@ namespace nf
             _weightUpdateMode = value;
         }
 
-        bool props_equals(const layer_behavior_ptr& other) const override;
+        bool props_equals(const layer_behavior* other) const override;
         learning_algo_optimization_type optimization_type() const override;
 
     private:

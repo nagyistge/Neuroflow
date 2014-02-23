@@ -25,6 +25,8 @@ namespace nf
             _strength = value;
         }
 
+        bool props_equals(const layer_behavior* other) const override;
+
     private:
         float _strength = 1.0f;
     };

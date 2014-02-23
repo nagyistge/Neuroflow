@@ -550,37 +550,84 @@ namespace LinqlikeUT
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(distinct_test)
         {
-                try
-                {
-                    vector<int> values = { 2, 1, 2, 3, 4, 5, 5, 1, 4, 3, 10 };
-                    vector<int> desiredValues = { 2, 1, 3, 4, 5, 10 };
+            try
+            {
+                vector<int> values = { 2, 1, 2, 3, 4, 5, 5, 1, 4, 3, 10 };
+                vector<int> desiredValues = { 2, 1, 3, 4, 5, 10 };
                     
-                    vector<int> distinctValues = from(values) | distinct() | to_vector();
+                vector<int> distinctValues = from(values) | distinct() | to_vector();
 
-                    Assert::AreEqual(desiredValues.size(), distinctValues.size());
+                Assert::AreEqual(desiredValues.size(), distinctValues.size());
 
-                    for (size_t i = 0; i < desiredValues.size(); i++)
-                    {
-                        Assert::AreEqual(desiredValues[i], distinctValues[i]);
-                    }
-
-                    vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
-                    vector<t> desiredTs = { { 2, 1 }, { 1, 4 }, { 5, 11 } };
-
-                    vector<t> distinctTs = from(ts) | distinct([](const t& t1, const t& t2) { return t1.p1 == t2.p1; }) | to_vector();
-
-                    Assert::AreEqual(desiredTs.size(), distinctTs.size());
-
-                    for (size_t i = 0; i < desiredTs.size(); i++)
-                    {
-                        Assert::IsTrue(desiredTs[i] == distinctTs[i]);
-                    }
-                }
-                catch (exception& ex)
+                for (size_t i = 0; i < desiredValues.size(); i++)
                 {
-                    Logger::WriteMessage(ex.what());
-                    throw;
+                    Assert::AreEqual(desiredValues[i], distinctValues[i]);
                 }
+
+                vector<t> ts = { { 2, 1 }, { 1, 4 }, { 1, -1 }, { 2, 11 }, { 5, 11 }, { 1, 21 } };
+                vector<t> desiredTs = { { 2, 1 }, { 1, 4 }, { 5, 11 } };
+
+                vector<t> distinctTs = from(ts) | distinct([](const t& t1, const t& t2) { return t1.p1 == t2.p1; }) | to_vector();
+
+                Assert::AreEqual(desiredTs.size(), distinctTs.size());
+
+                for (size_t i = 0; i < desiredTs.size(); i++)
+                {
+                    Assert::IsTrue(desiredTs[i] == distinctTs[i]);
+                }
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cross_join_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cross_join_test)
+        {
+            try
+            {
+                vector<int> values1 = { 2, 1, 2, 3, 4, 5 };
+                vector<int> values2 = { 10, 11 };
+                size_t count = 0, s = 0;
+                for (auto& v : from(values1) | cross_join(from(values2)))
+                {
+                    count++;
+                    s += v.first + v.second;
+                }
+                Assert::AreEqual(values1.size() * values2.size(), count);
+                Assert::AreEqual(size_t((from(values1) | sum()) * 2 + (from(values2) | sum()) * 6), s);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(select_many_test)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Linqlike")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(select_many_test)
+        {
+            try
+            {
+                vector<pair<int, vector<int>>> stuff;
+                stuff.push_back(make_pair(0, vector<int>({ 1, 2, 3, 4 })));
+                stuff.push_back(make_pair(1, vector<int>({ 5, 6, 7, 8 })));
+                vector<int> values = from(stuff) | select_many([](const pair<int, vector<int>>& s) { return from(s.second); }) | to_vector();
+                
+                Assert::AreEqual(size_t(8), values.size());
+                Assert::AreEqual(1 + 2 + 3 + 4 + 5 + 6 + 7 + 8, from(values) | sum());
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
         }
 	};
 }

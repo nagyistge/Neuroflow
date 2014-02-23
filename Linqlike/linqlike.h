@@ -20,3 +20,5 @@
 #include "linqlike_size.h"
 #include "linqlike_sum.h"
 #include "linqlike_distinct.h"
+#include "linqlike_cross_join.h"
+#include "linqlike_select_many.h"
