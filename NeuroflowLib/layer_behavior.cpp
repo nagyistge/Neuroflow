@@ -10,3 +10,8 @@ bool layer_behavior::equals(const layer_behavior_ptr& other) const
     if (typeid(this) == typeid(other)) return props_equals(other);
     return false;
 }
+
+bool layer_behavior::props_equals(const layer_behavior_ptr& other) const
+{
+    return false;
+}
