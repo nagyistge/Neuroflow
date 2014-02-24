@@ -14,6 +14,7 @@
 #include "mlp_forward_node.h"
 #include "mlp_backward_node.h"
 #include "compute_activation.h"
+#include "equatable_ptr.h"
 
 USING
 namespace ph = std::placeholders;
@@ -315,7 +316,7 @@ void multilayer_perceptron::create_algos()
     }) |
     group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
     {
-        return b.value();
+        return make_equatable_ptr(b.value());
     }, [](row_numbered<supervised_learning_behavior_ptr>& b)
     {
         return b.row_num();

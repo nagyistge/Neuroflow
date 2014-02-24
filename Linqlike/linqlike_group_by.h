@@ -82,7 +82,7 @@ namespace linqlike
         {
             return enumerable<grouping_t>::pull_type([=](enumerable<grouping_t>::push_type& yield) mutable
             {
-                typedef std::multimap<key_t, T> map_t;
+                typedef std::unordered_multimap<key_t, T> map_t;
                 typedef typename map_t::value_type map_value_t;
                 map_t map;
                 auto& selectKey = groupdBy.select_key();
@@ -121,7 +121,7 @@ namespace linqlike
         {
             return enumerable<grouping_t>::pull_type([=](enumerable<grouping_t>::push_type& yield) mutable
             {
-                typedef std::multimap<key_t, value_t> map_t;
+                typedef std::unordered_multimap<key_t, value_t> map_t;
                 typedef typename map_t::value_type map_value_t;
                 map_t map;
                 auto& selectKey = groupdBy.select_key();

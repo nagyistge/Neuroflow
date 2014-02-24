@@ -26,6 +26,7 @@ namespace nf
         }
 
         bool props_equals(const layer_behavior* other) const override;
+        ::size_t get_hash_code() const override;
 
     private:
         float _strength = 1.0f;
