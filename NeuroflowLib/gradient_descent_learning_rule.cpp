@@ -5,12 +5,20 @@ USING
 
 bool gradient_descent_learning_rule::props_equals(const layer_behavior* other) const
 {
-    if (!supervised_learning_behavior::props_equals(other)) return false;
     auto o = dynamic_cast<const gradient_descent_learning_rule*>(other);
     if (!o) return false;
     return _learningRate == o->_learningRate &&
         _momentum == o->_momentum &&
-        _smoothing == o->_smoothing;
+        _smoothing == o->_smoothing &&
+        _weightUpdateMode == o->_weightUpdateMode;
+}
+
+::size_t gradient_descent_learning_rule::get_hash_code() const
+{
+    return hash<float>()(_learningRate) ^
+        hash<float>()(_momentum) ^
+        hash<bool>()(_smoothing) ^
+        hash<int>()((int)_weightUpdateMode);
 }
 
 learning_algo_optimization_type gradient_descent_learning_rule::optimization_type() const

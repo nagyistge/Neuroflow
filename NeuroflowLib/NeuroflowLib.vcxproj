@@ -216,6 +216,8 @@
     <ClInclude Include="device_info.h" />
     <ClInclude Include="enum_flags.h" />
     <ClInclude Include="enum_to_string.h" />
+    <ClInclude Include="equatable.h" />
+    <ClInclude Include="equatable_ptr.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="finally.h" />
     <ClInclude Include="get_vector_size.h" />
@@ -326,7 +328,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="supervised_batch.cpp" />
-    <ClCompile Include="supervised_learning_behavior.cpp" />
     <ClCompile Include="supervised_sample.cpp" />
     <ClCompile Include="supervised_sample_entry.cpp" />
     <ClCompile Include="version.cpp" />

@@ -9,6 +9,5 @@ namespace nf
     {
         virtual learning_algo_optimization_type optimization_type() const = 0;
         virtual weight_update_mode weight_update_mode() const = 0;
-        bool props_equals(const layer_behavior* other) const override;
     };
 }

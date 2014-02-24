@@ -3,11 +3,9 @@
 
 USING
 
-bool layer_behavior::equals(const layer_behavior_ptr& other) const
+bool layer_behavior::equals(const equatable& other) const
 {
-    if (!other) return false;
-    if (this == other.get()) return true;
-    if (typeid(this) == typeid(other)) return props_equals(other.get());
+    if (typeid(this) == typeid(other)) return props_equals(dynamic_cast<const layer_behavior*>(&other));
     return false;
 }
 

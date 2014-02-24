@@ -304,6 +304,12 @@
     <ClInclude Include="randomize_weights_uniform.h">
       <Filter>Base\NN\LearningInit</Filter>
     </ClInclude>
+    <ClInclude Include="equatable.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="equatable_ptr.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -440,9 +446,6 @@
     </ClCompile>
     <ClCompile Include="layer_behavior.cpp">
       <Filter>Base\NN</Filter>
-    </ClCompile>
-    <ClCompile Include="supervised_learning_behavior.cpp">
-      <Filter>Base\NN\Learning</Filter>
     </ClCompile>
     <ClCompile Include="gradient_descent_learning_rule.cpp">
       <Filter>Base\NN\Learning</Filter>

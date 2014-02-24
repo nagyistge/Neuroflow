@@ -56,6 +56,7 @@ namespace nf
         }
 
         bool props_equals(const layer_behavior* other) const override;
+        ::size_t get_hash_code() const override;
         learning_algo_optimization_type optimization_type() const override;
 
     private:
