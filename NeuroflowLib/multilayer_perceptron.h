@@ -94,7 +94,7 @@ namespace nf
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
         void create_train(std::map<idx_t, layer_info>& infos);
-        void create_algos();
+        void create_impls();
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
         const device_array_ptr& get_net_values(idx_t layerIndex) const;

@@ -1,11 +1,11 @@
 #pragma once
 
 #include "nfdev.h"
-#include "layer_behavior.h"
+#include "learning_behavior.h"
 
 namespace nf
 {
-    struct learning_init_behavior : layer_behavior
+    struct learning_init_behavior : virtual learning_behavior
     {
     };
 }

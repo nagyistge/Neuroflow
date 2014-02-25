@@ -5,7 +5,7 @@
 
 namespace nf
 {
-    struct randomize_weights_uniform : learning_init_behavior
+    struct randomize_weights_uniform : virtual learning_init_behavior
     {
         randomize_weights_uniform()
         {
