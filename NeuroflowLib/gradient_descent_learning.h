@@ -5,13 +5,13 @@
 
 namespace nf
 {
-    struct gradient_descent_learning_rule : supervised_learning_behavior
+    struct gradient_descent_learning : virtual supervised_learning_behavior
     {
-        gradient_descent_learning_rule()
+        gradient_descent_learning()
         {
         }
 
-        gradient_descent_learning_rule(float learningRate, float momentum, bool smoothing, nf::weight_update_mode weightUpdateMode) :
+        gradient_descent_learning(float learningRate, float momentum, bool smoothing, nf::weight_update_mode weightUpdateMode) :
             _learningRate(learningRate),
             _momentum(momentum),
             _smoothing(smoothing),
@@ -68,11 +68,11 @@ namespace nf
 
     inline layer_behavior_ptr make_gradient_descent_learning_rule()
     {
-        return std::make_shared<gradient_descent_learning_rule>();
+        return std::make_shared<gradient_descent_learning>();
     }
 
     inline layer_behavior_ptr make_gradient_descent_learning_rule(float learningRate, float momentum, bool smoothing, nf::weight_update_mode weightUpdateMode)
     {
-        return std::make_shared<gradient_descent_learning_rule>(learningRate, momentum, smoothing, weightUpdateMode);
+        return std::make_shared<gradient_descent_learning>(learningRate, momentum, smoothing, weightUpdateMode);
     }
 }

@@ -302,10 +302,10 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
     {
         throw_runtime_error("Not implemented!");
     }
-    create_algos();
+    create_impls();
 }
 
-void multilayer_perceptron::create_algos()
+void multilayer_perceptron::create_impls()
 {
     auto learningLayers = _layers | 
     select_many([](row_numbered<layer_ptr>& l)

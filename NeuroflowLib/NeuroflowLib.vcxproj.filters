@@ -29,9 +29,6 @@
     <Filter Include="Ocl\NN">
       <UniqueIdentifier>{17a7821d-fc0b-4323-9902-451fc7ed3eeb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Base\NN\LearningInit">
-      <UniqueIdentifier>{c8663f74-1c9d-43c4-abba-b6a87db455e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Base\NN\Learning">
       <UniqueIdentifier>{4dfcc3b6-f489-402c-9384-dfda01339a58}</UniqueIdentifier>
     </Filter>
@@ -289,26 +286,41 @@
     <ClInclude Include="cpp_compute_activation_backward.h">
       <Filter>Cpp\NN</Filter>
     </ClInclude>
-    <ClInclude Include="learning_behavior.h">
-      <Filter>Base\NN\Learning</Filter>
-    </ClInclude>
     <ClInclude Include="supervised_learning_behavior.h">
       <Filter>Base\NN\Learning</Filter>
-    </ClInclude>
-    <ClInclude Include="gradient_descent_learning_rule.h">
-      <Filter>Base\NN\Learning</Filter>
-    </ClInclude>
-    <ClInclude Include="learning_init_behavior.h">
-      <Filter>Base\NN\LearningInit</Filter>
-    </ClInclude>
-    <ClInclude Include="randomize_weights_uniform.h">
-      <Filter>Base\NN\LearningInit</Filter>
     </ClInclude>
     <ClInclude Include="equatable.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="equatable_ptr.h">
       <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="training_node.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="gradient_descent_learning.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="randomize_weights_uniform.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_behavior.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_impl.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_impl_factory.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="initialize_learning.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="supervised_learning.h">
+      <Filter>Base\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_init_behavior.h">
+      <Filter>Base\NN\Learning</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -447,11 +459,11 @@
     <ClCompile Include="layer_behavior.cpp">
       <Filter>Base\NN</Filter>
     </ClCompile>
-    <ClCompile Include="gradient_descent_learning_rule.cpp">
+    <ClCompile Include="gradient_descent_learning.cpp">
       <Filter>Base\NN\Learning</Filter>
     </ClCompile>
     <ClCompile Include="randomize_weights_uniform.cpp">
-      <Filter>Base\NN\LearningInit</Filter>
+      <Filter>Base\NN\Learning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@ namespace nf
 
     struct device_array2;
     typedef std::shared_ptr<device_array2> device_array2_ptr;
+    typedef std::vector<device_array2_ptr> device_array2_collection_t;
 
     struct device_array_pool;
     typedef std::shared_ptr<device_array_pool> device_array_pool_ptr;
@@ -64,6 +65,12 @@ namespace nf
     typedef std::shared_ptr<layer_behavior> layer_behavior_ptr;
     typedef std::list<layer_behavior_ptr> layer_behavior_coll_t;
 
+    struct learning_behavior;
+    typedef std::shared_ptr<learning_behavior> learning_behavior_ptr;
+
+    struct learning_init_behavior;
+    typedef std::shared_ptr<learning_init_behavior> learning_init_behavior_ptr;
+
     struct supervised_learning_behavior;
     typedef std::shared_ptr<supervised_learning_behavior> supervised_learning_behavior_ptr;
 
@@ -77,6 +84,14 @@ namespace nf
 
     struct device_array2_group;
     typedef std::shared_ptr<device_array2_group> device_array2_group_ptr;
+
+    struct learning_impl;
+    typedef std::shared_ptr<learning_impl> learning_impl_ptr;
+
+    struct learning_impl_factory;
+    typedef std::shared_ptr<learning_impl_factory> learning_impl_factory_ptr;
+
+    struct training_node;
 
     struct supervised_batch;
     struct supervised_sample;
@@ -98,6 +113,13 @@ namespace nf
         none,
         gradient_based, 
         global
+    };
+
+    ENUM_FLAGS(supervised_learning_iteration_type)
+    enum class supervised_learning_iteration_type
+    {
+        online = 1 << 2,
+        offline = 1 << 3
     };
 
     ENUM_STRINGS(gradient_computation_method, "none", "feed_forward", "bptt", "rtlr")
