@@ -74,6 +74,15 @@ namespace nf
     struct supervised_learning_behavior;
     typedef std::shared_ptr<supervised_learning_behavior> supervised_learning_behavior_ptr;
 
+    struct learning_impl;
+    typedef std::shared_ptr<learning_impl> learning_impl_ptr;
+
+    struct initialize_learning;
+    typedef std::shared_ptr<initialize_learning> initialize_learning_ptr;
+
+    struct supervised_learning;
+    typedef std::shared_ptr<supervised_learning> supervised_learning_ptr;
+
     struct layer_description;
     typedef std::shared_ptr<layer_description> layer_description_ptr;
     typedef std::list<layer_description_ptr> layer_description_coll_t;
@@ -92,6 +101,7 @@ namespace nf
     typedef std::shared_ptr<learning_impl_factory> learning_impl_factory_ptr;
 
     struct training_node;
+    typedef std::vector<training_node> training_node_collection_t;
 
     struct supervised_batch;
     struct supervised_sample;
