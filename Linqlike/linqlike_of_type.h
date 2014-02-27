@@ -11,7 +11,7 @@ namespace linqlike
     };
 
     template <typename TColl, typename R, typename T = TColl::value_type>
-    auto operator|(TColl& coll, const of_type<R>& ot)
+    auto operator|(TColl& coll, const of_type<R>& ot) -> enumerable<std::shared_ptr<R>>
     {
         typedef std::shared_ptr<R> result_t;
         return enumerable<result_t>([=]() mutable

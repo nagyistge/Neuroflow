@@ -89,11 +89,15 @@ namespace nf
         device_array2_group _gradients;
         device_array2_group _gradientSums;
         std::function<void(idx_t)> _computeFunc;
-        std::function<void(idx_t, gradient_computation_formula, idx_t)> trainFunc;
+        std::function<void(idx_t, gradient_computation_formula, idx_t)> _trainFunc;
+        std::function<void()> _initLearningFunc;
+        std::function<void()> _offlineLearningFunc;
+        std::function<void()> _onlineLearningFunc;
+
 
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
-        void create_train(std::map<idx_t, layer_info>& infos);
+        void create_training(std::map<idx_t, layer_info>& infos);
         void create_impls();
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
