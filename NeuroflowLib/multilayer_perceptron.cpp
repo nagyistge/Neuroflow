@@ -4,6 +4,7 @@
 #include "layer_order_comparer.h"
 #include "layer_connections.h"
 #include "supervised_learning_behavior.h"
+#include "learning_init_behavior.h"
 #include "layer.h"
 #include "device_array_management.h"
 #include "computation_context.h"
@@ -15,6 +16,7 @@
 #include "mlp_backward_node.h"
 #include "compute_activation.h"
 #include "equatable_ptr.h"
+#include "training_node.h"
 
 USING
 namespace ph = std::placeholders;
@@ -84,7 +86,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     create_structure(infos);
     create_compute();
-    create_train(infos);
+    create_training(infos);
     
     /*
     create_train_init();
@@ -230,7 +232,7 @@ void multilayer_perceptron::create_compute()
     }
 }
 
-void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
+void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
 {
     if (_doBackpropagate)
     {
@@ -284,7 +286,7 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
             if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
         }
 
-        trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t inItIdx)
+        _trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t inItIdx)
         {
             _computeActivation->compute_backward(ctx, nodes, offset, gcf, inItIdx);
         },
@@ -307,20 +309,68 @@ void multilayer_perceptron::create_train(std::map<idx_t, layer_info>& infos)
 
 void multilayer_perceptron::create_impls()
 {
+    auto initLayers = _layers |
+        select_many([](row_numbered<layer_ptr>& l)
+        {
+            return from(l.value()->behaviors()) |
+                of_type<learning_init_behavior>() |
+                select([=](learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
+        }) |
+        group_by([](row_numbered<learning_init_behavior_ptr>& b)
+        {
+            return make_equatable_ptr(b.value());
+        }, [](row_numbered<learning_init_behavior_ptr>& b)
+        {
+            return b.row_num();
+        });
+
     auto learningLayers = _layers | 
-    select_many([](row_numbered<layer_ptr>& l)
-    { 
-        return from(l.value()->behaviors()) |
-            of_type<supervised_learning_behavior>() |
-            select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
-    }) |
-    group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
+        select_many([](row_numbered<layer_ptr>& l)
+        { 
+            return from(l.value()->behaviors()) |
+                of_type<supervised_learning_behavior>() |
+                select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
+        }) |
+        group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
+        {
+            return make_equatable_ptr(b.value());
+        }, [](row_numbered<supervised_learning_behavior_ptr>& b)
+        {
+            return b.row_num();
+        });
+
+    training_node_collection_t nodes;
+    for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
     {
-        return make_equatable_ptr(b.value());
-    }, [](row_numbered<supervised_learning_behavior_ptr>& b)
-    {
-        return b.row_num();
-    });
+        auto& layer = _layers[lidx];
+        device_array_collection_t weights;
+        boost::optional<device_array_collection_t> gradients;
+        boost::optional<device_array_collection_t> gradientSums;
+
+        weights.push_back(_biases.get(lidx));
+        device_array_ptr arr;
+        if (_biasGradients.try_get(lidx, arr))
+        {
+            if (!gradients) gradients = device_array_collection_t();
+            gradients->push_back(arr);
+        }
+        if (_biasGradientSums.try_get(lidx, arr))
+        {
+            if (!gradientSums) gradientSums = device_array_collection_t();
+            gradientSums->push_back(arr);
+        }
+
+        for (auto& inputConnectedLayer : layer.value()->input_layers())
+        {
+            idx_t inputIndex = get_layer_index(inputConnectedLayer);
+            auto key = make_pair(inputIndex, lidx);
+            device_array2_ptr arr2;
+            if (_gradients.try_get(key, arr2)) gradients->push_back(arr2);
+            if (_gradientSums.try_get(key, arr2)) gradientSums->push_back(arr2);
+        }
+
+        nodes.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
+    }
 }
 
 idx_t multilayer_perceptron::get_layer_index(const layer_ptr& layer)

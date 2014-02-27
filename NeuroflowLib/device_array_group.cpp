@@ -23,6 +23,17 @@ const device_array_ptr& device_array_group::get(const key_t& idx) const
     return _arrays.at(idx);
 }
 
+bool device_array_group::try_get(const key_t& idx, device_array_ptr& result) const
+{
+    result = null;
+    if (idx < _arrays.size() && _arrays[idx])
+    {
+        result = _arrays[idx];
+        return true;
+    }
+    return false;
+}
+
 void device_array_group::zero()
 {
     _pool->zero();

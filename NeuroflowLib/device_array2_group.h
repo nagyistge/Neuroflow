@@ -12,6 +12,7 @@ namespace nf
 
         const device_array2_ptr& add(const key_t& idx, idx_t rowSize, idx_t colSize);
         const device_array2_ptr& get(const key_t& idx) const;
+        bool try_get(const key_t& idx, device_array2_ptr& result) const;
         void zero();
         idx_t size() const;
         linq::enumerable<device_array2_ptr> get_arrays() const;

@@ -25,6 +25,18 @@ const device_array2_ptr& device_array2_group::get(const key_t& idx) const
     return it->second;
 }
 
+bool device_array2_group::try_get(const key_t& idx, device_array2_ptr& result) const
+{
+    result = null;
+    auto it = _arrays.find(idx);
+    if (it != _arrays.end())
+    {
+        result = it->second;
+        return true;
+    }
+    return false;
+}
+
 void device_array2_group::zero()
 {
     _pool->zero();
