@@ -15,6 +15,7 @@ namespace nf
         virtual data_array_factory_ptr data_array_factory() = 0;
         virtual utils_ptr utils() = 0;
         virtual compute_activation_ptr compute_activation() = 0;
+        virtual learning_impl_factory_ptr learning_impl_factory() = 0;
 
     private:
         neural_network_factory_ptr _neuralNetworkFactory;
