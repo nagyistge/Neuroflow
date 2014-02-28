@@ -77,6 +77,7 @@ namespace nf
         nf_object_ptr _setOutputState;
         device_array_management_ptr _daMan;
         compute_activation_ptr _computeActivation;
+        learning_impl_factory_ptr _learningImplFactory;
         device_array_pool_ptr _gradientsPool;
         device_array_pool_ptr _gradientSumsPool;
         device_array_group _outputs;
@@ -91,9 +92,8 @@ namespace nf
         std::function<void(idx_t)> _computeFunc;
         std::function<void(idx_t, gradient_computation_formula, idx_t)> _trainFunc;
         std::function<void()> _initLearningFunc;
-        std::function<void()> _offlineLearningFunc;
-        std::function<void()> _onlineLearningFunc;
-
+        std::function<void(idx_t, const device_array_ptr&)> _offlineLearningFunc;
+        std::function<void(idx_t, const device_array_ptr&)> _onlineLearningFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
@@ -105,5 +105,7 @@ namespace nf
         const device_array_ptr& get_net_desired_outputs() const;
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
+        template<typename I>
+        std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const training_node_collection_t& nodes);
     };
 }

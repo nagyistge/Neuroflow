@@ -17,6 +17,9 @@
 #include "compute_activation.h"
 #include "equatable_ptr.h"
 #include "training_node.h"
+#include "supervised_learning.h"
+#include "initialize_learning.h"
+#include "learning_impl_factory.h"
 
 USING
 namespace ph = std::placeholders;
@@ -25,6 +28,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     contexted(context),
     _computeActivation(context->compute_activation()),
     _daMan(context->device_array_management()),
+    _learningImplFactory(context->learning_impl_factory()),
     _gradientsPool(_daMan->create_pool(false)),
     _gradientSumsPool(_daMan->create_pool(false)),
     _outputs(_daMan->create_pool(false)),
@@ -37,6 +41,10 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _gradients(_gradientsPool),
     _gradientSums(_gradientSumsPool)
 {
+    assert(_daMan);
+    assert(_computeActivation);
+    assert(_learningImplFactory);
+
     prop_def pd(_properties, properties);
     _gradientComputationMethod = pd.defEnum(prop_gradient_computation_method, gradient_computation_method::feed_forward);
     _maxBpttIterations = pd.def<idx_t>(prop_max_bptt_iterations, idx_t(0), [](idx_t v) { return v >= 0; });
@@ -371,6 +379,68 @@ void multilayer_perceptron::create_impls()
 
         nodes.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
     }
+
+    vector<learning_impl_ptr> implsToInit;
+    vector<supervised_learning_ptr> onlineImpls;
+    vector<supervised_learning_ptr> offlineImpls;
+
+    for (auto& toInit : initLayers)
+    {
+        implsToInit.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), nodes));
+    }
+
+    for (auto& learn : learningLayers)
+    {
+        auto impl = create_learning_impl<supervised_learning>(learn.key().ptr(), learn.values(), nodes);
+        if (int(impl->iteration_type() & supervised_learning_iteration_type::online) != 0)
+        {
+            onlineImpls.push_back(impl);
+        }
+
+        if (int(impl->iteration_type() & supervised_learning_iteration_type::offline) != 0)
+        {
+            offlineImpls.push_back(impl);
+        }
+    }
+
+    _initLearningFunc = std::bind([](const vector<learning_impl_ptr>& impls)
+    {
+        for (auto& impl : impls) impl->initialize();
+    },
+    std::move(implsToInit));
+
+    _onlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, idx_t iterationCount, const device_array_ptr& error)
+    { 
+        for (auto& impl : impls) impl->run(iterationCount, error);
+    },
+    std::move(onlineImpls),
+    ph::_1,
+    ph::_2);
+
+    _offlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, idx_t iterationCount, const device_array_ptr& error)
+    {
+        for (auto& impl : impls) impl->run(iterationCount, error);
+    },
+    std::move(offlineImpls),
+    ph::_1,
+    ph::_2);
+}
+
+template<typename I>
+std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const training_node_collection_t& nodes)
+{
+    training_node_collection_t layerNodes;
+    for (idx_t layerIndex : forLayerIndexes)
+    {
+        layerNodes.push_back(nodes[layerIndex - 1]);
+    }
+    auto impl = dynamic_pointer_cast<I>(_learningImplFactory->create_impl(behavior, layerNodes));
+    if (!impl)
+    {
+        auto e = string("Cannot create Learning Algorithm implementation for behavior: '") + typeid(*behavior).name() + "'.";
+        throw_runtime_error(e);
+    }
+    return impl;
 }
 
 idx_t multilayer_perceptron::get_layer_index(const layer_ptr& layer)

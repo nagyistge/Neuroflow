@@ -20,6 +20,10 @@ namespace nf
         const ocl_utils_ptr& ocl_utils();
         compute_activation_ptr compute_activation() override;
         const ocl_compute_activation_ptr& ocl_compute_activation();
+        learning_impl_factory_ptr learning_impl_factory() override
+        {
+            return null;
+        }
 
         const cl::Context& cl_context() const;
         const cl::Device& cl_device() const;
