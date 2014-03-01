@@ -204,6 +204,8 @@
     <ClInclude Include="cpp_device_array2.h" />
     <ClInclude Include="cpp_device_array_management.h" />
     <ClInclude Include="cpp_device_array_pool.h" />
+    <ClInclude Include="cpp_learning_impl.h" />
+    <ClInclude Include="cpp_learning_impl_factory.h" />
     <ClInclude Include="cpp_utils.h" />
     <ClInclude Include="data_array.h" />
     <ClInclude Include="data_array_factory.h" />
@@ -297,6 +299,7 @@
     <ClCompile Include="cpp_device_array2.cpp" />
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
+    <ClCompile Include="cpp_learning_impl_factory.cpp" />
     <ClCompile Include="cpp_utils.cpp" />
     <ClCompile Include="device_array2_group.cpp" />
     <ClCompile Include="device_array_group.cpp" />

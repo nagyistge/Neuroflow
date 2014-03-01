@@ -60,7 +60,7 @@ idx_t ocl_exec::vector_size_to_index(idx_t vectorSize) const
     }
 }
 
-Kernel& ocl_exec::get_kernel(idx_t vectorSize)
+cl::Kernel& ocl_exec::get_kernel(idx_t vectorSize)
 {
     return kernels[vector_size_to_index(vectorSize)];
 }

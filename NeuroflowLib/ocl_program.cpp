@@ -13,7 +13,7 @@ ocl_program_unit(context, name)
 
 cl::Kernel ocl_program::create_kernel(const std::string name)
 {
-    return Kernel(get_or_create_program(), name.c_str());
+    return cl::Kernel(get_or_create_program(), name.c_str());
 }
 
 const cl::Program& ocl_program::get_or_create_program()
@@ -101,7 +101,7 @@ cl::Program ocl_program::create_program_and_binary(std::vector<char>& bin)
 #if _DEBUG
     source = code;
 #endif
-    auto p = Program(ctx->cl_context(), code.c_str(), false);
+    auto p = cl::Program(ctx->cl_context(), code.c_str(), false);
     build(p);
 
     auto s = p.getInfo<CL_PROGRAM_BINARY_SIZES>();
@@ -127,9 +127,9 @@ cl::Program ocl_program::create_program(const std::vector<char>& bin)
 {
     auto ctx = lock_context();
 
-    Program::Binaries bins;
+    cl::Program::Binaries bins;
     bins.emplace_back(&bin[0], bin.size());
-    auto p = Program(ctx->cl_context(), vector<Device>(1, ctx->cl_device()), bins);
+    auto p = cl::Program(ctx->cl_context(), vector<cl::Device>(1, ctx->cl_device()), bins);
     build(p);
     return p;
 }
@@ -140,9 +140,9 @@ void ocl_program::build(cl::Program& program)
 
     try
     {
-        program.build(vector<Device>(1, ctx->cl_device()), "-cl-fast-relaxed-math");
+        program.build(vector<cl::Device>(1, ctx->cl_device()), "-cl-fast-relaxed-math");
     }
-    catch (Error&)
+    catch (cl::Error&)
     {
         auto info = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(ctx->cl_device());
         info = string("\nOPENCL BUILD FAILED:\n") + info;

@@ -19,6 +19,7 @@
 #include <type_traits>
 #include <map>
 #include <unordered_map>
+#include <typeinfo>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>

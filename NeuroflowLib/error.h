@@ -88,3 +88,8 @@ inline void throw_not_implemented()
 {
     throw_runtime_error("Not implemented!");
 }
+
+inline void throw_not_implemented(const std::string& message)
+{
+    throw_runtime_error(message);
+}

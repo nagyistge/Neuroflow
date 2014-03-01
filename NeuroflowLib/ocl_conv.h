@@ -11,11 +11,11 @@ namespace nf
     {
         if (ptr == null)
         {
-            if (!allowNull) throw_runtime_error("Device array is null.");
+            if (!allowNull) throw_runtime_error("cl::Device array is null.");
             return null;
         }
         auto result = std::dynamic_pointer_cast<ocl_device_array>(ptr);
-        if (result == null) throw_runtime_error("Device array type is unknonwn.");
+        if (result == null) throw_runtime_error("cl::Device array type is unknonwn.");
         return result;
     }
 
@@ -23,11 +23,11 @@ namespace nf
     {
         if (ptr == null)
         {
-            if (!allowNull) throw_runtime_error("Device array 2 is null.");
+            if (!allowNull) throw_runtime_error("cl::Device array 2 is null.");
             return null;
         }
         auto result = std::dynamic_pointer_cast<ocl_device_array2>(ptr);
-        if (result == null) throw_runtime_error("Device array 2 type is unknonwn.");
+        if (result == null) throw_runtime_error("cl::Device array 2 type is unknonwn.");
         return result;
     }
 

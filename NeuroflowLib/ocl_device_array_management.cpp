@@ -53,7 +53,7 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t 
 
     try
     {
-        auto buffer = Buffer(
+        auto buffer = cl::Buffer(
             ctx->cl_context(),
             flags,
             sizeInBytes,
@@ -81,7 +81,7 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float*
 
     try
     {
-        return Buffer(
+        return cl::Buffer(
             ctx->cl_context(),
             flags,
             sizeInBytes,

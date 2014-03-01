@@ -162,7 +162,7 @@ void ocl_utils::add_mse(const ocl_data_array_ptr& desiredValues, const ocl_data_
     addExec.execute(
     program,
     vectorSize,
-    [&, vectorSize, mseValueIndex](Kernel& kernel)
+    [&, vectorSize, mseValueIndex](cl::Kernel& kernel)
     {
     kernel.setArg(0, desiredValues->buffer());
     kernel.setArg(1, currentValues->buffer());
@@ -180,14 +180,14 @@ void ocl_utils::div(const ocl_data_array_ptr& values, idx_t valueIndex, float by
     divExec.execute(
     program,
     1,
-    [=](Kernel& kernel)
+    [=](cl::Kernel& kernel)
     {
     kernel.setArg(0, values->buffer());
     kernel.setArg(1, byValue);
     },
-    NDRange(valueIndex),
-    NDRange(1),
-    NullRange);
+    cl::NDRange(valueIndex),
+    cl::NDRange(1),
+    cl::NullRange);
 }
 
 void ocl_utils::zero(const device_array_ptr& deviceArray)
@@ -249,7 +249,7 @@ void ocl_utils::zero(const cl::Buffer& buffer, idx_t size)
             zeroFExec.execute(
             program,
             vectorSize,
-            [&](Kernel& kernel)
+            [&](cl::Kernel& kernel)
             {
                 kernel.setArg(0, buffer);
                 kernel.setArg(1, (unsigned)(size / vectorSize));

@@ -32,6 +32,9 @@
     <Filter Include="Base\NN\Learning">
       <UniqueIdentifier>{4dfcc3b6-f489-402c-9384-dfda01339a58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cpp\NN\Learning">
+      <UniqueIdentifier>{5a54aa1b-3cc9-4528-b8a9-25991c21a57c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -322,6 +325,12 @@
     <ClInclude Include="learning_init_behavior.h">
       <Filter>Base\NN\Learning</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_learning_impl.h">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_learning_impl_factory.h">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -464,6 +473,9 @@
     </ClCompile>
     <ClCompile Include="randomize_weights_uniform.cpp">
       <Filter>Base\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_learning_impl_factory.cpp">
+      <Filter>Cpp\NN\Learning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

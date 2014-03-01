@@ -30,7 +30,7 @@ boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t co
     auto future = boost::shared_future<void>(promise->get_future());
     try
     {
-        Event e;
+        cl::Event e;
         auto queue = ctx->cl_queue();
 
         queue.enqueueReadBuffer(
@@ -56,7 +56,7 @@ boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t co
                 }
                 else
                 {
-                    // Error
+                    // cl::Error
                     promise->set_exception(ocl_error(status, "Cannot read memory."));
                 }
             }
@@ -93,7 +93,7 @@ boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourc
     auto future = boost::shared_future<void>(promise->get_future());
     try
     {
-        Event e;
+        cl::Event e;
         auto queue = ctx->cl_queue();
 
         queue.enqueueWriteBuffer(
@@ -119,7 +119,7 @@ boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourc
                 }
                 else
                 {
-                    // Error
+                    // cl::Error
                     promise->set_exception(ocl_error(status, "Cannot read memory."));
                 }
             }
