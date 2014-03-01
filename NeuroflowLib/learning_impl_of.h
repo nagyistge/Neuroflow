@@ -3,14 +3,16 @@
 #include "nfdev.h"
 #include "learning_impl.h"
 #include "training_node.h"
+#include "weak_contexted.h"
 
 namespace nf
 {
-    template <typename T>
-    struct learning_impl_of : virtual learning_impl
+    template <typename C, typename T>
+    struct learning_impl_of : weak_contexted<C>, virtual learning_impl
     {
     protected:
-        learning_impl_of(const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
+        learning_impl_of(const std::weak_ptr<C>& context, const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
+            weak_contexted(context),
             _behavior(std::dynamic_pointer_cast<T>(behavior)),
             _nodes(nodes)
         {
