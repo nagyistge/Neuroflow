@@ -187,6 +187,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="activation_description.h" />
+    <ClInclude Include="cc_init_pars.h" />
     <ClInclude Include="computation_context.h" />
     <ClInclude Include="computation_context_factory.h" />
     <ClInclude Include="cc_factory_adapter.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="libs.h" />
     <ClInclude Include="mlp_backward_node.h" />
     <ClInclude Include="mlp_forward_node.h" />
+    <ClInclude Include="mlp_init_pars.h" />
     <ClInclude Include="multilayer_perceptron.h" />
     <ClInclude Include="neural_network_factory.h" />
     <ClInclude Include="nf.h" />
@@ -247,10 +249,10 @@
     <ClInclude Include="cpp_nfdev.h" />
     <ClInclude Include="ocl.h" />
     <ClInclude Include="ocl_cc_factory_adapter.h" />
+    <ClInclude Include="ocl_cc_init_pars.h" />
     <ClInclude Include="ocl_gradient_descent_learning.h" />
     <ClInclude Include="ocl_learning_impl_factory.h" />
     <ClInclude Include="ocl_learning_impl_of.h" />
-    <ClInclude Include="ocl_props.h" />
     <ClInclude Include="ocl_computation_context.h" />
     <ClInclude Include="ocl_compute_activation.h" />
     <ClInclude Include="ocl_conv.h" />
@@ -271,9 +273,8 @@
     <ClInclude Include="ocl_sizes.h" />
     <ClInclude Include="ocl_units.h" />
     <ClInclude Include="ocl_utils.h" />
-    <ClInclude Include="props.h" />
-    <ClInclude Include="prop_def.h" />
     <ClInclude Include="randomize_weights_uniform.h" />
+    <ClInclude Include="random_generator.h" />
     <ClInclude Include="rtlr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
@@ -341,6 +342,7 @@
     <ClCompile Include="ocl_units.cpp" />
     <ClCompile Include="ocl_utils.cpp" />
     <ClCompile Include="randomize_weights_uniform.cpp" />
+    <ClCompile Include="random_generator.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

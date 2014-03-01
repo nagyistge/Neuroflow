@@ -15,7 +15,6 @@ namespace nf
 
         typedef std::vector<linq::row_numbered<layer_ptr>> ordered_layers_t;
 
-        const boost::property_tree::ptree& properties() const;
         gradient_computation_method gradient_computation_method() const;
         idx_t max_bptt_iterations() const;
         idx_t input_size() const;
@@ -50,11 +49,10 @@ namespace nf
             }
         };
 
-        multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties);
+        multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const mlp_init_pars* properties);
 
-        properties_t _properties;
-        nf::gradient_computation_method _gradientComputationMethod;
-        idx_t _maxBpttIterations;
+        nf::gradient_computation_method _gradientComputationMethod = nf::gradient_computation_method::feed_forward;
+        idx_t _maxBpttIterations = 0;
         ordered_layers_t _layers;
         bool _isTrainingEnabled;
         bool _isGradientsCalculated;

@@ -12,7 +12,11 @@ namespace nf
 
     typedef ::size_t idx_t;
 
+    struct nf_object;
     typedef std::shared_ptr<nf_object> nf_object_ptr;
+
+    struct cc_init_pars;
+    struct mlp_init_pars;
 
     struct computation_context;
     typedef std::shared_ptr<computation_context> computation_context_ptr;
@@ -45,9 +49,6 @@ namespace nf
 
     struct utils;
     typedef std::shared_ptr<utils> utils_ptr;
-
-    typedef boost::property_tree::ptree properties_t;
-    typedef boost::optional<properties_t> optional_properties_t;
 
     struct compute_activation;
     typedef std::shared_ptr<compute_activation> compute_activation_ptr;

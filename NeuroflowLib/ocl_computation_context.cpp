@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ocl_computation_context.h"
-#include "prop_def.h"
+#include "ocl_cc_init_pars.h"
 #include "ocl_device_array_management.h"
 #include "ocl_data_array_factory.h"
 #include "ocl_utils.h"
@@ -12,19 +12,23 @@
 USING
 using namespace boost::algorithm;
 
-ocl_computation_context::ocl_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties) :
+ocl_computation_context::ocl_computation_context(const std::wstring& deviceHint, const cc_init_pars* properties) :
 _currentDevice(find_device(deviceHint)),
 _context(_currentDevice.second),
 _isCPU((_currentDevice.second.getInfo<CL_DEVICE_TYPE>() & CL_DEVICE_TYPE_CPU) != 0),
 _maxComputeUnits(_currentDevice.second.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()),
 _maxWorkGroupSize(_currentDevice.second.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()),
 _maxWorkItemSizes(cl::NullRange),
-_alignBits(_currentDevice.second.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>())
+_alignBits(_currentDevice.second.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>()),
+_generator(properties->random_seed)
 {
     _queue = cl::CommandQueue(_context, _currentDevice.second);
-    prop_def pd(_properties, properties);
-    _maxConnectionCount = pd.def<idx_t>(ocl_prop_max_connection_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
-    _maxLayerCount = pd.def<idx_t>(ocl_prop_max_layer_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
+    auto ocl_props = dynamic_cast<const ocl_cc_init_pars*>(properties);
+    if (ocl_props)
+    {
+        _maxConnectionCount = ocl_props->max_connection_count;
+        _maxLayerCount = ocl_props->max_layer_count;
+    }
 }
 
 ocl_computation_context::cl_device_list_t ocl_computation_context::get_available_devices(cl_device_type type)
@@ -171,9 +175,9 @@ const nf::device_info& ocl_computation_context::device_info() const
     return _currentDevice.first;
 }
 
-const boost::property_tree::ptree& ocl_computation_context::properties() const
+random_generator& ocl_computation_context::rnd() 
 {
-    return _properties;
+    return _generator;
 }
 
 const cl::Context& ocl_computation_context::cl_context() const

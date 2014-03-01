@@ -196,9 +196,6 @@
     <ClInclude Include="ocl_cc_factory_adapter.h">
       <Filter>Ocl</Filter>
     </ClInclude>
-    <ClInclude Include="prop_def.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="ocl_units.h">
       <Filter>Ocl</Filter>
     </ClInclude>
@@ -239,12 +236,6 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="enum_flags.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="ocl_props.h">
-      <Filter>Ocl</Filter>
-    </ClInclude>
-    <ClInclude Include="props.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="enum_to_string.h">
@@ -351,6 +342,18 @@
     </ClInclude>
     <ClInclude Include="ocl_learning_impl_factory.h">
       <Filter>Ocl\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="random_generator.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="cc_init_pars.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_cc_init_pars.h">
+      <Filter>Ocl</Filter>
+    </ClInclude>
+    <ClInclude Include="mlp_init_pars.h">
+      <Filter>Base\NN</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -515,6 +518,9 @@
     </ClCompile>
     <ClCompile Include="ocl_learning_impl_factory.cpp">
       <Filter>Ocl\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="random_generator.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
