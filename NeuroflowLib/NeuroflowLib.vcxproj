@@ -247,6 +247,9 @@
     <ClInclude Include="cpp_nfdev.h" />
     <ClInclude Include="ocl.h" />
     <ClInclude Include="ocl_cc_factory_adapter.h" />
+    <ClInclude Include="ocl_gradient_descent_learning.h" />
+    <ClInclude Include="ocl_learning_impl_factory.h" />
+    <ClInclude Include="ocl_learning_impl_of.h" />
     <ClInclude Include="ocl_props.h" />
     <ClInclude Include="ocl_computation_context.h" />
     <ClInclude Include="ocl_compute_activation.h" />
@@ -264,6 +267,7 @@
     <ClInclude Include="nf_object.h" />
     <ClInclude Include="ocl_program.h" />
     <ClInclude Include="ocl_program_unit.h" />
+    <ClInclude Include="ocl_randomize_weights_uniform.h" />
     <ClInclude Include="ocl_sizes.h" />
     <ClInclude Include="ocl_units.h" />
     <ClInclude Include="ocl_utils.h" />
@@ -327,9 +331,12 @@
     <ClCompile Include="ocl_device_array_management.cpp" />
     <ClCompile Include="ocl_device_array_pool.cpp" />
     <ClCompile Include="ocl_exec.cpp" />
+    <ClCompile Include="ocl_gradient_descent_learning.cpp" />
     <ClCompile Include="ocl_kernel_name.cpp" />
+    <ClCompile Include="ocl_learning_impl_factory.cpp" />
     <ClCompile Include="ocl_program.cpp" />
     <ClCompile Include="ocl_program_unit.cpp" />
+    <ClCompile Include="ocl_randomize_weights_uniform.cpp" />
     <ClCompile Include="ocl_sizes.cpp" />
     <ClCompile Include="ocl_units.cpp" />
     <ClCompile Include="ocl_utils.cpp" />

@@ -5,6 +5,7 @@
 #include "cpp_utils.h"
 #include "cpp_cc_factory_adapter.h"
 #include "cpp_compute_activation.h"
+#include "cpp_learning_impl_factory.h"
 
 USING
 
@@ -14,7 +15,7 @@ _dataArrayFactory(make_shared<cpp_data_array_factory>()),
 _utils(make_shared<cpp_utils>()),
 _computeActivation(make_shared<cpp_compute_activation>()),
 _deviceInfo(cpp_cc_factory_adapter::only_device()),
-_learningImplFactory(null)
+_learningImplFactory(make_shared<cpp_learning_impl_factory>())
 {
 }
 

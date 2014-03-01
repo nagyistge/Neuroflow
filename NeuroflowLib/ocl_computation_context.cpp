@@ -7,6 +7,7 @@
 #include "ocl_units.h"
 #include "ocl_sizes.h"
 #include "ocl_compute_activation.h"
+#include "ocl_learning_impl_factory.h"
 
 USING
 using namespace boost::algorithm;
@@ -312,4 +313,19 @@ const ocl_compute_activation_ptr& ocl_computation_context::ocl_compute_activatio
         _computeActivation = make_shared<nf::ocl_compute_activation>(_this);
     }
     return _computeActivation;
+}
+
+learning_impl_factory_ptr ocl_computation_context::learning_impl_factory()
+{
+    return static_pointer_cast<nf::learning_impl_factory>(ocl_learning_impl_factory());
+}
+
+const ocl_learning_impl_factory_ptr& ocl_computation_context::ocl_learning_impl_factory()
+{
+    if (!_learningImplFactory)
+    {
+        auto _this = shared_this<ocl_computation_context>();
+        _learningImplFactory = make_shared<nf::ocl_learning_impl_factory>(_this);
+    }
+    return _learningImplFactory;
 }

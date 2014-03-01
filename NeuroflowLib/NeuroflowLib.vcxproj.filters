@@ -35,6 +35,9 @@
     <Filter Include="Cpp\NN\Learning">
       <UniqueIdentifier>{5a54aa1b-3cc9-4528-b8a9-25991c21a57c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ocl\NN\Learning">
+      <UniqueIdentifier>{b4620dac-7c92-472c-a70a-7ff89e92d55a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -337,6 +340,18 @@
     <ClInclude Include="learning_impl_of.h">
       <Filter>Base\NN\Learning</Filter>
     </ClInclude>
+    <ClInclude Include="ocl_learning_impl_of.h">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_randomize_weights_uniform.h">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_gradient_descent_learning.h">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="ocl_learning_impl_factory.h">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -491,6 +506,15 @@
     </ClCompile>
     <ClCompile Include="learning_impl_factory.cpp">
       <Filter>Base\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_randomize_weights_uniform.cpp">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_gradient_descent_learning.cpp">
+      <Filter>Ocl\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="ocl_learning_impl_factory.cpp">
+      <Filter>Ocl\NN\Learning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

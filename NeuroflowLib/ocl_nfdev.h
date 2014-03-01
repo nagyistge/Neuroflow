@@ -46,4 +46,7 @@ namespace nf
 
     struct ocl_compute_activation;
     typedef std::shared_ptr<ocl_compute_activation> ocl_compute_activation_ptr;
+
+    struct ocl_learning_impl_factory;
+    typedef std::shared_ptr<ocl_learning_impl_factory> ocl_learning_impl_factory_ptr;
 }
