@@ -1,36 +1,27 @@
 #include "stdafx.h"
 #include "cpp_learning_impl_factory.h"
-#include "gradient_descent_learning.h"
-#include "randomize_weights_uniform.h"
+#include "cpp_gradient_descent_learning.h"
+#include "cpp_randomize_weights_uniform.h"
 
 USING
 
-cpp_learning_impl_factory::factory_map_t cpp_learning_impl_factory::factories = 
+cpp_learning_impl_factory::factory_map_t cpp_learning_impl_factory::get_factories()
 {
-    { 
-        typeid(gradient_descent_learning).name(), 
-        [](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes) 
-        { 
-            return null; 
-        } 
-    },
-    { 
-        typeid(randomize_weights_uniform).name(), 
-        [](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes) 
-        { 
-            return null; 
-        } 
-    }
-};
-
-learning_impl_ptr cpp_learning_impl_factory::create_impl(const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
-{
-    auto type = typeid(*learningBehavior).name();
-    auto result = factories.find(type);
-    if (result != factories.end())
+    return factory_map_t(
     {
-        auto impl = result->second(learningBehavior, nodes);
-        if (impl) return impl;
-    }
-    throw_not_implemented(string("Learning for behavior type: '") + type + "' is not implemeted.");
+        {
+            typeid(gradient_descent_learning).name(),
+            [](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            {
+                return make_shared<cpp_gradient_descent_learning>(learningBehavior, nodes);
+            }
+        },
+        {
+            typeid(randomize_weights_uniform).name(),
+            [](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            {
+                return make_shared<cpp_randomize_weights_uniform>(learningBehavior, nodes);
+            }
+        }
+    });
 }
