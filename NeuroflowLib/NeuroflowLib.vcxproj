@@ -204,8 +204,10 @@
     <ClInclude Include="cpp_device_array2.h" />
     <ClInclude Include="cpp_device_array_management.h" />
     <ClInclude Include="cpp_device_array_pool.h" />
+    <ClInclude Include="cpp_gradient_descent_learning.h" />
     <ClInclude Include="cpp_learning_impl.h" />
     <ClInclude Include="cpp_learning_impl_factory.h" />
+    <ClInclude Include="cpp_randomize_weights_uniform.h" />
     <ClInclude Include="cpp_utils.h" />
     <ClInclude Include="data_array.h" />
     <ClInclude Include="data_array_factory.h" />
@@ -299,7 +301,9 @@
     <ClCompile Include="cpp_device_array2.cpp" />
     <ClCompile Include="cpp_device_array_management.cpp" />
     <ClCompile Include="cpp_device_array_pool.cpp" />
+    <ClCompile Include="cpp_gradient_descent_learning.cpp" />
     <ClCompile Include="cpp_learning_impl_factory.cpp" />
+    <ClCompile Include="cpp_randomize_weights_uniform.cpp" />
     <ClCompile Include="cpp_utils.cpp" />
     <ClCompile Include="device_array2_group.cpp" />
     <ClCompile Include="device_array_group.cpp" />
@@ -308,6 +312,7 @@
     <ClCompile Include="layer_behavior.cpp" />
     <ClCompile Include="layer_connections.cpp" />
     <ClCompile Include="layer_order_comparer.cpp" />
+    <ClCompile Include="learning_impl_factory.cpp" />
     <ClCompile Include="mlp_backward_node.cpp" />
     <ClCompile Include="mlp_forward_node.cpp" />
     <ClCompile Include="multilayer_perceptron.cpp" />

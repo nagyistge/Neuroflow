@@ -331,6 +331,12 @@
     <ClInclude Include="cpp_learning_impl_factory.h">
       <Filter>Cpp\NN\Learning</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_randomize_weights_uniform.h">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_gradient_descent_learning.h">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -476,6 +482,15 @@
     </ClCompile>
     <ClCompile Include="cpp_learning_impl_factory.cpp">
       <Filter>Cpp\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_randomize_weights_uniform.cpp">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_gradient_descent_learning.cpp">
+      <Filter>Cpp\NN\Learning</Filter>
+    </ClCompile>
+    <ClCompile Include="learning_impl_factory.cpp">
+      <Filter>Base\NN\Learning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
