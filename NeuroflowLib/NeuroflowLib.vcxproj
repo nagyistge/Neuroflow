@@ -205,7 +205,6 @@
     <ClInclude Include="cpp_device_array_management.h" />
     <ClInclude Include="cpp_device_array_pool.h" />
     <ClInclude Include="cpp_gradient_descent_learning.h" />
-    <ClInclude Include="cpp_learning_impl.h" />
     <ClInclude Include="cpp_learning_impl_factory.h" />
     <ClInclude Include="cpp_randomize_weights_uniform.h" />
     <ClInclude Include="cpp_utils.h" />
@@ -235,6 +234,7 @@
     <ClInclude Include="learning_impl.h" />
     <ClInclude Include="learning_impl_factory.h" />
     <ClInclude Include="learning_behavior.h" />
+    <ClInclude Include="learning_impl_of.h" />
     <ClInclude Include="learning_init_behavior.h" />
     <ClInclude Include="libs.h" />
     <ClInclude Include="mlp_backward_node.h" />

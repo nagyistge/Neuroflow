@@ -4,7 +4,7 @@
 USING
 
 cpp_gradient_descent_learning::cpp_gradient_descent_learning(const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
-cpp_learning_impl(behavior, nodes)
+learning_impl_of(behavior, nodes)
 {
 }
 
