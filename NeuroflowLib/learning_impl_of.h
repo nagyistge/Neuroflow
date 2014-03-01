@@ -14,6 +14,7 @@ namespace nf
             _behavior(std::dynamic_pointer_cast<T>(behavior)),
             _nodes(nodes)
         {
+            assert(_behavior);
         }
 
         const std::shared_ptr<T>& behavior() const

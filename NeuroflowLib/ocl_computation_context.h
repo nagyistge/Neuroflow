@@ -20,10 +20,8 @@ namespace nf
         const ocl_utils_ptr& ocl_utils();
         compute_activation_ptr compute_activation() override;
         const ocl_compute_activation_ptr& ocl_compute_activation();
-        learning_impl_factory_ptr learning_impl_factory() override
-        {
-            return null;
-        }
+        learning_impl_factory_ptr learning_impl_factory() override;
+        const ocl_learning_impl_factory_ptr& ocl_learning_impl_factory();
 
         const cl::Context& cl_context() const;
         const cl::Device& cl_device() const;
@@ -64,6 +62,7 @@ namespace nf
         ocl_data_array_factory_ptr _dataArrayFactory;
         ocl_utils_ptr _utils;
         ocl_compute_activation_ptr _computeActivation;
+        ocl_learning_impl_factory_ptr _learningImplFactory;
 
         ocl_units_ptr _units;
         ocl_sizes_ptr _sizes;
