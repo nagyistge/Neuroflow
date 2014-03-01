@@ -8,7 +8,6 @@
 #include "nf_helpers.h"
 #include "get_vector_size.h"
 #include "finally.h"
-#include "props.h"
 
 namespace linq = linqlike;
 

@@ -2,6 +2,7 @@
 
 #include "nfdev.h"
 #include "device_info.h"
+#include "random_generator.h"
 
 namespace nf
 {
@@ -10,7 +11,7 @@ namespace nf
         const neural_network_factory_ptr& neural_network_factory();
 
         virtual const nf::device_info& device_info() const = 0;
-        virtual const properties_t& properties() const = 0;
+        virtual random_generator& rnd() = 0;
         virtual device_array_management_ptr device_array_management() = 0;
         virtual data_array_factory_ptr data_array_factory() = 0;
         virtual utils_ptr utils() = 0;

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "multilayer_perceptron.h"
-#include "prop_def.h"
 #include "layer_order_comparer.h"
 #include "layer_connections.h"
 #include "supervised_learning_behavior.h"
@@ -20,11 +19,12 @@
 #include "supervised_learning.h"
 #include "initialize_learning.h"
 #include "learning_impl_factory.h"
+#include "mlp_init_pars.h"
 
 USING
 namespace ph = std::placeholders;
 
-multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const optional_properties_t& properties) :
+multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const mlp_init_pars* properties) :
     contexted(context),
     _computeActivation(context->compute_activation()),
     _daMan(context->device_array_management()),
@@ -45,9 +45,8 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     assert(_computeActivation);
     assert(_learningImplFactory);
 
-    prop_def pd(_properties, properties);
-    _gradientComputationMethod = pd.defEnum(prop_gradient_computation_method, gradient_computation_method::feed_forward);
-    _maxBpttIterations = pd.def<idx_t>(prop_max_bptt_iterations, idx_t(0), [](idx_t v) { return v >= 0; });
+    _gradientComputationMethod = properties->gradient_computation_method;
+    _maxBpttIterations = properties->max_bptt_iterations;
 
     _layers = layers | sort(layer_order_comparer()) | row_num() | to_vector();
 
@@ -99,11 +98,6 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     /*
     create_train_init();
     */
-}
-
-const boost::property_tree::ptree& multilayer_perceptron::properties() const
-{
-    return _properties;
 }
 
 nf::gradient_computation_method multilayer_perceptron::gradient_computation_method() const

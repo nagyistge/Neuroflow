@@ -9,7 +9,7 @@ weak_contexted(context)
 {
 }
 
-multilayer_perceptron_ptr neural_network_factory::create_multilayer_perceptron(layers_t& layers, const optional_properties_t& properties)
+multilayer_perceptron_ptr neural_network_factory::create_multilayer_perceptron(layers_t& layers, const mlp_init_pars* properties)
 {
     return shared_ptr<multilayer_perceptron>(new multilayer_perceptron(lock_context(), layers, properties));
 }

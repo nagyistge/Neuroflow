@@ -3,7 +3,6 @@
 #include "nfdev.h"
 #include "ocl.h"
 #include "ocl_error.h"
-#include "ocl_props.h"
 
 namespace nf
 {

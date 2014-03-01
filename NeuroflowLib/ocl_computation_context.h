@@ -10,7 +10,7 @@ namespace nf
         friend struct ocl_cc_factory_adapter;
 
         const nf::device_info& device_info() const override;
-        const boost::property_tree::ptree& properties() const override;
+        random_generator& rnd() override;
 
         device_array_management_ptr device_array_management() override;
         const ocl_device_array_management_ptr& ocl_device_array_management();
@@ -45,15 +45,15 @@ namespace nf
         typedef std::list<std::pair<nf::device_info, cl::Device>> cl_device_list_t;
 
         std::pair<nf::device_info, cl::Device> _currentDevice;
-        properties_t _properties;
+        random_generator _generator;
         cl::CommandQueue _queue;
         cl::Context _context;
 
         bool _isCPU;
         idx_t _maxWorkGroupSize = 0;
         idx_t _maxComputeUnits = 0;
-        idx_t _maxLayerCount = 0;
-        idx_t _maxConnectionCount = 0;
+        idx_t _maxLayerCount = 4;
+        idx_t _maxConnectionCount = 4;
         idx_t _preferredWorkgroupSizeMul = 0;
         idx_t _alignBits = 0;
         cl::NDRange _maxWorkItemSizes;
@@ -67,7 +67,7 @@ namespace nf
         ocl_units_ptr _units;
         ocl_sizes_ptr _sizes;
 
-        ocl_computation_context(const std::wstring& deviceHint, const optional_properties_t& properties);
+        ocl_computation_context(const std::wstring& deviceHint, const cc_init_pars* properties);
 
         static cl_device_list_t get_available_devices(cl_device_type type = CL_DEVICE_TYPE_ALL);
         static std::pair<nf::device_info, cl::Device> find_device(const std::wstring& deviceHint);

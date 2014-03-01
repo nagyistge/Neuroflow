@@ -20,13 +20,14 @@
 #include <map>
 #include <unordered_map>
 #include <typeinfo>
+#include <random>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/coroutine/all.hpp>
 #include <boost/iterator.hpp>
 #include <boost/thread.hpp>
+#include <boost/scoped_ptr.hpp>
 #include "ocl.h"

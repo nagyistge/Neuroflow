@@ -3,6 +3,7 @@
 #include "cc_factory_adapter.h"
 #include "cpp_cc_factory_adapter.h"
 #include "ocl_cc_factory_adapter.h"
+#include "cc_init_pars.h"
 
 USING
 
@@ -32,12 +33,20 @@ std::list<device_info> computation_context_factory::get_available_devices(const 
     return found->second->get_available_devices();
 }
 
-computation_context_ptr computation_context_factory::create_context(const wchar_t* typeId, const std::wstring& deviceHint, const optional_properties_t& properties) const
+computation_context_ptr computation_context_factory::create_context(const wchar_t* typeId, const std::wstring& deviceHint, const cc_init_pars* properties) const
 {
     cc_factory_adapter_ptr adapter;
     auto found = adapters.find(typeId);
     if (found == adapters.cend()) throw_runtime_error(create_type_not_found_msg(typeId));
-    return found->second->create_context(deviceHint, properties);
+    if (properties != null)
+    {
+        return found->second->create_context(deviceHint, properties);
+    }
+    else
+    {
+        boost::scoped_ptr<cc_init_pars> p(new cc_init_pars());
+        return found->second->create_context(deviceHint, p.get());
+    }
 }
 
 std::string computation_context_factory::create_type_not_found_msg(const std::wstring& typeId)
