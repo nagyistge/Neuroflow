@@ -1,12 +1,12 @@
 #pragma once
 #include "nfdev.h"
 #include "gradient_descent_learning.h"
-#include "cpp_learning_impl.h"
+#include "learning_impl_of.h"
 #include "supervised_learning.h"
 
 namespace nf
 {
-    struct cpp_gradient_descent_learning : virtual cpp_learning_impl<gradient_descent_learning>, virtual supervised_learning
+    struct cpp_gradient_descent_learning : virtual learning_impl_of<gradient_descent_learning>, virtual supervised_learning
     {
         cpp_gradient_descent_learning(const learning_behavior_ptr& behavior, const training_node_collection_t& nodes);
 

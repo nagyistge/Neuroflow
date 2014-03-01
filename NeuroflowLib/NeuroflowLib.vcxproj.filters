@@ -325,9 +325,6 @@
     <ClInclude Include="learning_init_behavior.h">
       <Filter>Base\NN\Learning</Filter>
     </ClInclude>
-    <ClInclude Include="cpp_learning_impl.h">
-      <Filter>Cpp\NN\Learning</Filter>
-    </ClInclude>
     <ClInclude Include="cpp_learning_impl_factory.h">
       <Filter>Cpp\NN\Learning</Filter>
     </ClInclude>
@@ -336,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="cpp_gradient_descent_learning.h">
       <Filter>Cpp\NN\Learning</Filter>
+    </ClInclude>
+    <ClInclude Include="learning_impl_of.h">
+      <Filter>Base\NN\Learning</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
