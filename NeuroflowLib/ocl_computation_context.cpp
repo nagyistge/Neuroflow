@@ -20,7 +20,7 @@ _maxWorkGroupSize(_currentDevice.second.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>()
 _maxWorkItemSizes(cl::NullRange),
 _alignBits(_currentDevice.second.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>())
 {
-    _queue = CommandQueue(_context, _currentDevice.second);
+    _queue = cl::CommandQueue(_context, _currentDevice.second);
     prop_def pd(_properties, properties);
     _maxConnectionCount = pd.def<idx_t>(ocl_prop_max_connection_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
     _maxLayerCount = pd.def<idx_t>(ocl_prop_max_layer_count, idx_t(4), [](idx_t v) { return v >= 1 && v <= 10; });
@@ -29,10 +29,10 @@ _alignBits(_currentDevice.second.getInfo<CL_DEVICE_MEM_BASE_ADDR_ALIGN>())
 ocl_computation_context::cl_device_list_t ocl_computation_context::get_available_devices(cl_device_type type)
 {
     ocl_computation_context::cl_device_list_t all;
-    vector<pair<wstring, Device>> all2;
-    vector<Platform> platformList;
+    vector<pair<wstring, cl::Device>> all2;
+    vector<cl::Platform> platformList;
 
-    Platform::get(&platformList);
+    cl::Platform::get(&platformList);
 
     for (auto& p : platformList)
     {
@@ -125,7 +125,7 @@ pair<nf::device_info, cl::Device> ocl_computation_context::find_device(const std
         }
 
         stringstream error;
-        error << "Device '";
+        error << "cl::Device '";
         error << string(deviceHint.begin(), deviceHint.end());
         error << "' is not found.";
         throw_runtime_error(error.str().c_str());

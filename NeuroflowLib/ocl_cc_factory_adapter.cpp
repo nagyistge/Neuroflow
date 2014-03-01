@@ -10,7 +10,7 @@ std::list<device_info> ocl_cc_factory_adapter::get_available_devices()
     {
         list<device_info> result;
         auto devices = ocl_computation_context::get_available_devices();
-        transform(devices.cbegin(), devices.cend(), back_inserter(result), [](const pair<device_info, Device>& p) { return p.first; });
+        transform(devices.cbegin(), devices.cend(), back_inserter(result), [](const pair<device_info, cl::Device>& p) { return p.first; });
         return result;
     }
     catch (exception& ex)

@@ -13,6 +13,6 @@
 namespace linq = linqlike;
 
 #define null nullptr
-#define USING using namespace std; using namespace nf; using namespace cl; using namespace linq;
+#define USING using namespace std; using namespace nf; using namespace linq;
 #define _item_t(container) decltype(*std::begin(container))
 #define _citem_t(container) decltype(*std::cbegin(container))

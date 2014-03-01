@@ -3,8 +3,8 @@
 
 #define MAJOR_VER 1
 #define MINOR_VER 0
-#define BUILD_VER 423
-#define REVISION_VER 37765
+#define BUILD_VER 424
+#define REVISION_VER 18808
 
 std::wstring nf::version()
 {
