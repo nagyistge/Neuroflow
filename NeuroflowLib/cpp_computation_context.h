@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nfdev.h"
+#include "cpp_nfdev.h"
 #include "computation_context.h"
 
 namespace nf
@@ -16,6 +16,7 @@ namespace nf
         utils_ptr utils() override;
         compute_activation_ptr compute_activation() override;
         learning_impl_factory_ptr learning_impl_factory() override;
+        const cpp_learning_impl_factory_ptr& cpp_learning_impl_factory();
 
     private:
         nf::device_info _deviceInfo;
@@ -25,7 +26,7 @@ namespace nf
         data_array_factory_ptr _dataArrayFactory;
         utils_ptr _utils;
         compute_activation_ptr _computeActivation;
-        learning_impl_factory_ptr _learningImplFactory;
+        cpp_learning_impl_factory_ptr _learningImplFactory;
 
         cpp_computation_context(const std::wstring& deviceHint, const cc_init_pars* properties);
     };

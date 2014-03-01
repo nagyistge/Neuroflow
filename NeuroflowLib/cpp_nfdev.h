@@ -7,6 +7,9 @@ namespace nf
     struct cpp_computation_context;
     typedef std::shared_ptr<cpp_computation_context> cpp_computation_context_ptr;
 
+    struct cpp_learning_impl_factory;
+    typedef std::shared_ptr<cpp_learning_impl_factory> cpp_learning_impl_factory_ptr;
+
     struct cpp_device_array;
     typedef std::shared_ptr<cpp_device_array> cpp_device_array_ptr;
 

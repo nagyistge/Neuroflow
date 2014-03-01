@@ -252,7 +252,6 @@
     <ClInclude Include="ocl_cc_init_pars.h" />
     <ClInclude Include="ocl_gradient_descent_learning.h" />
     <ClInclude Include="ocl_learning_impl_factory.h" />
-    <ClInclude Include="ocl_learning_impl_of.h" />
     <ClInclude Include="ocl_computation_context.h" />
     <ClInclude Include="ocl_compute_activation.h" />
     <ClInclude Include="ocl_conv.h" />

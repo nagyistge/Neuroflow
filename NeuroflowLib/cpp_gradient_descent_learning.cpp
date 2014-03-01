@@ -3,8 +3,8 @@
 
 USING
 
-cpp_gradient_descent_learning::cpp_gradient_descent_learning(const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
-learning_impl_of(behavior, nodes)
+cpp_gradient_descent_learning::cpp_gradient_descent_learning(const std::weak_ptr<cpp_computation_context>& context, const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
+learning_impl_of(context, behavior, nodes)
 {
 }
 

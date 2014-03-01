@@ -4,8 +4,7 @@
 USING
 
 ocl_gradient_descent_learning::ocl_gradient_descent_learning(const std::weak_ptr<ocl_computation_context>& context, const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
-ocl_learning_impl_of(context, behavior, nodes),
-learning_impl_of(behavior, nodes)
+learning_impl_of(context, behavior, nodes)
 {
 }
 

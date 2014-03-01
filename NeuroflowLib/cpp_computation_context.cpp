@@ -17,7 +17,6 @@ _dataArrayFactory(make_shared<cpp_data_array_factory>()),
 _utils(make_shared<cpp_utils>()),
 _computeActivation(make_shared<cpp_compute_activation>()),
 _deviceInfo(cpp_cc_factory_adapter::only_device()),
-_learningImplFactory(make_shared<cpp_learning_impl_factory>()),
 _generator(properties->random_seed)
 {
 }
@@ -54,5 +53,15 @@ compute_activation_ptr cpp_computation_context::compute_activation()
 
 learning_impl_factory_ptr cpp_computation_context::learning_impl_factory()
 {
+    return cpp_learning_impl_factory();
+}
+
+const cpp_learning_impl_factory_ptr& cpp_computation_context::cpp_learning_impl_factory()
+{
+    if (!_learningImplFactory)
+    {
+        auto thisCtx = shared_this<cpp_computation_context>();
+        _learningImplFactory = make_shared<nf::cpp_learning_impl_factory>(thisCtx);
+    }
     return _learningImplFactory;
 }
