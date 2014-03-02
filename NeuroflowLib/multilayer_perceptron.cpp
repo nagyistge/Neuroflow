@@ -20,6 +20,9 @@
 #include "initialize_learning.h"
 #include "learning_impl_factory.h"
 #include "mlp_init_pars.h"
+#include "supervised_batch.h"
+#include "utils.h"
+#include "device_array_pool.h"
 
 USING
 namespace ph = std::placeholders;
@@ -41,6 +44,8 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _gradients(_gradientsPool),
     _gradientSums(_gradientSumsPool)
 {
+    assert(context);
+    assert(properties);
     assert(_daMan);
     assert(_computeActivation);
     assert(_learningImplFactory);
@@ -94,10 +99,6 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     create_structure(infos);
     create_compute();
     create_training(infos);
-    
-    /*
-    create_train_init();
-    */
 }
 
 nf::gradient_computation_method multilayer_perceptron::gradient_computation_method() const
@@ -216,11 +217,11 @@ void multilayer_perceptron::create_compute()
 
     if (_doRTLR)
     {
-        throw_logic_error("RTLR is not implemented.");
+        throw_not_implemented();
     }
     else if (_doBPTT)
     {
-        throw_logic_error("BPTT is not implemented.");
+        throw_not_implemented();
     }
     else
     {
@@ -258,7 +259,7 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
                 {
                     node.in.push_back([=]()
                     {
-                        throw_runtime_error("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
+                        throw_not_implemented("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
                         return get_net_values(inputIndex);
                     });
                 }
@@ -304,7 +305,7 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
     }
     if (_calculateGlobalOnlineError || _calculateGlobalOfflineError)
     {
-        throw_runtime_error("Not implemented!");
+        throw_not_implemented();
     }
     create_impls();
 }
@@ -403,13 +404,12 @@ void multilayer_perceptron::create_impls()
     },
     std::move(implsToInit));
 
-    _onlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, idx_t iterationCount, const device_array_ptr& error)
+    _onlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, const device_array_ptr& error)
     { 
-        for (auto& impl : impls) impl->run(iterationCount, error);
+        for (auto& impl : impls) impl->run(0, error);
     },
     std::move(onlineImpls),
-    ph::_1,
-    ph::_2);
+    ph::_1);
 
     _offlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, idx_t iterationCount, const device_array_ptr& error)
     {
@@ -498,7 +498,7 @@ activation_description multilayer_perceptron::get_activation_desc(idx_t layerInd
     return *desc;
 }
 
-const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) const
+device_array* multilayer_perceptron::get_net_values(idx_t layerIndex) const
 {
     if (layerIndex == 0)
     {
@@ -510,11 +510,11 @@ const device_array_ptr& multilayer_perceptron::get_net_values(idx_t layerIndex) 
     }
     else
     {
-        return _outputs.get(layerIndex); 
+        return _outputs.get(layerIndex).get(); 
     }
 }
 
-const device_array_ptr& multilayer_perceptron::get_net_desired_outputs() const
+device_array* multilayer_perceptron::get_net_desired_outputs() const
 {
     return _netDesiredOutputs;
 }
@@ -545,6 +545,136 @@ void multilayer_perceptron::compute_sample_entry(const device_array_ptr& inputs,
 
 void multilayer_perceptron::setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs)
 {
-    _netInputs = inputs;
-    _netOutputs = outputs;
+    _netInputs = inputs.get();
+    _netOutputs = outputs.get();
+}
+
+void multilayer_perceptron::verify_training_enabled()
+{
+    if (!_isTrainingEnabled) throw_logic_error("This MLP cannot trained, there is no training behaviors specified.");
+}
+
+void multilayer_perceptron::ensure_training_initialized()
+{
+    if (!_isTrainingInitialized)
+    {
+        verify_training_enabled();
+        _initLearningFunc();
+        _isTrainingInitialized = true;
+    }
+}
+
+void multilayer_perceptron::train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs)
+{
+    supervised_batch batch;
+    batch.push_back(input, desiredOutputs, actualOutputs);
+    train(batch);
+}
+
+void multilayer_perceptron::train(const supervised_sample_entry& sampleEntry)
+{
+    supervised_batch batch;
+    batch.push_back(sampleEntry);
+    train(batch);
+}
+
+void multilayer_perceptron::train(const supervised_sample& sample)
+{
+    supervised_batch batch;
+    batch.push_back(sample);
+    train(batch);
+}
+
+void multilayer_perceptron::train(supervised_batch& batch)
+{
+    ensure_training_initialized();
+    if (_doBackpropagate)
+    {
+        if (_doFFBP)
+        {
+            feed_forward_training(batch);
+        }
+        else
+        {
+            bppt_training(batch);
+        }
+    }
+    else if (_doRTLR)
+    {
+        rtlr_training(batch);
+    }
+    else
+    {
+        global_optimization_training(batch);
+    }
+}
+
+void multilayer_perceptron::feed_forward_training(supervised_batch& batch)
+{
+    assert(_isGradientsCalculated);
+
+    // Feed Forward:
+
+    // Start batch:
+    for (auto& sample : batch.samples())
+    {
+        auto& entry = sample.entries().front();
+
+        // Compute forward:
+        compute_sample_entry(entry.input(), entry.actual_output());
+
+        // Setup output error:
+        _netDesiredOutputs = entry.desired_output().get();
+
+        // Backpropagate:
+        _trainFunc(0, nf::gradient_computation_formula::ff, 0);
+
+        // Do Gradient based online algo step
+        _onlineLearningFunc(_globalOnlineErrors);
+    }
+
+    // Do batch algos
+    _offlineLearningFunc(batch.samples().size(), _globalOfflineErrors);
+    zero_gradient_sums();
+    zero_global_offline_errors();
+}
+
+void multilayer_perceptron::bppt_training(supervised_batch& batch)
+{
+    throw_not_implemented();
+}
+
+void multilayer_perceptron::rtlr_training(supervised_batch& batch)
+{
+    throw_not_implemented();
+}
+
+void multilayer_perceptron::global_optimization_training(supervised_batch& batch)
+{
+    throw_not_implemented();
+}
+
+void multilayer_perceptron::zero_global_offline_errors()
+{
+    if (_globalOfflineErrors) context()->utils()->zero(_globalOfflineErrors);
+}
+
+void multilayer_perceptron::zero_errors()
+{
+    _errors.zero();
+}
+
+void multilayer_perceptron::zero_outputs()
+{
+    _outputs.zero();
+}
+
+void multilayer_perceptron::zero_gradients()
+{
+    if (_gradientsPool) _gradientsPool->zero();
+}
+
+void multilayer_perceptron::zero_gradient_sums()
+{
+    if (_gradientSumsPool) _gradientSumsPool->zero();
 }

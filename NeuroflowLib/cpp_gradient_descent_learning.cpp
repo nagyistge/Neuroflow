@@ -38,5 +38,97 @@ void cpp_gradient_descent_learning::initialize()
 
 void cpp_gradient_descent_learning::run(idx_t iterationCount, const device_array_ptr& error)
 {
-    throw_not_implemented();
+    if (behavior()->weight_update_mode() == weight_update_mode::online)
+    {
+        auto d = _deltas.begin();
+        for (auto& node : *nodes())
+        {
+            update_weights_online(d->get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradients().get()));
+            d++;
+        }
+    }
+    else
+    {
+        auto d = _deltas.begin();
+        float itCount = iterationCount;
+        for (auto& node : *nodes())
+        {
+            update_weights_offline(d->get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradient_sums().get()), itCount);
+            d++;
+        }
+    }
+}
+
+void cpp_gradient_descent_learning::update_weights_online(cpp_device_array* deltas, cpp_device_array* weights, cpp_device_array* gradients)
+{
+    assert(weights);
+    assert(gradients);
+    idx_t size = weights->size();
+    assert(gradients->size() == size);
+    assert(deltas->size() == size);
+    float* weightsPtr = weights->ptr();
+    float* gradientsPtr = gradients->ptr();
+    float* deltasPtr = deltas->ptr();
+    float rate = behavior()->learning_rate();
+    float momentum = behavior()->momentum();
+    if (behavior()->smoothing())
+    {
+        float smoothV = 1.0f - momentum;
+        for (idx_t idx = 0; idx < size; idx++)
+        {
+            float update = gradientsPtr[idx] * rate;
+            float lastUpdate = gradientsPtr[idx];
+            update = (lastUpdate * momentum) + (update * smoothV);
+            weightsPtr[idx] += update;
+            gradientsPtr[idx] = update;
+        }
+    }
+    else
+    {
+        for (idx_t idx = 0; idx < size; idx++)
+        {
+            float update = gradientsPtr[idx] * rate;
+            float lastUpdate = deltasPtr[idx];
+            update = (lastUpdate * momentum) + update;
+            weightsPtr[idx] += update;
+            deltasPtr[idx] = update;
+        }
+    }
+}
+
+void cpp_gradient_descent_learning::update_weights_offline(cpp_device_array* deltas, cpp_device_array* weights, cpp_device_array* gradientSums, float itCount)
+{
+    assert(weights);
+    assert(gradientSums);
+    idx_t size = weights->size();
+    assert(gradientSums->size() == size);
+    assert(deltas->size() == size);
+    float* weightsPtr = weights->ptr();
+    float* gradientSumsPtr = gradientSums->ptr();
+    float* deltasPtr = deltas->ptr();
+    float rate = behavior()->learning_rate();
+    float momentum = behavior()->momentum();
+    if (behavior()->smoothing())
+    {
+        float smoothV = 1.0f - momentum;
+        for (idx_t idx = 0; idx < size; idx++)
+        {
+            float update = (gradientSumsPtr[idx] * rate) / itCount;
+            float lastUpdate = gradientSumsPtr[idx];
+            update = (lastUpdate * momentum) + (update * smoothV);
+            weightsPtr[idx] += update;
+            gradientSumsPtr[idx] = update;
+        }
+    }
+    else
+    {
+        for (idx_t idx = 0; idx < size; idx++)
+        {
+            float update = (gradientSumsPtr[idx] * rate) / itCount;
+            float lastUpdate = gradientSumsPtr[idx];
+            update = (lastUpdate * momentum) + update;
+            weightsPtr[idx] += update;
+            gradientSumsPtr[idx] = update;
+        }
+    }
 }

@@ -10,7 +10,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
 {
     for (auto& node : nodes)
     {
-        auto outputs = dynamic_cast<cpp_device_array*>(node.out().get());
+        auto outputs = dynamic_cast<cpp_device_array*>(node.out());
         assert(outputs);
         float* pOutputs = outputs->ptr();
         idx_t inputLayersCount = node.in.size();
@@ -22,7 +22,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
             for (auto& weightedInput : node.in)
             {
                 auto weights = dynamic_cast<cpp_device_array2*>(weightedInput.weights().get());
-                auto inputs = dynamic_cast<cpp_device_array*>(weightedInput.inputs()().get());
+                auto inputs = dynamic_cast<cpp_device_array*>(weightedInput.inputs()());
                 assert(weights);
                 assert(inputs);
                 idx_t inputsSize = inputs->size();

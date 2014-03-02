@@ -26,10 +26,10 @@ void cpp_compute_activation_backward::compute(const nf_object_ptr& context, cons
 void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t offset) const
 {
     assert(node.net_outputs);
-    auto outputs = dynamic_cast<cpp_device_array*>(node.net_outputs->outputs()().get());
+    auto outputs = dynamic_cast<cpp_device_array*>(node.net_outputs->outputs()());
     assert(outputs);
     float* pOutputs = outputs->ptr();
-    auto desiredOutputs = dynamic_cast<cpp_device_array*>(node.net_outputs->desired_outputs()().get());
+    auto desiredOutputs = dynamic_cast<cpp_device_array*>(node.net_outputs->desired_outputs()());
     assert(desiredOutputs);
     float* pDesiredOutputs = desiredOutputs->ptr();
     auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
@@ -87,7 +87,7 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
         if (node.activation.function() == activation_function::sigmoid)
         {
             assert(node.out);
-            auto outputs = dynamic_cast<cpp_device_array*>(node.out().get());
+            auto outputs = dynamic_cast<cpp_device_array*>(node.out());
             assert(outputs);
             assert(outputs->size() == size);
             float* pOutputs = outputs->ptr();
@@ -150,7 +150,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
@@ -191,7 +191,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backwar
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
@@ -240,7 +240,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]().get());
+            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
