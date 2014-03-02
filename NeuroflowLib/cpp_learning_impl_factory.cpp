@@ -16,7 +16,7 @@ cpp_learning_impl_factory::factory_map_t cpp_learning_impl_factory::get_factorie
     {
         {
             typeid(gradient_descent_learning).name(),
-            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_ptr& nodes)
             {
                 auto ctx = lock_context();
                 return make_shared<cpp_gradient_descent_learning>(ctx, learningBehavior, nodes);
@@ -24,7 +24,7 @@ cpp_learning_impl_factory::factory_map_t cpp_learning_impl_factory::get_factorie
         },
         {
             typeid(randomize_weights_uniform).name(),
-            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_ptr& nodes)
             {
                 auto ctx = lock_context();
                 return make_shared<cpp_randomize_weights_uniform>(ctx, learningBehavior, nodes);

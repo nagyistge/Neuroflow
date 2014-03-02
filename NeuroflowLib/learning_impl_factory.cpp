@@ -3,7 +3,7 @@
 
 USING
 
-learning_impl_ptr learning_impl_factory::create_impl(const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+learning_impl_ptr learning_impl_factory::create_impl(const learning_behavior_ptr& learningBehavior, const training_node_collection_ptr& nodes)
 {
     if (_factories.size() == 0)
     {

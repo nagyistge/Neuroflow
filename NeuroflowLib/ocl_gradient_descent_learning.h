@@ -8,7 +8,7 @@ namespace nf
 {
     struct ocl_gradient_descent_learning : learning_impl_of<ocl_computation_context, gradient_descent_learning>, virtual supervised_learning
     {
-        ocl_gradient_descent_learning(const std::weak_ptr<ocl_computation_context>& context, const learning_behavior_ptr& behavior, const training_node_collection_t& nodes);
+        ocl_gradient_descent_learning(const std::weak_ptr<ocl_computation_context>& context, const learning_behavior_ptr& behavior, const training_node_collection_ptr& nodes);
 
         supervised_learning_iteration_type iteration_type() const override;
         void initialize() override;

@@ -127,6 +127,23 @@ namespace nfut
             }
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_rnd)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"Computation Context")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpp_rnd)
+        {
+            try
+            {
+                test_rnd(cpp_context, L"");
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
         void test_rnd(const wstring& typeId, const wstring& hint)
         {
             computation_context_factory factory;

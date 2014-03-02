@@ -87,6 +87,7 @@ namespace nf
     struct layer_description;
     typedef std::shared_ptr<layer_description> layer_description_ptr;
     typedef std::list<layer_description_ptr> layer_description_coll_t;
+    
     struct activation_description;
 
     struct device_array_group;
@@ -103,6 +104,7 @@ namespace nf
 
     struct training_node;
     typedef std::vector<training_node> training_node_collection_t;
+    typedef std::shared_ptr<training_node_collection_t> training_node_collection_ptr;
 
     struct supervised_batch;
     struct supervised_sample;

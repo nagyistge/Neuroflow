@@ -11,7 +11,7 @@ namespace nf
     struct learning_impl_of : weak_contexted<C>, virtual learning_impl
     {
     protected:
-        learning_impl_of(const std::weak_ptr<C>& context, const learning_behavior_ptr& behavior, const training_node_collection_t& nodes) :
+        learning_impl_of(const std::weak_ptr<C>& context, const learning_behavior_ptr& behavior, const training_node_collection_ptr& nodes) :
             weak_contexted(context),
             _behavior(std::dynamic_pointer_cast<T>(behavior)),
             _nodes(nodes)
@@ -24,12 +24,12 @@ namespace nf
             return _behavior;
         }
 
-        const training_node_collection_t& nodes() const
+        const training_node_collection_ptr& nodes() const
         {
             return _nodes;
         }
 
         std::shared_ptr<T> _behavior;
-        training_node_collection_t _nodes;
+        training_node_collection_ptr _nodes;
     };
 }
