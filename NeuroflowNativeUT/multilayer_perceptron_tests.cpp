@@ -3,6 +3,7 @@
 
 #include <nf.h>
 #include <layer_order_comparer.h>
+#include <linqlike.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -98,16 +99,34 @@ namespace NeuroflowNativeUT
             }
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(cpu_compute)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_compute)
             TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(cpu_compute)
+        TEST_METHOD(cpp_compute)
         {
             try
             {
                 auto ctx = computation_context_factory().create_context(cpp_context);
                 do_compute(ctx);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_online_training)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpp_gd_online_training)
+        {
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_gd_training(ctx, 0.5f, true, 0.1f);
             }
             catch (exception& ex)
             {
@@ -176,13 +195,124 @@ namespace NeuroflowNativeUT
             }
         }
 
-        multilayer_perceptron_ptr create_mlp(const computation_context_ptr& ctx)
+        void do_gd_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
+        {
+            auto mlp = create_mlp_with_training(ctx, rndStrength, online, rate);
+            auto outputs = ctx->data_array_factory()->create(1);
+
+            const float maxInput = 4.0f;
+            const float minInput = -4.0f;
+            const float maxOutput = 16.0f;
+            const float minOutput = 0.0f;
+            supervised_batch batch;
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-4.0f, minInput, maxInput) })), 
+                to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-3.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(9.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-2.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(4.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-1.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(1.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(0.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(0.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(1.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(1.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(2.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(4.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(3.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(9.0f, minOutput, maxOutput) })),
+                outputs);
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(4.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
+                outputs);
+
+            const idx_t maxIterations = 1000;
+            auto errors = ctx->data_array_factory()->create(maxIterations);
+
+            bool first = true;
+            /*var sw = new Stopwatch();
+            sw.Start();*/
+            for (idx_t it = 0; it < maxIterations; it++)
+            {
+                mlp->training(batch);
+
+                if (first)
+                {
+                    auto weights = ctx->data_array_factory()->create(mlp->number_of_weights());
+                    mlp->get_weights(weights);
+                    vector<float> weightValues(weights->size());
+                    weights->read(0, weights->size(), &weightValues[0], 0).wait();
+                    Assert::IsTrue((from(weightValues) | sum()) != 0.0f);
+
+                    first = false;
+                }
+
+                //ctx.VectorUtils.CalculateMSE(batch, errors, it);
+            }
+
+            //float[] mses = new float[maxIterations];
+            //await errors.Read(mses);
+
+            /*sw.Stop();
+
+            foreach(var mse in mses) Console.WriteLine("Error: {0}", mse.ToString("0.00000000"));
+
+            Console.WriteLine("Ellapsed: {0} ms", sw.Elapsed.TotalMilliseconds);*/
+        }
+
+        static float normalize(float value, float min, float max)
+        {
+            return ((value - min) / (max - min)) * 2.0f - 1.0f;
+        }
+
+        static data_array_ptr to_data_array(const computation_context_ptr& ctx, vector<float>& values)
+        {
+            return ctx->data_array_factory()->create(&values[0], 0, values.size());
+        }
+
+        static multilayer_perceptron_ptr create_mlp(const computation_context_ptr& ctx)
         {
             vector<layer_ptr> layers =
             {
                 make_layer(2),
                 make_layer(4, make_activation_description(activation_function::sigmoid, 1.7f)),
                 make_layer(1, make_activation_description(activation_function::linear, 1.1f))
+            };
+            layers[0]->output_connections().add_one_way(layers[1]);
+            layers[1]->output_connections().add_one_way(layers[2]);
+
+            auto mlp = ctx->neural_network_factory()->create_multilayer_perceptron(layers);
+            idx_t numWeights = mlp->number_of_weights();
+            Assert::AreEqual(idx_t((2 * 4 + 4) + (4 * 1 + 1)), numWeights);
+
+            return move(mlp);
+        }
+
+        static multilayer_perceptron_ptr create_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
+        {
+            auto wrnd = make_randomize_weights_uniform(rndStrength);
+            auto algo = make_gradient_descent_learning(rate, 0.5f, false, online ? weight_update_mode::online : weight_update_mode::offline);
+            vector<layer_ptr> layers =
+            {
+                make_layer(2),
+                make_layer(4, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
+                make_layer(1, make_activation_description(activation_function::linear, 1.1f), wrnd, algo)
             };
             layers[0]->output_connections().add_one_way(layers[1]);
             layers[1]->output_connections().add_one_way(layers[2]);
