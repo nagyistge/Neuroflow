@@ -27,7 +27,7 @@ void cpp_gradient_descent_learning::initialize()
         idx_t idx = 0;
         for (auto& node : *nodes())
         {
-            _deltas[idx++] = dynamic_pointer_cast<cpp_device_array>(ctx->cpp_device_array_management()->create_array(false, node.weights()->size()));
+            _deltas.emplace_back(move(dynamic_pointer_cast<cpp_device_array>(ctx->cpp_device_array_management()->create_array(false, node.weights()->size()))));
         }
     }
     else
@@ -40,21 +40,19 @@ void cpp_gradient_descent_learning::run(idx_t iterationCount, const device_array
 {
     if (behavior()->weight_update_mode() == weight_update_mode::online)
     {
-        auto d = _deltas.begin();
+        idx_t idx = 0;
         for (auto& node : *nodes())
         {
-            update_weights_online(d->get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradients().get()));
-            d++;
+            update_weights_online(_deltas[idx++].get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradients().get()));
         }
     }
     else
     {
-        auto d = _deltas.begin();
+        idx_t idx = 0;
         float itCount = iterationCount;
         for (auto& node : *nodes())
         {
-            update_weights_offline(d->get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradient_sums().get()), itCount);
-            d++;
+            update_weights_offline(_deltas[idx++].get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradient_sums().get()), itCount);
         }
     }
 }
