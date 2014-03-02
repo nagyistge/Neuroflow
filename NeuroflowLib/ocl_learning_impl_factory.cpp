@@ -11,7 +11,7 @@ ocl_learning_impl_factory::factory_map_t ocl_learning_impl_factory::get_factorie
     {
         {
             typeid(gradient_descent_learning).name(),
-            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_ptr& nodes)
             {
                 auto ctx = lock_context();
                 return make_shared<ocl_gradient_descent_learning>(ctx, learningBehavior, nodes);
@@ -19,7 +19,7 @@ ocl_learning_impl_factory::factory_map_t ocl_learning_impl_factory::get_factorie
         },
         {
             typeid(randomize_weights_uniform).name(),
-            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_t& nodes)
+            [&](const learning_behavior_ptr& learningBehavior, const training_node_collection_ptr& nodes)
             {
                 auto ctx = lock_context();
                 return make_shared<ocl_randomize_weights_uniform>(ctx, learningBehavior, nodes);

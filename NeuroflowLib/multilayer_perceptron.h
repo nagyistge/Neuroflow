@@ -49,6 +49,8 @@ namespace nf
             }
         };
 
+        typedef std::vector<std::tuple<device_array_collection_t, boost::optional<device_array_collection_t>, boost::optional<device_array_collection_t>>> values_for_training_t;
+
         multilayer_perceptron(const computation_context_ptr& context, layers_t& layers, const mlp_init_pars* properties);
 
         nf::gradient_computation_method _gradientComputationMethod = nf::gradient_computation_method::feed_forward;
@@ -104,6 +106,6 @@ namespace nf
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
         template<typename I>
-        std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const training_node_collection_t& nodes);
+        std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values);
     };
 }

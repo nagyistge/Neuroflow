@@ -12,10 +12,6 @@
 USING
 
 cpp_computation_context::cpp_computation_context(const std::wstring& deviceHint, const cc_init_pars* properties) :
-_deviceArrayMan(make_shared<cpp_device_array_management>()),
-_dataArrayFactory(make_shared<cpp_data_array_factory>()),
-_utils(make_shared<cpp_utils>()),
-_computeActivation(make_shared<cpp_compute_activation>()),
 _deviceInfo(cpp_cc_factory_adapter::only_device()),
 _generator(properties->random_seed)
 {
@@ -33,21 +29,57 @@ random_generator& cpp_computation_context::rnd()
 
 device_array_management_ptr cpp_computation_context::device_array_management()
 {
+    return cpp_device_array_management();
+}
+
+const cpp_device_array_management_ptr& cpp_computation_context::cpp_device_array_management()
+{
+    if (_deviceArrayMan == null)
+    {
+        _deviceArrayMan = make_shared<nf::cpp_device_array_management>();
+    }
     return _deviceArrayMan;
 }
 
 data_array_factory_ptr cpp_computation_context::data_array_factory()
 {
+    return cpp_data_array_factory();
+}
+
+const cpp_data_array_factory_ptr& cpp_computation_context::cpp_data_array_factory()
+{
+    if (_dataArrayFactory == null)
+    {
+        _dataArrayFactory = make_shared<nf::cpp_data_array_factory>();
+    }
     return _dataArrayFactory;
 }
 
 utils_ptr cpp_computation_context::utils()
 {
+    return cpp_utils();
+}
+
+const cpp_utils_ptr& cpp_computation_context::cpp_utils()
+{
+    if (_utils == null)
+    {
+        _utils = make_shared<nf::cpp_utils>();
+    }
     return _utils;
 }
 
 compute_activation_ptr cpp_computation_context::compute_activation()
 {
+    return cpp_compute_activation();
+}
+
+const cpp_compute_activation_ptr& cpp_computation_context::cpp_compute_activation()
+{
+    if (_computeActivation == null)
+    {
+        _computeActivation = make_shared<nf::cpp_compute_activation>();
+    }
     return _computeActivation;
 }
 
@@ -60,8 +92,7 @@ const cpp_learning_impl_factory_ptr& cpp_computation_context::cpp_learning_impl_
 {
     if (!_learningImplFactory)
     {
-        auto thisCtx = shared_this<cpp_computation_context>();
-        _learningImplFactory = make_shared<nf::cpp_learning_impl_factory>(thisCtx);
+        _learningImplFactory = make_shared<nf::cpp_learning_impl_factory>(shared_this<cpp_computation_context>());
     }
     return _learningImplFactory;
 }

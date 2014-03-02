@@ -312,36 +312,36 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
 void multilayer_perceptron::create_impls()
 {
     auto initLayers = _layers |
-        select_many([](row_numbered<layer_ptr>& l)
-        {
-            return from(l.value()->behaviors()) |
-                of_type<learning_init_behavior>() |
-                select([=](learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
-        }) |
-        group_by([](row_numbered<learning_init_behavior_ptr>& b)
-        {
-            return make_equatable_ptr(b.value());
-        }, [](row_numbered<learning_init_behavior_ptr>& b)
-        {
-            return b.row_num();
-        });
+    select_many([](row_numbered<layer_ptr>& l)
+    {
+        return from(l.value()->behaviors()) |
+            of_type<learning_init_behavior>() |
+            select([=](learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
+    }) |
+    group_by([](row_numbered<learning_init_behavior_ptr>& b)
+    {
+        return make_equatable_ptr(b.value());
+    }, [](row_numbered<learning_init_behavior_ptr>& b)
+    {
+        return b.row_num();
+    });
 
     auto learningLayers = _layers | 
-        select_many([](row_numbered<layer_ptr>& l)
-        { 
-            return from(l.value()->behaviors()) |
-                of_type<supervised_learning_behavior>() |
-                select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
-        }) |
-        group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
-        {
-            return make_equatable_ptr(b.value());
-        }, [](row_numbered<supervised_learning_behavior_ptr>& b)
-        {
-            return b.row_num();
-        });
+    select_many([](row_numbered<layer_ptr>& l)
+    { 
+        return from(l.value()->behaviors()) |
+            of_type<supervised_learning_behavior>() |
+            select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
+    }) |
+    group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
+    {
+        return make_equatable_ptr(b.value());
+    }, [](row_numbered<supervised_learning_behavior_ptr>& b)
+    {
+        return b.row_num();
+    });
 
-    training_node_collection_t nodes;
+    auto values = values_for_training_t();
     for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
     {
         auto& layer = _layers[lidx];
@@ -371,7 +371,7 @@ void multilayer_perceptron::create_impls()
             if (_gradientSums.try_get(key, arr2)) gradientSums->push_back(arr2);
         }
 
-        nodes.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
+        values.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
     }
 
     vector<learning_impl_ptr> implsToInit;
@@ -380,12 +380,12 @@ void multilayer_perceptron::create_impls()
 
     for (auto& toInit : initLayers)
     {
-        implsToInit.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), nodes));
+        implsToInit.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), values));
     }
 
     for (auto& learn : learningLayers)
     {
-        auto impl = create_learning_impl<supervised_learning>(learn.key().ptr(), learn.values(), nodes);
+        auto impl = create_learning_impl<supervised_learning>(learn.key().ptr(), learn.values(), values);
         if (int(impl->iteration_type() & supervised_learning_iteration_type::online) != 0)
         {
             onlineImpls.push_back(impl);
@@ -421,12 +421,19 @@ void multilayer_perceptron::create_impls()
 }
 
 template<typename I>
-std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const training_node_collection_t& nodes)
+std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values)
 {
-    training_node_collection_t layerNodes;
+    auto layerNodes = make_shared<training_node_collection_t>();
     for (idx_t layerIndex : forLayerIndexes)
     {
-        layerNodes.push_back(nodes[layerIndex - 1]);
+        auto& currentValues = values[layerIndex - 1];
+        for (idx_t arrayIndex = 0; arrayIndex < get<0>(currentValues).size(); arrayIndex++)
+        {
+            device_array_ptr gradients, gradientSums;
+            if (get<1>(currentValues)) gradients = (*get<1>(currentValues))[arrayIndex];
+            if (get<2>(currentValues)) gradients = (*get<2>(currentValues))[arrayIndex];
+            layerNodes->emplace_back(get<0>(currentValues)[arrayIndex], gradients, gradientSums);
+        }
     }
     auto impl = dynamic_pointer_cast<I>(_learningImplFactory->create_impl(behavior, layerNodes));
     if (!impl)
