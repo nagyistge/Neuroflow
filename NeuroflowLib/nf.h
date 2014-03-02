@@ -22,3 +22,5 @@
 #include "neural_network_factory.h"
 #include "multilayer_perceptron.h"
 #include "layer_connections.h"
+#include "randomize_weights_uniform.h"
+#include "gradient_descent_learning.h"

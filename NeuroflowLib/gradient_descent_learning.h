@@ -66,12 +66,12 @@ namespace nf
         nf::weight_update_mode _weightUpdateMode = weight_update_mode::online;
     };
 
-    inline layer_behavior_ptr make_gradient_descent_learning_rule()
+    inline layer_behavior_ptr make_gradient_descent_learning()
     {
         return std::make_shared<gradient_descent_learning>();
     }
 
-    inline layer_behavior_ptr make_gradient_descent_learning_rule(float learningRate, float momentum, bool smoothing, nf::weight_update_mode weightUpdateMode)
+    inline layer_behavior_ptr make_gradient_descent_learning(float learningRate, float momentum, bool smoothing, nf::weight_update_mode weightUpdateMode)
     {
         return std::make_shared<gradient_descent_learning>(learningRate, momentum, smoothing, weightUpdateMode);
     }

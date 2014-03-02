@@ -24,10 +24,10 @@ namespace nf
         void set_weights(const data_array_ptr& from);
         void compute(const data_array_ptr& inputs, const data_array_ptr& outputs);
         void compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs);
-        void train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs);
-        void train(const supervised_sample_entry& sampleEntry);
-        void train(const supervised_sample& sample);
-        void train(supervised_batch& batch);
+        void training(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs);
+        void training(const supervised_sample_entry& sampleEntry);
+        void training(const supervised_sample& sample);
+        void training(supervised_batch& batch);
 
     private:
         struct layer_info
@@ -56,16 +56,16 @@ namespace nf
         nf::gradient_computation_method _gradientComputationMethod = nf::gradient_computation_method::feed_forward;
         idx_t _maxBpttIterations = 0;
         ordered_layers_t _layers;
-        bool _isTrainingEnabled;
-        bool _isGradientsCalculated;
-        bool _doBackpropagate;
-        bool _doFFBP;
-        bool _doBPTT;
-        bool _doRTLR;
-        bool _isRecurrent;
-        bool _calculateGlobalOnlineError;
-        bool _calculateGlobalOfflineError;
-        bool _isTrainingInitialized;
+        bool _isTrainingEnabled = false;
+        bool _isGradientsCalculated = false;
+        bool _doBackpropagate = false;
+        bool _doFFBP = false;
+        bool _doBPTT = false;
+        bool _doRTLR = false;
+        bool _isRecurrent = false;
+        bool _calculateGlobalOnlineError = false;
+        bool _calculateGlobalOfflineError = false;
+        bool _isTrainingInitialized = false;
         rtlr _rtlr;
         device_array* _netInputs;
         device_array* _netOutputs;

@@ -84,12 +84,12 @@ if (!(expr)) \
 } \
 }
 
-inline void throw_not_implemented()
-{
-    throw_runtime_error("Not implemented!");
-}
-
-inline void throw_not_implemented(const std::string& message)
-{
-    throw_runtime_error(message);
+#define throw_not_implemented() \
+{ \
+    std::stringstream str; \
+    str << "Method or operation is not implemented at "; \
+    str << __FILE__; \
+    str << ": "; \
+    str << __LINE__; \
+    throw std::runtime_error(str.str().c_str()); \
 }

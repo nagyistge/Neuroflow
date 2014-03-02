@@ -158,7 +158,7 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
             _errors.add(lidx, layerSize);
         }
 
-        if (learningInfo.is_offline || _doBPTT)
+        if (learningInfo.is_online || _doBPTT)
         {
             // Bias Gradients:
             _biasGradients.add(lidx, layerSize);
@@ -259,7 +259,7 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
                 {
                     node.in.push_back([=]()
                     {
-                        throw_not_implemented("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
+                        throw_runtime_error("Not implemented! Stack based input copy needed, see MultiplayerPerceptron.cs!");
                         return get_net_values(inputIndex);
                     });
                 }
@@ -564,28 +564,28 @@ void multilayer_perceptron::ensure_training_initialized()
     }
 }
 
-void multilayer_perceptron::train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs)
+void multilayer_perceptron::training(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs)
 {
     supervised_batch batch;
     batch.push_back(input, desiredOutputs, actualOutputs);
-    train(batch);
+    training(batch);
 }
 
-void multilayer_perceptron::train(const supervised_sample_entry& sampleEntry)
+void multilayer_perceptron::training(const supervised_sample_entry& sampleEntry)
 {
     supervised_batch batch;
     batch.push_back(sampleEntry);
-    train(batch);
+    training(batch);
 }
 
-void multilayer_perceptron::train(const supervised_sample& sample)
+void multilayer_perceptron::training(const supervised_sample& sample)
 {
     supervised_batch batch;
     batch.push_back(sample);
-    train(batch);
+    training(batch);
 }
 
-void multilayer_perceptron::train(supervised_batch& batch)
+void multilayer_perceptron::training(supervised_batch& batch)
 {
     ensure_training_initialized();
     if (_doBackpropagate)
@@ -671,10 +671,10 @@ void multilayer_perceptron::zero_outputs()
 
 void multilayer_perceptron::zero_gradients()
 {
-    if (_gradientsPool) _gradientsPool->zero();
+    if (_gradientsPool && _gradientsPool->is_allocated()) _gradientsPool->zero();
 }
 
 void multilayer_perceptron::zero_gradient_sums()
 {
-    if (_gradientSumsPool) _gradientSumsPool->zero();
+    if (_gradientSumsPool && _gradientSumsPool->is_allocated()) _gradientSumsPool->zero();
 }

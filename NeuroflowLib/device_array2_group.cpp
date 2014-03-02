@@ -39,7 +39,7 @@ bool device_array2_group::try_get(const key_t& idx, device_array2_ptr& result) c
 
 void device_array2_group::zero()
 {
-    if (_arrays.size() > 0) _pool->zero();
+    if (_arrays.size() > 0 && _pool->is_allocated()) _pool->zero();
 }
 
 idx_t device_array2_group::size() const
