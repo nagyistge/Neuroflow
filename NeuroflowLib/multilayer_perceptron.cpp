@@ -375,13 +375,14 @@ void multilayer_perceptron::create_impls()
         values.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
     }
 
-    vector<learning_impl_ptr> implsToInit;
+    vector<learning_impl_ptr> initImpls;
+    vector<supervised_learning_ptr> supervisedImpls;
     vector<supervised_learning_ptr> onlineImpls;
     vector<supervised_learning_ptr> offlineImpls;
 
     for (auto& toInit : initLayers)
     {
-        implsToInit.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), values));
+        initImpls.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), values));
     }
 
     for (auto& learn : learningLayers)
@@ -391,18 +392,20 @@ void multilayer_perceptron::create_impls()
         {
             onlineImpls.push_back(impl);
         }
-
         if (int(impl->iteration_type() & supervised_learning_iteration_type::offline) != 0)
         {
             offlineImpls.push_back(impl);
         }
+        supervisedImpls.push_back(impl);
     }
 
-    _initLearningFunc = std::bind([](const vector<learning_impl_ptr>& impls)
+    _initLearningFunc = std::bind([](const vector<learning_impl_ptr>& initImpls, const vector<supervised_learning_ptr>& supervisedImpls)
     {
-        for (auto& impl : impls) impl->initialize();
+        for (auto& impl : initImpls) impl->initialize();
+        for (auto& impl : supervisedImpls) impl->initialize();
     },
-    std::move(implsToInit));
+    std::move(initImpls),
+    std::move(supervisedImpls));
 
     _onlineLearningFunc = std::bind([](const vector<supervised_learning_ptr>& impls, const device_array_ptr& error)
     { 

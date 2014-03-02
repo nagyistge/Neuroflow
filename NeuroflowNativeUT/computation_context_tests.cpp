@@ -144,7 +144,7 @@ namespace nfut
             }
         }
 
-        void test_rnd(const wstring& typeId, const wstring& hint)
+        void test_rnd(const wchar_t* typeId, wchar_t* hint = null)
         {
             computation_context_factory factory;
 
