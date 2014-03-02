@@ -27,7 +27,7 @@ namespace nf
         void train(const data_array_ptr& input, const data_array_ptr& desiredOutputs, const data_array_ptr& actualOutputs);
         void train(const supervised_sample_entry& sampleEntry);
         void train(const supervised_sample& sample);
-        void train(const supervised_batch& batch);
+        void train(supervised_batch& batch);
 
     private:
         struct layer_info
@@ -67,11 +67,11 @@ namespace nf
         bool _calculateGlobalOfflineError;
         bool _isTrainingInitialized;
         rtlr _rtlr;
-        device_array_ptr _netInputs;
-        device_array_ptr _netOutputs;
-        device_array_ptr _netDesiredOutputs;
-        device_array_ptr _globalOfflineError;
-        device_array_ptr _globalOnlineError;
+        device_array* _netInputs;
+        device_array* _netOutputs;
+        device_array* _netDesiredOutputs;
+        device_array_ptr _globalOfflineErrors;
+        device_array_ptr _globalOnlineErrors;
         nf_object_ptr _calculateGlobalErrorState;
         std::list<nf_object_ptr> _computationStates;
         nf_object_ptr _setOutputState;
@@ -93,7 +93,7 @@ namespace nf
         std::function<void(idx_t, gradient_computation_formula, idx_t)> _trainFunc;
         std::function<void()> _initLearningFunc;
         std::function<void(idx_t, const device_array_ptr&)> _offlineLearningFunc;
-        std::function<void(idx_t, const device_array_ptr&)> _onlineLearningFunc;
+        std::function<void(const device_array_ptr&)> _onlineLearningFunc;
 
         void create_structure(std::map<idx_t, layer_info>& infos);
         void create_compute();
@@ -101,11 +101,22 @@ namespace nf
         void create_impls();
         idx_t get_layer_index(const layer_ptr& layer);
         activation_description get_activation_desc(idx_t layerIndex);
-        const device_array_ptr& get_net_values(idx_t layerIndex) const;
-        const device_array_ptr& get_net_desired_outputs() const;
+        device_array* get_net_values(idx_t layerIndex) const;
+        device_array* get_net_desired_outputs() const;
         void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
         void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
         template<typename I>
         std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values);
+        void verify_training_enabled();
+        void ensure_training_initialized();
+        void feed_forward_training(supervised_batch& batch);
+        void bppt_training(supervised_batch& batch);
+        void rtlr_training(supervised_batch& batch);
+        void global_optimization_training(supervised_batch& batch);
+        void zero_global_offline_errors();
+        void zero_errors();
+        void zero_outputs();
+        void zero_gradients();
+        void zero_gradient_sums();
     };
 }

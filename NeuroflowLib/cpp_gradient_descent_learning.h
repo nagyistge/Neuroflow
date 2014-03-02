@@ -16,5 +16,8 @@ namespace nf
 
     private:
         cpp_device_array_collection_t _deltas;
+
+        void update_weights_online(cpp_device_array* deltas, cpp_device_array* weights, cpp_device_array* gradients);
+        void update_weights_offline(cpp_device_array* deltas, cpp_device_array* weights, cpp_device_array* gradientSums, float itCount);
     };
 }
