@@ -16,7 +16,7 @@ namespace linqlike
         typedef std::shared_ptr<R> result_t;
         return enumerable<result_t>([=]() mutable
         {
-            return enumerable<result_t>::pull_type([=](enumerable<result_t>::push_type& yield) mutable
+            return enumerable<result_t>::make_pull([=](enumerable<result_t>::push_type& yield) mutable
             {
                 for (auto& v : coll)
                 {

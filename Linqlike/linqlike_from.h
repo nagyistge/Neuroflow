@@ -11,7 +11,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 std::for_each(begin, end, [&](T& v)
                 {
@@ -28,7 +28,7 @@ namespace linqlike
         TIterator& e = const_cast<TIterator&>(end);
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 std::for_each(b, e, [&](T& v)
                 {
@@ -76,7 +76,7 @@ namespace linqlike
         auto end = std::end(map);
         return enumerable<std::pair<K, V*>>([=]() mutable
         {
-            return enumerable<std::pair<K, V*>>::pull_type([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
+            return enumerable<std::pair<K, V*>>::make_pull([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
             {
                 std::for_each(begin, end, [&](std::map<K, V>::iterator::value_type& v)
                 {
@@ -99,7 +99,7 @@ namespace linqlike
         auto end = std::end(unordered_map);
         return enumerable<std::pair<K, V*>>([=]() mutable
         {
-            return enumerable<std::pair<K, V*>>::pull_type([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
+            return enumerable<std::pair<K, V*>>::make_pull([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
             {
                 std::for_each(begin, end, [&](std::unordered_map<K, V>::iterator::value_type& v)
                 {
@@ -122,7 +122,7 @@ namespace linqlike
         auto end = std::end(multimap);
         return enumerable<std::pair<K, V*>>([=]() mutable
         {
-            return enumerable<std::pair<K, V*>>::pull_type([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
+            return enumerable<std::pair<K, V*>>::make_pull([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
             {
                 std::for_each(begin, end, [&](std::multimap<K, V>::iterator::value_type& v)
                 {
@@ -145,7 +145,7 @@ namespace linqlike
         auto end = std::end(unordered_multimap);
         return enumerable<std::pair<K, V*>>([=]() mutable
         {
-            return enumerable<std::pair<K, V*>>::pull_type([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
+            return enumerable<std::pair<K, V*>>::make_pull([=](enumerable<std::pair<K, V*>>::push_type& yield) mutable
             {
                 std::for_each(begin, end, [&](std::unordered_multimap<K, V>::iterator::value_type& v)
                 {

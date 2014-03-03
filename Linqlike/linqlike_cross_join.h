@@ -34,7 +34,7 @@ namespace linqlike
     {
         return enumerable<R>([=]() mutable
         {
-            return enumerable<R>::pull_type([=](enumerable<R>::push_type& yield) mutable
+            return enumerable<R>::make_pull([=](enumerable<R>::push_type& yield) mutable
             {
                 for (auto& v1 : coll)
                 {

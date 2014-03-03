@@ -45,7 +45,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 if (orderBy.comparer())
                 {
@@ -67,7 +67,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 if (orderBy.direction())
                 {

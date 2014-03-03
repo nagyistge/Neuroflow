@@ -50,7 +50,7 @@ namespace linqlike
     {
         return enumerable<row_numbered<T>>([=]() mutable
         {
-            return  enumerable<row_numbered<T>>::pull_type([=](enumerable<row_numbered<T>>::push_type& yield) mutable
+            return  enumerable<row_numbered<T>>::make_pull([=](enumerable<row_numbered<T>>::push_type& yield) mutable
             {
                 ::size_t rowNum = 0;
                 for (auto& v : coll)

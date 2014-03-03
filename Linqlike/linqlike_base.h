@@ -5,6 +5,12 @@
 #include <functional>
 #include <iterator>
 
+#ifdef LINQLIKE_STACK_SIZE
+#define _LINQLIKE_STACK_SIZE LINQLIKE_STACK_SIZE
+#else
+#define _LINQLIKE_STACK_SIZE 512
+#endif
+
 namespace linqlike
 {
     template <typename T>
@@ -81,6 +87,11 @@ namespace linqlike
         iterator end()
         {
             return iterator();
+        }
+
+        static pull_type make_pull(std::function<void(push_type& yield)>&& impl)
+        {
+            return std::move(pull_type(std::move(impl), boost::coroutines::attributes(_LINQLIKE_STACK_SIZE * 1024)));
         }
 
     private:
