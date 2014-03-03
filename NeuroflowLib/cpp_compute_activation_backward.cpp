@@ -169,6 +169,31 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
                     pGradientSums[gidx] += (pGradients[gidx] = pInputs[inputIndex] * pErrors[valueIdx]);
                 }
             }
+            else if (hasGradients)
+            {
+                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                assert(gradients);
+                float* pGradients = gradients->ptr();
+
+                for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+                {
+                    idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    pGradients[gidx] = pInputs[inputIndex] * pErrors[valueIdx];
+                }
+            }
+            else
+            {
+                assert(hasGradientSums);
+                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                assert(gradientSums);
+                float* pGradientSums = gradientSums->ptr();
+
+                for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
+                {
+                    idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    pGradientSums[gidx] += (pInputs[inputIndex] * pErrors[valueIdx]);
+                }
+            }
         }
     }
 }

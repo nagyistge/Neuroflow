@@ -263,11 +263,19 @@ namespace NeuroflowNativeUT
                     first = false;
                 }
 
-                //ctx.VectorUtils.CalculateMSE(batch, errors, it);
+                ctx->utils()->calculate_mse(batch, errors, it);
             }
 
-            //float[] mses = new float[maxIterations];
-            //await errors.Read(mses);
+            vector<float> mses(maxIterations);
+            errors->read(0, maxIterations, &mses[0], 0).wait();
+
+            stringstream s;
+            for (float mse : mses)
+            {
+                s << "Error: " << mse << endl;
+            }
+
+            Logger::WriteMessage(s.str().c_str());
 
             /*sw.Stop();
 

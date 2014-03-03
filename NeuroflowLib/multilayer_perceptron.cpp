@@ -367,6 +367,7 @@ void multilayer_perceptron::create_impls()
         {
             idx_t inputIndex = get_layer_index(inputConnectedLayer);
             auto key = make_pair(inputIndex, lidx);
+            weights.push_back(_weights.get(key));
             device_array2_ptr arr2;
             if (_gradients.try_get(key, arr2)) gradients->push_back(arr2);
             if (_gradientSums.try_get(key, arr2)) gradientSums->push_back(arr2);
@@ -434,7 +435,7 @@ std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_be
         {
             device_array_ptr gradients, gradientSums;
             if (get<1>(currentValues)) gradients = (*get<1>(currentValues))[arrayIndex];
-            if (get<2>(currentValues)) gradients = (*get<2>(currentValues))[arrayIndex];
+            if (get<2>(currentValues)) gradientSums = (*get<2>(currentValues))[arrayIndex];
             layerNodes->emplace_back(get<0>(currentValues)[arrayIndex], gradients, gradientSums);
         }
     }
