@@ -93,7 +93,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 std::vector<T> values;
                 for (auto& v : coll) values.push_back(v);
@@ -125,7 +125,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 typedef std::function<int(T&, T&)> comp_t;
 
@@ -184,7 +184,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 typedef std::function<int(T&, T&)> comp_t;
 
@@ -259,7 +259,7 @@ namespace linqlike
     {
         return enumerable<T>([=]() mutable
         {
-            return enumerable<T>::pull_type([=](enumerable<T>::push_type& yield) mutable
+            return enumerable<T>::make_pull([=](enumerable<T>::push_type& yield) mutable
             {
                 typedef std::function<int(T&, T&)> comp_t;
 

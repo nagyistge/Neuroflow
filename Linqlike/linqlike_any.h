@@ -33,26 +33,14 @@ namespace linqlike
     template <typename TColl>
     bool operator|(TColl& coll, const _any<_dummy>& a)
     {
-#if (_MSC_VER && _DEBUG)
-        bool found = false;
-        for (auto& v : coll) if (!found) found = true;
-        return found;
-#else
         return std::begin(coll) != std::end(coll);
-#endif
     }
 
     template <typename TColl, typename F>
     bool operator|(TColl& coll, const _any<F>& a)
     {
         auto& pred = *a.pred();
-#if (_MSC_VER && _DEBUG)
-        bool found = false;
-        for (auto& v : coll) if (pred(v) && !found) found = true;
-        return found;
-#else
         for (auto& v : coll) if (pred(v)) return true;
         return false;
-#endif
     }
 }
