@@ -170,25 +170,23 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
             _biasGradientSums.add(lidx, layerSize);
         }
 
-        idx_t inputLayersSize = layer.value()->input_layers() | size();
-        for (idx_t iidx = 0; iidx < inputLayersSize; iidx++)
+        for (auto& inputConnectedLayer : layer.value()->input_layers())
         {
-            auto inputLayer = layer.value()->get_input_layer(iidx);
-            auto key = make_pair(get_layer_index(inputLayer), lidx);
+            auto key = make_pair(get_layer_index(inputConnectedLayer), lidx);
 
             // Weights
-            _weights.add(key, inputLayer->size(), layer.value()->size());
+            _weights.add(key, inputConnectedLayer->size(), layer.value()->size());
 
             if (learningInfo.is_online || _doBPTT)
             {
                 // Gradients:
-                _gradients.add(key, inputLayer->size(), layer.value()->size());
+                _gradients.add(key, inputConnectedLayer->size(), layer.value()->size());
             }
 
             if (learningInfo.is_offline)
             {
                 // Gradient Sums:
-                _gradientSums.add(key, inputLayer->size(), layer.value()->size());
+                _gradientSums.add(key, inputConnectedLayer->size(), layer.value()->size());
             }
         }
     }
@@ -372,6 +370,9 @@ void multilayer_perceptron::create_impls()
             if (_gradients.try_get(key, arr2)) gradients->push_back(arr2);
             if (_gradientSums.try_get(key, arr2)) gradientSums->push_back(arr2);
         }
+
+        if (gradients) assert(gradients->size() == weights.size());
+        if (gradientSums) assert(gradientSums->size() == weights.size());
 
         values.emplace_back(std::move(weights), std::move(gradients), std::move(gradientSums));
     }

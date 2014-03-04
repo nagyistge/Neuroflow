@@ -24,5 +24,6 @@ void cpp_randomize_weights_uniform::initialize()
         idx_t size = cppw->size();
         float* ptr = cppw->ptr();
         for (idx_t i = 0; i < size; i++) ptr[i] = rnd.next(min, max);
+        assert(ptr);
     }
 }

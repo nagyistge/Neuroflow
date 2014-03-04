@@ -139,7 +139,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
     {
         auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
         assert(biasGradientSums);
-        pBiasGradients = biasGradientSums->ptr();
+        pBiasGradientSums = biasGradientSums->ptr();
     }
 
     for (idx_t valueIdx = 0; valueIdx < size; valueIdx++)
@@ -253,7 +253,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
     {
         auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
         assert(biasGradientSums);
-        pBiasGradients = biasGradientSums->ptr();
+        pBiasGradientSums = biasGradientSums->ptr();
     }
 
     for (idx_t valueIdx = 0; valueIdx < size; valueIdx++)
