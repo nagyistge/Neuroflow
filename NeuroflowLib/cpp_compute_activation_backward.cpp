@@ -80,7 +80,9 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
 
             for (idx_t lowerErrorIdx = 0; lowerErrorIdx < lowerErrorsSize; lowerErrorIdx++)
             {
-                sum += pLowerErrors[lowerErrorIdx] * pLowerWeights[get_index2(valueIdx, lowerErrorIdx, size)];
+                idx_t lwidx = get_index2(valueIdx, lowerErrorIdx, size);
+                assert(lwidx >= 0 && lwidx < lowerWeights->size());
+                sum += pLowerErrors[lowerErrorIdx] * pLowerWeights[lwidx];
             }
         }
 
@@ -166,6 +168,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
                 for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    assert(gidx >= 0 && gidx < gradients->size() && gidx < gradientSums->size());
                     pGradientSums[gidx] += (pGradients[gidx] = pInputs[inputIndex] * pErrors[valueIdx]);
                 }
             }
@@ -178,6 +181,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
                 for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    assert(gidx >= 0 && gidx < gradients->size());
                     pGradients[gidx] = pInputs[inputIndex] * pErrors[valueIdx];
                 }
             }
@@ -191,6 +195,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
                 for (idx_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     idx_t gidx = get_index2(inputIndex, valueIdx, inputSize);
+                    assert(gidx >= 0 && gidx < gidx < gradientSums->size());
                     pGradientSums[gidx] += (pInputs[inputIndex] * pErrors[valueIdx]);
                 }
             }
@@ -305,7 +310,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
 
 float cpp_compute_activation_backward::sigmoid_deriv(float value, float alpha)
 {
-    // return alpha * (1.0f - value * value) / 2.0f; // Logistics
-    // return alpha * (1.0f - (value * value)); // Tanh
+    //return alpha * (1.0f - value * value) / 2.0f; // Logistics
+    //return alpha * (1.0f - (value * value)); // Tanh
     return alpha * 1.0f / ((1.0f + abs(value * alpha)) * (1.0f + abs(value * alpha))); // Elliot
 }

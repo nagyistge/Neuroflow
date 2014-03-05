@@ -75,10 +75,10 @@ void cpp_gradient_descent_learning::update_weights_online(cpp_device_array* delt
         for (idx_t idx = 0; idx < size; idx++)
         {
             float update = gradientsPtr[idx] * rate;
-            float lastUpdate = gradientsPtr[idx];
+            float lastUpdate = deltasPtr[idx];
             update = (lastUpdate * momentum) + (update * smoothV);
             weightsPtr[idx] += update;
-            gradientsPtr[idx] = update;
+            deltasPtr[idx] = update;
         }
     }
     else
@@ -112,10 +112,10 @@ void cpp_gradient_descent_learning::update_weights_offline(cpp_device_array* del
         for (idx_t idx = 0; idx < size; idx++)
         {
             float update = (gradientSumsPtr[idx] * rate) / itCount;
-            float lastUpdate = gradientSumsPtr[idx];
+            float lastUpdate = deltasPtr[idx];
             update = (lastUpdate * momentum) + (update * smoothV);
             weightsPtr[idx] += update;
-            gradientSumsPtr[idx] = update;
+            deltasPtr[idx] = update;
         }
     }
     else
@@ -123,10 +123,10 @@ void cpp_gradient_descent_learning::update_weights_offline(cpp_device_array* del
         for (idx_t idx = 0; idx < size; idx++)
         {
             float update = (gradientSumsPtr[idx] * rate) / itCount;
-            float lastUpdate = gradientSumsPtr[idx];
+            float lastUpdate = deltasPtr[idx];
             update = (lastUpdate * momentum) + update;
             weightsPtr[idx] += update;
-            gradientSumsPtr[idx] = update;
+            deltasPtr[idx] = update;
         }
     }
 }

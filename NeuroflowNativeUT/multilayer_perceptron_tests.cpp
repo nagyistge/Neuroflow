@@ -279,10 +279,6 @@ namespace NeuroflowNativeUT
                     first = false;
                 }
 
-                batch.samples().front().entries().back().actual_output()->read(0, 1, &o[0], 0).wait();
-
-                Logger::WriteMessage((to_string(o[0]) + "\n").c_str());
-
                 ctx->utils()->calculate_mse(batch, errors, it);
             }
 
@@ -338,6 +334,7 @@ namespace NeuroflowNativeUT
             };
             layers[0]->output_connections().add_one_way(layers[1]);
             layers[1]->output_connections().add_one_way(layers[2]);
+            layers[2]->output_connections().add_one_way(layers[3]);
 
             auto mlp = ctx->neural_network_factory()->create_multilayer_perceptron(layers);
 
