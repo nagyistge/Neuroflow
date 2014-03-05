@@ -6,9 +6,9 @@ namespace nf
 {
     struct supervised_outputs
     {
-        supervised_outputs(const get_device_array_ptr_t& Outputs, const get_device_array_ptr_t& DesiredOutputs) :
-            _outputs(Outputs),
-            _desiredOutputs(DesiredOutputs)
+        supervised_outputs(const get_device_array_ptr_t& outputs, const get_device_array_ptr_t& desiredOutputs) :
+            _outputs(outputs),
+            _desiredOutputs(desiredOutputs)
         {
         }
 

@@ -268,7 +268,13 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
             if (nodeidx == 0)
             {
                 // Last layer
-                node.net_outputs = supervised_outputs([=](){ return get_net_values(lidx); }, [=]() { return get_net_desired_outputs(); });
+                node.net_outputs = supervised_outputs([=]()
+                { 
+                    return get_net_values(lidx); 
+                }, [=]() 
+                { 
+                    return get_net_desired_outputs(); 
+                });
             }
             else
             {
@@ -434,10 +440,12 @@ std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_be
         auto& currentValues = values[layerIndex - 1];
         for (idx_t arrayIndex = 0; arrayIndex < get<0>(currentValues).size(); arrayIndex++)
         {
-            device_array_ptr gradients, gradientSums;
+            device_array_ptr weights, gradients, gradientSums;
+
+            weights = get<0>(currentValues)[arrayIndex];
             if (get<1>(currentValues)) gradients = (*get<1>(currentValues))[arrayIndex];
             if (get<2>(currentValues)) gradientSums = (*get<2>(currentValues))[arrayIndex];
-            layerNodes->emplace_back(get<0>(currentValues)[arrayIndex], gradients, gradientSums);
+            layerNodes->emplace_back(weights, gradients, gradientSums);
         }
     }
     auto impl = dynamic_pointer_cast<I>(_learningImplFactory->create_impl(behavior, layerNodes));

@@ -30,7 +30,9 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
                 float* pWeights = weights->ptr();
                 for (idx_t inputIdx = 0; inputIdx < inputsSize; inputIdx++)
                 {
-                    sum += pInputs[inputIdx] * pWeights[get_index2(inputIdx, valueIdx, inputsSize)];
+                    idx_t widx = get_index2(inputIdx, valueIdx, inputsSize);
+                    assert(widx >= 0 && widx < weights->size());
+                    sum += pInputs[inputIdx] * pWeights[widx];
                 }
             }
 
@@ -48,7 +50,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
 
 float cpp_compute_activation_forward::sigmoid(float value, float alpha)
 {
-    // return (2.0f / (1.0f + (float)Math.Exp(-alpha * value))) - 1.0f; // Logistics
+    //return (2.0f / (1.0f + exp(-alpha * value))) - 1.0f; // Logistics
     // return (float)Math.Tanh(value * alpha); // Tanh
     return (value * alpha) / (1.0f + abs(value * alpha)); // Elliot
 }
