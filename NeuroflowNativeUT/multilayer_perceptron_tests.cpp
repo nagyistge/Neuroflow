@@ -222,7 +222,7 @@ namespace NeuroflowNativeUT
             const float maxOutput = 16.0f;
             const float minOutput = 0.0f;
             supervised_batch batch;
-            batch.push_back(
+            /*batch.push_back(
                 to_data_array(ctx, vector<float>({ normalize(-4.0f, minInput, maxInput) })), 
                 to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
                 ctx->data_array_factory()->create(1));
@@ -257,13 +257,51 @@ namespace NeuroflowNativeUT
             batch.push_back(
                 to_data_array(ctx, vector<float>({ normalize(4.0f, minInput, maxInput) })),
                 to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
+                ctx->data_array_factory()->create(1));*/
+
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-4.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-3.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-2.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(-1.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(0.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(1.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(2.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(3.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
+                ctx->data_array_factory()->create(1));
+            batch.push_back(
+                to_data_array(ctx, vector<float>({ normalize(4.0f, minInput, maxInput) })),
+                to_data_array(ctx, vector<float>({ 0.0f })),
                 ctx->data_array_factory()->create(1));
 
-            const idx_t maxIterations = 1000;
+            const idx_t maxIterations = 10000;
             auto errors = ctx->data_array_factory()->create(maxIterations);
-            vector<float> o(1);
+            vector<float> mses(maxIterations);
 
             bool first = true;
+            boost::chrono::high_resolution_clock::time_point start;
             for (idx_t it = 0; it < maxIterations; it++)
             {
                 mlp->training(batch);
@@ -275,17 +313,20 @@ namespace NeuroflowNativeUT
                     vector<float> weightValues(weights->size());
                     weights->read(0, weights->size(), &weightValues[0], 0).wait();
                     Assert::IsTrue((from(weightValues) | sum()) != 0.0f);
-
                     first = false;
+
+                    start = boost::chrono::high_resolution_clock::now();
                 }
 
                 ctx->utils()->calculate_mse(batch, errors, it);
             }
 
-            vector<float> mses(maxIterations);
             errors->read(0, maxIterations, &mses[0], 0).wait();
 
+            boost::chrono::duration<double> sec = boost::chrono::high_resolution_clock::now() - start;
+
             stringstream s;
+            s << "Ellapsed: " << sec << endl;
             for (float mse : mses)
             {
                 s << "Error: " << mse << endl;
@@ -329,6 +370,7 @@ namespace NeuroflowNativeUT
             vector<layer_ptr> layers =
             {
                 make_layer(1),
+                make_layer(16, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
                 make_layer(16, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
                 make_layer(1, make_activation_description(activation_function::linear, 1.1f), wrnd, algo)
             };

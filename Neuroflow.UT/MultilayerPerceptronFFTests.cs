@@ -272,7 +272,6 @@ namespace Neuroflow.UT
 
                 bool first = true;
                 var sw = new Stopwatch();
-                sw.Start();
                 for (int it = 0; it < maxIterations; it++)
                 {
                     nn.Train(batch);
@@ -289,6 +288,7 @@ namespace Neuroflow.UT
                             Assert.IsTrue(wa.Sum() != 0.0f);
                         }
                         first = false;
+                        sw.Start();
                     }
 
                     ctx.VectorUtils.CalculateMSE(batch, errors, it);
@@ -299,9 +299,8 @@ namespace Neuroflow.UT
 
                 sw.Stop();
 
+                Console.WriteLine("Ellapsed: {0} sec", sw.Elapsed.TotalSeconds);
                 foreach (var mse in mses) Console.WriteLine("Error: {0}", mse.ToString("0.00000000"));
-
-                Console.WriteLine("Ellapsed: {0} ms", sw.Elapsed.TotalMilliseconds);
             }
         }
 

@@ -30,4 +30,5 @@
 #include <boost/iterator.hpp>
 #include <boost/thread.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/chrono.hpp>
 #include "ocl.h"
