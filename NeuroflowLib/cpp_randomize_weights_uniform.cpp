@@ -19,7 +19,7 @@ void cpp_randomize_weights_uniform::initialize()
     float max = 0.0f + behavior()->strength();
     for (auto& node : *nodes())
     {
-        auto cppw = dynamic_cast<cpp_device_array*>(node.weights().get());
+        auto cppw = _fast_cast_alt<cpp_device_array>(node.weights().get());
         assert(cppw);
         idx_t size = cppw->size();
         float* ptr = cppw->ptr();

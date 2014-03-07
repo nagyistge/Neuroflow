@@ -12,13 +12,18 @@ cpp_device_array_pool::~cpp_device_array_pool()
 
 float* cpp_device_array_pool::ptr()
 {
-    allocate();
+    do_allocate();
     assert(internalArray != null);
     assert(is_allocated());
     return internalArray;
 }
 
 bool cpp_device_array_pool::is_allocated() const
+{
+    return check_is_allocated();
+}
+
+bool cpp_device_array_pool::check_is_allocated() const
 {
     return internalArray != null;
 }
@@ -35,8 +40,13 @@ device_array2_ptr cpp_device_array_pool::create_array2(idx_t rowSize, idx_t colS
 
 void cpp_device_array_pool::allocate()
 {
+    do_allocate();
+}
+
+void cpp_device_array_pool::do_allocate()
+{
     if (endIndex == 0) throw_logic_error("There is no allocated memory in the pool.");
-    if (!is_allocated())
+    if (!check_is_allocated())
     {
         internalArray = new float[endIndex];
         memset(internalArray, 0, endIndex * sizeof(float));
@@ -45,13 +55,13 @@ void cpp_device_array_pool::allocate()
 
 void cpp_device_array_pool::zero()
 {
-    if (!is_allocated()) throw_logic_error("Cannot zero out an unallocated pool.");
+    if (!check_is_allocated()) throw_logic_error("Cannot zero out an unallocated pool.");
     memset(internalArray, 0, endIndex * sizeof(float));
 }
 
 idx_t cpp_device_array_pool::reserve(idx_t size)
 {
-    if (is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
+    if (check_is_allocated()) throw_logic_error("Cannot reserve memory in an already allocated pool.");
     idx_t beginIndex = endIndex;
     endIndex += size;
     return beginIndex;

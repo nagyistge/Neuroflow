@@ -141,16 +141,16 @@ namespace NeuroflowNativeUT
         END_TEST_METHOD_ATTRIBUTE()
         TEST_METHOD(cpp_gd_offline_training)
         {
-                try
-                {
-                    auto ctx = computation_context_factory().create_context(cpp_context);
-                    do_gd_training(ctx, 0.3f, false, 0.1f);
-                }
-                catch (exception& ex)
-                {
-                    Logger::WriteMessage(ex.what());
-                    throw;
-                }
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_gd_training(ctx, 0.3f, false, 0.1f);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
         }
 
         void do_get_and_set_weights(const computation_context_ptr& ctx)
@@ -296,7 +296,7 @@ namespace NeuroflowNativeUT
                 to_data_array(ctx, vector<float>({ 0.0f })),
                 ctx->data_array_factory()->create(1));
 
-            const idx_t maxIterations = 10000;
+            const idx_t maxIterations = 1000;
             auto errors = ctx->data_array_factory()->create(maxIterations);
             vector<float> mses(maxIterations);
 

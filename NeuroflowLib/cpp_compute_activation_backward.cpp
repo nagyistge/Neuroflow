@@ -26,13 +26,13 @@ void cpp_compute_activation_backward::compute(const nf_object_ptr& context, cons
 void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t offset) const
 {
     assert(node.net_outputs);
-    auto outputs = dynamic_cast<cpp_device_array*>(node.net_outputs->outputs()());
+    auto outputs = _fast_cast<cpp_device_array>(node.net_outputs->outputs()());
     assert(outputs);
     float* pOutputs = outputs->ptr();
-    auto desiredOutputs = dynamic_cast<cpp_device_array*>(node.net_outputs->desired_outputs()());
+    auto desiredOutputs = _fast_cast<cpp_device_array>(node.net_outputs->desired_outputs()());
     assert(desiredOutputs);
     float* pDesiredOutputs = desiredOutputs->ptr();
-    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
     float* pErrors = errors->ptr();
     idx_t size = errors->size();
@@ -59,7 +59,7 @@ void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node
 void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& node, idx_t offset) const
 {
     assert(node.lower_errors.size() > 0);
-    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
     float* pErrors = errors->ptr();
     idx_t size = errors->size();
@@ -70,10 +70,10 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
         float sum = 0.0f;
         for (auto& weightedError : node.lower_errors)
         {
-            auto lowerErrors = dynamic_cast<cpp_device_array*>(weightedError.errors().get());
+            auto lowerErrors = _fast_cast<cpp_device_array>(weightedError.errors().get());
             assert(lowerErrors);
             float* pLowerErrors = lowerErrors->ptr();
-            auto lowerWeights = dynamic_cast<cpp_device_array2*>(weightedError.weights().get());
+            auto lowerWeights = _fast_cast<cpp_device_array2>(weightedError.weights().get());
             assert(lowerWeights);
             float* pLowerWeights = lowerWeights->ptr();
             idx_t lowerErrorsSize = lowerErrors->size();
@@ -89,7 +89,7 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
         if (node.activation.function() == activation_function::sigmoid)
         {
             assert(node.out);
-            auto outputs = dynamic_cast<cpp_device_array*>(node.out());
+            auto outputs = _fast_cast<cpp_device_array>(node.out());
             assert(outputs);
             assert(outputs->size() == size);
             float* pOutputs = outputs->ptr();
@@ -124,7 +124,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
     bool hasGradients = node.has_gradients();
     bool hasGradientSums = node.has_gradient_sums();
     assert(hasGradients || hasGradientSums);
-    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
     float* pErrors = errors->ptr();
     idx_t size = errors->size();
@@ -133,13 +133,13 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
     float* pBiasGradientSums = null;
     if (hasGradients)
     {
-        auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+        auto biasGradients = _fast_cast<cpp_device_array>(node.bias_gradients.get());
         assert(biasGradients);
         pBiasGradients = biasGradients->ptr();
     }
     if (hasGradientSums)
     {
-        auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
+        auto biasGradientSums = _fast_cast<cpp_device_array>(node.bias_gradient_sums.get());
         assert(biasGradientSums);
         pBiasGradientSums = biasGradientSums->ptr();
     }
@@ -152,16 +152,16 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
+            auto inputs = _fast_cast<cpp_device_array>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
             if (hasGradients && hasGradientSums)
             {
-                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                auto gradients = _fast_cast<cpp_device_array2>(node.gradients[ilidx].get());
                 assert(gradients);
                 float* pGradients = gradients->ptr();
-                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                auto gradientSums = _fast_cast<cpp_device_array2>(node.gradient_sums[ilidx].get());
                 assert(gradientSums);
                 float* pGradientSums = gradientSums->ptr();
 
@@ -174,7 +174,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
             }
             else if (hasGradients)
             {
-                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                auto gradients = _fast_cast<cpp_device_array2>(node.gradients[ilidx].get());
                 assert(gradients);
                 float* pGradients = gradients->ptr();
 
@@ -188,7 +188,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
             else
             {
                 assert(hasGradientSums);
-                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                auto gradientSums = _fast_cast<cpp_device_array2>(node.gradient_sums[ilidx].get());
                 assert(gradientSums);
                 float* pGradientSums = gradientSums->ptr();
 
@@ -205,12 +205,12 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
 
 void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backward_node& node, idx_t offset) const
 {
-    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
     float* pErrors = errors->ptr();
     idx_t size = errors->size();
 
-    auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+    auto biasGradients = _fast_cast<cpp_device_array>(node.bias_gradients.get());
     assert(biasGradients);
     float* pBiasGradients = biasGradients->ptr();
 
@@ -221,11 +221,11 @@ void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backwar
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
+            auto inputs = _fast_cast<cpp_device_array>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
-            auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+            auto gradients = _fast_cast<cpp_device_array2>(node.gradients[ilidx].get());
             assert(gradients);
             float* pGradients = gradients->ptr();
 
@@ -243,20 +243,20 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
     bool hasGradients = node.has_gradients();
     bool hasGradientSums = node.has_gradient_sums();
     assert(hasGradients || hasGradientSums);
-    auto errors = dynamic_cast<cpp_device_array*>(node.errors.get());
+    auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
     float* pErrors = errors->ptr();
     idx_t size = errors->size();
     float by = internalIterationCount;
 
-    auto biasGradients = dynamic_cast<cpp_device_array*>(node.bias_gradients.get());
+    auto biasGradients = _fast_cast<cpp_device_array>(node.bias_gradients.get());
     assert(biasGradients);
     float* pBiasGradients = biasGradients->ptr();
 
     float* pBiasGradientSums = null;
     if (hasGradientSums)
     {
-        auto biasGradientSums = dynamic_cast<cpp_device_array*>(node.bias_gradient_sums.get());
+        auto biasGradientSums = _fast_cast<cpp_device_array>(node.bias_gradient_sums.get());
         assert(biasGradientSums);
         pBiasGradientSums = biasGradientSums->ptr();
     }
@@ -270,16 +270,16 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
         idx_t inputLayersCount = node.in.size();
         for (idx_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
-            auto inputs = dynamic_cast<cpp_device_array*>(node.in[ilidx]());
+            auto inputs = _fast_cast<cpp_device_array>(node.in[ilidx]());
             assert(inputs);
             float* pInputs = inputs->ptr();
             idx_t inputSize = inputs->size();
             if (hasGradientSums)
             {
-                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                auto gradients = _fast_cast<cpp_device_array2>(node.gradients[ilidx].get());
                 assert(gradients);
                 float* pGradients = gradients->ptr();
-                auto gradientSums = dynamic_cast<cpp_device_array2*>(node.gradient_sums[ilidx].get());
+                auto gradientSums = _fast_cast<cpp_device_array2>(node.gradient_sums[ilidx].get());
                 assert(gradientSums);
                 float* pGradientSums = gradientSums->ptr();
 
@@ -293,7 +293,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
             }
             else
             {
-                auto gradients = dynamic_cast<cpp_device_array2*>(node.gradients[ilidx].get());
+                auto gradients = _fast_cast<cpp_device_array2>(node.gradients[ilidx].get());
                 assert(gradients);
                 float* pGradients = gradients->ptr();
 
