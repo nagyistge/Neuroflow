@@ -43,7 +43,7 @@ void cpp_gradient_descent_learning::run(idx_t iterationCount, const device_array
         idx_t idx = 0;
         for (auto& node : *nodes())
         {
-            update_weights_online(_deltas[idx++].get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradients().get()));
+            update_weights_online(_deltas[idx++].get(), _fast_cast_alt<cpp_device_array>(node.weights().get()), _fast_cast_alt<cpp_device_array>(node.gradients().get()));
         }
     }
     else
@@ -52,7 +52,7 @@ void cpp_gradient_descent_learning::run(idx_t iterationCount, const device_array
         float itCount = iterationCount;
         for (auto& node : *nodes())
         {
-            update_weights_offline(_deltas[idx++].get(), dynamic_cast<cpp_device_array*>(node.weights().get()), dynamic_cast<cpp_device_array*>(node.gradient_sums().get()), itCount);
+            update_weights_offline(_deltas[idx++].get(), _fast_cast_alt<cpp_device_array>(node.weights().get()), _fast_cast_alt<cpp_device_array>(node.gradient_sums().get()), itCount);
         }
     }
 }

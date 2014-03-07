@@ -21,6 +21,8 @@ namespace nf
         idx_t endIndex = 0;
         float* internalArray = null;
 
+        inline bool check_is_allocated() const;
+        inline void do_allocate();
         idx_t reserve(idx_t size);
     };
 }
