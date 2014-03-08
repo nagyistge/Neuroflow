@@ -13,6 +13,7 @@ namespace nf
         ~cpp_device_array();
 
         idx_t size() const override;
+        std::string dump() override;
         float* ptr();
 
     private:

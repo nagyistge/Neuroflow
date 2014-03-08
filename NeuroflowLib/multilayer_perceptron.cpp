@@ -373,8 +373,14 @@ void multilayer_perceptron::create_impls()
             auto key = make_pair(inputIndex, lidx);
             weights.push_back(_weights.get(key));
             device_array2_ptr arr2;
-            if (_gradients.try_get(key, arr2)) gradients->push_back(arr2);
-            if (_gradientSums.try_get(key, arr2)) gradientSums->push_back(arr2);
+            if (_gradients.try_get(key, arr2)) 
+            {
+                gradients->push_back(arr2);
+            }
+            if (_gradientSums.try_get(key, arr2))
+            {
+                gradientSums->push_back(arr2);
+            }
         }
 
         if (gradients) assert(gradients->size() == weights.size());

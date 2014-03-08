@@ -41,6 +41,17 @@ idx_t cpp_device_array::size() const
 
 float* cpp_device_array::ptr() 
 {
-    if (_ptr == null && _pool != null) _ptr = _pool->ptr();
+    if (_ptr == null && _pool != null) _ptr = _pool->ptr() + _beginIndex;
     return _ptr;
+}
+
+std::string cpp_device_array::dump()
+{
+    stringstream s;
+    float* p = ptr();
+    if (p != null)
+    {
+        for (idx_t i = 0; i < _arraySize; i++) s << to_string(p[i]);
+    }
+    return s.str();
 }
