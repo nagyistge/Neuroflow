@@ -13,13 +13,13 @@ generator((std::random_device()() << 16) | std::random_device()())
 
 void cpp_utils::zero(const device_array_ptr& deviceArray)
 {
-    auto& cppArray = to_cpp(deviceArray, false);
+    auto cppArray = to_cpp(deviceArray, false);
     memset(cppArray->ptr(), 0, sizeof(float)* cppArray->size());
 }
 
 void cpp_utils::randomize_uniform(const device_array_ptr& deviceArray, float min, float max)
 {
-    auto& cppArray = to_cpp(deviceArray, false);
+    auto cppArray = to_cpp(deviceArray, false);
     uniform_real_distribution<float> uniform_distribution(min, max);
     auto randF = bind(uniform_distribution, ref(generator));
     idx_t size = cppArray->size();
@@ -32,7 +32,7 @@ void cpp_utils::calculate_mse(supervised_batch& batch, const data_array_ptr& dat
     verify_arg(dataArray != null, "dataArray");
     verify_arg(valueIndex >= 0 && valueIndex < dataArray->size(), "valueIndex");
 
-    auto& cppArray = to_cpp(dataArray, false);
+    auto cppArray = to_cpp(dataArray, false);
     auto ptr = cppArray->ptr();
 
     ptr[valueIndex] = 0.0f;
@@ -43,8 +43,8 @@ void cpp_utils::calculate_mse(supervised_batch& batch, const data_array_ptr& dat
         {
             if (entry.has_output())
             {
-                auto& actualOutput = to_cpp(entry.actual_output(), false);
-                auto& desiredOutput = to_cpp(entry.desired_output(), false);
+                auto actualOutput = to_cpp(entry.actual_output(), false);
+                auto desiredOutput = to_cpp(entry.desired_output(), false);
                 float cMse = 0.0f;
 
                 idx_t size = actualOutput->size();

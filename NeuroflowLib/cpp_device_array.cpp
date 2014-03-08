@@ -5,41 +5,42 @@
 USING
 
 cpp_device_array::cpp_device_array(float* internalArray, idx_t arraySize) :
-internalArray(internalArray),
-arraySize(arraySize)
+_ptr(internalArray),
+_arraySize(arraySize)
 {
-    assert(internalArray != null && arraySize > 0);
+    assert(_ptr != null && _arraySize > 0);
 }
 
 cpp_device_array::cpp_device_array(idx_t arraySize) :
-internalArray(new float[arraySize]),
-arraySize(arraySize)
+_ptr(new float[arraySize]),
+_arraySize(arraySize)
 {
-    assert(arraySize > 0);
-    memset(internalArray, 0, arraySize * sizeof(float));
+    assert(_arraySize > 0);
+    memset(_ptr, 0, _arraySize * sizeof(float));
 }
 
 cpp_device_array::cpp_device_array(const cpp_device_array_pool_ptr& pool, idx_t beginIndex, idx_t arraySize) :
-pool(pool),
-beginIndex(beginIndex),
-arraySize(arraySize)
+_pool(pool),
+_beginIndex(beginIndex),
+_arraySize(arraySize)
 {
-    assert(arraySize > 0);
-    assert(beginIndex >= 0);
-    assert(pool != null);
+    assert(_arraySize > 0);
+    assert(_beginIndex >= 0);
+    assert(_pool != null);
 }
 
 cpp_device_array::~cpp_device_array()
 {
-    delete[] internalArray;
+    if (_pool == null) delete[] _ptr;
 }
 
 idx_t cpp_device_array::size() const
 {
-    return arraySize;
+    return _arraySize;
 }
 
-float* cpp_device_array::ptr() const
+float* cpp_device_array::ptr() 
 {
-    return pool == null ? internalArray : pool->ptr() + beginIndex;
+    if (_ptr == null && _pool != null) _ptr = _pool->ptr();
+    return _ptr;
 }
