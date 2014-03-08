@@ -337,7 +337,7 @@ namespace NeuroflowNativeUT
         static multilayer_perceptron_ptr create_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
         {
             auto wrnd = make_randomize_weights_uniform(rndStrength);
-            auto algo = make_gradient_descent_learning(rate, 0.8f, false, online ? weight_update_mode::online : weight_update_mode::offline);
+            auto algo = make_gradient_descent_learning(rate, online ? 0.25f : 0.8f, online ? true : false, online ? weight_update_mode::online : weight_update_mode::offline);
             vector<layer_ptr> layers =
             {
                 make_layer(1),
