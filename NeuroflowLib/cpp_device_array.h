@@ -13,11 +13,11 @@ namespace nf
         ~cpp_device_array();
 
         idx_t size() const override;
-        float* ptr() const;
+        float* ptr();
 
     private:
-        float* internalArray = null;
-        cpp_device_array_pool_ptr pool;
-        idx_t beginIndex = 0, arraySize = 0;
+        float* _ptr = null;
+        cpp_device_array_pool_ptr _pool;
+        idx_t _beginIndex = 0, _arraySize = 0;
     };
 }
