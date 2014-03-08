@@ -51,7 +51,7 @@ std::string cpp_device_array::dump()
     float* p = ptr();
     if (p != null)
     {
-        for (idx_t i = 0; i < _arraySize; i++) s << to_string(p[i]);
+        for (idx_t i = 0; i < _arraySize; i++) s << to_string(p[i]) << " ";
     }
     return s.str();
 }
