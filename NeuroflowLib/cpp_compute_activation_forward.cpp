@@ -13,12 +13,15 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
         auto outputs = _fast_cast<cpp_device_array>(node.out());
         assert(outputs);
         float* pOutputs = outputs->ptr();
+        auto biases = _fast_cast<cpp_device_array>(node.bias.get());
+        assert(biases);
+        float* pBiases = biases->ptr();
         idx_t inputLayersCount = node.in.size();
         idx_t layerSize = node.size();
         float alpha = node.activation.alpha();
         for (idx_t valueIdx = 0; valueIdx < layerSize; valueIdx++)
         {
-            float sum = 0.0f;
+            float sum = pBiases[valueIdx];
             for (auto& weightedInput : node.in)
             {
                 auto weights = _fast_cast<cpp_device_array2>(weightedInput.weights().get());

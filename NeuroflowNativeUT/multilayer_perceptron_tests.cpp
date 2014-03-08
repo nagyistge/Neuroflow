@@ -222,7 +222,7 @@ namespace NeuroflowNativeUT
             const float maxOutput = 16.0f;
             const float minOutput = 0.0f;
             supervised_batch batch;
-            /*batch.push_back(
+            batch.push_back(
                 to_data_array(ctx, vector<float>({ normalize(-4.0f, minInput, maxInput) })), 
                 to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
                 ctx->data_array_factory()->create(1));
@@ -257,43 +257,6 @@ namespace NeuroflowNativeUT
             batch.push_back(
                 to_data_array(ctx, vector<float>({ normalize(4.0f, minInput, maxInput) })),
                 to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
-                ctx->data_array_factory()->create(1));*/
-
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(-4.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(-3.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(-2.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(-1.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(0.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(1.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(2.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(3.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
-                ctx->data_array_factory()->create(1));
-            batch.push_back(
-                to_data_array(ctx, vector<float>({ normalize(4.0f, minInput, maxInput) })),
-                to_data_array(ctx, vector<float>({ 0.0f })),
                 ctx->data_array_factory()->create(1));
 
             const idx_t maxIterations = 1000;
@@ -305,6 +268,14 @@ namespace NeuroflowNativeUT
             for (idx_t it = 0; it < maxIterations; it++)
             {
                 mlp->training(batch);
+
+                /*for (auto& sample : batch.samples())
+                {
+                    auto& entry = sample.entries().front();
+                    Logger::WriteMessage(entry.actual_output()->dump().c_str());
+                    Logger::WriteMessage("\n");
+                }
+                Logger::WriteMessage("\n");*/
 
                 if (first)
                 {
