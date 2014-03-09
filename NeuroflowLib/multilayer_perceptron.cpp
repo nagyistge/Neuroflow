@@ -210,7 +210,7 @@ void multilayer_perceptron::create_compute()
         node.activation = get_activation_desc(lidx);
         node.bias = _biases.get(lidx);
         node.out = [=](){ return get_net_values(lidx); };
-        if (_doRTLR) node.derivate = _netValueDerivates.get(lidx);
+        if (_doRTLR) node.derivates = _netValueDerivates.get(lidx);
     }
 
     if (_doRTLR)
@@ -305,7 +305,8 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
     }
     else if (_doRTLR)
     {
-        _rtlr.initialize(this);
+        _rtlr = move(rtlr());
+        _rtlr->initialize(this);
     }
     if (_calculateGlobalOnlineError || _calculateGlobalOfflineError)
     {

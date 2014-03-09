@@ -269,14 +269,6 @@ namespace NeuroflowNativeUT
             {
                 mlp->training(batch);
 
-                /*for (auto& sample : batch.samples())
-                {
-                    auto& entry = sample.entries().front();
-                    Logger::WriteMessage(entry.actual_output()->dump().c_str());
-                    Logger::WriteMessage("\n");
-                }
-                Logger::WriteMessage("\n");*/
-
                 if (first)
                 {
                     auto weights = ctx->data_array_factory()->create(mlp->number_of_weights());
@@ -296,12 +288,15 @@ namespace NeuroflowNativeUT
 
             boost::chrono::duration<double> sec = boost::chrono::high_resolution_clock::now() - start;
 
+            float lastMse = 0.0f;
             stringstream s;
             s << "Ellapsed: " << sec << endl;
             for (float mse : mses)
             {
                 s << "Error: " << mse << endl;
+                lastMse = mse;
             }
+            Assert::IsTrue(lastMse < 0.0001f);
 
             Logger::WriteMessage(s.str().c_str());
         }

@@ -12,6 +12,7 @@ namespace nf
     struct multilayer_perceptron : contexted<computation_context>, virtual nf_object
     {
         friend struct neural_network_factory;
+        friend struct rtlr;
 
         typedef std::vector<linq::row_numbered<layer_ptr>> ordered_layers_t;
 
@@ -66,7 +67,7 @@ namespace nf
         bool _calculateGlobalOnlineError = false;
         bool _calculateGlobalOfflineError = false;
         bool _isTrainingInitialized = false;
-        rtlr _rtlr;
+        boost::optional<rtlr> _rtlr;
         device_array* _netInputs;
         device_array* _netOutputs;
         device_array* _netDesiredOutputs;

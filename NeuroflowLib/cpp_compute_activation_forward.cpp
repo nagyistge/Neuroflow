@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "cpp_compute_activation_forward.h"
+#include "cpp_compute_activation_backward.h"
 #include "mlp_forward_node.h"
 #include "cpp_device_array.h"
 #include "cpp_device_array2.h"
@@ -16,6 +17,15 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
         auto biases = _fast_cast<cpp_device_array>(node.bias.get());
         assert(biases);
         float* pBiases = biases->ptr();
+        
+        float* pDerivates = null;
+        if (node.derivates)
+        {
+            auto derivates = _fast_cast<cpp_device_array>(node.derivates.get());
+            assert(derivates);
+            pDerivates = derivates->ptr();
+        }
+
         idx_t inputLayersCount = node.in.size();
         idx_t layerSize = node.size();
         float alpha = node.activation.alpha();
@@ -42,10 +52,12 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
             if (node.activation.function() == activation_function::sigmoid)
             {
                 pOutputs[valueIdx] = sigmoid(sum, alpha);
+                if (pDerivates != null) pDerivates[valueIdx] = cpp_compute_activation_backward::sigmoid_deriv(sum, alpha);
             }
             else // Linear
             {
                 pOutputs[valueIdx] = linear(sum, alpha);
+                if (pDerivates != null) pDerivates[valueIdx] = alpha;
             }
         }
     }

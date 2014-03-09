@@ -33,6 +33,7 @@ namespace nf
     struct device_array2;
     typedef std::shared_ptr<device_array2> device_array2_ptr;
     typedef std::vector<device_array2_ptr> device_array2_collection_t;
+    typedef std::vector<device_array2_collection_t> device_array2_groups_t;
 
     struct device_array_pool;
     typedef std::shared_ptr<device_array_pool> device_array_pool_ptr;
@@ -106,6 +107,12 @@ namespace nf
     typedef std::vector<training_node> training_node_collection_t;
     typedef std::shared_ptr<training_node_collection_t> training_node_collection_ptr;
 
+    struct rtlr_layer_info;
+    typedef std::vector<rtlr_layer_info> rtlr_layer_info_collection_t;
+    typedef std::vector<rtlr_layer_info_collection_t> rtlr_layer_info_groups_t;
+
+    struct rtlr_computation_data;
+
     struct supervised_batch;
     struct supervised_sample;
     struct supervised_sample_entry;
@@ -170,5 +177,13 @@ namespace nf
         ff,
         bptt_phase1,
         bptt_phase2
+    };
+
+    ENUM_STRINGS(sequence_marker, "begin", "inner", "end")
+    enum class sequence_marker
+    {
+        begin = -1,
+        inner = 0,
+        end = 1
     };
 }

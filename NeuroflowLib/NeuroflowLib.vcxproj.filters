@@ -352,6 +352,12 @@
     <ClInclude Include="mlp_init_pars.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
+    <ClInclude Include="rtlr_layer_info.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
+    <ClInclude Include="rtlr_computation_data.h">
+      <Filter>Base\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -518,6 +524,9 @@
     </ClCompile>
     <ClCompile Include="random_generator.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="rtlr.cpp">
+      <Filter>Base\NN</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
