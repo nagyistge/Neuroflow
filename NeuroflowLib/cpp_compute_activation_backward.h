@@ -6,6 +6,8 @@ namespace nf
 {
     struct cpp_compute_activation_backward
     {
+        friend struct cpp_compute_activation_forward;
+
         void compute(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) const;
         void compute_last(const mlp_backward_node& node, idx_t offset) const;
         void compute_inner(const mlp_backward_node& node, idx_t offset) const;

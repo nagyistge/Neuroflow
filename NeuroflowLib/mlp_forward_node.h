@@ -12,7 +12,7 @@ namespace nf
         std::vector<weighted_inputs> in;
         get_device_array_ptr_t out;
         device_array_ptr bias;
-        device_array_ptr derivate;
+        device_array_ptr derivates;
         
         idx_t size() const;
     };

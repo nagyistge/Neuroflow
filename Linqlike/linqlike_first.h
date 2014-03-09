@@ -29,11 +29,6 @@ namespace linqlike
         return _first<F>(pred);
     }
 
-    inline void _throw_seq_empty()
-    {
-        throw std::runtime_error("Sequence contains no elements.");
-    }
-
     template <typename TColl, typename T = TColl::value_type>
     T operator|(TColl& coll, const _first<_dummy>& f)
     {

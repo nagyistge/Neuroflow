@@ -367,6 +367,8 @@
     <ClInclude Include="randomize_weights_uniform.h" />
     <ClInclude Include="random_generator.h" />
     <ClInclude Include="rtlr.h" />
+    <ClInclude Include="rtlr_computation_data.h" />
+    <ClInclude Include="rtlr_layer_info.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="supervised_batch.h" />
     <ClInclude Include="supervised_learning.h" />
@@ -434,6 +436,7 @@
     <ClCompile Include="ocl_utils.cpp" />
     <ClCompile Include="randomize_weights_uniform.cpp" />
     <ClCompile Include="random_generator.cpp" />
+    <ClCompile Include="rtlr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

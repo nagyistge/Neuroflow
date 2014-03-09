@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <functional>
 #include <iterator>
+#include <exception>
 
 #ifdef LINQLIKE_STACK_SIZE
 #define _LINQLIKE_STACK_SIZE LINQLIKE_STACK_SIZE
@@ -25,6 +26,11 @@ namespace linqlike
     };
 
     struct _dummy { };
+
+    inline void _throw_seq_empty()
+    {
+        throw std::runtime_error("Sequence contains no elements.");
+    }
 
     template <typename T>
     struct enumerable

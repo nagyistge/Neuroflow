@@ -24,5 +24,6 @@
     <ClInclude Include="linqlike_distinct.h" />
     <ClInclude Include="linqlike_cross_join.h" />
     <ClInclude Include="linqlike_select_many.h" />
+    <ClInclude Include="linqlike_minmax.h" />
   </ItemGroup>
 </Project>

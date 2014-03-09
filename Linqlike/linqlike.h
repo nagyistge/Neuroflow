@@ -22,3 +22,4 @@
 #include "linqlike_distinct.h"
 #include "linqlike_cross_join.h"
 #include "linqlike_select_many.h"
+#include "linqlike_minmax.h"
