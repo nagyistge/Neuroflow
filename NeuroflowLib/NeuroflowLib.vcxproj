@@ -290,6 +290,7 @@
     <ClInclude Include="cpp_compute_activation.h" />
     <ClInclude Include="cpp_compute_activation_backward.h" />
     <ClInclude Include="cpp_compute_activation_forward.h" />
+    <ClInclude Include="cpp_compute_activation_gradients_rtlr.h" />
     <ClInclude Include="cpp_conv.h" />
     <ClInclude Include="cpp_data_array.h" />
     <ClInclude Include="cpp_data_array_factory.h" />
@@ -393,6 +394,7 @@
     <ClCompile Include="cpp_compute_activation.cpp" />
     <ClCompile Include="cpp_compute_activation_backward.cpp" />
     <ClCompile Include="cpp_compute_activation_forward.cpp" />
+    <ClCompile Include="cpp_compute_activation_gradients_rtlr.cpp" />
     <ClCompile Include="cpp_data_array.cpp" />
     <ClCompile Include="cpp_data_array_factory.cpp" />
     <ClCompile Include="cpp_device_array.cpp" />
