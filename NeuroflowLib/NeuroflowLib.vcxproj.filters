@@ -358,6 +358,9 @@
     <ClInclude Include="rtlr_computation_data.h">
       <Filter>Base\NN</Filter>
     </ClInclude>
+    <ClInclude Include="cpp_compute_activation_gradients_rtlr.h">
+      <Filter>Cpp\NN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -527,6 +530,9 @@
     </ClCompile>
     <ClCompile Include="rtlr.cpp">
       <Filter>Base\NN</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_compute_activation_gradients_rtlr.cpp">
+      <Filter>Cpp\NN</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
