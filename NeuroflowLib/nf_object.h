@@ -47,10 +47,24 @@ namespace nf
         return obj->_Fast_cast<T>();
     }
 
+    template <typename T, typename O>
+    inline T* _fast_cast(const std::shared_ptr<O>& ptr)
+    {
+        if (!ptr) return nullptr;
+        return _fast_cast<T>(ptr.get());
+    }
+
     template <typename T>
     inline T* _fast_cast_alt(nf_object* obj)
     {
         if (obj == nullptr) return nullptr;
         return obj->_Fast_cast_alt<T>();
+    }
+
+    template <typename T, typename O>
+    inline T* _fast_cast_alt(const std::shared_ptr<O>& ptr)
+    {
+        if (!ptr) return nullptr;
+        return _fast_cast_alt<T>(ptr.get());
     }
 }
