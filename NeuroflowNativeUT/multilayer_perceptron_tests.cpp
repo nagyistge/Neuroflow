@@ -117,16 +117,16 @@ namespace NeuroflowNativeUT
             }
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_online_training)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_ff_online_training)
             TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(cpp_gd_online_training)
+        TEST_METHOD(cpp_gd_ff_online_training)
         {
             try
             {
                 auto ctx = computation_context_factory().create_context(cpp_context);
-                do_gd_training(ctx, 0.3f, true, 0.1f);
+                do_gd_ff_training(ctx, 0.3f, true, 0.1f);
             }
             catch (exception& ex)
             {
@@ -135,22 +135,40 @@ namespace NeuroflowNativeUT
             }
         }
 
-        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_offline_training)
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_ff_offline_training)
             TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
             TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
         END_TEST_METHOD_ATTRIBUTE()
-        TEST_METHOD(cpp_gd_offline_training)
+        TEST_METHOD(cpp_gd_ff_offline_training)
         {
             try
             {
                 auto ctx = computation_context_factory().create_context(cpp_context);
-                do_gd_training(ctx, 0.3f, false, 0.1f);
+                do_gd_ff_training(ctx, 0.3f, false, 0.1f);
             }
             catch (exception& ex)
             {
                 Logger::WriteMessage(ex.what());
                 throw;
             }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_rtlr_online_training)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpp_gd_rtlr_online_training)
+        {
+                try
+                {
+                    auto ctx = computation_context_factory().create_context(cpp_context);
+                    do_gd_rec_training(ctx, 0.3f, true, 0.1f, gradient_computation_method::rtlr);
+                }
+                catch (exception& ex)
+                {
+                    Logger::WriteMessage(ex.what());
+                    throw;
+                }
         }
 
         void do_get_and_set_weights(const computation_context_ptr& ctx)
@@ -213,9 +231,9 @@ namespace NeuroflowNativeUT
             }
         }
 
-        void do_gd_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
+        void do_gd_ff_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
         {
-            auto mlp = create_mlp_with_training(ctx, rndStrength, online, rate);
+            auto mlp = create_ff_mlp_with_training(ctx, rndStrength, online, rate);
 
             const float maxInput = 4.0f;
             const float minInput = -4.0f;
@@ -259,7 +277,140 @@ namespace NeuroflowNativeUT
                 to_data_array(ctx, vector<float>({ normalize(16.0f, minOutput, maxOutput) })),
                 ctx->data_array_factory()->create(1));
 
-            const idx_t maxIterations = 1000;
+            runner(ctx, mlp, batch, 1000);
+        }
+
+        void do_gd_rec_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate, gradient_computation_method gcm)
+        {
+            auto mlp = create_rec_mlp_with_training(ctx, rndStrength, online, rate, gcm);
+
+            supervised_batch batch;
+            
+            supervised_sample sample;
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                to_data_array(ctx, vector<float>({ -1.0f, -1.0f, -1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+            
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                to_data_array(ctx, vector<float>({ -1.0f, -1.0f, 1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                to_data_array(ctx, vector<float>({ -1.0f, 1.0f, -1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                to_data_array(ctx, vector<float>({ -1.0f, 1.0f, 1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                to_data_array(ctx, vector<float>({ 1.0f, -1.0f, -1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                to_data_array(ctx, vector<float>({ 1.0f, -1.0f, 1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ -1.0f })),
+                to_data_array(ctx, vector<float>({ 1.0f, 1.0f, -1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            sample = supervised_sample();
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                null,
+                null);
+            sample.push_back(
+                to_data_array(ctx, vector<float>({ 1.0f })),
+                to_data_array(ctx, vector<float>({ 1.0f, 1.0f, 1.0f })),
+                ctx->data_array_factory()->create(3));
+            batch.push_back(sample);
+
+            runner(ctx, mlp, batch, 1000);
+        }
+
+        void runner(const computation_context_ptr& ctx, const multilayer_perceptron_ptr& mlp, supervised_batch& batch, int maxIterations)
+        {
             auto errors = ctx->data_array_factory()->create(maxIterations);
             vector<float> mses(maxIterations);
 
@@ -329,7 +480,7 @@ namespace NeuroflowNativeUT
             return move(mlp);
         }
 
-        static multilayer_perceptron_ptr create_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
+        static multilayer_perceptron_ptr create_ff_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate)
         {
             auto wrnd = make_randomize_weights_uniform(rndStrength);
             auto algo = make_gradient_descent_learning(rate, online ? 0.25f : 0.8f, online ? true : false, online ? weight_update_mode::online : weight_update_mode::offline);
@@ -340,6 +491,7 @@ namespace NeuroflowNativeUT
                 make_layer(16, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
                 make_layer(1, make_activation_description(activation_function::linear, 1.1f), wrnd, algo)
             };
+
             layers[0]->output_connections().add_one_way(layers[1]);
             layers[1]->output_connections().add_one_way(layers[2]);
             layers[2]->output_connections().add_one_way(layers[3]);
@@ -348,5 +500,28 @@ namespace NeuroflowNativeUT
 
             return move(mlp);
         }
+
+        static multilayer_perceptron_ptr create_rec_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate, nf::gradient_computation_method gcm)
+        {
+            auto wrnd = make_randomize_weights_uniform(rndStrength);
+            auto algo = make_gradient_descent_learning(rate, online ? 0.25f : 0.8f, online ? true : false, online ? weight_update_mode::online : weight_update_mode::offline);
+            vector<layer_ptr> layers =
+            {
+                make_layer(1),
+                make_layer(16, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
+                make_layer(16, make_activation_description(activation_function::sigmoid, 1.7f), wrnd, algo),
+                make_layer(3, make_activation_description(activation_function::linear, 1.1f), wrnd, algo)
+            };
+
+            layers[0]->output_connections().add_two_way(layers[1]);
+            layers[1]->output_connections().add_two_way(layers[2]);
+            layers[2]->output_connections().add_two_way(layers[3]);
+
+            mlp_init_pars pars;
+            pars.gradient_computation_method = gcm;
+            auto mlp = ctx->neural_network_factory()->create_multilayer_perceptron(layers, &pars);
+
+            return move(mlp);
+        }        
 	};
 }
