@@ -13,9 +13,7 @@ supervised_sample_entry::supervised_sample_entry(const data_array_ptr& input, co
 data(input, desiredOutput, actualOutput)
 {
     verify_arg(input != null, "input");
-    verify_arg(desiredOutput != null, "desiredOutput");
-    verify_arg(actualOutput != null, "actualOutput");
-    verify_arg(desiredOutput->size() == actualOutput->size(), "desiredOutput, actualOutput");
+    verify_arg(!desiredOutput && !actualOutput || desiredOutput && actualOutput && desiredOutput->size() == actualOutput->size(), "desiredOutput, actualOutput");
 }
 
 const data_array_ptr& supervised_sample_entry::input() const

@@ -199,6 +199,7 @@ void multilayer_perceptron::create_compute()
     {
         auto& layer = _layers[lidx];
         auto& node = nodes[lidx - 1];
+        bool isLast = lidx == _layers.size() - 1;
         
         for (auto& inputConnectedLayer : layer.value()->input_layers())
         {
@@ -210,18 +211,22 @@ void multilayer_perceptron::create_compute()
         node.activation = get_activation_desc(lidx);
         node.bias = _biases.get(lidx);
         node.out = [=](){ return get_net_values(lidx); };
-        if (_doRTLR) node.derivates = _netValueDerivates.get(lidx);
+        if (_doRTLR)
+        {
+            node.derivates = _netValueDerivates.get(lidx);
+            node.computed_callback = [=]
+            {
+                auto desiredOutputs = isLast ? _netDesiredOutputs : null;
+                _rtlr->compute_gradients(desiredOutputs);
+            };
+        }
     }
 
-    if (_doRTLR)
+    if (_doBPTT)
     {
         throw_not_implemented();
     }
-    else if (_doBPTT)
-    {
-        throw_not_implemented();
-    }
-    else
+    else 
     {
         _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
         {
@@ -640,11 +645,11 @@ void multilayer_perceptron::feed_forward_training(supervised_batch& batch)
     {
         auto& entry = sample.entries().front();
 
-        // Compute forward:
-        compute_sample_entry(entry.input(), entry.actual_output());
-
         // Setup output error:
         _netDesiredOutputs = entry.desired_output().get();
+
+        // Compute forward:
+        compute_sample_entry(entry.input(), entry.actual_output());
 
         // Backpropagate:
         _trainFunc(0, nf::gradient_computation_formula::ff, 0);

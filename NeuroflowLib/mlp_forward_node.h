@@ -13,6 +13,7 @@ namespace nf
         get_device_array_ptr_t out;
         device_array_ptr bias;
         device_array_ptr derivates;
+        boost::optional<std::function<void()>> computed_callback;
         
         idx_t size() const;
     };

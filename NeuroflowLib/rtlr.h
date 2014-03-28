@@ -8,6 +8,7 @@ namespace nf
     struct rtlr 
     {
         void initialize(multilayer_perceptron* mlp);
+        void compute_gradients(device_array* desiredOutputs);
 
     private:
         typedef std::vector<std::function<void(device_array*, device_array*)>> step_functions_t;
@@ -22,7 +23,6 @@ namespace nf
         step_functions_t _steps;
 
         device_array2_ptr create_p_values_for_weights(const device_array_ptr& weights);
-        void compute_gradients(device_array* desiredOutputs);
         void compute_gradients(
             idx_t iLayerIndex, 
             idx_t jLayerIndex,
