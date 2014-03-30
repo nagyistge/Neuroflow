@@ -25,7 +25,7 @@ idx_t supervised_sample::number_of_outputs() const
     return c;
 }
 
-std::list<supervised_sample_entry>& supervised_sample::entries()
+std::vector<supervised_sample_entry>& supervised_sample::entries()
 {
     return _entries;
 }

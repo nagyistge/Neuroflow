@@ -9,6 +9,7 @@ namespace nf
     {
         void initialize(multilayer_perceptron* mlp);
         void compute_gradients(device_array* desiredOutputs);
+        void zero();
 
     private:
         typedef std::vector<std::function<void(device_array*, device_array*)>> step_functions_t;

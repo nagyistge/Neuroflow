@@ -104,8 +104,8 @@ namespace nf
         activation_description get_activation_desc(idx_t layerIndex);
         device_array* get_net_values(idx_t layerIndex) const;
         device_array* get_net_desired_outputs() const;
-        void compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs);
-        void setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs);
+        void compute_sample_entry(device_array* inputs, device_array* outputs, device_array* desiredOutputs);
+        void setup_net_values(device_array* inputs, device_array* outputs, device_array* desiredOutputs);
         template<typename I>
         std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values);
         void verify_training_enabled();
@@ -114,6 +114,8 @@ namespace nf
         void bppt_training(supervised_batch& batch);
         void rtlr_training(supervised_batch& batch);
         void global_optimization_training(supervised_batch& batch);
+        data_array* find_actual_output(supervised_sample& sample, idx_t entryIndex);
+
         void zero_global_offline_errors();
         void zero_errors();
         void zero_outputs();
