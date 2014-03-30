@@ -60,8 +60,6 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
                 if (pDerivates != null) pDerivates[valueIdx] = alpha;
             }
         }
-
-        if (node.computed_callback) (*node.computed_callback)();
     }
 }
 

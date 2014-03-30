@@ -13,12 +13,12 @@ namespace nf
         supervised_sample(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
 
         idx_t number_of_outputs() const;
-        std::list<supervised_sample_entry>& entries();
+        std::vector<supervised_sample_entry>& entries();
         void push_back(const supervised_sample_entry& entry);
         void push_back(const data_array_ptr& input);
         void push_back(const data_array_ptr& input, const data_array_ptr& desiredOutput, const data_array_ptr& actualOutput);
 
     private:
-        std::list<supervised_sample_entry> _entries;
+        std::vector<supervised_sample_entry> _entries;
     };
 }

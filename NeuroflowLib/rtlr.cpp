@@ -25,7 +25,7 @@ void rtlr::initialize(multilayer_perceptron* mlp)
     _uLayersCount = _mlp->_layers.size() - 1;
     _maxULayerSize = _mlp->_layers |
     where([](row_numbered<layer_ptr>& l) { return l.row_num() != 0; }) |
-    max_value([](row_numbered<layer_ptr>& l) { return l.row_num(); });
+    max_value([](row_numbered<layer_ptr>& l) { return l.value()->size(); });
     
     for (idx_t lidx = 1; lidx < _mlp->_layers.size(); lidx++)
     {
@@ -42,9 +42,11 @@ void rtlr::initialize(multilayer_perceptron* mlp)
             info.size = inputLayer->size();
             info.weights = _mlp->_weights.get(make_pair(iidx, lidx));
             info.is_element_of_u = inputLayer != _mlp->_layers[0].value();
-            _pValues.back().emplace_back(info.weights);
+            _pValues.back().emplace_back(create_p_values_for_weights(info.weights));
         }
     }
+
+    _pValuesPool->allocate();
 }
 
 device_array2_ptr rtlr::create_p_values_for_weights(const device_array_ptr& weights)
@@ -120,14 +122,16 @@ void rtlr::compute_gradients(
         assert(!(data.bias_gradients == null && data.bias_gradient_sums == null && data.gradients == null && data.gradient_sums == null));
 
         auto comp = _mlp->context()->compute_activation();
+        auto& iinfos = _inputLayerInfos;
+        auto& derivs = _netValueDerivates;
         _steps[computationIndex] =
         std::bind(
-        [=](const nf_object_ptr& context, const rtlr_computation_data& data, device_array* outputs, device_array* desiredOutputs)
+        [=, &iinfos, &derivs](const nf_object_ptr& context, const rtlr_computation_data& data, device_array* outputs, device_array* desiredOutputs)
         {
             comp->compute_gradients_rtlr(
                 context, 
-                this->_inputLayerInfos, 
-                this->_netValueDerivates, 
+                iinfos,
+                derivs,
                 data, 
                 pValuesOfWeights, 
                 outputs, 
@@ -141,4 +145,9 @@ void rtlr::compute_gradients(
     }
 
     _steps[computationIndex](outputs, desiredOutputs);
+}
+
+void rtlr::zero()
+{
+    _pValuesPool->zero();
 }

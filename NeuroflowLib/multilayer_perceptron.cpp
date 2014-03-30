@@ -211,20 +211,27 @@ void multilayer_perceptron::create_compute()
         node.activation = get_activation_desc(lidx);
         node.bias = _biases.get(lidx);
         node.out = [=](){ return get_net_values(lidx); };
+
         if (_doRTLR)
         {
             node.derivates = _netValueDerivates.get(lidx);
-            node.computed_callback = [=]
-            {
-                auto desiredOutputs = isLast ? _netDesiredOutputs : null;
-                _rtlr->compute_gradients(desiredOutputs);
-            };
         }
     }
 
     if (_doBPTT)
     {
         throw_not_implemented();
+    }
+    else if (_doRTLR)
+    {
+        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
+        {
+            _computeActivation->compute_forward(ctx, nodes, offset);
+            _rtlr->compute_gradients(_netDesiredOutputs);
+        },
+        move(_computeActivation->create_operation_context()),
+        move(nodes),
+        ph::_1);
     }
     else 
     {
@@ -549,7 +556,7 @@ void multilayer_perceptron::compute(const data_array_ptr& inputs, const data_arr
     verify_arg(inputs != null, "Argument 'inputs' is null.");
     verify_arg(outputs != null, "Argument 'outputs' is null.");
 
-    compute_sample_entry(inputs, outputs);
+    compute_sample_entry(inputs.get(), outputs.get(), null);
 }
 
 void multilayer_perceptron::compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
@@ -559,19 +566,20 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
     verify_arg(inputs.size() == outputs.size(), "Argument collections sizes are not match.");
 
     idx_t size = inputs.size();
-    for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i], outputs[i]);
+    for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i].get(), outputs[i].get(), null);
 }
 
-void multilayer_perceptron::compute_sample_entry(const device_array_ptr& inputs, const device_array_ptr& outputs)
+void multilayer_perceptron::compute_sample_entry(device_array* inputs, device_array* outputs, device_array* desiredOutputs)
 {
-    setup_net_values(inputs, outputs);
+    setup_net_values(inputs, outputs,desiredOutputs);
     _computeFunc((idx_t)0);
 }
 
-void multilayer_perceptron::setup_net_values(const device_array_ptr& inputs, const device_array_ptr& outputs)
+void multilayer_perceptron::setup_net_values(device_array* inputs, device_array* outputs, device_array* desiredOutputs)
 {
-    _netInputs = inputs.get();
-    _netOutputs = outputs.get();
+    _netInputs = inputs;
+    _netOutputs = outputs;
+    _netDesiredOutputs = desiredOutputs;
 }
 
 void multilayer_perceptron::verify_training_enabled()
@@ -645,11 +653,8 @@ void multilayer_perceptron::feed_forward_training(supervised_batch& batch)
     {
         auto& entry = sample.entries().front();
 
-        // Setup output error:
-        _netDesiredOutputs = entry.desired_output().get();
-
         // Compute forward:
-        compute_sample_entry(entry.input(), entry.actual_output());
+        compute_sample_entry(entry.input().get(), entry.actual_output().get(), entry.desired_output().get());
 
         // Backpropagate:
         _trainFunc(0, nf::gradient_computation_formula::ff, 0);
@@ -671,12 +676,76 @@ void multilayer_perceptron::bppt_training(supervised_batch& batch)
 
 void multilayer_perceptron::rtlr_training(supervised_batch& batch)
 {
-    throw_not_implemented();
+    assert(_doRTLR);
+    assert(_isGradientsCalculated);
+
+    // Start batch:
+    idx_t sampleIndex = 0;
+    for (auto& sample : batch.samples())
+    {
+        if (sample.entries().size() <= 1) throw_logic_error("Recurrent networks cannot be trained by using feed forward samples.");
+
+        idx_t lastEntryIndex = sample.entries().size() - 1;
+
+        // Compute forward + gradients:
+        data_array* actualOutputs = null;
+        idx_t entryIndex = 0;
+        for (auto& entry : sample.entries())
+        {
+            if (actualOutputs == null) actualOutputs = find_actual_output(sample, entryIndex);
+
+            // Compute forward:
+            compute_sample_entry(entry.input().get(), actualOutputs, entry.desired_output().get());
+
+            if (_netDesiredOutputs != null)
+            {
+                // We have and error (gradients are calculated in the forward phase):
+
+                // Do Gradient based online algo step
+                _onlineLearningFunc(_globalOnlineErrors);
+            }
+
+            if (actualOutputs == entry.actual_output().get())
+            {
+                // We should use an other output vector in the next iteration
+                actualOutputs = null;
+            }
+
+            entryIndex++;
+        }
+
+        if (sampleIndex == batch.samples().size() - 1)
+        {
+            // This is the last sample:
+
+            // Do batch algos
+            _offlineLearningFunc(batch.samples().size(), _globalOfflineErrors);
+            zero_gradient_sums();
+            zero_global_offline_errors();
+        }
+
+        sampleIndex++;
+
+        // New sample = new memory:
+        zero_outputs();
+        _rtlr->zero();
+    }
 }
 
 void multilayer_perceptron::global_optimization_training(supervised_batch& batch)
 {
     throw_not_implemented();
+}
+
+data_array* multilayer_perceptron::find_actual_output(supervised_sample& sample, idx_t entryIndex)
+{
+    auto& entries = sample.entries();
+    idx_t size = entries.size();
+    for (idx_t i = entryIndex; i < size; i++)
+    {
+        if (entries[i].actual_output()) return entries[i].actual_output().get();
+    }
+    throw_logic_error("Actual output data array is not found in sample.");
 }
 
 void multilayer_perceptron::zero_global_offline_errors()

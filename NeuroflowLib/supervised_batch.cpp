@@ -23,17 +23,17 @@ supervised_batch::supervised_batch(const data_array_ptr& input, const data_array
     push_back(input, desiredOutput, actualOutput);
 }
 
-std::list<supervised_sample>& supervised_batch::samples()
+std::vector<supervised_sample>& supervised_batch::samples()
 {
     return _samples;
 }
 
-std::list<supervised_sample>::reference supervised_batch::back()
+std::vector<supervised_sample>::reference supervised_batch::back()
 {
     return _samples.back();
 }
 
-std::list<supervised_sample>::reference supervised_batch::new_back()
+std::vector<supervised_sample>::reference supervised_batch::new_back()
 {
     _samples.emplace_back();
     return back();

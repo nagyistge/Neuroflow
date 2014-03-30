@@ -81,8 +81,8 @@ void cpp_compute_activation_gradients_rtlr::compute_gradients_rtlr(const nf_obje
     {
         float gradient = 0.0f;
 
-        int iValueIndex = ijValueIndex / inputsSize;
-        int jValueIndex = ijValueIndex % inputsSize;
+        idx_t iValueIndex = ijValueIndex / inputsSize;
+        idx_t jValueIndex = ijValueIndex % inputsSize;
 
         float inputValue = pInputs ? pInputs[jValueIndex] : 1.0f;
 
@@ -114,7 +114,8 @@ void cpp_compute_activation_gradients_rtlr::compute_gradients_rtlr(const nf_obje
 
                         for (idx_t lValueIndex = 0; lValueIndex < lLayerInfo.size; lValueIndex++)
                         {
-                            sum += pWeights[lValueIndex, kValueIndex] * p_i_j_l_Ptr[lValueIndex];
+                            idx_t widx = get_index2(lValueIndex, kValueIndex, lLayerInfo.size);
+                            sum += pWeights[widx] * p_i_j_l_Ptr[lValueIndex];
                         }
                     }
                 }
@@ -139,7 +140,7 @@ void cpp_compute_activation_gradients_rtlr::compute_gradients_rtlr(const nf_obje
     }
 }
 
-float* cpp_compute_activation_gradients_rtlr::get_p_values_ptr(float* pPValuesOfWeights, int ijValueIndex, const rtlr_computation_data& data, idx_t kLayerIndex)
+float* cpp_compute_activation_gradients_rtlr::get_p_values_ptr(float* pPValuesOfWeights, idx_t ijValueIndex, const rtlr_computation_data& data, idx_t kLayerIndex)
 {
     return pPValuesOfWeights + (ijValueIndex * (data.u_layers_count * data.max_u_layer_size) + kLayerIndex * data.max_u_layer_size);
 }
