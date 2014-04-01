@@ -69,8 +69,11 @@ namespace nf
         bool _isTrainingInitialized = false;
         boost::optional<rtlr> _rtlr;
         device_array* _netInputs;
+        device_array_ptr _bpttNetInputs;
         device_array* _netOutputs;
+        device_array_ptr _bpttNetOutputs;
         device_array* _netDesiredOutputs;
+        device_array_ptr _bpttNetDesiredOutputs;
         device_array_ptr _globalOfflineErrors;
         device_array_ptr _globalOnlineErrors;
         nf_object_ptr _calculateGlobalErrorState;
@@ -104,8 +107,8 @@ namespace nf
         activation_description get_activation_desc(idx_t layerIndex);
         device_array* get_net_values(idx_t layerIndex) const;
         device_array* get_net_desired_outputs() const;
-        void compute_sample_entry(device_array* inputs, device_array* outputs, device_array* desiredOutputs);
-        void setup_net_values(device_array* inputs, device_array* outputs, device_array* desiredOutputs);
+        void compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset = 0);
+        void setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset);
         template<typename I>
         std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values);
         void verify_training_enabled();
@@ -114,7 +117,7 @@ namespace nf
         void bppt_training(supervised_batch& batch);
         void rtlr_training(supervised_batch& batch);
         void global_optimization_training(supervised_batch& batch);
-        data_array* find_actual_output(supervised_sample& sample, idx_t entryIndex);
+        const data_array_ptr& find_actual_output(supervised_sample& sample, idx_t entryIndex);
 
         void zero_global_offline_errors();
         void zero_errors();

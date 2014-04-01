@@ -189,6 +189,42 @@ namespace NeuroflowNativeUT
             }
         }
 
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_bptt_online_training)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpp_gd_bptt_online_training)
+        {
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_gd_rec_training(ctx, 0.3f, true, 0.01f, gradient_computation_method::bptt);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
+        BEGIN_TEST_METHOD_ATTRIBUTE(cpp_gd_bptt_offline_training)
+            TEST_METHOD_ATTRIBUTE(L"Category", L"MLP")
+            TEST_METHOD_ATTRIBUTE(L"Platform", L"CPP")
+        END_TEST_METHOD_ATTRIBUTE()
+        TEST_METHOD(cpp_gd_bptt_offline_training)
+        {
+            try
+            {
+                auto ctx = computation_context_factory().create_context(cpp_context);
+                do_gd_rec_training(ctx, 0.3f, false, 0.01f, gradient_computation_method::bptt);
+            }
+            catch (exception& ex)
+            {
+                Logger::WriteMessage(ex.what());
+                throw;
+            }
+        }
+
         void do_get_and_set_weights(const computation_context_ptr& ctx)
         {
             auto mlp = create_mlp(ctx);
@@ -521,7 +557,11 @@ namespace NeuroflowNativeUT
 
         static multilayer_perceptron_ptr create_rec_mlp_with_training(const computation_context_ptr& ctx, float rndStrength, bool online, float rate, nf::gradient_computation_method gcm)
         {
+#if _DEBUG
+            idx_t hs = 8;
+#else
             idx_t hs = gcm == gradient_computation_method::rtlr ? 32 : 8;
+#endif
             auto wrnd = make_randomize_weights_uniform(rndStrength);
             auto algo = make_gradient_descent_learning(rate, online ? 0.25f : 0.8f, false, online ? weight_update_mode::online : weight_update_mode::offline);
             vector<layer_ptr> layers =

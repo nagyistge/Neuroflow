@@ -128,6 +128,12 @@ idx_t multilayer_perceptron::number_of_weights() const
 
 void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
 {
+    if (_doBPTT)
+    {
+        _bpttNetInputs = _daMan->create_array(false, input_size() * _maxBpttIterations);
+        _netInputs = _bpttNetInputs.get();
+    }
+
     for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
     {
         auto& learningInfo = infos.find(lidx)->second;
@@ -140,6 +146,13 @@ void multilayer_perceptron::create_structure(std::map<idx_t, layer_info>& infos)
         if (!isOutput)
         {
             _outputs.add(lidx, _doBPTT ? layerSize * _maxBpttIterations : layerSize);
+        }
+        else if (_doBPTT)
+        {
+            _bpttNetOutputs = _daMan->create_array(false, layerSize * _maxBpttIterations);
+            _bpttNetDesiredOutputs = _daMan->create_array(false, layerSize * _maxBpttIterations);
+            _netOutputs = _bpttNetInputs.get();
+            _netDesiredOutputs = _bpttNetDesiredOutputs.get();
         }
 
         // Net Value Derivates:
@@ -218,11 +231,7 @@ void multilayer_perceptron::create_compute()
         }
     }
 
-    if (_doBPTT)
-    {
-        throw_not_implemented();
-    }
-    else if (_doRTLR)
+    if (_doRTLR)
     {
         _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
         {
@@ -556,7 +565,7 @@ void multilayer_perceptron::compute(const data_array_ptr& inputs, const data_arr
     verify_arg(inputs != null, "Argument 'inputs' is null.");
     verify_arg(outputs != null, "Argument 'outputs' is null.");
 
-    compute_sample_entry(inputs.get(), outputs.get(), null);
+    compute_sample_entry(inputs, outputs, null);
 }
 
 void multilayer_perceptron::compute(const data_array_collection_t& inputs, const data_array_collection_t& outputs)
@@ -566,20 +575,38 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
     verify_arg(inputs.size() == outputs.size(), "Argument collections sizes are not match.");
 
     idx_t size = inputs.size();
-    for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i].get(), outputs[i].get(), null);
+    for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i], outputs[i], null);
 }
 
-void multilayer_perceptron::compute_sample_entry(device_array* inputs, device_array* outputs, device_array* desiredOutputs)
+void multilayer_perceptron::compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset)
 {
-    setup_net_values(inputs, outputs,desiredOutputs);
-    _computeFunc((idx_t)0);
+    setup_net_values(inputs, outputs, desiredOutputs, offset);
+    _computeFunc(offset);
 }
 
-void multilayer_perceptron::setup_net_values(device_array* inputs, device_array* outputs, device_array* desiredOutputs)
+void multilayer_perceptron::setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset)
 {
-    _netInputs = inputs;
-    _netOutputs = outputs;
-    _netDesiredOutputs = desiredOutputs;
+    if (!_doBPTT)
+    {
+        _netInputs = inputs.get();
+        _netOutputs = outputs.get();
+        _netDesiredOutputs = desiredOutputs ? desiredOutputs.get() : null;
+    }
+    else
+    {
+        // If there is BPTT we should remember the values:
+        _daMan->copy(inputs, 0, _bpttNetInputs, offset * inputs->size(), inputs->size());
+        _daMan->copy(outputs, 0, _bpttNetOutputs, offset * outputs->size(), outputs->size());
+        if (desiredOutputs)
+        {
+            _daMan->copy(desiredOutputs, 0, _bpttNetDesiredOutputs, offset, desiredOutputs->size());
+        }
+        else
+        {
+            // A trick. Desired = actual, which means there is no errors:
+            _daMan->copy(outputs, 0, _bpttNetDesiredOutputs, offset, outputs->size());
+        }
+    }
 }
 
 void multilayer_perceptron::verify_training_enabled()
@@ -654,7 +681,7 @@ void multilayer_perceptron::feed_forward_training(supervised_batch& batch)
         auto& entry = sample.entries().front();
 
         // Compute forward:
-        compute_sample_entry(entry.input().get(), entry.actual_output().get(), entry.desired_output().get());
+        compute_sample_entry(entry.input(), entry.actual_output(), entry.desired_output());
 
         // Backpropagate:
         _trainFunc(0, nf::gradient_computation_formula::ff, 0);
@@ -671,6 +698,9 @@ void multilayer_perceptron::feed_forward_training(supervised_batch& batch)
 
 void multilayer_perceptron::bppt_training(supervised_batch& batch)
 {
+    assert(_doBPTT);
+    assert(_isGradientsCalculated);
+
     throw_not_implemented();
 }
 
@@ -688,14 +718,15 @@ void multilayer_perceptron::rtlr_training(supervised_batch& batch)
         idx_t lastEntryIndex = sample.entries().size() - 1;
 
         // Compute forward + gradients:
-        data_array* actualOutputs = null;
+        data_array_ptr noActualOutput;
+        const data_array_ptr* actualOutputs = null;
         idx_t entryIndex = 0;
         for (auto& entry : sample.entries())
         {
-            if (actualOutputs == null) actualOutputs = find_actual_output(sample, entryIndex);
+            if (actualOutputs == null) actualOutputs = &(find_actual_output(sample, entryIndex));
 
             // Compute forward:
-            compute_sample_entry(entry.input().get(), actualOutputs, entry.desired_output().get());
+            compute_sample_entry(entry.input(), actualOutputs ? *actualOutputs : noActualOutput, entry.desired_output());
 
             if (_netDesiredOutputs != null)
             {
@@ -705,7 +736,7 @@ void multilayer_perceptron::rtlr_training(supervised_batch& batch)
                 _onlineLearningFunc(_globalOnlineErrors);
             }
 
-            if (actualOutputs == entry.actual_output().get())
+            if (actualOutputs && actualOutputs->get() == entry.actual_output().get())
             {
                 // We should use an other output vector in the next iteration
                 actualOutputs = null;
@@ -737,13 +768,13 @@ void multilayer_perceptron::global_optimization_training(supervised_batch& batch
     throw_not_implemented();
 }
 
-data_array* multilayer_perceptron::find_actual_output(supervised_sample& sample, idx_t entryIndex)
+const data_array_ptr& multilayer_perceptron::find_actual_output(supervised_sample& sample, idx_t entryIndex)
 {
     auto& entries = sample.entries();
     idx_t size = entries.size();
     for (idx_t i = entryIndex; i < size; i++)
     {
-        if (entries[i].actual_output()) return entries[i].actual_output().get();
+        if (entries[i].actual_output()) return entries[i].actual_output();
     }
     throw_logic_error("Actual output data array is not found in sample.");
 }
