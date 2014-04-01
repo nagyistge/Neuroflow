@@ -11,9 +11,12 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
 {
     for (auto& node : nodes)
     {
+        idx_t inputLayersCount = node.in.size();
+        idx_t layerSize = node.size();
+
         auto outputs = _fast_cast<cpp_device_array>(node.out());
         assert(outputs);
-        float* pOutputs = outputs->ptr();
+        float* pOutputs = outputs->ptr() + offset * layerSize;
         auto biases = _fast_cast<cpp_device_array>(node.bias.get());
         assert(biases);
         float* pBiases = biases->ptr();
@@ -25,9 +28,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
             assert(derivates);
             pDerivates = derivates->ptr();
         }
-
-        idx_t inputLayersCount = node.in.size();
-        idx_t layerSize = node.size();
+        
         float alpha = node.activation.alpha();
         for (idx_t valueIdx = 0; valueIdx < layerSize; valueIdx++)
         {
@@ -39,7 +40,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
                 assert(weights);
                 assert(inputs);
                 idx_t inputsSize = inputs->size();
-                float* pInputs = inputs->ptr();
+                float* pInputs = inputs->ptr() + offset * inputsSize;
                 float* pWeights = weights->ptr();
                 for (idx_t inputIdx = 0; inputIdx < inputsSize; inputIdx++)
                 {
