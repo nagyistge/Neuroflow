@@ -1,0 +1,21 @@
+﻿<sap:ActivityDesigner x:Class="NeoComp.Activities.Design.ComputationContextDesigner"
+                      xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities"
+                      x:Name="This"
+                      xmlns:nw="http://neocomp.hu/wpf"
+                      xmlns:prj="clr-namespace:NeoComp.Activities.Design"
+                      xmlns:conv="clr-namespace:NeoComp.Activities.Design.Converters"
+                      xmlns:controls="clr-namespace:NeoComp.Activities.Design.Controls"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
+    xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation">
+    
+    <Grid prj:SharedResources.MergedDictionaries="CommonResources">
+        <controls:ExpandedView IsExpanded="{Binding ShowExpanded, Mode=OneWay}">
+            <Border Margin="2">
+                <sap:WorkflowItemPresenter Item="{Binding ModelItem.Body}" HintText="Drop activity here"/>
+            </Border>
+        </controls:ExpandedView>
+    </Grid>
+    
+</sap:ActivityDesigner>
