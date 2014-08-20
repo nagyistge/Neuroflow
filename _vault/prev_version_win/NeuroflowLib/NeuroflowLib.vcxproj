@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profiler|Win32">
+      <Configuration>Profiler</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Profiler|x64">
+      <Configuration>Profiler</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1E3F9155-8960-457D-8A38-9F1E20F07763}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>NeuroflowLib</RootNamespace>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>PGOptimize</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-gd-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profiler|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Linqlike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/Xm500 </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>opencl.lib;libboost_filesystem-vc120-mt-1_55.lib</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\Tools\gencppver $(ProjectDir)version.cpp</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="activation_description.h" />
+    <ClInclude Include="cc_init_pars.h" />
+    <ClInclude Include="computation_context.h" />
+    <ClInclude Include="computation_context_factory.h" />
+    <ClInclude Include="cc_factory_adapter.h" />
+    <ClInclude Include="compute_activation.h" />
+    <ClInclude Include="contexted.h" />
+    <ClInclude Include="cpp_cc_factory_adapter.h" />
+    <ClInclude Include="cpp_computation_context.h" />
+    <ClInclude Include="cpp_compute_activation.h" />
+    <ClInclude Include="cpp_compute_activation_backward.h" />
+    <ClInclude Include="cpp_compute_activation_forward.h" />
+    <ClInclude Include="cpp_compute_activation_gradients_rtlr.h" />
+    <ClInclude Include="cpp_conv.h" />
+    <ClInclude Include="cpp_data_array.h" />
+    <ClInclude Include="cpp_data_array_factory.h" />
+    <ClInclude Include="cpp_device_array.h" />
+    <ClInclude Include="cpp_device_array2.h" />
+    <ClInclude Include="cpp_device_array_management.h" />
+    <ClInclude Include="cpp_device_array_pool.h" />
+    <ClInclude Include="cpp_gradient_descent_learning.h" />
+    <ClInclude Include="cpp_learning_impl_factory.h" />
+    <ClInclude Include="cpp_randomize_weights_uniform.h" />
+    <ClInclude Include="cpp_utils.h" />
+    <ClInclude Include="data_array.h" />
+    <ClInclude Include="data_array_factory.h" />
+    <ClInclude Include="device_array.h" />
+    <ClInclude Include="device_array2.h" />
+    <ClInclude Include="device_array2_group.h" />
+    <ClInclude Include="device_array_group.h" />
+    <ClInclude Include="device_array_management.h" />
+    <ClInclude Include="device_array_pool.h" />
+    <ClInclude Include="device_info.h" />
+    <ClInclude Include="enum_flags.h" />
+    <ClInclude Include="enum_to_string.h" />
+    <ClInclude Include="equatable.h" />
+    <ClInclude Include="equatable_ptr.h" />
+    <ClInclude Include="error.h" />
+    <ClInclude Include="finally.h" />
+    <ClInclude Include="get_vector_size.h" />
+    <ClInclude Include="gradient_descent_learning.h" />
+    <ClInclude Include="initialize_learning.h" />
+    <ClInclude Include="layer.h" />
+    <ClInclude Include="layer_behavior.h" />
+    <ClInclude Include="layer_connections.h" />
+    <ClInclude Include="layer_description.h" />
+    <ClInclude Include="layer_order_comparer.h" />
+    <ClInclude Include="learning_impl.h" />
+    <ClInclude Include="learning_impl_factory.h" />
+    <ClInclude Include="learning_behavior.h" />
+    <ClInclude Include="learning_impl_of.h" />
+    <ClInclude Include="learning_init_behavior.h" />
+    <ClInclude Include="libs.h" />
+    <ClInclude Include="mlp_backward_node.h" />
+    <ClInclude Include="mlp_forward_node.h" />
+    <ClInclude Include="mlp_init_pars.h" />
+    <ClInclude Include="multilayer_perceptron.h" />
+    <ClInclude Include="neural_network_factory.h" />
+    <ClInclude Include="nf.h" />
+    <ClInclude Include="nf_helpers.h" />
+    <ClInclude Include="nfdev.h" />
+    <ClInclude Include="cpp_nfdev.h" />
+    <ClInclude Include="ocl.h" />
+    <ClInclude Include="ocl_cc_factory_adapter.h" />
+    <ClInclude Include="ocl_cc_init_pars.h" />
+    <ClInclude Include="ocl_gradient_descent_learning.h" />
+    <ClInclude Include="ocl_learning_impl_factory.h" />
+    <ClInclude Include="ocl_computation_context.h" />
+    <ClInclude Include="ocl_compute_activation.h" />
+    <ClInclude Include="ocl_conv.h" />
+    <ClInclude Include="ocl_data_array.h" />
+    <ClInclude Include="ocl_data_array_factory.h" />
+    <ClInclude Include="ocl_device_array.h" />
+    <ClInclude Include="ocl_device_array2.h" />
+    <ClInclude Include="ocl_device_array_management.h" />
+    <ClInclude Include="ocl_device_array_pool.h" />
+    <ClInclude Include="ocl_error.h" />
+    <ClInclude Include="ocl_exec.h" />
+    <ClInclude Include="ocl_kernel_name.h" />
+    <ClInclude Include="ocl_nfdev.h" />
+    <ClInclude Include="nf_object.h" />
+    <ClInclude Include="ocl_program.h" />
+    <ClInclude Include="ocl_program_unit.h" />
+    <ClInclude Include="ocl_randomize_weights_uniform.h" />
+    <ClInclude Include="ocl_sizes.h" />
+    <ClInclude Include="ocl_units.h" />
+    <ClInclude Include="ocl_utils.h" />
+    <ClInclude Include="randomize_weights_uniform.h" />
+    <ClInclude Include="random_generator.h" />
+    <ClInclude Include="rtlr.h" />
+    <ClInclude Include="rtlr_computation_data.h" />
+    <ClInclude Include="rtlr_layer_info.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="supervised_batch.h" />
+    <ClInclude Include="supervised_learning.h" />
+    <ClInclude Include="supervised_learning_behavior.h" />
+    <ClInclude Include="supervised_outputs.h" />
+    <ClInclude Include="supervised_sample.h" />
+    <ClInclude Include="supervised_sample_entry.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="training_node.h" />
+    <ClInclude Include="typedefs.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="version.h" />
+    <ClInclude Include="weak_contexted.h" />
+    <ClInclude Include="weighted_errors.h" />
+    <ClInclude Include="weighted_inputs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="computation_context.cpp" />
+    <ClCompile Include="computation_context_factory.cpp" />
+    <ClCompile Include="cpp_cc_factory_adapter.cpp" />
+    <ClCompile Include="cpp_computation_context.cpp" />
+    <ClCompile Include="cpp_compute_activation.cpp" />
+    <ClCompile Include="cpp_compute_activation_backward.cpp" />
+    <ClCompile Include="cpp_compute_activation_forward.cpp" />
+    <ClCompile Include="cpp_compute_activation_gradients_rtlr.cpp" />
+    <ClCompile Include="cpp_data_array.cpp" />
+    <ClCompile Include="cpp_data_array_factory.cpp" />
+    <ClCompile Include="cpp_device_array.cpp" />
+    <ClCompile Include="cpp_device_array2.cpp" />
+    <ClCompile Include="cpp_device_array_management.cpp" />
+    <ClCompile Include="cpp_device_array_pool.cpp" />
+    <ClCompile Include="cpp_gradient_descent_learning.cpp" />
+    <ClCompile Include="cpp_learning_impl_factory.cpp" />
+    <ClCompile Include="cpp_randomize_weights_uniform.cpp" />
+    <ClCompile Include="cpp_utils.cpp" />
+    <ClCompile Include="device_array2_group.cpp" />
+    <ClCompile Include="device_array_group.cpp" />
+    <ClCompile Include="gradient_descent_learning.cpp" />
+    <ClCompile Include="layer.cpp" />
+    <ClCompile Include="layer_behavior.cpp" />
+    <ClCompile Include="layer_connections.cpp" />
+    <ClCompile Include="layer_order_comparer.cpp" />
+    <ClCompile Include="learning_impl_factory.cpp" />
+    <ClCompile Include="mlp_backward_node.cpp" />
+    <ClCompile Include="mlp_forward_node.cpp" />
+    <ClCompile Include="multilayer_perceptron.cpp" />
+    <ClCompile Include="neural_network_factory.cpp" />
+    <ClCompile Include="ocl_cc_factory_adapter.cpp" />
+    <ClCompile Include="ocl_computation_context.cpp" />
+    <ClCompile Include="ocl_compute_activation.cpp" />
+    <ClCompile Include="ocl_data_array.cpp" />
+    <ClCompile Include="ocl_data_array_factory.cpp" />
+    <ClCompile Include="ocl_device_array.cpp" />
+    <ClCompile Include="ocl_device_array2.cpp" />
+    <ClCompile Include="ocl_device_array_management.cpp" />
+    <ClCompile Include="ocl_device_array_pool.cpp" />
+    <ClCompile Include="ocl_exec.cpp" />
+    <ClCompile Include="ocl_gradient_descent_learning.cpp" />
+    <ClCompile Include="ocl_kernel_name.cpp" />
+    <ClCompile Include="ocl_learning_impl_factory.cpp" />
+    <ClCompile Include="ocl_program.cpp" />
+    <ClCompile Include="ocl_program_unit.cpp" />
+    <ClCompile Include="ocl_randomize_weights_uniform.cpp" />
+    <ClCompile Include="ocl_sizes.cpp" />
+    <ClCompile Include="ocl_units.cpp" />
+    <ClCompile Include="ocl_utils.cpp" />
+    <ClCompile Include="randomize_weights_uniform.cpp" />
+    <ClCompile Include="random_generator.cpp" />
+    <ClCompile Include="rtlr.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profiler|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profiler|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="supervised_batch.cpp" />
+    <ClCompile Include="supervised_sample.cpp" />
+    <ClCompile Include="supervised_sample_entry.cpp" />
+    <ClCompile Include="version.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  </ImportGroup>
+</Project>
