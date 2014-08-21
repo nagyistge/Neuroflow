@@ -5,7 +5,7 @@ namespace nf
     template <typename T>
     struct row_numbered
     {
-        row_numbered(::size_t rowNum, T& _value) : _row_num(rowNum), _value(_value)
+        row_numbered(::size_t rowNum, const T& _value) : _row_num(rowNum), _value(_value)
         {
         }
 

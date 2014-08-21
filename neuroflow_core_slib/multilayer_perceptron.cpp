@@ -53,37 +53,54 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _gradientComputationMethod = properties->gradient_computation_method;
     _maxBpttIterations = properties->max_bptt_iterations;
 
-    _layers = layers | sort(layer_order_comparer()) | row_num() | to_vector();
+    //Create ordered layers:
+
+    // Copy leayers
+    layer_collection_t copyOfLayers(layers);
+    // Sort
+    layer_order_comparer comparer;
+    sort(copyOfLayers.begin(), copyOfLayers.end(), [&](const layer_ptr& l1, const layer_ptr& l2) { return comparer(l1, l2) < 1; });
+    // Project:
+    idx_t idx = 0;
+    _layers = from(copyOfLayers) >> select([&](const layer_ptr& l) { return row_numbered<layer_ptr>(idx++, l); }) >> to_vector();
 
     // It supposed to be cool, but looks like shit because of MSVC.    
-    auto infos = _layers
-    | select([](row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr> { return make_pair(l.row_num(), from(l.value()->behaviors()) | of_type<supervised_learning_behavior>() | first_or_default()); })
-    | select([](pair<idx_t, supervised_learning_behavior_ptr>& r)
-    { 
-        return layer_info(
-            r.first, 
-            r.second != null ? r.second->weight_update_mode() == weight_update_mode::online : false, // is_online
-            r.second != null ? r.second->weight_update_mode() == weight_update_mode::offline : false, // is_offline
-            r.second != null ? r.second->optimization_type() : learning_algo_optimization_type::none);
-    })
-    | to_map([](layer_info& i) { return i.index; });
+    auto infos = from(_layers) >>
+        select([](const row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr>
+        {
+            return make_pair(
+                        l.row_num(),
+                        from(l.value()->behaviors()) >>
+                        select([](const layer_behavior_ptr& b) { return dynamic_pointer_cast<supervised_learning_behavior>(b); }) >>
+                        where([](const supervised_learning_behavior_ptr& b) { return b != null; }) >>
+                        first_or_default());
+        }) >>
+        select([](const pair<idx_t, supervised_learning_behavior_ptr>& r)
+        {
+            return layer_info(
+                r.first,
+                r.second != null ? r.second->weight_update_mode() == weight_update_mode::online : false, // is_online
+                r.second != null ? r.second->weight_update_mode() == weight_update_mode::offline : false, // is_offline
+                r.second != null ? r.second->optimization_type() : learning_algo_optimization_type::none);
+        }) >>
+        to_map([](const layer_info& i) { return i.index; });
 
-    auto infoValues = infos | select([](pair<const idx_t, layer_info>& p) { return p.second; });
+    auto infoValues = from(infos) >> select([](const pair<const idx_t, layer_info>& p) { return p.second; }) >> to_list();
 
     _isTrainingEnabled = infos.size() > 0;
 
-    _isGradientsCalculated = infoValues | any([](layer_info& i) { return i.optimization_type == learning_algo_optimization_type::gradient_based; });
+    _isGradientsCalculated = from(infoValues) >> any([](const layer_info& i) { return i.optimization_type == learning_algo_optimization_type::gradient_based; });
 
-    _calculateGlobalOfflineError = infoValues | any([](layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_offline; });
-    _calculateGlobalOnlineError = _calculateGlobalOfflineError || infoValues | any([](layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_online; });
+    _calculateGlobalOfflineError = from(infoValues) >> any([](const layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_offline; });
+    _calculateGlobalOnlineError = _calculateGlobalOfflineError || (from(infoValues) >> any([](layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_online; }));
 
-    _doBackpropagate = _isTrainingEnabled && _isGradientsCalculated && (_gradientComputationMethod == gradient_computation_method::feed_forward || _gradientComputationMethod == gradient_computation_method::bptt);
+    _doBackpropagate = _isTrainingEnabled && _isGradientsCalculated && (_gradientComputationMethod == nf::gradient_computation_method::feed_forward || _gradientComputationMethod == nf::gradient_computation_method::bptt);
 
-    _isRecurrent = _layers | any([](row_numbered<layer_ptr>& l) { return l.value()->has_recurrent_connections(); });
+    _isRecurrent = from(_layers) >> any([](const row_numbered<layer_ptr>& l) { return l.value()->has_recurrent_connections(); });
 
-    _doFFBP = _doBackpropagate && !_isRecurrent && _gradientComputationMethod == gradient_computation_method::feed_forward;
-    _doBPTT = _doBackpropagate && _isRecurrent && _gradientComputationMethod == gradient_computation_method::bptt;
-    _doRTLR = _isTrainingEnabled && _isRecurrent && _gradientComputationMethod == gradient_computation_method::rtlr;
+    _doFFBP = _doBackpropagate && !_isRecurrent && _gradientComputationMethod == nf::gradient_computation_method::feed_forward;
+    _doBPTT = _doBackpropagate && _isRecurrent && _gradientComputationMethod == nf::gradient_computation_method::bptt;
+    _doRTLR = _isTrainingEnabled && _isRecurrent && _gradientComputationMethod == nf::gradient_computation_method::rtlr;
 
     if (_isRecurrent && _isGradientsCalculated && !(_doBPTT || _doRTLR)) throw_logic_error("Recurrent Multilayer Perceptron cannot be trained by Feed Forward gradient computation algorithms.");
 
@@ -338,35 +355,39 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
 
 void multilayer_perceptron::create_impls()
 {
-    auto initLayers = _layers |
-    select_many([](row_numbered<layer_ptr>& l)
+    unordered_set<equatable_ptr<learning_init_behavior>> initLayerKeys;
+    auto initLayers = from(_layers)
+    >> select_many([](const row_numbered<layer_ptr>& l)
     {
-        return from(l.value()->behaviors()) |
-            of_type<learning_init_behavior>() |
-            select([=](learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
-    }) |
-    group_by([](row_numbered<learning_init_behavior_ptr>& b)
+        return
+                from(l.value()->behaviors())
+                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<learning_init_behavior>(b); })
+                >> where([](const learning_init_behavior_ptr& b){ return b != null; })
+                >> select([=](const learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
+    })
+    >> to_lookup([&](const row_numbered<learning_init_behavior_ptr>& b)
     {
-        return make_equatable_ptr(b.value());
-    }, [](row_numbered<learning_init_behavior_ptr>& b)
-    {
-        return b.row_num();
-    });
+        auto key = make_equatable_ptr(b.value());
+        initLayerKeys.insert(key);
+        return key;
+    } );
 
-    auto learningLayers = _layers | 
-    select_many([](row_numbered<layer_ptr>& l)
-    { 
-        return from(l.value()->behaviors()) |
-            of_type<supervised_learning_behavior>() |
-            select([=](supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
-    }) |
-    group_by([](row_numbered<supervised_learning_behavior_ptr>& b)
+    unordered_set<equatable_ptr<supervised_learning_behavior>> learningLayerKeys;
+    auto learningLayers = from(_layers)
+    >> select_many([](const row_numbered<layer_ptr>& l)
     {
-        return make_equatable_ptr(b.value());
-    }, [](row_numbered<supervised_learning_behavior_ptr>& b)
+        return
+                from(l.value()->behaviors())
+                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<supervised_learning_behavior>(b); })
+                >> where([](const supervised_learning_behavior_ptr& b){ return b != null; })
+                >> select([=](const supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
+    })
+    >> to_lookup([&](const row_numbered<supervised_learning_behavior_ptr>& b)
     {
-        return b.row_num();
-    });
+        auto key = make_equatable_ptr(b.value());
+        learningLayerKeys.insert(key);
+        return key;
+    } );
 
     auto values = values_for_training_t();
     for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
@@ -416,14 +437,16 @@ void multilayer_perceptron::create_impls()
     vector<supervised_learning_ptr> onlineImpls;
     vector<supervised_learning_ptr> offlineImpls;
 
-    for (auto& toInit : initLayers)
+    for (auto& key : initLayerKeys)
     {
-        initImpls.push_back(create_learning_impl<learning_impl>(toInit.key().ptr(), toInit.values(), values));
+        auto group = initLayers[key] >> select([](const row_numbered<learning_init_behavior_ptr>& b){ return b.row_num(); }) >> to_vector();
+        initImpls.push_back(create_learning_impl<learning_impl>(key.ptr(), group, values));
     }
 
-    for (auto& learn : learningLayers)
+    for (auto& key : learningLayerKeys)
     {
-        auto impl = create_learning_impl<supervised_learning>(learn.key().ptr(), learn.values(), values);
+        auto group = learningLayers[key] >> select([](const row_numbered<supervised_learning_behavior_ptr>& b){ return b.row_num(); }) >> to_vector();
+        auto impl = create_learning_impl<supervised_learning>(key.ptr(), group, values);
         if (int(impl->iteration_type() & supervised_learning_iteration_type::online) != 0)
         {
             onlineImpls.push_back(impl);
@@ -487,10 +510,10 @@ std::shared_ptr<I> multilayer_perceptron::create_learning_impl(const learning_be
 
 idx_t multilayer_perceptron::get_layer_index(const layer_ptr& layer)
 {
-    return _layers
-        | where([=](row_numbered<layer_ptr>& l) { return l.value() == layer; })
-        | select([](row_numbered<layer_ptr>& l) { return l.row_num(); })
-        | first();
+    return from(_layers) >>
+        where([=](const row_numbered<layer_ptr>& l) { return l.value() == layer; }) >>
+        select([](const row_numbered<layer_ptr>& l) { return l.row_num(); }) >>
+        first();
 }
 
 void multilayer_perceptron::get_weights(const data_array_ptr& to) const
@@ -534,7 +557,11 @@ void multilayer_perceptron::set_weights(const data_array_ptr& from)
 activation_description multilayer_perceptron::get_activation_desc(idx_t layerIndex)
 {
     auto& layer = _layers[layerIndex];
-    auto desc = from(layer.value()->descriptions()) | of_type<activation_description>() | first_or_default();
+    auto desc = from(layer.value()->descriptions()) >>
+            select([](const layer_description_ptr& d) { return dynamic_pointer_cast<activation_description>(d); }) >>
+            where([](const layer_description_ptr& d) { return d != null; }) >>
+            first_or_default();
+
     if (!desc) throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
     return *desc;
 }
