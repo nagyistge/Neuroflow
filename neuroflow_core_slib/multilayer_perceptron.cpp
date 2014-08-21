@@ -56,7 +56,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     //Create ordered layers:
 
     // Copy leayers
-    layer_collection_t copyOfLayers(layers);
+    auto copyOfLayers = from(layers) >> to_vector();
     // Sort
     layer_order_comparer comparer;
     sort(copyOfLayers.begin(), copyOfLayers.end(), [&](const layer_ptr& l1, const layer_ptr& l2) { return comparer(l1, l2) < 1; });
@@ -92,7 +92,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     _isGradientsCalculated = from(infoValues) >> any([](const layer_info& i) { return i.optimization_type == learning_algo_optimization_type::gradient_based; });
 
     _calculateGlobalOfflineError = from(infoValues) >> any([](const layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_offline; });
-    _calculateGlobalOnlineError = _calculateGlobalOfflineError || (from(infoValues) >> any([](layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_online; }));
+    _calculateGlobalOnlineError = _calculateGlobalOfflineError || (from(infoValues) >> any([](const layer_info& i) { return i.optimization_type == learning_algo_optimization_type::global && i.is_online; }));
 
     _doBackpropagate = _isTrainingEnabled && _isGradientsCalculated && (_gradientComputationMethod == nf::gradient_computation_method::feed_forward || _gradientComputationMethod == nf::gradient_computation_method::bptt);
 
@@ -355,7 +355,31 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
 
 void multilayer_perceptron::create_impls()
 {
-    unordered_set<equatable_ptr<learning_init_behavior>> initLayerKeys;
+    unordered_multimap<equatable_ptr<learning_init_behavior>, idx_t> initLayers;
+    from(_layers)
+    >> select_many([](const row_numbered<layer_ptr>& l)
+    {
+        return
+                from(l.value()->behaviors())
+                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<learning_init_behavior>(b); })
+                >> where([](const learning_init_behavior_ptr& b){ return b != null; })
+                >> select([=](const learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
+    })
+    >> for_each([&](const row_numbered<learning_init_behavior_ptr>& item)
+    {
+        auto key = make_equatable_ptr(item.value());
+        auto it = initLayers.find(key);
+        if (it != initLayers.end())
+        {
+            //found:
+        }
+        else
+        {
+            // not found:
+        }
+    });
+
+    /*unordered_set<equatable_ptr<learning_init_behavior>> initLayerKeys;
     auto initLayers = from(_layers)
     >> select_many([](const row_numbered<layer_ptr>& l)
     {
@@ -387,7 +411,7 @@ void multilayer_perceptron::create_impls()
         auto key = make_equatable_ptr(b.value());
         learningLayerKeys.insert(key);
         return key;
-    } );
+    } );*/
 
     auto values = values_for_training_t();
     for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
