@@ -7,3 +7,7 @@ file(GLOB cpp_files ./cpp/*.h ./cpp/*.cpp)
 file(GLOB ocl_files ./ocl/*.h ./ocl/*.cpp)
 
 add_library(neuroflow_core_slib STATIC ${main_files} ${cpp_files} ${ocl_files})
+
+#PCH
+set_target_properties(neuroflow_core_slib PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "stdafx.h")
+cotire(neuroflow_core_slib)

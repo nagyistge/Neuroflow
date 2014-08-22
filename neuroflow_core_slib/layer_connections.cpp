@@ -41,7 +41,7 @@ void layer_connections::add(const layer_ptr& layer, flow_direction direction)
     verify_arg(layer != null, "layer");
     verify_arg(direction == flow_direction::one_way || direction == flow_direction::one_way_to_source || direction == flow_direction::two_way, "direction");
 
-    if (find_if(_otherLayers.cbegin(), _otherLayers.cend(), [&](_citem_t(_otherLayers) p) { return p.second == layer; }) == _otherLayers.cend())
+    if (find_if(_otherLayers.begin(), _otherLayers.end(), [&](_item_t(_otherLayers) p) { return p.second == layer; }) == _otherLayers.end())
     {
         with_other_side_update_suppressed(layer,
         [&]()
@@ -63,8 +63,8 @@ bool layer_connections::remove(const layer_ptr& layer)
 {
     verify_arg(layer != null, "item");
 
-    auto toRemove = find_if(_otherLayers.cbegin(), _otherLayers.cend(), [&](_citem_t(_otherLayers) p) { return p.second == layer; });
-    if (toRemove != _otherLayers.cend())
+    auto toRemove = find_if(_otherLayers.begin(), _otherLayers.end(), [&](_item_t(_otherLayers) p) { return p.second == layer; });
+    if (toRemove != _otherLayers.end())
     {
         _otherLayers.erase(toRemove);
         with_other_side_update_suppressed(layer,
@@ -103,8 +103,9 @@ void layer_connections::clear()
 layer_collection_t layer_connections::connected_layers(flow_direction direction) const
 {
     return from(_otherLayers)
-        | where([=](const other_layer_t& layer) { return int(layer.first & direction) != 0; })
-        | select([](const other_layer_t& layer) { return layer.second; });
+        >> where([=](const other_layer_t& layer) { return int(layer.first & direction) != 0; })
+        >> select([](const other_layer_t& layer) { return layer.second; })
+        >> to_vector();
 }
 
 void layer_connections::with_other_side_update_suppressed(const layer_ptr& layer, const std::function<void()>& method)

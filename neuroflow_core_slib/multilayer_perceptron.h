@@ -7,6 +7,7 @@
 #include "rtlr.h"
 #include "activation_description.h"
 #include "row_numbered.h"
+#include "equatable_ptr.h"
 
 namespace nf
 {
@@ -125,5 +126,8 @@ namespace nf
         void zero_outputs();
         void zero_gradients();
         void zero_gradient_sums();
+
+        template<typename TB>
+        std::unordered_map<equatable_ptr<TB>, std::set<idx_t>> collect_layer_indexes();
     };
 }

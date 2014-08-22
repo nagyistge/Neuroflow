@@ -353,66 +353,43 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
     create_impls();
 }
 
-void multilayer_perceptron::create_impls()
+template<typename TB>
+std::unordered_map<equatable_ptr<TB>, std::set<idx_t>> multilayer_perceptron::collect_layer_indexes()
 {
-    unordered_multimap<equatable_ptr<learning_init_behavior>, idx_t> initLayers;
+    typedef shared_ptr<TB> PTB;
+
+    unordered_map<equatable_ptr<TB>, set<idx_t>> layerIndexes;
     from(_layers)
     >> select_many([](const row_numbered<layer_ptr>& l)
     {
-        return
-                from(l.value()->behaviors())
-                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<learning_init_behavior>(b); })
-                >> where([](const learning_init_behavior_ptr& b){ return b != null; })
-                >> select([=](const learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
+     return
+             from(l.value()->behaviors())
+             >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<TB>(b); })
+             >> where([](const PTB& b){ return b != null; })
+             >> select([=](const PTB& ptr) { return row_numbered<PTB>(l.row_num(), ptr); });
     })
-    >> for_each([&](const row_numbered<learning_init_behavior_ptr>& item)
+    >> for_each([&](const row_numbered<PTB>& item)
     {
-        auto key = make_equatable_ptr(item.value());
-        auto it = initLayers.find(key);
-        if (it != initLayers.end())
-        {
-            //found:
-        }
-        else
-        {
-            // not found:
-        }
+     auto key = make_equatable_ptr(item.value());
+     auto it = layerIndexes.find(key);
+     if (it != layerIndexes.end())
+     {
+         //found:
+         it->second.insert(item.row_num());
+     }
+     else
+     {
+         // not found:
+         layerIndexes.insert(make_pair(key, set<idx_t>({ item.row_num() })));
+     }
     });
 
-    /*unordered_set<equatable_ptr<learning_init_behavior>> initLayerKeys;
-    auto initLayers = from(_layers)
-    >> select_many([](const row_numbered<layer_ptr>& l)
-    {
-        return
-                from(l.value()->behaviors())
-                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<learning_init_behavior>(b); })
-                >> where([](const learning_init_behavior_ptr& b){ return b != null; })
-                >> select([=](const learning_init_behavior_ptr& ptr) { return row_numbered<learning_init_behavior_ptr>(l.row_num(), ptr); });
-    })
-    >> to_lookup([&](const row_numbered<learning_init_behavior_ptr>& b)
-    {
-        auto key = make_equatable_ptr(b.value());
-        initLayerKeys.insert(key);
-        return key;
-    } );
+    return move(layerIndexes);
+}
 
-    unordered_set<equatable_ptr<supervised_learning_behavior>> learningLayerKeys;
-    auto learningLayers = from(_layers)
-    >> select_many([](const row_numbered<layer_ptr>& l)
-    {
-        return
-                from(l.value()->behaviors())
-                >> select([](const layer_behavior_ptr& b){ return dynamic_pointer_cast<supervised_learning_behavior>(b); })
-                >> where([](const supervised_learning_behavior_ptr& b){ return b != null; })
-                >> select([=](const supervised_learning_behavior_ptr& ptr) { return row_numbered<supervised_learning_behavior_ptr>(l.row_num(), ptr); });
-    })
-    >> to_lookup([&](const row_numbered<supervised_learning_behavior_ptr>& b)
-    {
-        auto key = make_equatable_ptr(b.value());
-        learningLayerKeys.insert(key);
-        return key;
-    } );*/
-
+void multilayer_perceptron::create_impls()
+{
+    // Init Layers
     auto values = values_for_training_t();
     for (idx_t lidx = 1; lidx < _layers.size(); lidx++)
     {
@@ -461,16 +438,14 @@ void multilayer_perceptron::create_impls()
     vector<supervised_learning_ptr> onlineImpls;
     vector<supervised_learning_ptr> offlineImpls;
 
-    for (auto& key : initLayerKeys)
+    for (auto& il : collect_layer_indexes<learning_init_behavior>())
     {
-        auto group = initLayers[key] >> select([](const row_numbered<learning_init_behavior_ptr>& b){ return b.row_num(); }) >> to_vector();
-        initImpls.push_back(create_learning_impl<learning_impl>(key.ptr(), group, values));
+        initImpls.push_back(create_learning_impl<learning_impl>(il.first.ptr(), from(il.second) >> to_vector(), values));
     }
 
-    for (auto& key : learningLayerKeys)
+    for (auto& sl : collect_layer_indexes<supervised_learning_behavior>())
     {
-        auto group = learningLayers[key] >> select([](const row_numbered<supervised_learning_behavior_ptr>& b){ return b.row_num(); }) >> to_vector();
-        auto impl = create_learning_impl<supervised_learning>(key.ptr(), group, values);
+        auto impl = create_learning_impl<supervised_learning>(sl.first.ptr(), from(sl.second) >> to_vector(), values);
         if (int(impl->iteration_type() & supervised_learning_iteration_type::online) != 0)
         {
             onlineImpls.push_back(impl);

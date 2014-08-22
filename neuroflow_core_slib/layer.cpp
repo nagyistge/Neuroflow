@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "layer.h"
+#include "row_numbered.h"
 
 USING
 
@@ -39,29 +40,38 @@ layer_connections& layer::output_connections()
 
 bool layer::has_recurrent_connections() const
 {
-    return _inputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) | any()
-        || _outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way) | any();
+    return from(_inputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way)) >> any()
+        || from(_outputConnections.connected_layers(flow_direction::one_way_to_source | flow_direction::two_way)) >> any();
 }
 
 layer_collection_t layer::input_layers() const
 {
-    return _inputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
-        | concat(_outputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
+    layer_collection_t result;
+    auto l1 = _inputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way);
+    auto l2 = _outputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source);
+    result.insert(result.end(), l1.begin(), l1.end());
+    result.insert(result.end(), l2.begin(), l2.end());
+    return move(result);
 }
 
 layer_collection_t layer::output_layers() const
 {
-    return _outputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way)
-        | concat(_inputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source));
+    layer_collection_t result;
+    auto l1 = _outputConnections.connected_layers(flow_direction::one_way | flow_direction::two_way);
+    auto l2 = _inputConnections.connected_layers(flow_direction::two_way | flow_direction::one_way_to_source);
+    result.insert(result.end(), l1.begin(), l1.end());
+    result.insert(result.end(), l2.begin(), l2.end());
+    return move(result);
 }
 
 layer_ptr layer::get_input_layer(idx_t connectionIndex) const
 {
-    auto result = input_layers()
-        | row_num()
-        | where([=](row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
-        | select([](row_numbered<layer_ptr>& obj) { return obj.value(); })
-        | first_or_default();
+    idx_t idx = 0;
+    auto result = from(input_layers())
+        >> select([&](const layer_ptr& l){ return row_numbered<layer_ptr>(idx++, l); })
+        >> where([=](const row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
+        >> select([](const row_numbered<layer_ptr>& obj) { return obj.value(); })
+        >> first_or_default();
 
     if (!result) throw_logic_error("Input layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
     return result;
@@ -69,11 +79,12 @@ layer_ptr layer::get_input_layer(idx_t connectionIndex) const
 
 layer_ptr layer::get_output_layer(idx_t connectionIndex) const
 {
-    auto result = output_layers()
-        | row_num()
-        | where([=](row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
-        | select([](row_numbered<layer_ptr>& obj) { return obj.value(); })
-        | first_or_default();
+    idx_t idx = 0;
+    auto result = from(output_layers())
+        >> select([&](const layer_ptr& l){ return row_numbered<layer_ptr>(idx++, l); })
+        >> where([=](const row_numbered<layer_ptr>& obj) { return obj.row_num() == connectionIndex; })
+        >> select([](const row_numbered<layer_ptr>& obj) { return obj.value(); })
+        >> first_or_default();
 
     if (!result) throw_logic_error("Output layer not found, connection index value " + to_string(connectionIndex) + " was out of range.");
     return result;

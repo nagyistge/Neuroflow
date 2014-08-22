@@ -7,7 +7,7 @@
 USING
 
 cpp_utils::cpp_utils() :
-generator((std::random_device()() << 16) | std::random_device()())
+generator(((std::random_device())() << 16) | (std::random_device())())
 {
 }
 
