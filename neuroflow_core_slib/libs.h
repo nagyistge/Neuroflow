@@ -26,7 +26,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/coroutine/all.hpp>
 #include <boost/iterator.hpp>
 #include <boost/thread.hpp>
 #include <boost/scoped_ptr.hpp>

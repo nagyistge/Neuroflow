@@ -63,7 +63,7 @@ namespace nf
         float _learningRate = 0.01f;
         float _momentum = 0.25f;
         bool _smoothing = false;
-        nf::weight_update_mode _weightUpdateMode = weight_update_mode::online;
+        nf::weight_update_mode _weightUpdateMode = nf::weight_update_mode::online;
     };
 
     inline layer_behavior_ptr make_gradient_descent_learning()

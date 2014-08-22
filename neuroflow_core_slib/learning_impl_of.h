@@ -12,7 +12,7 @@ namespace nf
     {
     protected:
         learning_impl_of(const std::weak_ptr<C>& context, const learning_behavior_ptr& behavior, const training_node_collection_ptr& nodes) :
-            weak_contexted(context),
+            weak_contexted<C>(context),
             _behavior(std::dynamic_pointer_cast<T>(behavior)),
             _nodes(nodes)
         {

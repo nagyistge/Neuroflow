@@ -126,11 +126,11 @@ namespace nf
     struct layer;
     typedef std::shared_ptr<layer> layer_ptr;
     typedef std::pair<flow_direction, layer_ptr> other_layer_t;
-    typedef std::list<layer_ptr> layer_collection_t;
+    typedef std::vector<layer_ptr> layer_collection_t;
 
     struct layer_behavior;
     typedef std::shared_ptr<layer_behavior> layer_behavior_ptr;
-    typedef std::list<layer_behavior_ptr> layer_behavior_coll_t;
+    typedef std::vector<layer_behavior_ptr> layer_behavior_coll_t;
 
     struct learning_behavior;
     typedef std::shared_ptr<learning_behavior> learning_behavior_ptr;

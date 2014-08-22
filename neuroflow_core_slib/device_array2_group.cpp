@@ -44,10 +44,10 @@ void device_array2_group::zero()
 
 idx_t device_array2_group::size() const
 {
-    return from(_arrays) >> select([](const pair<key_t, device_array2_ptr*>& i) { return (*i.second)->size(); }) >> sum();
+    return from(_arrays) >> select([](const pair<const key_t, device_array2_ptr>& i) { return i.second->size(); }) >> sum();
 }
 
 device_array2_collection_t device_array2_group::get_arrays() const
 {
-    return from(_arrays) >> select([](const pair<key_t, device_array2_ptr*>& i) { return (*i.second); }) >> to_vector();
+    return from(_arrays) >> select([](const pair<const key_t, device_array2_ptr>& i) { return i.second; }) >> to_vector();
 }

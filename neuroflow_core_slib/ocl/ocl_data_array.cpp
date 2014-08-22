@@ -62,7 +62,7 @@ boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t co
             }
             catch (...)
             {
-                OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
+                // OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
             }
             delete promise;
         },
@@ -125,7 +125,7 @@ boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourc
             }
             catch (...)
             {
-                OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
+                // OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
             }
             delete promise;
         },

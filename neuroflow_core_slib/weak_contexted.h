@@ -7,6 +7,10 @@ namespace nf
     template<typename T>
     struct weak_contexted
     {
+        weak_contexted() = delete;
+        weak_contexted(const weak_contexted<T>&) = delete;
+        weak_contexted(weak_contexted<T>&&) = delete;
+
     protected:
         weak_contexted(const std::weak_ptr<T>& context) : _context(context) { }
 

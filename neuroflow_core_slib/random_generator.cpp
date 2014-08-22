@@ -5,7 +5,7 @@
 USING
 
 random_generator::random_generator(const boost::optional<unsigned long>& seed) :
-_generator(!seed.is_initialized() ? ((std::random_device()() << 16) | std::random_device()()) : *seed)
+_generator(!seed.is_initialized() ? (((std::random_device())() << 16) | (std::random_device())()) : *seed)
 {
 }
 
