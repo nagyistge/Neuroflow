@@ -21,6 +21,9 @@
 #include <unordered_map>
 #include <typeinfo>
 #include <random>
+#include <exception>
+#include <stdexcept>
+#include <fstream>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>

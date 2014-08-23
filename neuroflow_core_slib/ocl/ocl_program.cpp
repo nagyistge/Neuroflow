@@ -2,6 +2,7 @@
 #include "ocl_program.h"
 #include "ocl_computation_context.h"
 #include "../device_info.h"
+#include <boost/filesystem/fstream.hpp>
 
 USING
 using namespace boost::filesystem;
@@ -36,15 +37,14 @@ cl::Program ocl_program::compile()
         return result.str();
     };
 
-    TCHAR exePath[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, exePath);
+    path c_full_path(current_path());
 
     auto ver = toAlphanumeric(version());
 
     wstringstream fns;
-    fns << wstring(exePath);
+    fns << c_full_path;
     fns << "\\";
-    fns << "kernels\\";
+    fns << "kernels\\"; // TODO: from options
 
     path kernelPath(fns.str());
     create_directory(kernelPath);
@@ -73,11 +73,11 @@ cl::Program ocl_program::compile()
     fns << '_';
     fns << toAlphanumeric(ctx->device_info().id());
     fns << ".bin";
-    wstring fn = fns.str();
+    path fn(fns.str());
 
     vector<char> bin;
 
-    auto fi = ifstream(fn.c_str(), ios::binary);
+    boost::filesystem::ifstream fi(fn, ios::binary);
     if (fi.good())
     {
         bin = vector<char>(istreambuf_iterator<char>(fi), istreambuf_iterator<char>());
@@ -85,7 +85,7 @@ cl::Program ocl_program::compile()
     else
     {
         auto prog = create_program_and_binary(bin);
-        auto fo = ofstream(fn.c_str(), ios::binary);
+        boost::filesystem::ofstream fo(fn, ios::binary);
         fo.write((char*)&bin[0], bin.size());
         fo.flush();
         return prog;

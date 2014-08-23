@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <exception>
+#include <stdexcept>
 #include <assert.h>
 
 #define throw_logic_error(msg) \

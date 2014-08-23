@@ -57,12 +57,12 @@ boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t co
                 else
                 {
                     // cl::Error
-                    promise->set_exception(ocl_error(status, "Cannot read memory."));
+                    promise->set_exception(std::copy_exception(ocl_error(status, "Cannot read memory.")));
                 }
             }
             catch (...)
             {
-                // OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
+                promise->set_exception(std::current_exception());
             }
             delete promise;
         },
@@ -120,12 +120,12 @@ boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourc
                 else
                 {
                     // cl::Error
-                    promise->set_exception(ocl_error(status, "Cannot read memory."));
+                    promise->set_exception(std::copy_exception(ocl_error(status, "Cannot read memory.")));
                 }
             }
             catch (...)
             {
-                // OutputDebugString(L"OCLDataArray::Read done callback cannot be called.\n");
+                promise->set_exception(std::current_exception());
             }
             delete promise;
         },

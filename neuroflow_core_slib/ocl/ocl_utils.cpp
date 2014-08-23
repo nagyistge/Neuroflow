@@ -17,16 +17,11 @@ ocl_kernel_name ocl_utils::zeroFName = ocl_kernel_name("ZeroF");
 
 ocl_utils::ocl_utils(const ocl_computation_context_wptr& context) :
     weak_contexted(context),
-    generator((std::random_device()() << 16) | std::random_device()()),
+    generator(((std::random_device())() << 16) | (std::random_device())()),
     addExec(context, addMSEName),
     divExec(context, divName),
     zeroFExec(context, zeroFName)
 {
-    memset(z2.s, 0, sizeof(float)* 2);
-    memset(z4.s, 0, sizeof(float)* 4);
-    memset(z8.s, 0, sizeof(float)* 8);
-    memset(z16.s, 0, sizeof(float)* 16);
-
     build();
 }
 
@@ -205,44 +200,11 @@ void ocl_utils::zero(const cl::Buffer& buffer, idx_t size)
 
         if (ctx->is_cpu())
         {
-            switch (vectorSize)
-            {
-                case 2:
-                    ctx->cl_queue().enqueueFillBuffer(
-                        buffer,
-                        z2,
-                        0,
-                        sizeof(float)* size);
-                    break;
-                case 4:
-                    ctx->cl_queue().enqueueFillBuffer(
-                        buffer,
-                        z4,
-                        0,
-                        sizeof(float)* size);
-                    break;
-                case 8:
-                    ctx->cl_queue().enqueueFillBuffer(
-                        buffer,
-                        z8,
-                        0,
-                        sizeof(float)* size);
-                    break;
-                case 16:
-                    ctx->cl_queue().enqueueFillBuffer(
-                        buffer,
-                        z16,
-                        0,
-                        sizeof(float)* size);
-                    break;
-                default:
-                    ctx->cl_queue().enqueueFillBuffer(
-                        buffer,
-                        0.0f,
-                        0,
-                        sizeof(float)* size);
-                    break;
-            }
+            ctx->cl_queue().enqueueFillBuffer<float>(
+                buffer,
+                0.0f,
+                0,
+                sizeof(float)* size * vectorSize);
         }
         else
         {

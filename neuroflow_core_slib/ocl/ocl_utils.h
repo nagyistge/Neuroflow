@@ -27,10 +27,6 @@ namespace nf
         std::mt19937 generator;
         ocl_program_ptr program;
         ocl_exec addExec, divExec, zeroFExec;
-        cl_float2 z2;
-        cl_float4 z4;
-        cl_float8 z8;
-        cl_float16 z16;
 
         void build();
         void zero(const cl::Buffer& buffer, idx_t size);
