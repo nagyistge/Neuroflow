@@ -17,6 +17,11 @@ namespace nf
         void compute_gradients_bpttp2(const mlp_backward_node& node, idx_t offset, idx_t internalIterationCount) const;
 
     private:
-        inline static float sigmoid_deriv(float value, float alpha);
+        inline static float sigmoid_deriv(float value, float alpha)
+        {
+            //return alpha * (1.0f - value * value) / 2.0f; // Logistics
+            //return alpha * (1.0f - (value * value)); // Tanh
+            return alpha * 1.0f / ((1.0f + abs(value * alpha)) * (1.0f + abs(value * alpha))); // Elliot
+        }
     };
 }

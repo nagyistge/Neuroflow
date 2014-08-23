@@ -1,6 +1,6 @@
 #pragma once
 
-#include "error.h"
+#include "../error.h"
 #include "../ocl.h"
 
 inline std::runtime_error as_ocl_error_helper(const std::exception& ex, const char* file, const int line)

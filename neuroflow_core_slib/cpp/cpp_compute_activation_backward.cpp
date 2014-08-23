@@ -307,10 +307,3 @@ void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backwar
         }
     }
 }
-
-float cpp_compute_activation_backward::sigmoid_deriv(float value, float alpha)
-{
-    //return alpha * (1.0f - value * value) / 2.0f; // Logistics
-    //return alpha * (1.0f - (value * value)); // Tanh
-    return alpha * 1.0f / ((1.0f + abs(value * alpha)) * (1.0f + abs(value * alpha))); // Elliot
-}
