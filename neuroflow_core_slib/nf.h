@@ -16,7 +16,7 @@
 #include "supervised_batch.h"
 #include "utils.h"
 #include "cc_init_pars.h"
-#include "ocl_cc_init_pars.h"
+#include "ocl/ocl_cc_init_pars.h"
 #include "mlp_init_pars.h"
 #include "layer.h"
 #include "neural_network_factory.h"
