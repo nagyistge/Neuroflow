@@ -9,7 +9,6 @@ namespace nf
     static const wchar_t* cpp_context = L"cpp";
     static const wchar_t* ocl_context = L"ocl";
 
-    ENUM_STRINGS(weight_update_mode, "offline", "online")
     enum class weight_update_mode
     {
         offline,
