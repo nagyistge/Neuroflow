@@ -21,17 +21,17 @@ data_array_ptr cpp_data_array_factory::create(idx_t size, float fill)
     }
 }
 
-data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx_t size)
+data_array_ptr cpp_data_array_factory::create(const float* values, idx_t beginPos, idx_t size)
 {
     return create(values, beginPos, size, false);
 }
 
-data_array_ptr cpp_data_array_factory::create_const(float* values, idx_t beginPos, idx_t size)
+data_array_ptr cpp_data_array_factory::create_const(const float* values, idx_t beginPos, idx_t size)
 {
     return create(values, beginPos, size, true);
 }
 
-data_array_ptr cpp_data_array_factory::create(float* values, idx_t beginPos, idx_t size, bool isConst)
+data_array_ptr cpp_data_array_factory::create(const float* values, idx_t beginPos, idx_t size, bool isConst)
 {
     verify_arg(values != null, "values");
     verify_arg(beginPos >= 0, "beginPos");
