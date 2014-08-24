@@ -8,10 +8,10 @@ namespace nf
     struct cpp_data_array_factory : virtual data_array_factory
     {
         data_array_ptr create(idx_t size, float fill) override;
-        data_array_ptr create(float* values, idx_t beginPos, idx_t size) override;
-        data_array_ptr create_const(float* values, idx_t beginPos, idx_t size) override;
+        data_array_ptr create(const float* values, idx_t beginPos, idx_t size) override;
+        data_array_ptr create_const(const float* values, idx_t beginPos, idx_t size) override;
 
     private:
-        data_array_ptr create(float* values, idx_t beginPos, idx_t size, bool isConst);
+        data_array_ptr create(const float* values, idx_t beginPos, idx_t size, bool isConst);
     };
 }

@@ -20,7 +20,7 @@ data_array_ptr ocl_data_array_factory::create(idx_t size, float fill)
     return make_shared<ocl_data_array>(ctx, ctx->ocl_device_array_management()->create_buffer(0, size * sizeof(float), fill), false);
 }
 
-data_array_ptr ocl_data_array_factory::create(float* values, idx_t beginPos, idx_t size)
+data_array_ptr ocl_data_array_factory::create(const float* values, idx_t beginPos, idx_t size)
 {
     verify_arg(values != null, "values");
     verify_arg(beginPos >= 0, "beginPos");
@@ -31,7 +31,7 @@ data_array_ptr ocl_data_array_factory::create(float* values, idx_t beginPos, idx
     return make_shared<ocl_data_array>(ctx, ctx->ocl_device_array_management()->create_buffer(CL_MEM_COPY_HOST_PTR, values + beginPos, size * sizeof(float)), false);
 }
 
-data_array_ptr ocl_data_array_factory::create_const(float* values, idx_t beginPos, idx_t size)
+data_array_ptr ocl_data_array_factory::create_const(const float* values, idx_t beginPos, idx_t size)
 {
     verify_arg(values != null, "values");
     verify_arg(beginPos >= 0, "beginPos");

@@ -75,7 +75,7 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, idx_t 
     }
 }
 
-cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float* from, idx_t sizeInBytes)
+cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, const float* from, idx_t sizeInBytes)
 {
     auto ctx = lock_context();
 
@@ -85,7 +85,7 @@ cl::Buffer ocl_device_array_management::create_buffer(cl_mem_flags flags, float*
             ctx->cl_context(),
             flags,
             sizeInBytes,
-            from);
+            const_cast<void*>((const void*)from));
     }
     catch (exception& ex)
     {

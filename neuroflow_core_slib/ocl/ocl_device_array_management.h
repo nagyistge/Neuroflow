@@ -21,6 +21,6 @@ namespace nf
     private:
 
         cl::Buffer create_buffer(cl_mem_flags flags, idx_t sizeInBytes, float fill = 0.0f);
-        cl::Buffer create_buffer(cl_mem_flags flags, float* from, idx_t sizeInBytes);
+        cl::Buffer create_buffer(cl_mem_flags flags, const float* from, idx_t sizeInBytes);
     };
 }

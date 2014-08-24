@@ -11,7 +11,7 @@ namespace nf
         ocl_data_array_factory(const ocl_computation_context_wptr& context);
 
         data_array_ptr create(idx_t size, float fill) override;
-        data_array_ptr create(float* values, idx_t beginPos, idx_t size) override;
-        data_array_ptr create_const(float* values, idx_t beginPos, idx_t size) override;
+        data_array_ptr create(const float* values, idx_t beginPos, idx_t size) override;
+        data_array_ptr create_const(const float* values, idx_t beginPos, idx_t size) override;
     };
 }
