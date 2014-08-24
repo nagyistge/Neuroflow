@@ -59,12 +59,11 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
     auto copyOfLayers = from(layers) >> to_vector();
     // Sort
     layer_order_comparer comparer;
-    sort(copyOfLayers.begin(), copyOfLayers.end(), [&](const layer_ptr& l1, const layer_ptr& l2) { return comparer(l1, l2) < 1; });
+    sort(copyOfLayers.begin(), copyOfLayers.end(), [&](const layer_ptr& l1, const layer_ptr& l2) { return comparer(l1, l2) < 0; });
     // Project:
     idx_t idx = 0;
     _layers = from(copyOfLayers) >> select([&](const layer_ptr& l) { return row_numbered<layer_ptr>(idx++, l); }) >> to_vector();
 
-    // It supposed to be cool, but looks like shit because of MSVC.    
     auto infos = from(_layers) >>
         select([](const row_numbered<layer_ptr>& l) -> pair<idx_t, supervised_learning_behavior_ptr>
         {
@@ -446,11 +445,11 @@ void multilayer_perceptron::create_impls()
     for (auto& sl : collect_layer_indexes<supervised_learning_behavior>())
     {
         auto impl = create_learning_impl<supervised_learning>(sl.first.ptr(), from(sl.second) >> to_vector(), values);
-        if (int(impl->iteration_type() & supervised_learning_iteration_type::online) != 0)
+        if (idx_t(impl->iteration_type() & supervised_learning_iteration_type::online) != idx_t(0))
         {
             onlineImpls.push_back(impl);
         }
-        if (int(impl->iteration_type() & supervised_learning_iteration_type::offline) != 0)
+        if (idx_t(impl->iteration_type() & supervised_learning_iteration_type::offline) != idx_t(0))
         {
             offlineImpls.push_back(impl);
         }
@@ -561,7 +560,10 @@ activation_description multilayer_perceptron::get_activation_desc(idx_t layerInd
             where([](const layer_description_ptr& d) { return d != null; }) >>
             first_or_default();
 
-    if (!desc) throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
+    if (!desc)
+    {
+        throw_runtime_error("Layer " + to_string(layer.row_num()) + " activation description expected.");
+    }
     return *desc;
 }
 

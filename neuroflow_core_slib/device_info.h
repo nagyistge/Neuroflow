@@ -39,3 +39,17 @@ namespace nf
         std::wstring _id, _version, _name, _platform;
     };
 }
+
+namespace std
+{
+    inline wstring to_wstring(const nf::device_info& info)
+    {
+        wstringstream ws;
+        ws << info.platform();
+        ws << L": ";
+        ws << info.name();
+        ws << L" ";
+        ws << info.version();
+        return ws.str();
+    }
+}

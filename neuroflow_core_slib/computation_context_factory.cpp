@@ -15,7 +15,7 @@ computation_context_factory::computation_context_factory()
     register_type(ocl_context, make_shared<ocl_cc_factory_adapter>());
 }
 
-const computation_context_factory& computation_context_factory::singleton()
+const computation_context_factory& computation_context_factory::instance()
 {
     return _singleton;
 }
@@ -27,7 +27,6 @@ void computation_context_factory::register_type(const wchar_t* typeId, const cc_
 
 std::list<device_info> computation_context_factory::get_available_devices(const wchar_t* typeId) const
 {
-    cc_factory_adapter_ptr adapter;
     auto found = adapters.find(typeId);
     if (found == adapters.cend()) throw_runtime_error(create_type_not_found_msg(typeId));
     return found->second->get_available_devices();

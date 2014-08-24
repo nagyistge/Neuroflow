@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "enum_flags.h"
-#include "enum_to_string.h"
 
 namespace nf
 {
@@ -15,7 +14,6 @@ namespace nf
         online
     };
 
-    ENUM_STRINGS(learning_algo_optimization_type, "none", "gradient_based", "global")
     enum class learning_algo_optimization_type
     {
         none,
@@ -30,7 +28,6 @@ namespace nf
         offline = 1 << 3
     };
 
-    ENUM_STRINGS(gradient_computation_method, "none", "feed_forward", "bptt", "rtlr")
     enum class gradient_computation_method
     {
         none,
@@ -49,14 +46,12 @@ namespace nf
         all = one_way | two_way | one_way_to_source
     };
 
-    ENUM_STRINGS(activation_function, "sigmoid", "linear")
     enum class activation_function
     {
         sigmoid,
         linear
     };
 
-    ENUM_STRINGS(gradient_computation_formula, "ff", "bptt_phase1", "bptt_phase2")
     enum class gradient_computation_formula
     {
         ff,
@@ -64,7 +59,6 @@ namespace nf
         bptt_phase2
     };
 
-    ENUM_STRINGS(sequence_marker, "begin", "inner", "end")
     enum class sequence_marker
     {
         begin = -1,
