@@ -4,7 +4,7 @@ include(cotire)
 
 project (Neuroflow)
 
-find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS system filesystem unit_test_framework thread REQUIRED)
 find_package(OpenCL REQUIRED )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

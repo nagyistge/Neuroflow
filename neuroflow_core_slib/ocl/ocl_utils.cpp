@@ -204,7 +204,7 @@ void ocl_utils::zero(const cl::Buffer& buffer, idx_t size)
                 buffer,
                 0.0f,
                 0,
-                sizeof(float)* size * vectorSize);
+                sizeof(float)* size);
         }
         else
         {

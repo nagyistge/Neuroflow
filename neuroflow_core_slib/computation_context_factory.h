@@ -18,7 +18,7 @@ namespace nf
         
         computation_context_ptr create_context(const wchar_t* typeId, const std::wstring& deviceHint = L"", const cc_init_pars* properties = null) const;
         void register_type(const wchar_t* typeId, const cc_factory_adapter_ptr& adapter);
-        static const computation_context_factory& singleton();
+        static const computation_context_factory& instance();
 
     private:
         std::unordered_map<std::wstring, cc_factory_adapter_ptr> adapters;

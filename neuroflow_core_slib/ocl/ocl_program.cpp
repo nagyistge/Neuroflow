@@ -37,22 +37,12 @@ cl::Program ocl_program::compile()
         return result.str();
     };
 
-    path c_full_path(current_path());
-
     auto ver = toAlphanumeric(version());
 
-    wstringstream fns;
-    fns << c_full_path;
-    fns << "\\";
-    fns << "kernels\\"; // TODO: from options
-
-    path kernelPath(fns.str());
+    path c_full_path(current_path()); // TODO: from options
+    path kernelPath = c_full_path / "kernels";
     create_directory(kernelPath);
-
-    fns << ver;
-    fns << "\\";
-
-    path verPath(fns.str());
+    path verPath = kernelPath / ver;
     create_directory(verPath);
 
     boost::thread([=]()
@@ -69,11 +59,13 @@ cl::Program ocl_program::compile()
         }
     });
 
+    wstringstream fns;
     fns << toAlphanumeric(name());
     fns << '_';
     fns << toAlphanumeric(ctx->device_info().id());
     fns << ".bin";
-    path fn(fns.str());
+
+    path fn = verPath / fns.str();
 
     vector<char> bin;
 
