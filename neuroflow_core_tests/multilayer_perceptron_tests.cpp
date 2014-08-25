@@ -111,7 +111,10 @@ void do_get_and_set_weights(const computation_context_ptr& ctx)
     vector<float> weightValues(numWeights);
     mlp->get_weights(weights);
     weights->read(0, numWeights, &weightValues[0], 0).wait();
-    for (float v : weightValues) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (float v : weightValues)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 
     for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
     weights->write(&weightValues[0], 0, numWeights, 0).wait();
@@ -121,11 +124,17 @@ void do_get_and_set_weights(const computation_context_ptr& ctx)
     weights->write(&weightValues[0], 0, numWeights, 0).wait();
     for (idx_t i = 0; i < numWeights; i++) weightValues[i] = 0.0f;
     weights->read(0, numWeights, &weightValues[0], 0).wait();
-    for (float v : weightValues) BOOST_REQUIRE_EQUAL(0.99f, v);
+    for (float v : weightValues)
+    {
+        BOOST_REQUIRE_EQUAL(0.99f, v);
+    }
 
     mlp->get_weights(weights);
     weights->read(0, numWeights, &weightValues[0], 0).wait();
-    for (float v : weightValues) BOOST_REQUIRE_EQUAL(0.11f, v);
+    for (float v : weightValues)
+    {
+        BOOST_REQUIRE_EQUAL(0.11f, v);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(cpp_get_and_set_weights)

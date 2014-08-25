@@ -15,12 +15,18 @@ void test_zero(computation_context_ptr ctx)
     auto valuesArray = ctx->data_array_factory()->create(&values[0], 0, values.size());
 
     valuesArray->read(0, values.size(), &values[0], 0).wait();
-    for (float v : values) BOOST_REQUIRE(0.0f != v);
+    for (float v : values)
+    {
+        BOOST_REQUIRE(0.0f != v);
+    }
 
     ctx->utils()->zero(valuesArray);
 
     valuesArray->read(0, values.size(), &values[0], 0).wait();
-    for (float v : values) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (float v : values)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 }
 
 float calc_mse(const vector<float>& desired, const vector<float>& current)

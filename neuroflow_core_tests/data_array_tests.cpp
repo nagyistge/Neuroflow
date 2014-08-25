@@ -19,7 +19,10 @@ void test_copy_data(computation_context_ptr ctx)
 
     // Verify is target is filled:
     targetArray->read(0, 2, &target[0], 0).wait();
-    for (float v : target) BOOST_REQUIRE_EQUAL(100.0f, v);
+    for (float v : target)
+    {
+        BOOST_REQUIRE_EQUAL(100.0f, v);
+    }
 
     ctx->device_array_management()->copy(valuesArray, 0, targetArray, 0, 2);
 
@@ -38,15 +41,24 @@ void test_pooling(computation_context_ptr ctx)
     auto da = ctx->data_array_factory()->create(100, 9.9f);
 
     da->read(0, 100, &values[0], 0).wait();
-    for (auto v : values) BOOST_REQUIRE_EQUAL(9.9f, v);
+    for (auto v : values)
+    {
+        BOOST_REQUIRE_EQUAL(9.9f, v);
+    }
 
     ctx->device_array_management()->copy(a1, 0, da, 0, 100);
     da->read(0, 100, &values[0], 0).wait();
-    for (auto v : values) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (auto v : values)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 
     ctx->device_array_management()->copy(a2, 0, da, 0, 100);
     da->read(0, 100, &values[0], 0).wait();
-    for (auto v : values) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (auto v : values)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 
     fill(values.begin(), values.end(), 1.0f);
     da->write(&values[0], 0, 100, 0);
@@ -57,7 +69,10 @@ void test_pooling(computation_context_ptr ctx)
     auto it = values.cbegin();
     BOOST_REQUIRE_EQUAL(0.0f, *it);
     it++;
-    for (; it != values.cend(); it++) BOOST_REQUIRE_EQUAL(1.0f, *it);
+    for (; it != values.cend(); it++)
+    {
+        BOOST_REQUIRE_EQUAL(1.0f, *it);
+    }
 
     ctx->device_array_management()->copy(a1, 0, a2, 1, 2);
     ctx->device_array_management()->copy(a2, 0, da, 0, 100);
@@ -69,17 +84,26 @@ void test_pooling(computation_context_ptr ctx)
     it++;
     BOOST_REQUIRE_EQUAL(1.0f, *it);
     it++;
-    for (; it != values.cend(); it++) BOOST_REQUIRE_EQUAL(0.0f, *it);
+    for (; it != values.cend(); it++)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, *it);
+    }
 
     pool->zero();
 
     ctx->device_array_management()->copy(a1, 0, da, 0, 100);
     da->read(0, 100, &values[0], 0).wait();
-    for (auto v : values) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (auto v : values)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 
     ctx->device_array_management()->copy(a2, 0, da, 0, 100);
     da->read(0, 100, &values[0], 0).wait();
-    for (auto v : values) BOOST_REQUIRE_EQUAL(0.0f, v);
+    for (auto v : values)
+    {
+        BOOST_REQUIRE_EQUAL(0.0f, v);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(cpp_copy_data)

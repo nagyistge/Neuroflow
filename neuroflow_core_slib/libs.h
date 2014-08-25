@@ -34,4 +34,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/chrono.hpp>
 #include "ocl.h"
+#undef min
+#undef max
 #include <cpplinq.hpp>
