@@ -21,7 +21,7 @@ namespace nf
         {
             //return alpha * (1.0f - value * value) / 2.0f; // Logistics
             //return alpha * (1.0f - (value * value)); // Tanh
-            return alpha * 1.0f / ((1.0f + abs(value * alpha)) * (1.0f + abs(value * alpha))); // Elliot
+            return alpha * 1.0f / ((1.0f + nfabs(value * alpha)) * (1.0f + nfabs(value * alpha))); // Elliot
         }
     };
 }

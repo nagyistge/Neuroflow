@@ -11,7 +11,6 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
 {
     for (auto& node : nodes)
     {
-        idx_t inputLayersCount = node.in.size();
         idx_t layerSize = node.size();
 
         auto outputs = _fast_cast<cpp_device_array>(node.out());
