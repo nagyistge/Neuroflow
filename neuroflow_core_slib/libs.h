@@ -24,6 +24,7 @@
 #include <exception>
 #include <stdexcept>
 #include <fstream>
+#include <cmath>
 #include <boost/algorithm/string.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/filesystem.hpp>

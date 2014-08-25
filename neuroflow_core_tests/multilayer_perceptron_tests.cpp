@@ -195,15 +195,15 @@ void runner(const string& name, const computation_context_ptr& ctx, const multil
 
     boost::chrono::duration<double> sec = boost::chrono::high_resolution_clock::now() - start;
 
-    float lastMse = 0.0f;
     stringstream s;
     s << name << ":" << endl << "Ellapsed: " << sec << endl;
-    for (float mse : mses)
+    idx_t bidx = maxIterations - 10;
+    if (bidx < 0) bidx = 0;
+    for (idx_t i = bidx; i < mses.size(); i++)
     {
-        s << "Error: " << mse << endl;
-        lastMse = mse;
+        s << "Iteration " << i+1 << ". error: " << mses[i] << endl;
     }
-    BOOST_REQUIRE(lastMse < 0.0001f);
+    BOOST_CHECK(mses.back() < 0.01f);
 
     BOOST_TEST_MESSAGE(s.str());
 }
@@ -421,7 +421,7 @@ void do_gd_rec_training(const string& ctxName, const computation_context_ptr& ct
     string onlineStr((online ? string("Online ") : string("Offline ")));
     string gcmStr((gcm == nf::gradient_computation_method::bptt) ? string("BPTT") : string("RTLR"));
 
-    runner(onlineStr + ctxName + " Feed-Forward GD " + gcmStr + " Training", ctx, mlp, batch, gcm == gradient_computation_method::rtlr ? 30 : 1000);
+    runner(onlineStr + ctxName + " Recurrent GD " + gcmStr + " Training", ctx, mlp, batch, gcm == gradient_computation_method::rtlr ? 100 : 1000);
 }
 
 BOOST_AUTO_TEST_CASE(cpp_compute)
@@ -451,19 +451,19 @@ BOOST_AUTO_TEST_CASE(cpp_gd_rtlr_online_training)
 BOOST_AUTO_TEST_CASE(cpp_gd_rtlr_offline_training)
 {
     auto ctx = computation_context_factory().create_context(cpp_context);
-    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.01f, gradient_computation_method::rtlr);
+    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.1f, gradient_computation_method::rtlr);
 }
 
 BOOST_AUTO_TEST_CASE(cpp_gd_bptt_online_training)
 {
     auto ctx = computation_context_factory().create_context(cpp_context);
-    do_gd_rec_training("CPP", ctx, 0.3f, true, 0.01f, gradient_computation_method::bptt);
+    do_gd_rec_training("CPP", ctx, 0.3f, true, 0.1f, gradient_computation_method::bptt);
 }
 
 BOOST_AUTO_TEST_CASE(cpp_gd_bptt_offline_training)
 {
     auto ctx = computation_context_factory().create_context(cpp_context);
-    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.01f, gradient_computation_method::bptt);
+    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.1f, gradient_computation_method::bptt);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

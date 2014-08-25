@@ -383,31 +383,6 @@ std::unordered_map<equatable_ptr<TB>, std::set<idx_t>> multilayer_perceptron::co
         }
     }
 
-    /*from(_layers)
-    >> select_many([](const row_numbered<layer_ptr>& l)
-    {
-     return
-             from(l.value()->behaviors())
-             >> select([](const layer_behavior_ptr& b) { return dynamic_pointer_cast<TB>(b); })
-             >> where([](const PTB& b){ return b != null; })
-             >> select([=](const PTB& ptr) { return row_numbered<PTB>(l.row_num(), ptr); });
-    })
-    >> for_each([&](const row_numbered<PTB>& item)
-    {
-     auto key = make_equatable_ptr(item.value());
-     auto it = layerIndexes.find(key);
-     if (it != layerIndexes.end())
-     {
-         //found:
-         it->second.insert(item.row_num());
-     }
-     else
-     {
-         // not found:
-         layerIndexes.insert(make_pair(key, set<idx_t>({ item.row_num() })));
-     }
-    });*/
-
     return move(layerIndexes);
 }
 

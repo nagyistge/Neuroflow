@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/thread.hpp>
+#include <cmath>
 
 namespace nf
 {
@@ -17,6 +18,12 @@ namespace nf
         auto comp = promise<void>();
         comp.set_value();
         return comp.get_future();
+    }
+
+    inline float nfabs(float value)
+    {
+        return std::abs(value);
+        //return value < 0.0f ? -value : value;
     }
 
     template<typename T>
