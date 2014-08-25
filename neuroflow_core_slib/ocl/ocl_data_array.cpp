@@ -57,7 +57,7 @@ boost::shared_future<void> ocl_data_array::read(idx_t sourceBeginIndex, idx_t co
                 else
                 {
                     // cl::Error
-                    promise->set_exception(std::copy_exception(ocl_error(status, "Cannot read memory.")));
+                    promise->set_exception(std::make_exception_ptr(ocl_error(status, "Cannot read memory.")));
                 }
             }
             catch (...)
@@ -120,7 +120,7 @@ boost::shared_future<void> ocl_data_array::write(float* sourceArray, idx_t sourc
                 else
                 {
                     // cl::Error
-                    promise->set_exception(std::copy_exception(ocl_error(status, "Cannot read memory.")));
+                    promise->set_exception(std::make_exception_ptr(ocl_error(status, "Cannot read memory.")));
                 }
             }
             catch (...)
