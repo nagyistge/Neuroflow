@@ -7,7 +7,7 @@
 
 USING
 
-void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t offset) const
+void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const std::vector<mlp_forward_node>& nodes, idx_t bpttIterationsCount) const
 {
     for (auto& node : nodes)
     {
@@ -15,7 +15,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
 
         auto outputs = _fast_cast<cpp_device_array>(node.out());
         assert(outputs);
-        float* pOutputs = outputs->ptr() + offset * layerSize;
+        float* pOutputs = outputs->ptr() + bpttIterationsCount * layerSize;
         auto biases = _fast_cast<cpp_device_array>(node.bias.get());
         assert(biases);
         float* pBiases = biases->ptr();
@@ -39,7 +39,7 @@ void cpp_compute_activation_forward::compute(const nf_object_ptr& context, const
                 assert(weights);
                 assert(inputs);
                 idx_t inputsSize = inputs->size();
-                float* pInputs = inputs->ptr() + offset * inputsSize;
+                float* pInputs = inputs->ptr() + bpttIterationsCount * inputsSize;
                 float* pWeights = weights->ptr();
                 for (idx_t inputIdx = 0; inputIdx < inputsSize; inputIdx++)
                 {

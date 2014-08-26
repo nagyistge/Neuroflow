@@ -16,4 +16,4 @@ namespace nf
         
         idx_t size() const;
     };
-};
+}

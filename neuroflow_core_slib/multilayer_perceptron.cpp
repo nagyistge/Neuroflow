@@ -249,9 +249,9 @@ void multilayer_perceptron::create_compute()
 
     if (_doRTLR)
     {
-        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
+        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t bpttIterationsCount)
         {
-            _computeActivation->compute_forward(ctx, nodes, offset);
+            _computeActivation->compute_forward(ctx, nodes, bpttIterationsCount);
             _rtlr->compute_gradients(_netDesiredOutputs);
         },
         move(_computeActivation->create_operation_context()),
@@ -260,9 +260,9 @@ void multilayer_perceptron::create_compute()
     }
     else 
     {
-        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t offset)
+        _computeFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_forward_node>& nodes, idx_t bpttIterationsCount)
         {
-            _computeActivation->compute_forward(ctx, nodes, offset);
+            _computeActivation->compute_forward(ctx, nodes, bpttIterationsCount);
         },
         move(_computeActivation->create_operation_context()),
         move(nodes),
@@ -330,9 +330,9 @@ void multilayer_perceptron::create_training(std::map<idx_t, layer_info>& infos)
             if (learningInfo.is_offline) node.bias_gradient_sums = _biasGradientSums.get(lidx);
         }
 
-        _trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t inItIdx)
+        _trainFunc = std::bind([=](const nf_object_ptr& ctx, const vector<mlp_backward_node>& nodes, idx_t bpttIterationsCount, gradient_computation_formula gcf, idx_t inItIdx)
         {
-            _computeActivation->compute_backward(ctx, nodes, offset, gcf, inItIdx);
+            _computeActivation->compute_backward(ctx, nodes, bpttIterationsCount, gcf, inItIdx);
         },
         move(_computeActivation->create_operation_context()),
         move(nodes),
@@ -606,13 +606,13 @@ void multilayer_perceptron::compute(const data_array_collection_t& inputs, const
     for (idx_t i = 0; i < size; i++) compute_sample_entry(inputs[i], outputs[i], null);
 }
 
-void multilayer_perceptron::compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset)
+void multilayer_perceptron::compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t bpttIterationsCount)
 {
-    setup_net_values(inputs, outputs, desiredOutputs, offset);
-    _computeFunc(offset);
+    setup_net_values(inputs, outputs, desiredOutputs, bpttIterationsCount);
+    _computeFunc(bpttIterationsCount);
 }
 
-void multilayer_perceptron::setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset)
+void multilayer_perceptron::setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t bpttIterationsCount)
 {
     if (!_doBPTT)
     {
@@ -623,16 +623,16 @@ void multilayer_perceptron::setup_net_values(const data_array_ptr& inputs, const
     else
     {
         // If there is BPTT we should remember the values:
-        _daMan->copy(inputs, 0, _bpttNetInputs, offset * inputs->size(), inputs->size());
-        _daMan->copy(outputs, 0, _bpttNetOutputs, offset * outputs->size(), outputs->size());
+        _daMan->copy(inputs, 0, _bpttNetInputs, bpttIterationsCount * inputs->size(), inputs->size());
+        _daMan->copy(outputs, 0, _bpttNetOutputs, bpttIterationsCount * outputs->size(), outputs->size());
         if (desiredOutputs)
         {
-            _daMan->copy(desiredOutputs, 0, _bpttNetDesiredOutputs, offset, desiredOutputs->size());
+            _daMan->copy(desiredOutputs, 0, _bpttNetDesiredOutputs, bpttIterationsCount, desiredOutputs->size());
         }
         else
         {
             // A trick. Desired = actual, which means there is no errors:
-            _daMan->copy(outputs, 0, _bpttNetDesiredOutputs, offset, outputs->size());
+            _daMan->copy(outputs, 0, _bpttNetDesiredOutputs, bpttIterationsCount, outputs->size());
         }
     }
 }

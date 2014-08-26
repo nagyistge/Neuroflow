@@ -451,7 +451,7 @@ BOOST_AUTO_TEST_CASE(cpp_gd_rtlr_online_training)
 BOOST_AUTO_TEST_CASE(cpp_gd_rtlr_offline_training)
 {
     auto ctx = computation_context_factory().create_context(cpp_context);
-    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.1f, gradient_computation_method::rtlr);
+    do_gd_rec_training("CPP", ctx, 0.3f, false, 0.01f, gradient_computation_method::rtlr);
 }
 
 BOOST_AUTO_TEST_CASE(cpp_gd_bptt_online_training)
