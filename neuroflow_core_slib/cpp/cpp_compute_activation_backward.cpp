@@ -7,23 +7,23 @@
 
 USING
 
-void cpp_compute_activation_backward::compute(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) const
+void cpp_compute_activation_backward::compute(const nf_object_ptr& context, const std::vector<mlp_backward_node>& nodes, idx_t bpttIterationsCount, gradient_computation_formula gcf, idx_t internalIterationCount) const
 {
     for (auto& node : nodes)
     {
         if (node.is_last())
         {
-            compute_last(node, offset);
+            compute_last(node, bpttIterationsCount);
         }
         else if (node.lower_errors.size() != 0)
         {
-            compute_inner(node, offset);
+            compute_inner(node, bpttIterationsCount);
         }
-        compute_gradients(node, offset, gcf, internalIterationCount);
+        compute_gradients(node, bpttIterationsCount, gcf, internalIterationCount);
     }
 }
 
-void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t offset) const
+void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node, idx_t bpttIterationsCount) const
 {
     assert(node.net_outputs);
     auto outputs = _fast_cast<cpp_device_array>(node.net_outputs->outputs()());
@@ -56,7 +56,7 @@ void cpp_compute_activation_backward::compute_last(const mlp_backward_node& node
     }
 }
 
-void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& node, idx_t offset) const
+void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& node, idx_t bpttIterationsCount) const
 {
     assert(node.lower_errors.size() > 0);
     auto errors = _fast_cast<cpp_device_array>(node.errors.get());
@@ -103,23 +103,23 @@ void cpp_compute_activation_backward::compute_inner(const mlp_backward_node& nod
     }
 }
 
-void cpp_compute_activation_backward::compute_gradients(const mlp_backward_node& node, idx_t offset, gradient_computation_formula gcf, idx_t internalIterationCount) const
+void cpp_compute_activation_backward::compute_gradients(const mlp_backward_node& node, idx_t bpttIterationsCount, gradient_computation_formula gcf, idx_t internalIterationCount) const
 {
     switch (gcf)
     {
         case gradient_computation_formula::ff:
-            compute_gradients_ff(node, offset);
+            compute_gradients_ff(node, bpttIterationsCount);
             break;
         case gradient_computation_formula::bptt_phase1:
-            compute_gradients_bpttp1(node, offset);
+            compute_gradients_bpttp1(node, bpttIterationsCount);
             break;
         case gradient_computation_formula::bptt_phase2:
-            compute_gradients_bpttp2(node, offset, internalIterationCount);
+            compute_gradients_bpttp2(node, bpttIterationsCount, internalIterationCount);
             break;
     }
 }
 
-void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_node& node, idx_t offset) const
+void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_node& node, idx_t bpttIterationsCount) const
 {
     bool hasGradients = node.has_gradients();
     bool hasGradientSums = node.has_gradient_sums();
@@ -203,7 +203,7 @@ void cpp_compute_activation_backward::compute_gradients_ff(const mlp_backward_no
     }
 }
 
-void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backward_node& node, idx_t offset) const
+void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backward_node& node, idx_t bpttIterationsCount) const
 {
     auto errors = _fast_cast<cpp_device_array>(node.errors.get());
     assert(errors);
@@ -238,7 +238,7 @@ void cpp_compute_activation_backward::compute_gradients_bpttp1(const mlp_backwar
     }
 }
 
-void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backward_node& node, idx_t offset, idx_t internalIterationCount) const
+void cpp_compute_activation_backward::compute_gradients_bpttp2(const mlp_backward_node& node, idx_t bpttIterationsCount, idx_t internalIterationCount) const
 {
     bool hasGradients = node.has_gradients();
     bool hasGradientSums = node.has_gradient_sums();

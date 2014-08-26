@@ -109,8 +109,8 @@ namespace nf
         activation_description get_activation_desc(idx_t layerIndex);
         device_array* get_net_values(idx_t layerIndex) const;
         device_array* get_net_desired_outputs() const;
-        void compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset = 0);
-        void setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t offset);
+        void compute_sample_entry(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t bpttIterationsCount = 0);
+        void setup_net_values(const data_array_ptr& inputs, const data_array_ptr& outputs, const data_array_ptr& desiredOutputs, idx_t bpttIterationsCount);
         template<typename I>
         std::shared_ptr<I> create_learning_impl(const learning_behavior_ptr& behavior, const std::vector<idx_t>& forLayerIndexes, const values_for_training_t& values);
         void verify_training_enabled();
