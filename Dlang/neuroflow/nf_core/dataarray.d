@@ -1,10 +1,11 @@
 ﻿import devicearray;
+import aliases;
 
 interface DataArray : DeviceArray
 {
-	bool is_const() const;
+	bool isConst() const;
 
-	void read(size_t sourceBeginIndex, size_t count, float* targetPtr, size_t targetBeginIndex);
+	void read(in DoneFunc doneCallback, in size_t sourceBeginIndex, in size_t count, in float* targetPtr, in size_t targetBeginIndex);
 
-	void write(float* sourceArray, size_t sourceBeginIndex, size_t count, size_t targetBeginIndex);
+	void write(in DoneFunc doneCallback, in float* sourceArray, in size_t sourceBeginIndex, in size_t count, in size_t targetBeginIndex);
 }
