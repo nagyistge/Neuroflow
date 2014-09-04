@@ -43,6 +43,9 @@
     <DebugLevel>0</DebugLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="devicearray.d" />
+    <Compile Include="devicearray.d">
+      <LastGenOutput>obj/Debug/devicearray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="dataarray.d" />
   </ItemGroup>
 </Project>

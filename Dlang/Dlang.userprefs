@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/devicearray.d">
+  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/dataarray.d">
     <Files>
-      <File FileName="neuroflow/nf_core/devicearray.d" Line="22" Column="22" />
+      <File FileName="neuroflow/nf_core/devicearray.d" Line="8" Column="8" />
+      <File FileName="neuroflow/nf_core/dataarray.d" Line="2" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
