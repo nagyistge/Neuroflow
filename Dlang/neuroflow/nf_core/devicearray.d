@@ -1,10 +1,4 @@
-﻿module devicearray;
-
-class devicearray
+﻿interface DeviceArray
 {
-	this()
-	{
-		// Constructor code
-	}
+	size_t size() @property;
 }
-
