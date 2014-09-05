@@ -1,10 +1,13 @@
 import devicearraypool;
 import devicearray;
+import std.algorithm;
 
 class DeviceArrayGroup
 {
 	this(DeviceArrayPool pool)
 	{
+		assert(pool);
+
 		this._pool = pool;
 	}
 
@@ -14,9 +17,9 @@ class DeviceArrayGroup
 		return _arrays[idx] = _pool.createArray(size);
 	}
 
-	DeviceArray get(in size_t idx) const
+	DeviceArray get(in size_t idx) 
 	{
-		return arrays[idx];
+		return _arrays[idx];
 	}
 
 	bool tryGet(in size_t idx, out DeviceArray result)
@@ -34,20 +37,17 @@ class DeviceArrayGroup
 		if (_arrays.length > 0 && _pool.isAllocated()) _pool.zero();
 	}
 
-	size_t size() const @property
+	@property size_t size() 
 	{
-		/*
-		return from(_arrays) >> where([](const device_array_ptr& a) { return (bool)a; }) >> select([](const device_array_ptr& a) { return a->size(); }) >> sum();
-		*/
+		return _arrays.filter!(a => a).map!(a => a.size()).reduce!((a, b) => a + b);
 	}
 
-	DeviceArray[] arrays() const @property
+	@property auto arrays() 
 	{
-		/*
-		return from(_arrays) >> where([](const device_array_ptr& a) { return (bool)a; }) >> to_vector();
-		*/
+		return _arrays.filter!(a => a);
 	}
 
 	private DeviceArrayPool _pool;
+
 	private DeviceArray[] _arrays;
 }
