@@ -42,7 +42,7 @@
   <pic>0</pic>
   <cov>0</cov>
   <nofloat>0</nofloat>
-  <Dversion>2.043</Dversion>
+  <Dversion>2</Dversion>
   <ignoreUnsupportedPragmas>0</ignoreUnsupportedPragmas>
   <compiler>0</compiler>
   <otherDMD>0</otherDMD>
@@ -191,14 +191,15 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="nf_core">
-  <Folder name="ocl" />
   <Folder name="mt" />
+  <Folder name="ocl" />
   <Folder name="st" />
   <File path="aliases.d" />
   <File path="dataarray.d" />
   <File path="dataarrayfactory.d" />
   <File path="devicearray.d" />
   <File path="devicearray2.d" />
+  <File path="devicearray2group.d" />
   <File path="devicearraygroup.d" />
   <File path="devicearraymanagement.d" />
   <File path="devicearraypool.d" />
