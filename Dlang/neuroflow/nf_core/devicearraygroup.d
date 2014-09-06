@@ -11,18 +11,18 @@ class DeviceArrayGroup
 		this._pool = pool;
 	}
 
-	DeviceArray add(in size_t idx, in size_t size)
+	DeviceArray add(size_t idx, size_t size)
 	{
 		if (idx >= _arrays.length) _arrays.length = idx + 1;
 		return _arrays[idx] = _pool.createArray(size);
 	}
 
-	DeviceArray get(in size_t idx) 
+	DeviceArray get(size_t idx) 
 	{
 		return _arrays[idx];
 	}
 
-	bool tryGet(in size_t idx, out DeviceArray result)
+	bool tryGet(size_t idx, out DeviceArray result)
 	{
 		if (idx < _arrays.length && _arrays[idx])
 		{

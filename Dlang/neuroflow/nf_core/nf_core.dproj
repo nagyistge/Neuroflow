@@ -46,6 +46,59 @@
     <Compile Include="devicearray.d">
       <LastGenOutput>obj/Debug/devicearray.o</LastGenOutput>
     </Compile>
-    <Compile Include="dataarray.d" />
+    <Compile Include="dataarray.d">
+      <LastGenOutput>obj/Debug/dataarray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="aliases.d">
+      <LastGenOutput>obj/Debug/aliases.o</LastGenOutput>
+    </Compile>
+    <Compile Include="dataarrayfactory.d">
+      <LastGenOutput>obj/Debug/dataarrayfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearray2.d">
+      <LastGenOutput>obj/Debug/devicearray2.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearray2group.d">
+      <LastGenOutput>obj/Debug/devicearray2group.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraygroup.d">
+      <LastGenOutput>obj/Debug/devicearraygroup.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraymanagement.d">
+      <LastGenOutput>obj/Debug/devicearraymanagement.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraypool.d">
+      <LastGenOutput>obj/Debug/devicearraypool.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ccinitpars.d">
+      <LastGenOutput>obj/Debug/ccinitpars.o</LastGenOutput>
+    </Compile>
+    <Compile Include="randomgenerator.d">
+      <LastGenOutput>obj/Debug/randomgenerator.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computationcontext.d">
+      <LastGenOutput>obj/Debug/computationcontext.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computationcontextfactory.d">
+      <LastGenOutput>obj/Debug/computationcontextfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="deviceinfo.d">
+      <LastGenOutput>obj/Debug/deviceinfo.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ccfactoryadapter.d">
+      <LastGenOutput>obj/Debug/ccfactoryadapter.o</LastGenOutput>
+    </Compile>
+    <Compile Include="main.d" />
+    <Compile Include="nfdefs.d" />
+    <Compile Include="native\nccfactoryadapter.d" />
+    <Compile Include="native\ndevicearray.d" />
+    <Compile Include="native\ndevicearraypool.d" />
+    <Compile Include="native\ncomputationcontext.d" />
+    <Compile Include="native\ndataarray.d" />
+    <Compile Include="native\ndataarrayfactory.d" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ocl\" />
+    <Folder Include="native\" />
   </ItemGroup>
 </Project>

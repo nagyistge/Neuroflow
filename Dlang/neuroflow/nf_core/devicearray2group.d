@@ -12,7 +12,7 @@ class DeviceArray2Group
 		this._pool = pool;
 	}
 
-	DeviceArray2 add(in RowCol idx, in size_t rowSize, in size_t colSize)
+	DeviceArray2 add(in RowCol idx, size_t rowSize, size_t colSize)
 	{
 		auto a = _pool.createArray2(rowSize, colSize);
 		_arrays[idx] = a;

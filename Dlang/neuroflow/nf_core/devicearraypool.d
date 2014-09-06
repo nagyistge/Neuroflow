@@ -1,15 +1,23 @@
 import devicearray;
 import devicearray2; 
+import computationcontextfactory;
+import nfdefs;
 
 interface DeviceArrayPool
 {
-	bool isAllocated() const;
+	@property bool isAllocated() const;
 
-	DeviceArray createArray(in size_t size);
+	DeviceArray createArray(size_t size);
 
-	DeviceArray2 createArray2(in size_t rowSize, in size_t colSize);
+	DeviceArray2 createArray2(size_t rowSize, size_t colSize);
 
 	void allocate();
 
 	void zero();
+}
+
+unittest
+{
+    auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
+    assert(ctx);
 }

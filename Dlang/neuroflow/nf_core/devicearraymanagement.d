@@ -4,11 +4,11 @@ import devicearraypool;
 
 interface DeviceArrayManagement
 {
-	DeviceArray createArray(in bool copyOptimized, in size_t size);
+	DeviceArray createArray(bool copyOptimized, size_t size);
 
-	DeviceArray2 createArray2(in bool copyOptimized, in size_t rowSize, in size_t colSize);
+	DeviceArray2 createArray2(bool copyOptimized, size_t rowSize, size_t colSize);
 
-	void copy(DeviceArray from, in size_t fromIndex, DeviceArray to, in size_t toIndex, in size_t size);
+	void copy(DeviceArray from, size_t fromIndex, DeviceArray to, size_t toIndex, size_t size);
 
-	DeviceArrayPool createPool(in bool copyOptimized);
+	DeviceArrayPool createPool(bool copyOptimized);
 }
