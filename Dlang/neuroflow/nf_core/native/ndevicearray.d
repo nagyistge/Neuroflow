@@ -7,6 +7,7 @@ class NDeviceArray : DeviceArray
     {
         assert(internalArray);
         _internalArray = internalArray;
+        _arraySize = _internalArray.length;
     }
 
     this(size_t arraySize)

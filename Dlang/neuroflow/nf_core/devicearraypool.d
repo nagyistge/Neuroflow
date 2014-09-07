@@ -1,7 +1,5 @@
 import devicearray;
 import devicearray2; 
-import computationcontextfactory;
-import nfdefs;
 
 interface DeviceArrayPool
 {
@@ -14,10 +12,4 @@ interface DeviceArrayPool
 	void allocate();
 
 	void zero();
-}
-
-unittest
-{
-    auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
-    assert(ctx);
 }

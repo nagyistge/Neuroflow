@@ -3,6 +3,8 @@ import randomgenerator;
 import ccinitpars;
 import devicearraymanagement;
 import dataarrayfactory;
+import ndevicearraymanagement;
+import ndataarrayfactory;
 
 class NComputationContext : ComputationContext
 {
@@ -10,22 +12,28 @@ class NComputationContext : ComputationContext
     {
         auto pars = initPars !is null ? initPars : new CCInitPars();
         _randomGenerator = new RandomGenerator(pars.randomSeed);
+        _deviceArrayManagement = new NDeviceArrayManagement();
+        _dataArrayFactory = new NDataArrayFactory();
     }
 
     @property override RandomGenerator randomGenerator()
     {
-        assert(false, "TODO");
+        return randomGenerator;
     }
     
     @property override DeviceArrayManagement deviceArrayManagement()
     {
-        assert(false, "TODO");
+        return _deviceArrayManagement;
     }
     
     @property override DataArrayFactory dataArrayFactory()
     {
-        assert(false, "TODO");
+        return _dataArrayFactory;
     }
 
-    RandomGenerator _randomGenerator;
+    private RandomGenerator _randomGenerator;
+
+    private NDeviceArrayManagement _deviceArrayManagement;
+
+    private NDataArrayFactory _dataArrayFactory;
 }
