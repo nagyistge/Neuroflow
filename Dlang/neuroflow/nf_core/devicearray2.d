@@ -2,7 +2,7 @@ import devicearray;
 
 interface DeviceArray2 : DeviceArray
 {
-	size_t size1() @property;
+    @property size_t size1();
 
-	size_t size2() @property;
+    @property size_t size2();
 }

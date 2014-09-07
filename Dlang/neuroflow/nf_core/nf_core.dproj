@@ -96,6 +96,10 @@
     <Compile Include="native\ncomputationcontext.d" />
     <Compile Include="native\ndataarray.d" />
     <Compile Include="native\ndataarrayfactory.d" />
+    <Compile Include="native\ndevicearraymanagement.d" />
+    <Compile Include="native\ndevicearray2.d" />
+    <Compile Include="dataarray_ut.d" />
+    <Compile Include="computationcontext_ut.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
