@@ -5,6 +5,8 @@ import devicearraymanagement;
 import dataarrayfactory;
 import ndevicearraymanagement;
 import ndataarrayfactory;
+import nutils;
+import utils;
 
 class NComputationContext : ComputationContext
 {
@@ -14,6 +16,7 @@ class NComputationContext : ComputationContext
         _randomGenerator = new RandomGenerator(pars.randomSeed);
         _deviceArrayManagement = new NDeviceArrayManagement();
         _dataArrayFactory = new NDataArrayFactory();
+        _utils = new NUtils();
     }
 
     @property override RandomGenerator randomGenerator()
@@ -31,9 +34,16 @@ class NComputationContext : ComputationContext
         return _dataArrayFactory;
     }
 
+    @property override Utils utils()
+    {
+        return _utils;
+    }
+
     private RandomGenerator _randomGenerator;
 
     private NDeviceArrayManagement _deviceArrayManagement;
 
     private NDataArrayFactory _dataArrayFactory;
+
+    private NUtils _utils;
 }
