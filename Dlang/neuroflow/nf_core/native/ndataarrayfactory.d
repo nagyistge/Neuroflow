@@ -1,6 +1,7 @@
 ﻿import dataarrayfactory;
 import dataarray;
 import ndataarray;
+import std.algorithm;
 
 class NDataArrayFactory : DataArrayFactory
 {
@@ -8,7 +9,7 @@ class NDataArrayFactory : DataArrayFactory
     {
         float[] a;
         a.length = size;
-        for (size_t i = 0; i < size; i++) a[i] = fill;
+        .fill(a, fill);
 
         return new NDataArray(a, false);
     }

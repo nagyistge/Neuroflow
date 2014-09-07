@@ -1,5 +1,6 @@
 ﻿import devicearray;
 import ndevicearraypool;
+import std.algorithm;
 
 class NDeviceArray : DeviceArray
 {
@@ -13,6 +14,7 @@ class NDeviceArray : DeviceArray
     this(size_t arraySize)
     {
         _internalArray.length = (_arraySize = arraySize);
+        fill(_internalArray, 0.0f);
     }
 
     this(NDeviceArrayPool pool, size_t beginIndex, size_t arraySize)

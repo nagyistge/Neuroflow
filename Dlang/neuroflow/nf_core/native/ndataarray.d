@@ -17,7 +17,7 @@ class NDataArray : NDeviceArray, DataArray
         return _isConst;
     }
     
-    void read(in DoneFunc doneCallback, size_t sourceBeginIndex, size_t count, float* targetPtr, size_t targetBeginIndex)
+    void read(size_t sourceBeginIndex, size_t count, float* targetPtr, size_t targetBeginIndex)
     {
         assert(targetPtr);
         auto a = this.array;
@@ -26,7 +26,7 @@ class NDataArray : NDeviceArray, DataArray
         assert(targetPtr[targetBeginIndex + count - 1] == a[sourceBeginIndex + count - 1]);
     }
     
-    void write(in DoneFunc doneCallback, in float* sourcePtr, in size_t sourceBeginIndex, size_t count, size_t targetBeginIndex)
+    void write(in float* sourcePtr, in size_t sourceBeginIndex, size_t count, size_t targetBeginIndex)
     {
         assert(sourcePtr);
         auto a = this.array;
