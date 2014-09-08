@@ -7,21 +7,28 @@ import ndevicearraymanagement;
 import ndataarrayfactory;
 import nutils;
 import utils;
+import deviceinfo;
 
 class NComputationContext : ComputationContext
 {
-    this(in wstring deviceHint, in CCInitPars initPars)
+    this(immutable DeviceInfo info, in CCInitPars initPars)
     {
         auto pars = initPars !is null ? initPars : new CCInitPars();
+        _info = info;
         _randomGenerator = new RandomGenerator(pars.randomSeed);
         _deviceArrayManagement = new NDeviceArrayManagement();
         _dataArrayFactory = new NDataArrayFactory();
         _utils = new NUtils();
     }
 
+    @property override immutable(DeviceInfo) deviceInfo()
+    {
+        return _info;
+    }
+
     @property override RandomGenerator randomGenerator()
     {
-        return randomGenerator;
+        return _randomGenerator;
     }
     
     @property override DeviceArrayManagement deviceArrayManagement()
@@ -38,6 +45,8 @@ class NComputationContext : ComputationContext
     {
         return _utils;
     }
+
+    immutable DeviceInfo _info;
 
     private RandomGenerator _randomGenerator;
 

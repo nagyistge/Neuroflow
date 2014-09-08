@@ -19,5 +19,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = nf_core\nf_core.dproj
+		version = 0.1.*
 	EndGlobalSection
 EndGlobal
