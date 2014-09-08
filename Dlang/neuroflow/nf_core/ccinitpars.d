@@ -1,4 +1,3 @@
 ﻿class CCInitPars
 {
-	uint randomSeed;
 }
