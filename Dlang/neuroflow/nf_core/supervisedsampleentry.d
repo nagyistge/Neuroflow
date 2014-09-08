@@ -21,6 +21,23 @@ class SupervisedSampleEntry
         _actualOutput = actualOutput;
     }
 
+    ~this()
+    {
+        auto idoSame = _input is _desiredOutput;
+        destroy(_input);
+        _input = null;
+        if (_desiredOutput !is null) 
+        {
+            if (!idoSame) destroy(_desiredOutput);
+            _desiredOutput = null;
+        }
+        if (_actualOutput !is null) 
+        {
+            destroy(_actualOutput);
+            _actualOutput = null;
+        }
+    }
+
     @property DataArray input()
     {
         return _input;
@@ -36,5 +53,5 @@ class SupervisedSampleEntry
         return _actualOutput;
     }
 
-    private DataArray _input, _desiredOutput, _actualOutput;
+    private DataArray _input = null, _desiredOutput = null, _actualOutput = null;
 }

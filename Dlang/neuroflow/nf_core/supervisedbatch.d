@@ -29,29 +29,49 @@ class SupervisedBatch
         _samples ~= new SupervisedSample(new SupervisedSampleEntry(input, desiredOutput, actualOutput));
     }
 
+    ~this()
+    {
+        foreach(sample; _samples) destroy(sample);
+        _samples.length = 0;
+    }
+
     @property SupervisedSample[] samples()
     {
         return _samples;
     }
 
-    void add(SupervisedSample sample)
+    SupervisedSample add()
+    {
+        auto sample = new SupervisedSample();
+        _samples ~= sample;
+        return sample;
+    }
+
+    SupervisedSample add(SupervisedSample sample)
     {
         _samples ~= sample;
+        return sample;
     }
     
-    void add(SupervisedSampleEntry entry)
+    SupervisedSample add(SupervisedSampleEntry entry)
     {
-        _samples ~= new SupervisedSample(entry);
+        auto sample = new SupervisedSample(entry);
+        _samples ~= sample;
+        return sample;
     }
     
-    void add(DataArray input)
+    SupervisedSample add(DataArray input)
     {
-        _samples ~= new SupervisedSample(new SupervisedSampleEntry(input));
+        auto sample = new SupervisedSample(new SupervisedSampleEntry(input));
+        _samples ~= sample;
+        return sample;
     }
     
-    void add(DataArray input, DataArray desiredOutput, DataArray actualOutput)
+    SupervisedSample add(DataArray input, DataArray desiredOutput, DataArray actualOutput)
     {
-        _samples ~= new SupervisedSample(new SupervisedSampleEntry(input, desiredOutput, actualOutput));
+        auto sample = new SupervisedSample(new SupervisedSampleEntry(input, desiredOutput, actualOutput));
+        _samples ~= sample;
+        return sample;
     }
 
     private SupervisedSample[] _samples;

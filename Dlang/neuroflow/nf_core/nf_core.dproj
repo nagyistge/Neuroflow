@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E29219AC-4F64-48EA-97D6-DF2B67AF6CAE}</ProjectGuid>
-    <Compiler>GDC</Compiler>
+    <Compiler>DMD2</Compiler>
     <PreferOneStepBuild>true</PreferOneStepBuild>
     <UseDefaultCompiler>true</UseDefaultCompiler>
     <IncrementalLinking>true</IncrementalLinking>
@@ -40,7 +40,6 @@
     <OutputName>libnf_core</OutputName>
     <Target>Executable</Target>
     <DebugLevel>0</DebugLevel>
-    <ConsolePause>false</ConsolePause>
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
@@ -54,7 +53,6 @@
     <Compile Include="devicearraymanagement.d" />
     <Compile Include="devicearraypool.d" />
     <Compile Include="ccinitpars.d" />
-    <Compile Include="randomgenerator.d" />
     <Compile Include="computationcontext.d" />
     <Compile Include="computationcontextfactory.d" />
     <Compile Include="deviceinfo.d" />
@@ -76,6 +74,7 @@
     <Compile Include="native\nutils.d" />
     <Compile Include="supervisedsampleentry.d" />
     <Compile Include="supervisedsample.d" />
+    <Compile Include="utils_ut.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
