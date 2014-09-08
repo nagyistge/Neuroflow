@@ -127,7 +127,7 @@ unittest
     }
 
     // Native
-    auto ctx= ComputationContextFactory.instance.createContext(NativeContext);
+    auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
     try
     {
         testZero(ctx);

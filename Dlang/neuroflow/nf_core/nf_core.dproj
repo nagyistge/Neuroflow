@@ -75,6 +75,8 @@
     <Compile Include="supervisedsampleentry.d" />
     <Compile Include="supervisedsample.d" />
     <Compile Include="utils_ut.d" />
+    <Compile Include="native\nconv.d" />
+    <Compile Include="nfobject.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
