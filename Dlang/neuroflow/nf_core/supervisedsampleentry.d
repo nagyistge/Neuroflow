@@ -53,5 +53,10 @@ class SupervisedSampleEntry
         return _actualOutput;
     }
 
+    @property bool hasOutput()
+    {
+        return _actualOutput !is null;
+    }
+
     private DataArray _input = null, _desiredOutput = null, _actualOutput = null;
 }

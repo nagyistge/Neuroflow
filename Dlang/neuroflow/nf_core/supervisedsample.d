@@ -31,7 +31,7 @@ class SupervisedSample
 
     @property SupervisedSampleEntry[] entries()
     {
-        return entries;
+        return _entries;
     }
 
     SupervisedSampleEntry add(SupervisedSampleEntry entry)

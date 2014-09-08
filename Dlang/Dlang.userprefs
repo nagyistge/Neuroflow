@@ -1,10 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Unittest" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/supervisedsampleentry.d">
+  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/nfobject.d">
     <Files>
-      <File FileName="neuroflow/nf_core/supervisedsampleentry.d" Line="25" Column="25" />
-      <File FileName="../../../../../usr/include/d/4.8/object.di" Line="1" Column="1" />
-      <File FileName="../../../../../usr/include/dmd/druntime/import/object.di" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/nfobject.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/dataarray.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/devicearray.d" Line="33" Column="33" />
+      <File FileName="neuroflow/nf_core/native/ndevicearray.d" Line="28" Column="28" />
+      <File FileName="neuroflow/nf_core/native/nconv.d" Line="36" Column="36" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
