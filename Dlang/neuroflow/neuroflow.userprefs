@@ -1,0 +1,13 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Unittest" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="nf_core/dataarray_ut.d">
+    <Files>
+      <File FileName="nf_core/native/ndevicearraypool.d" Line="6" Column="6" />
+      <File FileName="nf_core/dataarray_ut.d" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

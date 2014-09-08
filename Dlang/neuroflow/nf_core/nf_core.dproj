@@ -4,11 +4,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E29219AC-4F64-48EA-97D6-DF2B67AF6CAE}</ProjectGuid>
-    <BaseDirectory>.</BaseDirectory>
     <Compiler>GDC</Compiler>
     <PreferOneStepBuild>true</PreferOneStepBuild>
     <UseDefaultCompiler>true</UseDefaultCompiler>
     <IncrementalLinking>true</IncrementalLinking>
+    <ReleaseVersion>0.1.*</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,55 +39,26 @@
     <UnittestMode>true</UnittestMode>
     <OutputName>libnf_core</OutputName>
     <Target>Executable</Target>
-    <Externalconsole>true</Externalconsole>
     <DebugLevel>0</DebugLevel>
+    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="devicearray.d">
-      <LastGenOutput>obj/Debug/devicearray.o</LastGenOutput>
-    </Compile>
-    <Compile Include="dataarray.d">
-      <LastGenOutput>obj/Debug/dataarray.o</LastGenOutput>
-    </Compile>
-    <Compile Include="aliases.d">
-      <LastGenOutput>obj/Debug/aliases.o</LastGenOutput>
-    </Compile>
-    <Compile Include="dataarrayfactory.d">
-      <LastGenOutput>obj/Debug/dataarrayfactory.o</LastGenOutput>
-    </Compile>
-    <Compile Include="devicearray2.d">
-      <LastGenOutput>obj/Debug/devicearray2.o</LastGenOutput>
-    </Compile>
-    <Compile Include="devicearray2group.d">
-      <LastGenOutput>obj/Debug/devicearray2group.o</LastGenOutput>
-    </Compile>
-    <Compile Include="devicearraygroup.d">
-      <LastGenOutput>obj/Debug/devicearraygroup.o</LastGenOutput>
-    </Compile>
-    <Compile Include="devicearraymanagement.d">
-      <LastGenOutput>obj/Debug/devicearraymanagement.o</LastGenOutput>
-    </Compile>
-    <Compile Include="devicearraypool.d">
-      <LastGenOutput>obj/Debug/devicearraypool.o</LastGenOutput>
-    </Compile>
-    <Compile Include="ccinitpars.d">
-      <LastGenOutput>obj/Debug/ccinitpars.o</LastGenOutput>
-    </Compile>
-    <Compile Include="randomgenerator.d">
-      <LastGenOutput>obj/Debug/randomgenerator.o</LastGenOutput>
-    </Compile>
-    <Compile Include="computationcontext.d">
-      <LastGenOutput>obj/Debug/computationcontext.o</LastGenOutput>
-    </Compile>
-    <Compile Include="computationcontextfactory.d">
-      <LastGenOutput>obj/Debug/computationcontextfactory.o</LastGenOutput>
-    </Compile>
-    <Compile Include="deviceinfo.d">
-      <LastGenOutput>obj/Debug/deviceinfo.o</LastGenOutput>
-    </Compile>
-    <Compile Include="ccfactoryadapter.d">
-      <LastGenOutput>obj/Debug/ccfactoryadapter.o</LastGenOutput>
-    </Compile>
+    <Compile Include="devicearray.d" />
+    <Compile Include="dataarray.d" />
+    <Compile Include="aliases.d" />
+    <Compile Include="dataarrayfactory.d" />
+    <Compile Include="devicearray2.d" />
+    <Compile Include="devicearray2group.d" />
+    <Compile Include="devicearraygroup.d" />
+    <Compile Include="devicearraymanagement.d" />
+    <Compile Include="devicearraypool.d" />
+    <Compile Include="ccinitpars.d" />
+    <Compile Include="randomgenerator.d" />
+    <Compile Include="computationcontext.d" />
+    <Compile Include="computationcontextfactory.d" />
+    <Compile Include="deviceinfo.d" />
+    <Compile Include="ccfactoryadapter.d" />
     <Compile Include="main.d" />
     <Compile Include="nfdefs.d" />
     <Compile Include="native\nccfactoryadapter.d" />
@@ -103,6 +74,8 @@
     <Compile Include="utils.d" />
     <Compile Include="supervisedbatch.d" />
     <Compile Include="native\nutils.d" />
+    <Compile Include="supervisedsampleentry.d" />
+    <Compile Include="supervisedsample.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
