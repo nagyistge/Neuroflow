@@ -4,7 +4,7 @@ import devicearray;
 import ndevicearray;
 import supervisedbatch;
 import dataarray;
-import nconv;
+import ncast;
 import std.random;
 import std.exception;
 

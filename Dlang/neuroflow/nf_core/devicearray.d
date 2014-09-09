@@ -1,6 +1,6 @@
-﻿import nfobject;
+﻿import fastcastable;
 
-interface DeviceArray : NFObject
+interface DeviceArray : FastCastable
 {
     @property size_t size();
 }

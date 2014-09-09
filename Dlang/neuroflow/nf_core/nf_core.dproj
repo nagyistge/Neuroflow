@@ -75,8 +75,15 @@
     <Compile Include="supervisedsampleentry.d" />
     <Compile Include="supervisedsample.d" />
     <Compile Include="utils_ut.d" />
-    <Compile Include="native\nconv.d" />
-    <Compile Include="nfobject.d" />
+    <Compile Include="nfcast.d" />
+    <Compile Include="native\ncast.d" />
+    <Compile Include="mlp.d" />
+    <Compile Include="fastcastable.d" />
+    <Compile Include="neuralnetworkfactory.d" />
+    <Compile Include="mlpinitpars.d" />
+    <Compile Include="layer.d" />
+    <Compile Include="layerbehavior.d" />
+    <Compile Include="layerdescription.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />

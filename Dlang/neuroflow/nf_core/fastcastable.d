@@ -1,4 +1,4 @@
-﻿interface NFObject
+﻿interface FastCastable
 {
     @property void* primaryPtr();
 
