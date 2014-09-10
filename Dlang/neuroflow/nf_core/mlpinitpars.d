@@ -1,12 +1,12 @@
 ﻿enum GradientComputationMethod
 {
-    None,
-    FeedForward,
-    BPTT,
-    RTLR
+    none,
+    feedForward,
+    bptt,
+    rtlr
 }
 
 class MLPInitPars
 {
-    GradientComputationMethod gradientComputationMethod = GradientComputationMethod.FeedForward;
+    GradientComputationMethod gradientComputationMethod = GradientComputationMethod.feedForward;
 }
