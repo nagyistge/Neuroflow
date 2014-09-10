@@ -84,6 +84,7 @@
     <Compile Include="layer.d" />
     <Compile Include="layerbehavior.d" />
     <Compile Include="layerdescription.d" />
+    <Compile Include="layerconnections.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
