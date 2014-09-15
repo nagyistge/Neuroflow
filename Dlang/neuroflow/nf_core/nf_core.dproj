@@ -85,6 +85,8 @@
     <Compile Include="layerbehavior.d" />
     <Compile Include="layerdescription.d" />
     <Compile Include="layerconnections.d" />
+    <Compile Include="learningbehavior.d" />
+    <Compile Include="supervisedlearningbehavior.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />
