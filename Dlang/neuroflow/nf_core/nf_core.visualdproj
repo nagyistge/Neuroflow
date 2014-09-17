@@ -3,8 +3,8 @@
  <Config name="Debug" platform="Win32">
   <obj>0</obj>
   <link>0</link>
-  <lib>1</lib>
-  <subsystem>0</subsystem>
+  <lib>0</lib>
+  <subsystem>1</subsystem>
   <multiobj>0</multiobj>
   <singleFileCompilation>0</singleFileCompilation>
   <oneobj>0</oneobj>
@@ -31,7 +31,7 @@
   <useArrayBounds>0</useArrayBounds>
   <noboundscheck>0</noboundscheck>
   <useSwitchError>0</useSwitchError>
-  <useUnitTests>0</useUnitTests>
+  <useUnitTests>1</useUnitTests>
   <useInline>0</useInline>
   <release>0</release>
   <preservePaths>0</preservePaths>
@@ -87,7 +87,7 @@
   <libpaths />
   <deffile />
   <resfile />
-  <exefile>$(OutDir)\$(ProjectName).lib</exefile>
+  <exefile>$(OutDir)\$(ProjectName).exe</exefile>
   <useStdLibPath>1</useStdLibPath>
   <cRuntime>2</cRuntime>
   <additionalOptions />
@@ -191,17 +191,51 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="nf_core">
-  <Folder name="mt" />
-  <Folder name="ocl" />
-  <Folder name="st" />
+  <Folder name="native">
+   <File path="native\ncast.d" />
+   <File path="native\nccfactoryadapter.d" />
+   <File path="native\ncomputationcontext.d" />
+   <File path="native\ndataarray.d" />
+   <File path="native\ndataarrayfactory.d" />
+   <File path="native\ndevicearray.d" />
+   <File path="native\ndevicearray2.d" />
+   <File path="native\ndevicearraymanagement.d" />
+   <File path="native\ndevicearraypool.d" />
+   <File path="native\nutils.d" />
+  </Folder>
   <File path="aliases.d" />
+  <File path="ccfactoryadapter.d" />
+  <File path="ccinitpars.d" />
+  <File path="computationcontext.d" />
+  <File path="computationcontextfactory.d" />
+  <File path="computationcontext_ut.d" />
   <File path="dataarray.d" />
   <File path="dataarrayfactory.d" />
+  <File path="dataarray_ut.d" />
   <File path="devicearray.d" />
   <File path="devicearray2.d" />
   <File path="devicearray2group.d" />
   <File path="devicearraygroup.d" />
   <File path="devicearraymanagement.d" />
   <File path="devicearraypool.d" />
+  <File path="deviceinfo.d" />
+  <File path="fastcastable.d" />
+  <File path="layer.d" />
+  <File path="layerbehavior.d" />
+  <File path="layerconnections.d" />
+  <File path="layerdescription.d" />
+  <File path="learningbehavior.d" />
+  <File path="main.d" />
+  <File path="mlp.d" />
+  <File path="mlpinitpars.d" />
+  <File path="neuralnetworkfactory.d" />
+  <File path="nfcast.d" />
+  <File path="nfdefs.d" />
+  <File path="supervisedbatch.d" />
+  <File path="supervisedlearningbehavior.d" />
+  <File path="supervisedsample.d" />
+  <File path="supervisedsampleentry.d" />
+  <File path="utils.d" />
+  <File path="utils_ut.d" />
  </Folder>
 </DProject>
