@@ -2,6 +2,8 @@
 import layerdescription;
 import layerconnections;
 import std.container;
+import std.algorithm;
+import std.range;
 
 class Layer
 {
@@ -52,6 +54,34 @@ class Layer
     {
         return _outputConnections;
     }
+
+	@property bool hasRecurrentConnections() const
+	{
+		return !takeOne(_inputConnections.connectedLayers(FlowDirection.oneWayToSource)).empty ||
+			!takeOne(_inputConnections.connectedLayers(FlowDirection.twoWay)).empty ||
+			!takeOne(_outputConnections.connectedLayers(FlowDirection.oneWayToSource)).empty ||
+			!takeOne(_outputConnections.connectedLayers(FlowDirection.twoWay)).empty;
+	}
+
+	auto inputLayers()
+	{
+		assert(false, "TODO");
+	}
+
+	auto outputLayers()
+	{
+		assert(false, "TODO");
+	}
+
+	Layer getInputLayer(size_t connectionIndex)
+	{
+		assert(false, "TODO");
+	}
+
+	Layer getOutputLayer(size_t connectionIndex)
+	{
+		assert(false, "TODO");
+	}
 
     private size_t _size;
 
