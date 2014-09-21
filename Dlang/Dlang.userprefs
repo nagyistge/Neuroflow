@@ -1,11 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Unittest" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/supervisedlearningbehavior.d">
+  <MonoDevelop.Ide.Workbench ActiveDocument="neuroflow/nf_core/layerordercomparer.d">
     <Files>
-      <File FileName="neuroflow/nf_core/layerbehavior.d" Line="10" Column="10" />
-      <File FileName="neuroflow/nf_core/learningbehavior.d" Line="10" Column="10" />
-      <File FileName="neuroflow/nf_core/supervisedlearningbehavior.d" Line="65" Column="65" />
-      <File FileName="neuroflow/nf_core/nfdefs.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/mlp_ut.d" Line="36" Column="36" />
+      <File FileName="neuroflow/nf_core/utils_ut.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/layer.d" Line="6" Column="6" />
+      <File FileName="neuroflow/nf_core/layerordercomparer.d" Line="48" Column="48" />
+      <File FileName="neuroflow/nf_core/layerdescription.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/layerbehavior.d" Line="1" Column="1" />
+      <File FileName="neuroflow/nf_core/supervisedlearningbehavior.d" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

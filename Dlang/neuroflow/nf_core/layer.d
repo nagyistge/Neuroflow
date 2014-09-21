@@ -1,9 +1,10 @@
 ﻿import layerbehavior;
 import layerdescription;
-import layerconnections;
+public import layerconnections;
 import std.container;
 import std.algorithm;
 import std.range;
+import std.exception;
 
 class Layer
 {
@@ -55,7 +56,7 @@ class Layer
         return _outputConnections;
     }
 
-	@property bool hasRecurrentConnections() const
+	bool hasRecurrentConnections() 
 	{
 		return !takeOne(_inputConnections.connectedLayers(FlowDirection.oneWayToSource)).empty ||
 			!takeOne(_inputConnections.connectedLayers(FlowDirection.twoWay)).empty ||
@@ -65,22 +66,32 @@ class Layer
 
 	auto inputLayers()
 	{
-		assert(false, "TODO");
+		return _inputConnections.connectedLayers(FlowDirection.oneWay)
+            .chain(_inputConnections.connectedLayers(FlowDirection.twoWay))
+            .chain(_outputConnections.connectedLayers(FlowDirection.twoWay))
+            .chain(_outputConnections.connectedLayers(FlowDirection.oneWayToSource));
 	}
 
 	auto outputLayers()
 	{
-		assert(false, "TODO");
+        return _outputConnections.connectedLayers(FlowDirection.oneWay)
+            .chain(_outputConnections.connectedLayers(FlowDirection.twoWay))
+            .chain(_inputConnections.connectedLayers(FlowDirection.twoWay))
+            .chain(_inputConnections.connectedLayers(FlowDirection.oneWayToSource));
 	}
 
 	Layer getInputLayer(size_t connectionIndex)
 	{
-		assert(false, "TODO");
+        auto l = takeOne(zip(sequence!"n", inputLayers).filter!(i => i[0] == connectionIndex).map!(i => i[1]));
+        enforce(!l.empty, "Input layer not found, connection index value " ~ connectionIndex.stringof ~ " was out of range.");
+		return l.front;
 	}
 
 	Layer getOutputLayer(size_t connectionIndex)
 	{
-		assert(false, "TODO");
+        auto l = takeOne(zip(sequence!"n", outputLayers).filter!(i => i[0] == connectionIndex).map!(i => i[1]));
+        enforce(!l.empty, "Output layer not found, connection index value " ~ connectionIndex.stringof ~ " was out of range.");
+        return l.front;
 	}
 
     private size_t _size;
