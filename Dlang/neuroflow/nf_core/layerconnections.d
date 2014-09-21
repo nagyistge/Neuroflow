@@ -106,7 +106,7 @@ class LayerConnections
         _otherLayers.length = 0;
     }
 
-    auto connectedLayers(FlowDirection direction) const
+    auto connectedLayers(FlowDirection direction)
     {
         return _otherLayers.filter!(ol => ol.flowDirection == direction).map!(ol => ol.layer);
     }

@@ -87,6 +87,8 @@
     <Compile Include="layerconnections.d" />
     <Compile Include="learningbehavior.d" />
     <Compile Include="supervisedlearningbehavior.d" />
+    <Compile Include="mlp_ut.d" />
+    <Compile Include="layerordercomparer.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />

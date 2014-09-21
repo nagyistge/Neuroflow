@@ -7,7 +7,7 @@ using namespace nf;
 using namespace std;
 using namespace linq;
 
-BOOST_AUTO_TEST_SUITE(computation_context_tests)
+BOOST_AUTO_TEST_SUITE(multileyer_percpetron_tests)
 
 BOOST_AUTO_TEST_CASE(layer_order_comparer_test)
 {
