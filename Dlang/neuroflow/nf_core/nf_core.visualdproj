@@ -224,10 +224,12 @@
   <File path="layerbehavior.d" />
   <File path="layerconnections.d" />
   <File path="layerdescription.d" />
+  <File path="layerordercomparer.d" />
   <File path="learningbehavior.d" />
   <File path="main.d" />
   <File path="mlp.d" />
   <File path="mlpinitpars.d" />
+  <File path="mlp_ut.d" />
   <File path="neuralnetworkfactory.d" />
   <File path="nfcast.d" />
   <File path="nfdefs.d" />
