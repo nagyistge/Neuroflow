@@ -1,8 +1,16 @@
-import supervisedlearningbehavior;
+public import supervisedlearningbehavior;
 import std.conv;
 
 class GradientDescentLearning : SupervisedLearningBehavior
 {
+	this(float learningRate, float momentum, bool smoothing, SupervisedWeightUpdateMode weightUpdateMode)
+	{
+		_learningRate = learningRate;
+		_momentum = momentum;
+		_smoothing = smoothing;
+		_weightUpdateMode = weightUpdateMode;
+	}
+
 	@property float learningRate() const
 	{
 		return _learningRate;
@@ -33,7 +41,7 @@ class GradientDescentLearning : SupervisedLearningBehavior
 		return to!hash_t(_learningRate * _momentum * (_smoothing ? 100.0 : 1.0) * 100000.0);
 	}
 
-	override abstract bool arePropsEquals(Object o) const 
+	override bool arePropsEquals(Object o) const 
 	{
 		auto gdl = cast(GradientDescentLearning)o;
 		return 
