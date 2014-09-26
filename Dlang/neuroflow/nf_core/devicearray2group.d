@@ -3,7 +3,7 @@ import devicearray2;
 import std.algorithm;
 import aliases;
 
-class DeviceArray2Group
+struct DeviceArray2Group
 {
 	this(DeviceArrayPool pool)
 	{

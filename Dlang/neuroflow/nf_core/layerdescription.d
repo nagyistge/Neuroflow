@@ -1,4 +1,3 @@
-﻿
-class LayerDescription
+﻿interface LayerDescription
 {
 }

@@ -4,7 +4,7 @@ import mlp;
 import std.exception;
 import computationcontext;
 
-class NeuralNetworkFactory
+struct NeuralNetworkFactory
 {
     this(ComputationContext context)
     {

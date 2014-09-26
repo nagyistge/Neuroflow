@@ -15,7 +15,7 @@ enum SupervisedOptimizationType
 
 class SupervisedLearningBehavior : LearningBehavior
 {
-    abstract SupervisedOptimizationType optimizationType() const;
+    abstract @property SupervisedOptimizationType optimizationType() const;
 
-    abstract SupervisedWeightUpdateMode weightUpdateMode() const;
+    abstract @property SupervisedWeightUpdateMode weightUpdateMode() const;
 }

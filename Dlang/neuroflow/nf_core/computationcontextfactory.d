@@ -2,9 +2,8 @@
 import ccfactoryadapter;
 import std.exception;
 import std.string;
-import nfdefs;
 import nccfactoryadapter;
-import computationcontext;
+public import computationcontext;
 import ccinitpars;
 
 class ComputationContextFactory

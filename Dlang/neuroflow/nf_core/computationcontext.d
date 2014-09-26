@@ -3,14 +3,22 @@ import dataarrayfactory;
 import ccinitpars;
 import utils;
 import deviceinfo;
+import neuralnetworkfactory;
 
-class ComputationContext
+wstring NativeContext = "NativeContext";
+
+interface ComputationContext
 {
-    @property abstract immutable(DeviceInfo) deviceInfo();
+    @property immutable(DeviceInfo) deviceInfo();
 
-    @property abstract DeviceArrayManagement deviceArrayManagement();
+    @property DeviceArrayManagement deviceArrayManagement();
 
-    @property abstract DataArrayFactory dataArrayFactory();
+    @property DataArrayFactory dataArrayFactory();
 
-    @property abstract Utils utils();
+    @property Utils utils();
+
+	final @property NeuralNetworkFactory neuralNetworkFactory()
+	{
+		return NeuralNetworkFactory(this);
+	}
 }
