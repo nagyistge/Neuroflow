@@ -1,1 +1,0 @@
-﻿wstring NativeContext = "NativeContext";

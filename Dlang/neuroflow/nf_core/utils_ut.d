@@ -4,7 +4,6 @@ import std.conv;
 import supervisedbatch;
 import supervisedsample;
 import std.math;
-import nfdefs;
 import std.typecons;
 
 unittest

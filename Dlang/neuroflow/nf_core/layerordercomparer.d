@@ -3,7 +3,7 @@ import std.typecons;
 import std.range;
 import std.typecons;
 
-class LayerOrderComparer
+struct LayerOrderComparer
 {
     bool less(Layer layer1, Layer layer2)
 	{

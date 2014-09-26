@@ -2,7 +2,7 @@ import devicearraypool;
 import devicearray;
 import std.algorithm;
 
-class DeviceArrayGroup
+struct DeviceArrayGroup
 {
 	this(DeviceArrayPool pool)
 	{
