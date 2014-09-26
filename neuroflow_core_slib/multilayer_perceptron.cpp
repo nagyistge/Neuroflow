@@ -55,7 +55,7 @@ multilayer_perceptron::multilayer_perceptron(const computation_context_ptr& cont
 
     //Create ordered layers:
 
-    // Copy leayers
+    // Copy layers
     auto copyOfLayers = from(layers) >> to_vector();
     // Sort
     layer_order_comparer comparer;
