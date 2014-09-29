@@ -7,6 +7,10 @@ import ndataarrayfactory;
 import nutils;
 import utils;
 import deviceinfo;
+import ncomputeactivation;
+import computeactivation;
+import nlearningimplfactory;
+import learningimplfactory;
 
 class NComputationContext : ComputationContext
 {
@@ -18,31 +22,45 @@ class NComputationContext : ComputationContext
         _utils = new NUtils();
     }
 
-    @property override immutable(DeviceInfo) deviceInfo()
+    @property immutable(DeviceInfo) deviceInfo()
     {
         return _info;
     }
     
-    @property override DeviceArrayManagement deviceArrayManagement()
+    @property DeviceArrayManagement deviceArrayManagement()
     {
         return _deviceArrayManagement;
     }
     
-    @property override DataArrayFactory dataArrayFactory()
+    @property DataArrayFactory dataArrayFactory()
     {
         return _dataArrayFactory;
     }
 
-    @property override Utils utils()
+    @property Utils utils()
     {
         return _utils;
     }
 
+	@property ComputeActivation computeActivation()
+	{
+		return _computeActivation;
+	}
+
+	@property LearningImplFactory learningImplFactory()
+	{
+		return _learningImplFactory;
+	}
+
     immutable DeviceInfo _info;
 
-    private NDeviceArrayManagement _deviceArrayManagement;
+    private NDeviceArrayManagement _deviceArrayManagement = new NDeviceArrayManagement();
 
-    private NDataArrayFactory _dataArrayFactory;
+    private NDataArrayFactory _dataArrayFactory = new NDataArrayFactory();
 
-    private NUtils _utils;
+    private NUtils _utils = new NUtils();
+
+	private NComputeActivation _computeActivation = new NComputeActivation();
+
+	private NLearningImplFactory _learningImplFactory = new NLearningImplFactory();
 }

@@ -195,12 +195,14 @@
    <File path="native\ncast.d" />
    <File path="native\nccfactoryadapter.d" />
    <File path="native\ncomputationcontext.d" />
+   <File path="native\ncomputeactivation.d" />
    <File path="native\ndataarray.d" />
    <File path="native\ndataarrayfactory.d" />
    <File path="native\ndevicearray.d" />
    <File path="native\ndevicearray2.d" />
    <File path="native\ndevicearraymanagement.d" />
    <File path="native\ndevicearraypool.d" />
+   <File path="native\nlearningimplfactory.d" />
    <File path="native\nutils.d" />
   </Folder>
   <File path="activationdescription.d" />
@@ -210,6 +212,7 @@
   <File path="computationcontext.d" />
   <File path="computationcontextfactory.d" />
   <File path="computationcontext_ut.d" />
+  <File path="computeactivation.d" />
   <File path="dataarray.d" />
   <File path="dataarrayfactory.d" />
   <File path="dataarray_ut.d" />
@@ -228,9 +231,13 @@
   <File path="layerdescription.d" />
   <File path="layerordercomparer.d" />
   <File path="learningbehavior.d" />
+  <File path="learningimpl.d" />
+  <File path="learningimplfactory.d" />
   <File path="learninginitbehavior.d" />
   <File path="main.d" />
   <File path="mlp.d" />
+  <File path="mlpbackwardnode.d" />
+  <File path="mlpforwardnode.d" />
   <File path="mlpinitpars.d" />
   <File path="mlp_ut.d" />
   <File path="neuralnetworkfactory.d" />
@@ -238,8 +245,10 @@
   <File path="randomizeweightsuniform.d" />
   <File path="supervisedbatch.d" />
   <File path="supervisedlearningbehavior.d" />
+  <File path="supervisedoutputs.d" />
   <File path="supervisedsample.d" />
   <File path="supervisedsampleentry.d" />
+  <File path="trainingnode.d" />
   <File path="utils.d" />
   <File path="utils_ut.d" />
  </Folder>

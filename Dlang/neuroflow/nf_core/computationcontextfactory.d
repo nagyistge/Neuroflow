@@ -4,7 +4,7 @@ import std.exception;
 import std.string;
 import nccfactoryadapter;
 public import computationcontext;
-import ccinitpars;
+public import ccinitpars;
 
 class ComputationContextFactory
 {

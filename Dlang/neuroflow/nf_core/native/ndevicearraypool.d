@@ -38,7 +38,7 @@ class NDeviceArrayPool : DeviceArrayPool
     {
         auto arr = array;
         assert(beginIndex < arr.length);
-        assert(length - beginIndex < arr.length);
+        assert(length + beginIndex <= arr.length);
         return arr[beginIndex .. beginIndex + length];
     }
 

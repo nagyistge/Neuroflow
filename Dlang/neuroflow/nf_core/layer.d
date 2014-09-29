@@ -41,7 +41,7 @@ class Layer
         return _behaviors;
     }
 
-    @property ref Array!LayerDescription desciptions()
+    @property ref Array!LayerDescription descriptions()
     {
         return _descriptions;
     }
