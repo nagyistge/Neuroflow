@@ -1,7 +1,7 @@
 import devicearraypool;
 import devicearray2;
 import std.algorithm;
-import aliases;
+public import aliases;
 
 struct DeviceArray2Group
 {
@@ -38,7 +38,7 @@ struct DeviceArray2Group
 
 	@property size_t size()
 	{
-		return _arrays.byValue.filter!(a => a).map!(a => a.size()).reduce!((a, b) => a + b);
+		return _arrays.byValue.filter!(a => a).map!(a => a.size()).sum;
 	}
 
 	@property auto arrays()

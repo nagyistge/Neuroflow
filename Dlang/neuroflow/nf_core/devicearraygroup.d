@@ -39,7 +39,7 @@ struct DeviceArrayGroup
 
 	@property size_t size() 
 	{
-		return _arrays.filter!(a => a).map!(a => a.size()).reduce!((a, b) => a + b);
+		return _arrays.filter!(a => a).map!(a => a.size()).sum;
 	}
 
 	@property auto arrays() 

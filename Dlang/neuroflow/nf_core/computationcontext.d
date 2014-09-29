@@ -4,6 +4,8 @@ import ccinitpars;
 import utils;
 import deviceinfo;
 import neuralnetworkfactory;
+import computeactivation;
+import learningimplfactory;
 
 wstring NativeContext = "NativeContext";
 
@@ -16,6 +18,10 @@ interface ComputationContext
     @property DataArrayFactory dataArrayFactory();
 
     @property Utils utils();
+
+	@property ComputeActivation computeActivation();
+
+	@property LearningImplFactory learningImplFactory();
 
 	final @property NeuralNetworkFactory neuralNetworkFactory()
 	{

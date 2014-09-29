@@ -1,0 +1,4 @@
+interface LearningImpl
+{
+	void initialize();
+}

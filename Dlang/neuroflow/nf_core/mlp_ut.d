@@ -1,6 +1,7 @@
 ﻿import layer;
 import std.range;
 import std.algorithm;
+import std.conv;
 import layerordercomparer;
 import std.array;
 import computationcontext;
@@ -8,6 +9,7 @@ import activationdescription;
 import gradientdescentlearning;
 import randomizeweightsuniform;
 import mlpinitpars;
+import computationcontextfactory;
 
 unittest
 {
@@ -81,7 +83,7 @@ auto createMlp(ComputationContext ctx)
 	auto mlp = ctx.neuralNetworkFactory.createMLP(layers);
 
 	size_t numWeights = mlp.numberOfWeights();
-	assert(((2 * 4 + 4) + (4 * 1 + 1)) == numWeights);
+	assert(((2 * 4 + 4) + (4 * 1 + 1)) == numWeights, "Number of weights is " ~ to!string(numWeights) ~ " which is wrong value.");
 	
 	return mlp;
 }
@@ -172,4 +174,13 @@ void doGetAndSetWeights(ComputationContext ctx)
     {
         assert(0.11f == v);
     }
+}
+
+unittest
+{
+	// Test get and set weights
+
+	// Native:
+	auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
+	doGetAndSetWeights(ctx);
 }
