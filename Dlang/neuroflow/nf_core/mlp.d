@@ -234,6 +234,37 @@ class MLP
 		}
 	}
 
+    void compute(DataArray inputs, DataArray outputs)
+    {
+        enforce(inputs, "Argument 'inputs' is null.");
+        enforce(outputs, "Argument 'outputs' is null.");
+        
+        computeSampleEntry(inputs, outputs, null);
+    }
+
+    void compute(DataArray[] inputs, DataArray[] outputs)
+    {
+        enforce(inputs && inputs.length, "Argument 'inputs' is empty.");
+        enforce(outputs && outputs.length, "Argument 'outputs' is empty.");
+        enforce(inputs.length == outputs.length, "Argument collections sizes are not match.");
+        
+        size_t size = inputs.length;
+        for (size_t i = 0; i < size; i++) computeSampleEntry(inputs[i], outputs[i], null);
+    }
+    
+    private void computeSampleEntry(DataArray inputs, DataArray outputs, DataArray desiredOutputs)
+    {
+        setupNetValues(inputs, outputs, desiredOutputs);
+        _computeFunc();
+    }
+    
+    private void setupNetValues(DataArray inputs, DataArray outputs, DataArray desiredOutputs)
+    {
+        _netInputs = inputs;
+        _netOutputs = outputs;
+        _netDesiredOutputs = desiredOutputs;
+    }
+
 	private void createStructure(in LayerInfo[size_t] infos)
 	{
 		for (size_t lidx = 1; lidx < _layers.length; lidx++)
