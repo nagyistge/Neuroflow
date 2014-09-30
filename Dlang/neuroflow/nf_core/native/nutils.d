@@ -4,15 +4,15 @@ import devicearray;
 import ndevicearray;
 import supervisedbatch;
 import dataarray;
-import ncast;
 import std.random;
 import std.exception;
+import tonative;
 
 class NUtils : Utils
 {
     void randomizeUniform(DeviceArray deviceArray, float min, float max)
     {
-        auto nArray = toNative(deviceArray);
+		auto nArray = toNativeDeviceArray(deviceArray);
         foreach (ref v; nArray.array)
         {
             v = uniform(min, max);
@@ -21,7 +21,7 @@ class NUtils : Utils
     
     void calculateMSE(SupervisedBatch batch, DataArray dataArray, size_t valueIndex)
     {
-        auto nArray = toNative(dataArray);
+        auto nArray = toNativeDeviceArray(dataArray);
         assert(nArray);
         enforce(valueIndex >= 0 && valueIndex < dataArray.size, "Value index is invalid.");
 
@@ -37,8 +37,8 @@ class NUtils : Utils
             {
                 if (entry.hasOutput)
                 {
-                    auto actualOutput = toNative(entry.actualOutput);
-                    auto desiredOutput = toNative(entry.desiredOutput);
+                    auto actualOutput = toNativeDeviceArray(entry.actualOutput);
+                    auto desiredOutput = toNativeDeviceArray(entry.desiredOutput);
                     assert(actualOutput);
                     assert(desiredOutput);
 

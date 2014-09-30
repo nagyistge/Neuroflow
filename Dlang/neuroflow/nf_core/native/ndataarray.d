@@ -12,6 +12,11 @@ class NDataArray : NDeviceArray, DataArray
         _isConst = isConst;
     }
 
+	@property void* dataArrayPtr()
+	{
+		return cast(void*)this;
+	}
+
     @property bool isConst() const
     {
         return _isConst;
