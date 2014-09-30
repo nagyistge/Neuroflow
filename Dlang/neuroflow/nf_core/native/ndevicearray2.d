@@ -20,6 +20,11 @@ class NDeviceArray2 : NDeviceArray, DeviceArray2
         _size2 = size2;
     }
 
+	@property void* deviceArray2Ptr()
+	{
+		return cast(void*)this;
+	}
+
     @property size_t size1()
     {
         return _size1;

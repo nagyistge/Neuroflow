@@ -192,7 +192,6 @@
  </Config>
  <Folder name="nf_core">
   <Folder name="native">
-   <File path="native\ncast.d" />
    <File path="native\nccfactoryadapter.d" />
    <File path="native\ncomputationcontext.d" />
    <File path="native\ncomputeactivation.d" />
@@ -204,6 +203,7 @@
    <File path="native\ndevicearraypool.d" />
    <File path="native\nlearningimplfactory.d" />
    <File path="native\nutils.d" />
+   <File path="native\tonative.d" />
   </Folder>
   <File path="activationdescription.d" />
   <File path="aliases.d" />
@@ -223,7 +223,6 @@
   <File path="devicearraymanagement.d" />
   <File path="devicearraypool.d" />
   <File path="deviceinfo.d" />
-  <File path="fastcastable.d" />
   <File path="gradientdescentlearning.d" />
   <File path="layer.d" />
   <File path="layerbehavior.d" />
@@ -242,7 +241,6 @@
   <File path="mlpinitpars.d" />
   <File path="mlp_ut.d" />
   <File path="neuralnetworkfactory.d" />
-  <File path="nfcast.d" />
   <File path="randomizeweightsuniform.d" />
   <File path="supervisedbatch.d" />
   <File path="supervisedlearningbehavior.d" />

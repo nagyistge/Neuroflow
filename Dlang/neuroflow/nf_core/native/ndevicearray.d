@@ -25,6 +25,11 @@ class NDeviceArray : DeviceArray
         _arraySize = arraySize;
     }
 
+	@property void* deviceArrayPtr()
+	{
+		return cast(void*)this;
+	}
+
     @property size_t size()
     {
         return _arraySize;

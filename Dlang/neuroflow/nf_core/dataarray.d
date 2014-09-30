@@ -3,6 +3,8 @@ import aliases;
 
 interface DataArray : DeviceArray
 {
+	@property void* dataArrayPtr();
+
 	@property bool isConst() const;
 
 	void read(size_t sourceBeginIndex, size_t count, float* targetPtr, size_t targetBeginIndex);

@@ -24,6 +24,7 @@ import activationdescription;
 import supervisedoutputs;
 import aliases;
 import layerbehaviorutils;
+import trainingnode;
 
 class MLP
 {
@@ -396,7 +397,50 @@ class MLP
 
 	private void createImpls()
 	{
+		auto nodes = appender!(TrainingNode[])();
+		for (size_t lidx = 1; lidx < _layers.length; lidx++)
+		{
+			auto layer = _layers[lidx][1];
+			auto weights = appender!(DeviceArray[])();
+			auto gradients = appender!(DeviceArray[])();
+			auto gradientSums = appender!(DeviceArray[])();
 
+			weights.put(_biases.get(lidx));
+			DeviceArray arr;
+			if (_biasGradients.tryGet(lidx, arr))
+			{
+				gradients.put(arr);
+			}
+			if (_biasGradientSums.tryGet(lidx, arr))
+			{
+				gradientSums.put(arr);
+			}
+
+			foreach (inputConnectedLayer; layer.inputLayers())
+			{
+				size_t inputIndex = getLayerIndex(inputConnectedLayer);
+				auto key = RowCol(inputIndex, lidx);
+				weights.put(_weights.get(key));
+				DeviceArray2 arr2;
+				if (_gradients.tryGet(key, arr2)) 
+				{
+					gradients.put(arr2);
+				}
+				if (_gradientSums.tryGet(key, arr2))
+				{
+					gradientSums.put(arr2);
+				}
+			}
+
+			auto aWeights = weights.data;
+			auto aGradients = gradients.data;
+			auto aGradientSums = gradientSums.data;
+
+			if (aGradients.length) assert(aGradients.length == aWeights.length);
+			if (aGradientSums.length) assert(aGradientSums.length == aWeights.length);
+
+			nodes.put(TrainingNode(aWeights, aGradients, aGradientSums));
+		}
 	}
 
 	private size_t getLayerIndex(in Layer layer)
