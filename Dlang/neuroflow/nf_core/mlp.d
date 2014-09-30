@@ -459,14 +459,14 @@ class MLP
 		auto offlineImpls = appender!(SupervisedLearning[])();
 		auto aValues = values.data;
 
-		foreach (il; collectLearningBehaviors!LearningInitBehavior(_layers))
+		foreach (behavior, indexes; collectLearningBehaviors!LearningInitBehavior(_layers))
 		{
-			initImpls.put(createLearningImpl!LearningImpl(il[0], il[2], aValues));
+			initImpls.put(createLearningImpl!LearningImpl(behavior, indexes, aValues));
 		}
 
-		foreach (sl; collectLearningBehaviors!SupervisedLearningBehavior(_layers))
+        foreach (behavior, indexes; collectLearningBehaviors!SupervisedLearningBehavior(_layers))
 		{
-			auto impl = createLearningImpl!SupervisedLearning(sl[0], sl[1], aValues);
+            auto impl = createLearningImpl!SupervisedLearning(behavior, indexes, aValues);
 			if ((impl.iterationType & SupervisedLearningIterationType.online) != 0)
 			{
 				onlineImpls.put(impl);

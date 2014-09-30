@@ -58,7 +58,6 @@
     <Compile Include="deviceinfo.d" />
     <Compile Include="ccfactoryadapter.d" />
     <Compile Include="main.d" />
-    <Compile Include="nfdefs.d" />
     <Compile Include="native\nccfactoryadapter.d" />
     <Compile Include="native\ndevicearray.d" />
     <Compile Include="native\ndevicearraypool.d" />
@@ -75,10 +74,7 @@
     <Compile Include="supervisedsampleentry.d" />
     <Compile Include="supervisedsample.d" />
     <Compile Include="utils_ut.d" />
-    <Compile Include="nfcast.d" />
-    <Compile Include="native\ncast.d" />
     <Compile Include="mlp.d" />
-    <Compile Include="fastcastable.d" />
     <Compile Include="neuralnetworkfactory.d" />
     <Compile Include="mlpinitpars.d" />
     <Compile Include="layer.d" />
@@ -89,6 +85,22 @@
     <Compile Include="supervisedlearningbehavior.d" />
     <Compile Include="mlp_ut.d" />
     <Compile Include="layerordercomparer.d" />
+    <Compile Include="activationdescription.d" />
+    <Compile Include="gradientdescentlearning.d" />
+    <Compile Include="learninginitbehavior.d" />
+    <Compile Include="randomizeweightsuniform.d" />
+    <Compile Include="native\ncomputeactivation.d" />
+    <Compile Include="native\nlearningimplfactory.d" />
+    <Compile Include="native\tonative.d" />
+    <Compile Include="computeactivation.d" />
+    <Compile Include="layerbehaviorutils.d" />
+    <Compile Include="learningimpl.d" />
+    <Compile Include="learningimplfactory.d" />
+    <Compile Include="mlpbackwardnode.d" />
+    <Compile Include="mlpforwardnode.d" />
+    <Compile Include="supervisedlearning.d" />
+    <Compile Include="supervisedoutputs.d" />
+    <Compile Include="trainingnode.d" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ocl\" />

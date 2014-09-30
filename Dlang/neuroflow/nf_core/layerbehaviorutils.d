@@ -7,6 +7,7 @@ import layerbehavior;
 import learningbehavior;
 import std.container;
 import std.typecons;
+import std.conv;
 
 size_t[][T] collectLearningBehaviors(T)(IndexedLayer[] layers)
 if (is (T : LearningBehavior))
@@ -47,27 +48,27 @@ unittest //collectLearningBehaviors
 
 	auto layers = 
 	[ 
-		tuple(size_t(0), new Layer(1, b1)), 
-		tuple(size_t(1), new Layer(1, b2)), 
-		tuple(size_t(2), new Layer(1, b3)),
-		tuple(size_t(3), new Layer(1, b4)), 
-		tuple(size_t(4), new Layer(1, b1)), 
-		tuple(size_t(5), new Layer(1, b2)), 
-		tuple(size_t(6), new Layer(1, b3)), 
-		tuple(size_t(7), new Layer(1, b4)), 
-		tuple(size_t(8), new Layer(1, b4alt))
+		tuple(to!size_t(0), new Layer(1, b1)), 
+        tuple(to!size_t(1), new Layer(1, b2)), 
+        tuple(to!size_t(2), new Layer(1, b3)),
+        tuple(to!size_t(3), new Layer(1, b4)), 
+        tuple(to!size_t(4), new Layer(1, b1)), 
+        tuple(to!size_t(5), new Layer(1, b2)), 
+        tuple(to!size_t(6), new Layer(1, b3)), 
+        tuple(to!size_t(7), new Layer(1, b4)), 
+        tuple(to!size_t(8), new Layer(1, b4alt))
 	];
 	layers = chain(layers, layers, layers).array;
 
 	auto collectedRWU = collectLearningBehaviors!RandomizeWeightsUniform(layers);
 
 	assert(collectedRWU.length == 2);
-	assert(collectedRWU[b1] == [ size_t(0), size_t(4) ]);
-	assert(collectedRWU[b2] == [ size_t(1), size_t(5) ]);
+    assert(collectedRWU[b1] == [ to!size_t(0), to!size_t(4) ]);
+    assert(collectedRWU[b2] == [ to!size_t(1), to!size_t(5) ]);
 
 	auto collectedGDL = collectLearningBehaviors!GradientDescentLearning(layers);
 
 	assert(collectedGDL.length == 2);
-	assert(collectedGDL[b3] == [ size_t(2), size_t(6) ]);
-	assert(collectedGDL[b4] == [ size_t(3), size_t(7), size_t(8) ]);
+    assert(collectedGDL[b3] == [ to!size_t(2), to!size_t(6) ]);
+    assert(collectedGDL[b4] == [ to!size_t(3), to!size_t(7), to!size_t(8) ]);
 }
