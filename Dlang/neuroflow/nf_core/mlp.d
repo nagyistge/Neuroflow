@@ -25,6 +25,9 @@ import supervisedoutputs;
 import aliases;
 import layerbehaviorutils;
 import trainingnode;
+import supervisedlearning;
+import learninginitbehavior;
+import learningbehavior;
 
 class MLP
 {
@@ -36,6 +39,8 @@ class MLP
 
 		SupervisedOptimizationType optimizationType;
 	}
+
+	alias ValuesForTraining = Tuple!(DeviceArray[], DeviceArray[], DeviceArray[]);
 
     this(ComputationContext ctx, Layer[] layers, MLPInitPars initPars = null)
 	in
@@ -121,6 +126,12 @@ class MLP
 	private void delegate() _computeFunc;
 
 	private void delegate(GradientComputationPhase, size_t) _trainFunc;
+
+	private void delegate() _initLearningFunc;
+
+	private void delegate(DeviceArray) _onlineLearningFunc;
+
+	private void delegate(size_t, DeviceArray) _offlineLearningFunc;
 
 	private DeviceArrayManagement _daMan;
 
@@ -397,7 +408,7 @@ class MLP
 
 	private void createImpls()
 	{
-		auto nodes = appender!(TrainingNode[])();
+		auto values = appender!(ValuesForTraining[])();
 		for (size_t lidx = 1; lidx < _layers.length; lidx++)
 		{
 			auto layer = _layers[lidx][1];
@@ -439,8 +450,75 @@ class MLP
 			if (aGradients.length) assert(aGradients.length == aWeights.length);
 			if (aGradientSums.length) assert(aGradientSums.length == aWeights.length);
 
-			nodes.put(TrainingNode(aWeights, aGradients, aGradientSums));
+			values.put(tuple(aWeights, aGradients, aGradientSums));
 		}
+
+		auto initImpls = appender!(LearningImpl[])();
+		auto supervisedImpls = appender!(SupervisedLearning[])();
+		auto onlineImpls = appender!(SupervisedLearning[])();
+		auto offlineImpls = appender!(SupervisedLearning[])();
+		auto aValues = values.data;
+
+		foreach (il; collectLearningBehaviors!LearningInitBehavior(_layers))
+		{
+			initImpls.put(createLearningImpl!LearningImpl(il[0], il[2], aValues));
+		}
+
+		foreach (sl; collectLearningBehaviors!SupervisedLearningBehavior(_layers))
+		{
+			auto impl = createLearningImpl!SupervisedLearning(sl[0], sl[1], aValues);
+			if ((impl.iterationType & SupervisedLearningIterationType.online) != 0)
+			{
+				onlineImpls.put(impl);
+			}
+			if ((impl.iterationType & SupervisedLearningIterationType.offline) != 0)
+			{
+				offlineImpls.put(impl);
+			}
+			supervisedImpls.put(impl);
+		}
+
+		auto aInitImpls = initImpls.data;
+		auto aSupervisedImpls = supervisedImpls.data;
+		auto aOnlineImpls = onlineImpls.data;
+		auto aOfflineImpls = offlineImpls.data;
+
+		_initLearningFunc = 
+		{
+			foreach (impl; aInitImpls) impl.initialize();
+			foreach (impl; aSupervisedImpls) impl.initialize();
+		};
+
+		_onlineLearningFunc = (error)
+		{ 
+			foreach (impl; aOnlineImpls) impl.run(0, error);
+		};
+
+		_offlineLearningFunc = (iterationCount, error)
+		{
+			foreach (impl; aOfflineImpls) impl.run(iterationCount, error);
+		};
+	}
+
+	private LI createLearningImpl(LI)(LearningBehavior behavior, in size_t[] forLayerIndexes, ValuesForTraining[] values)
+	{
+		auto layerNodes = appender!(TrainingNode[])();
+		foreach (layerIndex; forLayerIndexes)
+		{
+			auto currentValues = values[layerIndex - 1];
+			for (size_t arrayIndex = 0; arrayIndex < currentValues[0].length; arrayIndex++)
+			{
+				DeviceArray weights, gradients, gradientSums;
+
+				weights = currentValues[0][arrayIndex];
+				if (currentValues[1].length) gradients = currentValues[1][arrayIndex];
+				if (currentValues[2].length) gradientSums = currentValues[2][arrayIndex];
+				layerNodes.put(TrainingNode(weights, gradients, gradientSums));
+			}
+		}
+		auto impl = cast(LI)(_learningImplFactory.createImpl(behavior, layerNodes.data));
+		enforce(impl, "Cannot create Learning Algorithm implementation for behavior: '" ~ behavior.stringof ~ "'.");
+		return impl;
 	}
 
 	private size_t getLayerIndex(in Layer layer)
