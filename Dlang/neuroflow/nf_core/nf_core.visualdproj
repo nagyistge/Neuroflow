@@ -192,6 +192,7 @@
  </Config>
  <Folder name="nf_core">
   <Folder name="native">
+   <File path="native\ncaforward.d" />
    <File path="native\nccfactoryadapter.d" />
    <File path="native\ncomputationcontext.d" />
    <File path="native\ncomputeactivation.d" />
@@ -201,6 +202,7 @@
    <File path="native\ndevicearray2.d" />
    <File path="native\ndevicearraymanagement.d" />
    <File path="native\ndevicearraypool.d" />
+   <File path="native\nhelpers.d" />
    <File path="native\nlearningimplfactory.d" />
    <File path="native\nutils.d" />
    <File path="native\tonative.d" />
@@ -241,6 +243,7 @@
   <File path="mlpinitpars.d" />
   <File path="mlp_ut.d" />
   <File path="neuralnetworkfactory.d" />
+  <File path="nfhelpers.d" />
   <File path="randomizeweightsuniform.d" />
   <File path="supervisedbatch.d" />
   <File path="supervisedlearning.d" />

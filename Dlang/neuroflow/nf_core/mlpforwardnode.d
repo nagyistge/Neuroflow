@@ -22,7 +22,7 @@ struct MLPForwardNode
 
 	DeviceArray derivates;
 
-	@property size_t size()
+	@property size_t size() nothrow
 	{
 		return biases.size;
 	}

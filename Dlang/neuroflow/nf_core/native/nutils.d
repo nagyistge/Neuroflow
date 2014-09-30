@@ -12,8 +12,7 @@ class NUtils : Utils
 {
     void randomizeUniform(DeviceArray deviceArray, float min, float max)
     {
-		auto nArray = toNativeDeviceArray(deviceArray);
-        foreach (ref v; nArray.array)
+        foreach (ref v; toArray(deviceArray))
         {
             v = uniform(min, max);
         }
@@ -21,11 +20,9 @@ class NUtils : Utils
     
     void calculateMSE(SupervisedBatch batch, DataArray dataArray, size_t valueIndex)
     {
-        auto nArray = toNativeDeviceArray(dataArray);
-        assert(nArray);
+        auto arr = toArray(dataArray);
+        assert(arr);
         enforce(valueIndex >= 0 && valueIndex < dataArray.size, "Value index is invalid.");
-
-        auto arr = nArray.array;
         assert(arr && arr.length);
         arr[valueIndex] = 0.0f;
         float count = 0.0f;
@@ -37,21 +34,16 @@ class NUtils : Utils
             {
                 if (entry.hasOutput)
                 {
-                    auto actualOutput = toNativeDeviceArray(entry.actualOutput);
-                    auto desiredOutput = toNativeDeviceArray(entry.desiredOutput);
-                    assert(actualOutput);
-                    assert(desiredOutput);
-
                     float cMse = 0.0f;
                     
-                    size_t size = actualOutput.size;
-                    auto doArr = desiredOutput.array;
-                    auto aoArr = actualOutput.array;
+                    auto doArr = toArray(entry.desiredOutput);
+                    auto aoArr = toArray(entry.actualOutput);
                     assert(doArr && doArr.length);
                     assert(aoArr && aoArr.length);
                     assert(aoArr.length == doArr.length);
 
-                    for (size_t x = 0; x < size; x++)
+					size_t size = aoArr.length;
+					for (size_t x = 0; x < size; x++)
                     {
                         float error = (doArr[x] - aoArr[x]) * 0.5f;
                         cMse += error * error;

@@ -18,8 +18,10 @@ class NComputationContext : ComputationContext
     {
         _info = info;
         _deviceArrayManagement = new NDeviceArrayManagement();
-        _dataArrayFactory = new NDataArrayFactory();
-        _utils = new NUtils();
+		_dataArrayFactory = new NDataArrayFactory();
+		_utils = new NUtils();
+		_computeActivation = new NComputeActivation();
+		_learningImplFactory = new NLearningImplFactory();
     }
 
     @property immutable(DeviceInfo) deviceInfo()
@@ -54,13 +56,13 @@ class NComputationContext : ComputationContext
 
     immutable DeviceInfo _info;
 
-    private NDeviceArrayManagement _deviceArrayManagement = new NDeviceArrayManagement();
+    private NDeviceArrayManagement _deviceArrayManagement;
 
-    private NDataArrayFactory _dataArrayFactory = new NDataArrayFactory();
+    private NDataArrayFactory _dataArrayFactory;
 
-    private NUtils _utils = new NUtils();
+    private NUtils _utils;
 
-	private NComputeActivation _computeActivation = new NComputeActivation();
+	private NComputeActivation _computeActivation;
 
-	private NLearningImplFactory _learningImplFactory = new NLearningImplFactory();
+	private NLearningImplFactory _learningImplFactory;
 }
