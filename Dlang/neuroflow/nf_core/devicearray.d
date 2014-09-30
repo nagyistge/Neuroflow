@@ -1,6 +1,6 @@
 ﻿interface DeviceArray
 {
-    @property size_t size();
+    @property size_t size() nothrow;
 
-	@property void* deviceArrayPtr();
+	@property void* deviceArrayPtr() nothrow;
 }

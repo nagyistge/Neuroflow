@@ -184,3 +184,45 @@ unittest
 	auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
 	doGetAndSetWeights(ctx);
 }
+
+void doCompute(ComputationContext ctx)
+{
+    auto mlp = createMlp(ctx);
+    size_t numWeights = mlp.numberOfWeights;
+    auto weights = ctx.dataArrayFactory.create(numWeights);
+    auto weightValues = new float[numWeights];
+    for (size_t i = 0; i < numWeights; i++) weightValues[i] = 0.11f;
+    weights.write(&weightValues[0], 0, numWeights, 0);
+    mlp.setWeights(weights);
+
+    size_t inputsSize = mlp.inputSize;
+    auto inputs = ctx.dataArrayFactory.create(inputsSize);
+    auto inputValues = new float[inputsSize];
+    for (size_t i = 0; i < inputsSize; i++) inputValues[i] = 0.22f;
+    inputs.write(&inputValues[0], 0, inputsSize, 0);
+
+    size_t outputsSize = mlp.outputSize;
+    auto outputs = ctx.dataArrayFactory.create(outputsSize);
+    auto outputValues = new float[outputsSize];
+
+    outputs.read(0, outputsSize, &outputValues[0], 0);
+    for (size_t i = 0; i < outputsSize; i++)
+    {
+        assert(0.0f == outputValues[i]);
+    }
+
+    mlp.compute(inputs, outputs);
+
+    outputs.read(0, outputsSize, &outputValues[0], 0);
+    for (size_t i = 0; i < outputsSize; i++)
+    {
+        assert(outputValues[i] != 0.0f);
+    }
+}
+
+unittest // Test compute
+{
+	// Native:
+	auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
+	doCompute(ctx);
+}

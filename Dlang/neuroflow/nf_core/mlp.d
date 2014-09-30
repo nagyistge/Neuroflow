@@ -335,26 +335,31 @@ class MLP
 	{
 		MLPForwardNode[] nodes;
 		nodes.length = _layers.length - 1;
-		for (size_t lidx = 1; lidx < _layers.length; lidx++)
+		foreach (lidx; 1 .. _layers.length)
+		()
 		{
+			auto lidx = lidx;
 			auto layer = _layers[lidx][1];
 			auto node = &(nodes[lidx - 1]);
 			bool isLast = lidx == _layers.length - 1;
 
 			node.weightedInputs = 
 				layer.inputLayers.map!(
-					(inputConnectedLayer)
-					{
-						size_t inputIndex = getLayerIndex(inputConnectedLayer);
-						auto key = RowCol(inputIndex, lidx);
-						return WeightedInputs({ return getNetValues(inputIndex); }, _weights.get(key));
-					}).array;
+									   (inputConnectedLayer)
+									   {
+										   size_t inputIndex = getLayerIndex(inputConnectedLayer);
+										   auto key = RowCol(inputIndex, lidx);
+										   return WeightedInputs({ return getNetValues(inputIndex); }, _weights.get(key));
+									   }).array;
 
 			node.activation = getActivationDesc(lidx);
 			node.biases = _biases.get(lidx);
-			node.outputs = { return getNetValues(lidx); };
+			node.outputs = 
+			{ 
+				return getNetValues(lidx); 
+			};
 			if (_doRTLR) node.derivates = _netValueDerivates.get(lidx);
-		}
+		}();
 
 		auto cctx = _computeActivation.createOperationContext();
 
@@ -382,17 +387,21 @@ class MLP
 			MLPBackwardNode[] nodes;
 			nodes.length = _layers.length - 1;
 			for (size_t lidx = _layers.length - 1, nodeidx = 0; lidx >= 1; lidx--, nodeidx++)
+			()
 			{
+				auto lidx = lidx;
+				auto nodeidx = nodeidx;
+
 				auto layer = _layers[lidx][1];
 				auto node = &(nodes[nodeidx]);
 				auto learningInfo = &(infos[lidx]);
-				if (!learningInfo.isOffline && !learningInfo.isOnline) continue;
+				if (!learningInfo.isOffline && !learningInfo.isOnline) return;
 
 				foreach (inputConnectedLayer; layer.inputLayers)
 				{
 					size_t inputIndex = getLayerIndex(inputConnectedLayer);
 					auto key = RowCol(inputIndex, lidx);
-					node.inputs ~= { return getNetValues(inputIndex); };
+					node.inputs ~=  { return getNetValues(inputIndex); };
 					if (learningInfo.isOnline || _doBPTT) node.gradients ~= _gradients.get(key);
 					if (learningInfo.isOffline) node.gradientSums ~= _gradientSums.get(key);
 				}
@@ -417,7 +426,7 @@ class MLP
 				node.errors = _errors.get(lidx);            
 				if (learningInfo.isOnline || _doBPTT) node.biasGradients = _biasGradients.get(lidx);
 				if (learningInfo.isOffline) node.biasGradientSums = _biasGradientSums.get(lidx);
-			}
+			}();
 
 			auto cctx = _computeActivation.createOperationContext();
 			_trainFunc = (phase, inItIdx)
@@ -440,7 +449,7 @@ class MLP
 	private void createImpls()
 	{
 		auto values = appender!(ValuesForTraining[])();
-		for (size_t lidx = 1; lidx < _layers.length; lidx++)
+		foreach (lidx; 1 .. _layers.length)
 		{
 			auto layer = _layers[lidx][1];
 			auto weights = appender!(DeviceArray[])();
@@ -563,7 +572,7 @@ class MLP
 		{
 			return _netInputs;
 		}
-		else if (layerIndex == _layers.length)
+		else if (layerIndex == _layers.length - 1)
 		{
 			return _netOutputs;
 		}

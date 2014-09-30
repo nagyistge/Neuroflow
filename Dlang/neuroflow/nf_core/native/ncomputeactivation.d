@@ -1,4 +1,5 @@
 import computeactivation;
+import ncaforward;
 
 class NComputeActivation : ComputeActivation
 {
@@ -7,17 +8,17 @@ class NComputeActivation : ComputeActivation
 		return null;
 	}
 
-	void computeForward(Object context, in MLPForwardNode[] nodes) nothrow
+	void computeForward(Object context, ref MLPForwardNode[] nodes)
+	{
+		ncaForward(context, nodes);
+	}
+
+	void computeBackward(Object context, ref MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount)
 	{
 		assert(false, "TODO");
 	}
 
-	void computeBackward(Object context, in MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount) nothrow
-	{
-		assert(false, "TODO");
-	}
-
-	void computeGradientsRTLR() nothrow
+	void computeGradientsRTLR()
 	{
 		assert(false, "TODO");
 	}

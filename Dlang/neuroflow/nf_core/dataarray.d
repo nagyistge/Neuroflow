@@ -3,9 +3,9 @@ import aliases;
 
 interface DataArray : DeviceArray
 {
-	@property void* dataArrayPtr();
+	@property void* dataArrayPtr() nothrow;
 
-	@property bool isConst() const;
+	@property bool isConst() const nothrow;
 
 	void read(size_t sourceBeginIndex, size_t count, float* targetPtr, size_t targetBeginIndex);
 

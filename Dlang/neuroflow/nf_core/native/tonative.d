@@ -14,9 +14,21 @@ NDeviceArray toNativeDeviceArray(DeviceArray array, bool nullable = false)
 	return toNative!(NDeviceArray, "deviceArrayPtr")(array, nullable);
 }
 
+float[] toArray(DeviceArray array, bool nullable = false)
+{
+	auto a = toNativeDeviceArray(array, nullable);
+	return a is null ? null : a.array;
+}
+
 NDeviceArray toNativeDeviceArray(DeviceArray2 array, bool nullable = false)
 {
 	return toNative!(NDeviceArray, "deviceArrayPtr")(array, nullable);
+}
+
+float[] toArray(DeviceArray2 array, bool nullable = false)
+{
+	auto a = toNativeDeviceArray(array, nullable);
+	return a is null ? null : a.array;
 }
 
 NDeviceArray toNativeDeviceArray(DataArray array, bool nullable = false)
@@ -24,9 +36,15 @@ NDeviceArray toNativeDeviceArray(DataArray array, bool nullable = false)
 	return toNative!(NDeviceArray, "deviceArrayPtr")(array, nullable);
 }
 
+float[] toArray(DataArray array, bool nullable = false)
+{
+	auto a = toNativeDeviceArray(array, nullable);
+	return a is null ? null : a.array;
+}
+
 NDeviceArray toNative(T, string propName)(DeviceArray array, bool nullable)
 {
-	if (!nullable) enforce(array, eNull);
+	if (!nullable) enforce(array, eNull); else if (array is null) return null;
 	debug
 	{
 		auto a = cast(T)array;

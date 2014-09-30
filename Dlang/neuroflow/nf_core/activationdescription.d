@@ -14,12 +14,12 @@ class ActivationDescription : LayerDescription
 		_alpha = alpha;
 	}
 
-	@property ActivationFunction activationFunction() const
+	@property ActivationFunction activationFunction() const nothrow
 	{
 		return _activationFunction;
 	}
 
-	@property float alpha() const
+	@property float alpha() const nothrow
 	{
 		return _alpha;
 	}
