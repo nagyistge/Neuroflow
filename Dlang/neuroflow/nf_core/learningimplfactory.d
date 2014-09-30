@@ -1,4 +1,4 @@
-import learningimpl;
+public import learningimpl;
 import trainingnode;
 import learningbehavior;
 import std.conv;
