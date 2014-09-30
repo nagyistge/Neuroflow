@@ -91,7 +91,7 @@ auto createMlp(ComputationContext ctx)
 auto createFFMlpWithTraining(ComputationContext ctx, float rndStrength, bool online, float rate)
 {
 	auto wrnd = new RandomizeWeightsUniform(rndStrength);
-	auto algo = new GradientDescentLearning(rate, online ? 0.25f : 0.8f, false, online ? SupervisedWeightUpdateMode.online : SupervisedWeightUpdateMode.offline);
+	auto algo = new GradientDescentLearning(rate, online ? 0.25f : 0.8f, online ? SupervisedWeightUpdateMode.online : SupervisedWeightUpdateMode.offline);
 
 	auto layers =
 	[
@@ -116,7 +116,7 @@ auto createRecMlpWithTraining(ComputationContext ctx, float rndStrength, bool on
 	enum hidden2Size = 8;
 
 	auto wrnd = new RandomizeWeightsUniform(rndStrength);
-	auto algo = new GradientDescentLearning(rate, online ? 0.25f : 0.8f, false, online ? SupervisedWeightUpdateMode.online : SupervisedWeightUpdateMode.offline);
+	auto algo = new GradientDescentLearning(rate, online ? 0.25f : 0.8f, online ? SupervisedWeightUpdateMode.online : SupervisedWeightUpdateMode.offline);
 
 	auto layers =
 	[
