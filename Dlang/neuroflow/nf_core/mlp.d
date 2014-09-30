@@ -22,6 +22,8 @@ import layerbehavior;
 import std.conv;
 import activationdescription;
 import supervisedoutputs;
+import aliases;
+import layerbehaviorutils;
 
 class MLP
 {
@@ -113,7 +115,7 @@ class MLP
 
 	private ComputationContext _ctx;
 
-	private Tuple!(size_t, Layer)[] _layers;
+	private IndexedLayer[] _layers;
 
 	private void delegate() _computeFunc;
 
@@ -389,7 +391,12 @@ class MLP
 			assert(false, "TODO");
 		}
 
-		assert(false, "TODO: create_impls();");
+		createImpls();
+	}
+
+	private void createImpls()
+	{
+
 	}
 
 	private size_t getLayerIndex(in Layer layer)

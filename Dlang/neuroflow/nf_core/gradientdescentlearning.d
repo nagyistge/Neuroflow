@@ -3,7 +3,7 @@ import std.conv;
 
 class GradientDescentLearning : SupervisedLearningBehavior
 {
-	this(float learningRate, float momentum, bool smoothing, SupervisedWeightUpdateMode weightUpdateMode)
+	this(float learningRate = 0.01f, float momentum = 0.8f, SupervisedWeightUpdateMode weightUpdateMode = SupervisedWeightUpdateMode.online, bool smoothing = false)
 	{
 		_learningRate = learningRate;
 		_momentum = momentum;
@@ -48,6 +48,7 @@ class GradientDescentLearning : SupervisedLearningBehavior
 			gdl !is null && 
 			_learningRate == gdl._learningRate && 
 			_momentum == gdl._momentum && 
+			_weightUpdateMode == gdl._weightUpdateMode &&
 			_smoothing == gdl._smoothing;
 	}	
 
