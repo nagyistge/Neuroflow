@@ -10,6 +10,11 @@ import gradientdescentlearning;
 import randomizeweightsuniform;
 import mlpinitpars;
 import computationcontextfactory;
+import mlp;
+import supervisedbatch;
+import std.datetime;
+import std.stdio;
+import dataarray;
 
 unittest
 {
@@ -225,4 +230,111 @@ unittest // Test compute
 	// Native:
 	auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
 	doCompute(ctx);
+}
+
+float normalize(float value, float min, float max)
+{
+    return ((value - min) / (max - min)) * 2.0f - 1.0f;
+}
+
+DataArray toDataArray(ComputationContext ctx, float[] slice)
+{
+	return ctx.dataArrayFactory.createConst(&(slice[0]), 0, slice.length);
+}
+
+void runner(string name, ComputationContext ctx, MLP mlp, SupervisedBatch batch, int maxIterations)
+{
+    auto errors = ctx.dataArrayFactory.create(maxIterations);
+    auto mses = new float[maxIterations];
+
+    bool first = true;
+	StopWatch sw;
+	
+    for (size_t it = 0; it < maxIterations; it++)
+    {
+        mlp.training(batch);
+
+        if (first)
+        {
+            auto weights = ctx.dataArrayFactory.create(mlp.numberOfWeights);
+            mlp.getWeights(weights);
+            auto weightValues = new float[weights.size];
+            weights.read(0, weights.size, &weightValues[0], 0);
+            assert(weightValues.sum!() != 0.0f);
+            first = false;
+
+            sw.start();
+        }
+
+        ctx.utils.calculateMSE(batch, errors, it);
+    }
+
+    errors.read(0, maxIterations, &mses[0], 0);
+
+	sw.stop();
+
+	writefln("%s:\nEllapsed: %s nsecs", name, sw.peek.nsecs);
+
+    size_t bidx = maxIterations - 10;
+    if (bidx < 0) bidx = 0;
+    for (size_t i = bidx; i < mses.length; i++)
+    {
+        writefln("Iteration %s. Error: %s", i + 1, mses[i]);
+    }
+}
+
+void doGDFFTraining(string ctxName, ComputationContext ctx, float rndStrength, bool online, float rate)
+{
+    auto mlp = createFFMlpWithTraining(ctx, rndStrength, online, rate);
+
+    const float maxInput = 4.0f;
+    const float minInput = -4.0f;
+    const float maxOutput = 16.0f;
+    const float minOutput = 0.0f;
+    SupervisedBatch batch;
+    batch.add(
+				toDataArray(ctx, [ normalize(-4.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(16.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(-3.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(9.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(-2.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(4.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(-1.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(1.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(0.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(0.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(1.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(1.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(2.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(4.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(3.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(9.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+    batch.add(
+				toDataArray(ctx, [ normalize(4.0f, minInput, maxInput) ]),
+				toDataArray(ctx, [ normalize(16.0f, minOutput, maxOutput) ]),
+				ctx.dataArrayFactory.create(1));
+
+    runner((online ? "Online " : "Offline ") ~ ctxName ~ " Feed-Forward GD Training", ctx, mlp, batch, 1000);
+}
+
+unittest // Trainings
+{
+	// Native, GD, FF, Online
+	auto ctx = ComputationContextFactory.instance.createContext(NativeContext);
+    doGDFFTraining("CPP", ctx, 0.3f, true, 0.1f);
 }
