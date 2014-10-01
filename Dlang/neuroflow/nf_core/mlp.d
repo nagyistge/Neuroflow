@@ -28,6 +28,7 @@ import trainingnode;
 import supervisedlearning;
 import learninginitbehavior;
 import learningbehavior;
+import supervisedbatch;
 
 class MLP
 {
@@ -251,6 +252,11 @@ class MLP
         size_t size = inputs.length;
         for (size_t i = 0; i < size; i++) computeSampleEntry(inputs[i], outputs[i], null);
     }
+
+	void training(SupervisedBatch batch)
+	{
+		enforce(batch && batch.samples.length, "Argument 'batch' is null or empty.");
+	}
     
     private void computeSampleEntry(DataArray inputs, DataArray outputs, DataArray desiredOutputs)
     {
@@ -336,30 +342,32 @@ class MLP
 		MLPForwardNode[] nodes;
 		nodes.length = _layers.length - 1;
 		foreach (lidx; 1 .. _layers.length)
-		()
 		{
-			auto lidx = lidx;
-			auto layer = _layers[lidx][1];
-			auto node = &(nodes[lidx - 1]);
-			bool isLast = lidx == _layers.length - 1;
+			(lidx)
+			{
+				auto layer = _layers[lidx][1];
+				auto node = &(nodes[lidx - 1]);
+				bool isLast = lidx == _layers.length - 1;
 
-			node.weightedInputs = 
-				layer.inputLayers.map!(
-									   (inputConnectedLayer)
-									   {
-										   size_t inputIndex = getLayerIndex(inputConnectedLayer);
-										   auto key = RowCol(inputIndex, lidx);
-										   return WeightedInputs({ return getNetValues(inputIndex); }, _weights.get(key));
-									   }).array;
+				node.weightedInputs = 
+					layer.inputLayers.map!(
+										   (inputConnectedLayer)
+										   {
+											   size_t inputIndex = getLayerIndex(inputConnectedLayer);
+											   auto key = RowCol(inputIndex, lidx);
+											   return WeightedInputs({ return getNetValues(inputIndex); }, _weights.get(key));
+										   }).array;
 
-			node.activation = getActivationDesc(lidx);
-			node.biases = _biases.get(lidx);
-			node.outputs = 
-			{ 
-				return getNetValues(lidx); 
-			};
-			if (_doRTLR) node.derivates = _netValueDerivates.get(lidx);
-		}();
+				node.activation = getActivationDesc(lidx);
+				node.biases = _biases.get(lidx);
+				node.outputs = 
+				{ 
+					return getNetValues(lidx);
+				};
+
+				if (_doRTLR) node.derivates = _netValueDerivates.get(lidx);
+			}(lidx);
+		}
 
 		auto cctx = _computeActivation.createOperationContext();
 
@@ -387,46 +395,47 @@ class MLP
 			MLPBackwardNode[] nodes;
 			nodes.length = _layers.length - 1;
 			for (size_t lidx = _layers.length - 1, nodeidx = 0; lidx >= 1; lidx--, nodeidx++)
-			()
 			{
-				auto lidx = lidx;
-				auto nodeidx = nodeidx;
-
-				auto layer = _layers[lidx][1];
-				auto node = &(nodes[nodeidx]);
-				auto learningInfo = &(infos[lidx]);
-				if (!learningInfo.isOffline && !learningInfo.isOnline) return;
-
-				foreach (inputConnectedLayer; layer.inputLayers)
+				(lidx)
 				{
-					size_t inputIndex = getLayerIndex(inputConnectedLayer);
-					auto key = RowCol(inputIndex, lidx);
-					node.inputs ~=  { return getNetValues(inputIndex); };
-					if (learningInfo.isOnline || _doBPTT) node.gradients ~= _gradients.get(key);
-					if (learningInfo.isOffline) node.gradientSums ~= _gradientSums.get(key);
-				}
+					auto nodeidx = nodeidx;
 
-				if (nodeidx == 0)
-				{
-					// Last layer
-					node.netOutputs = SupervisedOutputs({ return getNetValues(lidx); }, { return _netDesiredOutputs; });
-				}
-				else
-				{
-					foreach (outputConnectedLayer; layer.outputLayers)
+					auto layer = _layers[lidx][1];
+					auto node = &(nodes[nodeidx]);
+					auto learningInfo = &(infos[lidx]);
+					if (!learningInfo.isOffline && !learningInfo.isOnline) return;
+
+					foreach (inputConnectedLayer; layer.inputLayers)
 					{
-						size_t outputIndex = getLayerIndex(outputConnectedLayer);
-						auto key = RowCol(lidx, outputIndex);
-						node.lowerErrors ~= WeightedErrors(_errors.get(outputIndex), _weights.get(key));
+						size_t inputIndex = getLayerIndex(inputConnectedLayer);
+						auto key = RowCol(inputIndex, lidx);
+						node.inputs ~=  { return getNetValues(inputIndex); };
+						if (learningInfo.isOnline || _doBPTT) node.gradients ~= _gradients.get(key);
+						if (learningInfo.isOffline) node.gradientSums ~= _gradientSums.get(key);
 					}
-					node.outputs = { return getNetValues(lidx); };
-				}
 
-				node.activation = getActivationDesc(lidx);
-				node.errors = _errors.get(lidx);            
-				if (learningInfo.isOnline || _doBPTT) node.biasGradients = _biasGradients.get(lidx);
-				if (learningInfo.isOffline) node.biasGradientSums = _biasGradientSums.get(lidx);
-			}();
+					if (nodeidx == 0)
+					{
+						// Last layer
+						node.netOutputs = SupervisedOutputs({ return getNetValues(lidx); }, { return _netDesiredOutputs; });
+					}
+					else
+					{
+						foreach (outputConnectedLayer; layer.outputLayers)
+						{
+							size_t outputIndex = getLayerIndex(outputConnectedLayer);
+							auto key = RowCol(lidx, outputIndex);
+							node.lowerErrors ~= WeightedErrors(_errors.get(outputIndex), _weights.get(key));
+						}
+						node.outputs = { return getNetValues(lidx); };
+					}
+
+					node.activation = getActivationDesc(lidx);
+					node.errors = _errors.get(lidx);            
+					if (learningInfo.isOnline || _doBPTT) node.biasGradients = _biasGradients.get(lidx);
+					if (learningInfo.isOffline) node.biasGradientSums = _biasGradientSums.get(lidx);
+				}(lidx);
+			}
 
 			auto cctx = _computeActivation.createOperationContext();
 			_trainFunc = (phase, inItIdx)
