@@ -36,8 +36,8 @@ class NUtils : Utils
                 {
                     float cMse = 0.0f;
                     
-                    auto doArr = toArray(entry.desiredOutput);
-                    auto aoArr = toArray(entry.actualOutput);
+                    auto doArr = toArray(entry.desiredOutputs);
+                    auto aoArr = toArray(entry.actualOutputs);
                     assert(doArr && doArr.length);
                     assert(aoArr && aoArr.length);
                     assert(aoArr.length == doArr.length);
