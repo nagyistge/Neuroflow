@@ -29,6 +29,8 @@ import supervisedlearning;
 import learninginitbehavior;
 import learningbehavior;
 import supervisedbatch;
+import supervisedsample;
+import rtlr;
 
 class MLP
 {
@@ -67,6 +69,8 @@ class MLP
 		_biasGradientSums = DeviceArrayGroup(_gradientSumsPool);
 		_gradients = DeviceArray2Group(_gradientsPool);
 		_gradientSums = DeviceArray2Group(_gradientSumsPool);
+
+		_rtlr = RTLR(this);
 
 		if (initPars !is null)
 		{
@@ -122,6 +126,8 @@ class MLP
 
 	private ComputationContext _ctx;
 
+	private RTLR _rtlr;
+
 	private IndexedLayer[] _layers;
 
 	private void delegate() _computeFunc;
@@ -143,7 +149,7 @@ class MLP
     private GradientComputationMethod _gradientComputationMethod = GradientComputationMethod.feedForward;
 
 	// Behavior flags
-	private bool _isTrainingEnabled, _isGradientsCalculated, _calculateGlobalOfflineError, _calculateGlobalOnlineError, _doBackpropagate, _isRecurrent, _doFFBP, _doBPTT, _doRTLR;
+	private bool _isTrainingInitialized, _isTrainingEnabled, _isGradientsCalculated, _calculateGlobalOfflineError, _calculateGlobalOnlineError, _doBackpropagate, _isRecurrent, _doFFBP, _doBPTT, _doRTLR;
 
 	private DeviceArray _netInputs;
 
@@ -253,9 +259,186 @@ class MLP
         for (size_t i = 0; i < size; i++) computeSampleEntry(inputs[i], outputs[i], null);
     }
 
+	void training(DataArray inputs, DataArray desiredOutputs, DataArray actualOutputs)
+	{
+		enforce(inputs, "Argument 'inputs' is null.");
+		enforce(desiredOutputs, "Argument 'desiredOutputs' is null.");
+        enforce(actualOutputs, "Argument 'actualOutputs' is null.");
+
+		training(new SupervisedBatch(inputs, desiredOutputs, actualOutputs));
+	}
+
 	void training(SupervisedBatch batch)
 	{
 		enforce(batch && batch.samples.length, "Argument 'batch' is null or empty.");
+		
+		ensureTrainingInitialized();
+		if (_doBackpropagate)
+		{
+			if (_doFFBP)
+			{
+				feedForwardTraining(batch);
+			}
+			else
+			{
+				bpptTraining(batch);
+			}
+		}
+		else if (_doRTLR)
+		{
+			rtlrTraining(batch);
+		}
+		else
+		{
+			globalOptimizationTraining(batch);
+		}
+	}
+
+	private void feedForwardTraining(SupervisedBatch batch)
+	{
+		assert(_isGradientsCalculated);
+
+		// Feed Forward:
+
+		// Start batch:
+		foreach (sample; batch.samples)
+		{
+			auto entry = sample.entries.front;
+
+			// Compute forward:
+			computeSampleEntry(entry.inputs, entry.actualOutputs, entry.desiredOutputs);
+
+			// Backpropagate:
+			_trainFunc(GradientComputationPhase.ff, 0);
+
+			// Do Gradient based online algo step
+			_onlineLearningFunc(_globalOnlineErrors);
+		}
+
+		// Do batch algos
+		_offlineLearningFunc(batch.samples.length, _globalOfflineErrors);
+		zeroGradientSums();
+		zeroGlobalOfflineErrors();
+	}
+
+	private void bpptTraining(SupervisedBatch batch)
+	{
+		assert(_doBPTT);
+		assert(_isGradientsCalculated);
+
+		assert(false, "TODO");
+	}
+
+	private void rtlrTraining(SupervisedBatch batch)
+	{
+		assert(_doRTLR);
+		assert(_isGradientsCalculated);
+
+		// Start batch:
+		size_t sampleIndex = 0;
+		foreach (sample; batch.samples)
+		{
+			enforce(sample.entries.length > 1, "Recurrent networks cannot be trained by using feed forward samples.");
+
+			// Compute forward + gradients:
+			DataArray actualOutputs = null;
+			size_t entryIndex = 0;
+			foreach (entry; sample.entries)
+			{
+				if (actualOutputs is null) actualOutputs = findActualOutput(sample, entryIndex);
+
+				// Compute forward:
+				computeSampleEntry(entry.inputs, actualOutputs, entry.desiredOutputs);
+
+				if (_netDesiredOutputs !is null)
+				{
+					// We have and error (gradients are calculated in the forward phase):
+
+					// Do Gradient based online algo step
+					_onlineLearningFunc(_globalOnlineErrors);
+				}
+
+				if (actualOutputs && actualOutputs == entry.actualOutputs)
+				{
+					// We should use an other output vector in the next iteration
+					actualOutputs = null;
+				}
+
+				entryIndex++;
+			}
+
+			if (sampleIndex == batch.samples.length - 1)
+			{
+				// This is the last sample:
+
+				// Do batch algos
+				_offlineLearningFunc(batch.samples.length, _globalOfflineErrors);
+				zeroGradientSums();
+				zeroGlobalOfflineErrors();
+			}
+
+			sampleIndex++;
+
+			// New sample = new memory:
+			zeroOutputs();
+			_rtlr.zero();
+		}
+	}
+
+	private void globalOptimizationTraining(SupervisedBatch batch)
+	{
+		assert(false, "TODO");
+	}
+
+	private DataArray findActualOutput(SupervisedSample sample, size_t entryIndex)
+	{
+		auto entries = sample.entries;
+		size_t size = entries.length;
+		for (size_t i = entryIndex; i < size; i++)
+		{
+			if (entries[i].actualOutputs) return entries[i].actualOutputs;
+		}
+		throw new Exception("Actual output data array is not found in sample.");
+	}
+
+	private void zeroGlobalOfflineErrors()
+	{
+		if (_globalOfflineErrors) _ctx.utils.zero(_globalOfflineErrors);
+	}
+
+	private void zeroErrors()
+	{
+		_errors.zero();
+	}
+
+	private void zeroOutputs()
+	{
+		_outputs.zero();
+	}
+
+	private void zeroGradients()
+	{
+		if (_gradientsPool && _gradientsPool.isAllocated) _gradientsPool.zero();
+	}
+
+	private void zeroGradientSums()
+	{
+		if (_gradientSumsPool && _gradientSumsPool.isAllocated) _gradientSumsPool.zero();
+	}
+
+	private void verifyTrainingEnabled()
+	{
+		enforce(_isTrainingEnabled, "This MLP cannot trained, there is no training behaviors specified.");
+	}
+
+	private void ensureTrainingInitialized()
+	{
+		if (!_isTrainingInitialized)
+		{
+			verifyTrainingEnabled();
+			_initLearningFunc();
+			_isTrainingInitialized = true;
+		}
 	}
     
     private void computeSampleEntry(DataArray inputs, DataArray outputs, DataArray desiredOutputs)
@@ -438,14 +621,14 @@ class MLP
 			}
 
 			auto cctx = _computeActivation.createOperationContext();
-			_trainFunc = (phase, inItIdx)
+			_trainFunc = (phase, inItCount)
 			{
-				_computeActivation.computeBackward(cctx, nodes, phase, inItIdx);
+				_computeActivation.computeBackward(cctx, nodes, phase, inItCount);
 			};
 		}
 		else if (_doRTLR)
 		{
-			assert(false, "TODO: _rtlr->initialize(this)");
+			_rtlr.initialize();
 		}
 		if (_calculateGlobalOnlineError || _calculateGlobalOfflineError)
 		{

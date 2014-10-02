@@ -3,60 +3,60 @@ import dataarray;
 
 class SupervisedSampleEntry
 {
-    this(DataArray input)
+    this(DataArray inputs)
     {
-        enforce(input !is null, "Input expected.");
+        enforce(inputs !is null, "Input expected.");
 
-        _input = input;
+        _inputs = inputs;
     }
 
-    this(DataArray input, DataArray desiredOutput, DataArray actualOutput)
+    this(DataArray inputs, DataArray desiredOutputs, DataArray actualOutputs)
     {
-        enforce(input, "Input expected.");
-        enforce(desiredOutput, "Desired output expected.");
-        enforce(actualOutput, "Actual output expected.");
+        enforce(inputs, "Inputs expected.");
+        enforce(desiredOutputs, "Desired outputs expected.");
+        enforce(actualOutputs, "Actual outputs expected.");
         
-        _input = input;
-        _desiredOutput = desiredOutput;
-        _actualOutput = actualOutput;
+        _inputs = inputs;
+        _desiredOutputs = desiredOutputs;
+        _actualOutputs = actualOutputs;
     }
 
     ~this()
     {
-        auto idoSame = _input is _desiredOutput;
-        destroy(_input);
-        _input = null;
-        if (_desiredOutput !is null) 
+        auto idoSame = _inputs is _desiredOutputs;
+        destroy(_inputs);
+        _inputs = null;
+        if (_desiredOutputs !is null) 
         {
-            if (!idoSame) destroy(_desiredOutput);
-            _desiredOutput = null;
+            if (!idoSame) destroy(_desiredOutputs);
+            _desiredOutputs = null;
         }
-        if (_actualOutput !is null) 
+        if (_actualOutputs !is null) 
         {
-            destroy(_actualOutput);
-            _actualOutput = null;
+            destroy(_actualOutputs);
+            _actualOutputs = null;
         }
     }
 
-    @property DataArray input()
+    @property DataArray inputs()
     {
-        return _input;
+        return _inputs;
     }
 
-    @property DataArray desiredOutput()
+    @property DataArray desiredOutputs()
     {
-        return _desiredOutput;
+        return _desiredOutputs;
     }
 
-    @property DataArray actualOutput()
+    @property DataArray actualOutputs()
     {
-        return _actualOutput;
+        return _actualOutputs;
     }
 
     @property bool hasOutput()
     {
-        return _actualOutput !is null;
+        return _actualOutputs !is null;
     }
 
-    private DataArray _input = null, _desiredOutput = null, _actualOutput = null;
+    private DataArray _inputs = null, _desiredOutputs = null, _actualOutputs = null;
 }
