@@ -1,4 +1,4 @@
-﻿import devicearray;
+﻿public import devicearray;
 import ndevicearraypool;
 import std.algorithm;
 

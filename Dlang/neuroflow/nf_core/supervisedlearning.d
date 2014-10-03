@@ -9,7 +9,7 @@ enum SupervisedLearningIterationType
 
 interface SupervisedLearning : LearningImpl
 {
-	@property SupervisedLearningIterationType iterationType() const;
+	@property SupervisedLearningIterationType iterationType();
 
-	void run(size_t iterationCount, DeviceArray error) nothrow;
+	void run(size_t iterationCount, DeviceArray error);
 }

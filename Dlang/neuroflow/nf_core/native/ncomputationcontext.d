@@ -21,7 +21,7 @@ class NComputationContext : ComputationContext
 		_dataArrayFactory = new NDataArrayFactory();
 		_utils = new NUtils();
 		_computeActivation = new NComputeActivation();
-		_learningImplFactory = new NLearningImplFactory();
+		_learningImplFactory = new NLearningImplFactory(this);
     }
 
     @property immutable(DeviceInfo) deviceInfo()

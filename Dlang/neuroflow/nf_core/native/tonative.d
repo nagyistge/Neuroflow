@@ -31,6 +31,11 @@ float[] toArray(DeviceArray2 array, bool nullable = false)
 	return a is null ? null : a.array;
 }
 
+NDeviceArray2 toNativeDeviceArray2(DeviceArray2 array, bool nullable = false)
+{
+	return toNative!(NDeviceArray2, "deviceArray2Ptr")(array, nullable);
+}
+
 NDeviceArray toNativeDeviceArray(DataArray array, bool nullable = false)
 {
 	return toNative!(NDeviceArray, "deviceArrayPtr")(array, nullable);
@@ -42,7 +47,7 @@ float[] toArray(DataArray array, bool nullable = false)
 	return a is null ? null : a.array;
 }
 
-NDeviceArray toNative(T, string propName)(DeviceArray array, bool nullable)
+T toNative(T, string propName)(DeviceArray array, bool nullable)
 {
 	if (!nullable) enforce(array, eNull); else if (array is null) return null;
 	debug

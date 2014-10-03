@@ -12,9 +12,9 @@ interface ComputeActivation
 {
 	Object createOperationContext() nothrow;
 
-	void computeForward(Object context, ref MLPForwardNode[] nodes);
+	void computeForward(Object context, MLPForwardNode[] nodes);
 
-	void computeBackward(Object context, ref MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount);
+	void computeBackward(Object context, MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount);
 
 	void computeGradientsRTLR();
 }
