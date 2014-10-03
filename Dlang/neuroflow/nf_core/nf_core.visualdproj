@@ -192,7 +192,9 @@
  </Config>
  <Folder name="nf_core">
   <Folder name="native">
+   <File path="native\ncabackward.d" />
    <File path="native\ncaforward.d" />
+   <File path="native\ncagradientsrtlr.d" />
    <File path="native\nccfactoryadapter.d" />
    <File path="native\ncomputationcontext.d" />
    <File path="native\ncomputeactivation.d" />
@@ -202,8 +204,10 @@
    <File path="native\ndevicearray2.d" />
    <File path="native\ndevicearraymanagement.d" />
    <File path="native\ndevicearraypool.d" />
+   <File path="native\ngradientdescentlearningimpl.d" />
    <File path="native\nhelpers.d" />
    <File path="native\nlearningimplfactory.d" />
+   <File path="native\nrandomizeweightsuniformimpl.d" />
    <File path="native\nutils.d" />
    <File path="native\tonative.d" />
   </Folder>

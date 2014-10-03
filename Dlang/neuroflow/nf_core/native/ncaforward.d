@@ -1,11 +1,11 @@
-import mlpforwardnode;
+import ncomputeactivation;
 import tonative;
 import activationdescription;
 import nhelpers;
 
-void ncaForward(Object context, ref MLPForwardNode[] nodes)
+void ncaForward(MLPForwardNode[] nodes)
 {
-	foreach (node; nodes)
+	foreach (ref node; nodes)
     {
         size_t layerSize = node.size;
 

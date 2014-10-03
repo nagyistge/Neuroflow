@@ -291,7 +291,7 @@ void doGDFFTraining(string ctxName, ComputationContext ctx, float rndStrength, b
     const float minInput = -4.0f;
     const float maxOutput = 16.0f;
     const float minOutput = 0.0f;
-    SupervisedBatch batch;
+    scope batch = new SupervisedBatch();
     batch.add(
 				toDataArray(ctx, [ normalize(-4.0f, minInput, maxInput) ]),
 				toDataArray(ctx, [ normalize(16.0f, minOutput, maxOutput) ]),

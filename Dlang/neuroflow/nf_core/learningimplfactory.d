@@ -3,8 +3,9 @@ import trainingnode;
 import learningbehavior;
 import std.conv;
 import std.exception;
+import std.traits;
 
-alias CreateLearningImpl = LearningImpl delegate(in LearningBehavior, in TrainingNode[]);
+alias CreateLearningImpl = LearningImpl delegate(LearningBehavior, TrainingNode[]);
 
 class LearningImplFactory
 {
@@ -13,14 +14,14 @@ class LearningImplFactory
 		_factories = to!(immutable(CreateLearningImpl[string]))(factories);
 	}
 
-	LearningImpl createImpl(in LearningBehavior learningBehavior, in TrainingNode[] nodes)
+	LearningImpl createImpl(LearningBehavior learningBehavior, TrainingNode[] nodes)
 	{
 		assert(nodes);
 		assert(nodes.length);
 
 		enforce(_factories && _factories.length, "Learning implemetation factories map is empty.");
 
-		auto typeName = learningBehavior.stringof;
+		auto typeName = learningBehavior.classinfo.name;
 		auto result = _factories.get(typeName, null);
 		if (result != null)
 		{

@@ -1,5 +1,7 @@
-import computeactivation;
+public import computeactivation;
 import ncaforward;
+import ncabackward;
+import ncagradientsrtlr;
 
 class NComputeActivation : ComputeActivation
 {
@@ -8,18 +10,18 @@ class NComputeActivation : ComputeActivation
 		return null;
 	}
 
-	void computeForward(Object context, ref MLPForwardNode[] nodes)
+	void computeForward(Object context, MLPForwardNode[] nodes)
 	{
-		ncaForward(context, nodes);
+		ncaForward(nodes);
 	}
 
-	void computeBackward(Object context, ref MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount)
+	void computeBackward(Object context, MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount)
 	{
-		assert(false, "TODO");
+		ncaBackward(nodes, phase, internalIterationCount);
 	}
 
 	void computeGradientsRTLR()
 	{
-		assert(false, "TODO");
+		ncaGradientsRTLR();
 	}
 }
