@@ -17,8 +17,9 @@ class LearningImplOf(C : ComputationContext, T : LearningBehavior) : LearningImp
 		assert(nodes && nodes.length);
 
 		_context = context;
-		assert((_behavior = cast(T)behavior) !is null);
-		_nodes = _nodes.dup;
+        _behavior = cast(T)behavior;
+		assert(_behavior !is null);
+		_nodes = nodes.dup;
 	}
 
 	@property static string behaviorName()
