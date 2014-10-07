@@ -17,6 +17,16 @@ class NDataArray : NDeviceArray, DataArray
 		return cast(void*)this;
 	}
 
+    override @property void* deviceArrayPtr()
+    {
+        return super.deviceArrayPtr();
+    }
+
+    override @property size_t size()
+    {
+        return super.size;
+    }
+
     @property bool isConst() const
     {
         return _isConst;

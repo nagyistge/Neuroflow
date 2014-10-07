@@ -5,21 +5,35 @@ import std.typecons;
 
 struct LayerOrderComparer
 {
+    struct TwoLayer
+    {
+        Layer layer1, layer2;
+
+        int opCmp(const ref TwoLayer o) const
+        {
+            int c;
+            c = layer1.opCmp(cast(Object)(o.layer1));
+            if (c != 0) return c;
+            c = layer2.opCmp(cast(Object)(o.layer2));
+            return c;
+        }
+    }
+
     bool less(Layer layer1, Layer layer2)
 	{
 		return compare(layer1, layer2) < 0;
 	}
 
-    private int[Tuple!(Layer, Layer)] _results;
+    private int[TwoLayer] _results;
 
 	private int compare(Layer layer1, Layer layer2)
 	{
-		auto key = tuple(layer1, layer2);
+		auto key = TwoLayer(layer1, layer2);
 
 		int result = _results.get(key, -1);
 		if (result != -1) return result;
 
-		auto rKey = tuple(layer2, layer1);
+		auto rKey = TwoLayer(layer2, layer1);
 
 		result = _results.get(rKey, -1);
 		if (result != -1) return -result;

@@ -5,96 +5,89 @@ import nhelpers;
 
 void ncaBackward(MLPBackwardNode[] nodes, in GradientComputationPhase phase, in size_t internalIterationCount)
 {
-	foreach (ref node; nodes)
-	{
-		if (node.isLast) computeLastErrors(&node); else computeInnerErrors(&node);
-		computeGradients(&node, phase, internalIterationCount);
-	}
+    foreach (ref node; nodes)
+    {
+        if (node.isLast) computeLastErrors(&node); else computeInnerErrors(&node);
+        computeGradients(&node, phase, internalIterationCount);
+    }
 }
 
 private void computeLastErrors(MLPBackwardNode* node)
 {
-	assert(!node.netOutputs.isNull);
-    auto outputs = toNativeDeviceArray(node.netOutputs.get.outputs());
+    assert(!node.netOutputs.isNull);
+    auto outputs = toArray(node.netOutputs.get.outputs());
+    auto desiredOutputs = toArray(node.netOutputs.get.desiredOutputs());
+    auto errors = toArray(node.errors);
     assert(outputs);
-    float[] outputsArr = outputs.array;
-    auto desiredOutputs = toNativeDeviceArray(node.netOutputs.get.desiredOutputs());
     assert(desiredOutputs);
-    float[] desiredOutputsArr = desiredOutputs.array;
-    auto errors = toNativeDeviceArray(node.errors);
     assert(errors);
-    float[] errorsArr = errors.array;
-    size_t size = errors.size;
-    assert(outputs.size == size);
-    assert(desiredOutputs.size == size);
+    size_t size = errors.length;
+    assert(outputs.length == size);
+    assert(desiredOutputs.length == size);
     float alpha = node.activation.alpha();
-
+    
     if (node.activation.activationFunction == ActivationFunction.sigmoid)
     {
         for (size_t i = 0; i < size; i++)
         {
-            errorsArr[i] = (desiredOutputsArr[i] - outputsArr[i]) * sigmoidDeriv(outputsArr[i], alpha);
+            errors[i] = (desiredOutputs[i] - outputs[i]) * sigmoidDeriv(outputs[i], alpha);
         }
     }
     else
     {
         for (size_t i = 0; i < size; i++)
         {
-            errorsArr[i] = (desiredOutputsArr[i] - outputsArr[i]) * alpha;
+            errors[i] = (desiredOutputs[i] - outputs[i]) * alpha;
         }
     }
 }
 
 private void computeInnerErrors(MLPBackwardNode* node)
 {
-	assert(node.lowerErrors.length > 0);
-    auto errors = toNativeDeviceArray(node.errors);
+    assert(node.lowerErrors.length > 0);
+    auto errors = toArray(node.errors);
     assert(errors);
-    float[] errorsArr = errors.array;
-    size_t size = errors.size;
+    size_t size = errors.length;
     float alpha = node.activation.alpha();
-
+    
     for (size_t valueIdx = 0; valueIdx < size; valueIdx++)
     {
         float sum = 0.0f;
         foreach (ref weightedError; node.lowerErrors)
         {
-            auto lowerErrors = toNativeDeviceArray(weightedError.errors);
+            auto lowerErrors = toArray(weightedError.errors);
             assert(lowerErrors);
-            float[] lowerErrorsArr = lowerErrors.array;
-            auto lowerWeights = toNativeDeviceArray2(weightedError.weights);
+            auto lowerWeights = toArray(weightedError.weights);
             assert(lowerWeights);
-            float[] lowerWeightsArr = lowerWeights.array;
-            size_t lowerErrorsSize = lowerErrors.size;
-
+            size_t lowerErrorsSize = lowerErrors.length;
+            
             for (size_t lowerErrorIdx = 0; lowerErrorIdx < lowerErrorsSize; lowerErrorIdx++)
             {
                 size_t lwidx = getIndex2(valueIdx, lowerErrorIdx, size);
-                assert(lwidx >= 0 && lwidx < lowerWeights.size);
-                sum += lowerErrorsArr[lowerErrorIdx] * lowerWeightsArr[lwidx];
+                assert(lwidx >= 0 && lwidx < lowerWeights.length);
+                sum += lowerErrors[lowerErrorIdx] * lowerWeights[lwidx];
             }
         }
-
+        
         if (node.activation.activationFunction == ActivationFunction.sigmoid)
         {
             assert(node.outputs);
-            auto outputs = toNativeDeviceArray(node.outputs());
+            auto outputs = toArray(node.outputs());
             assert(outputs);
-            assert(outputs.size == size);
-            float[] outputsArr = outputs.array;
-
-            errorsArr[valueIdx] = sum * sigmoidDeriv(outputsArr[valueIdx], alpha);
+            assert(outputs.length == size);
+            
+            errors[valueIdx] = sum * sigmoidDeriv(outputs[valueIdx], alpha);
         }
         else
         {
-            errorsArr[valueIdx] = sum * alpha;
+            errors[valueIdx] = sum * alpha;
         }
     }
 }
 
 private void computeGradients(MLPBackwardNode* node, in GradientComputationPhase phase, in size_t internalIterationCount)
 {
-	final switch (phase)
+    final switch (phase)
     {
         case GradientComputationPhase.ff:
             computeGradientsFF(node);
@@ -110,14 +103,14 @@ private void computeGradients(MLPBackwardNode* node, in GradientComputationPhase
 
 private void computeGradientsFF(MLPBackwardNode* node)
 {
-	bool hasGradients = node.hasGradients;
+    bool hasGradients = node.hasGradients;
     bool hasGradientSums = node.hasGradientSums;
     assert(hasGradients || hasGradientSums);
     auto errors = toNativeDeviceArray(node.errors);
     assert(errors);
     float[] errorsArr = errors.array;
     size_t size = errors.size;
-
+    
     float[] pBiasGradients = null;
     float[] pBiasGradientSums = null;
     if (hasGradients)
@@ -132,12 +125,12 @@ private void computeGradientsFF(MLPBackwardNode* node)
         assert(biasGradientSums);
         pBiasGradientSums = biasGradientSums.array;
     }
-
+    
     for (size_t valueIdx = 0; valueIdx < size; valueIdx++)
     {
         if (hasGradients) pBiasGradients[valueIdx] = errorsArr[valueIdx];
         if (hasGradientSums) pBiasGradientSums[valueIdx] += errorsArr[valueIdx];
-
+        
         size_t inputLayersCount = node.inputs.length;
         for (size_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
@@ -153,7 +146,7 @@ private void computeGradientsFF(MLPBackwardNode* node)
                 auto gradientSums = toNativeDeviceArray2(node.gradientSums[ilidx]);
                 assert(gradientSums);
                 float[] gradientSumsArr = gradientSums.array;
-
+                
                 for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);
@@ -166,7 +159,7 @@ private void computeGradientsFF(MLPBackwardNode* node)
                 auto gradients = toNativeDeviceArray2(node.gradients[ilidx]);
                 assert(gradients);
                 float[] gradientsArr = gradients.array;
-
+                
                 for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);
@@ -180,7 +173,7 @@ private void computeGradientsFF(MLPBackwardNode* node)
                 auto gradientSums = toNativeDeviceArray2(node.gradientSums[ilidx]);
                 assert(gradientSums);
                 float[] gradientSumsArr = gradientSums.array;
-
+                
                 for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);
@@ -194,19 +187,19 @@ private void computeGradientsFF(MLPBackwardNode* node)
 
 private void computeGradientsBPTTPhase1(MLPBackwardNode* node)
 {
-	auto errors = toNativeDeviceArray(node.errors);
+    auto errors = toNativeDeviceArray(node.errors);
     assert(errors);
     float[] errorsArr = errors.array;
     size_t size = errors.size;
-
+    
     auto biasGradients = toNativeDeviceArray(node.biasGradients);
     assert(biasGradients);
     float[] pBiasGradients = biasGradients.array;
-
+    
     for (size_t valueIdx = 0; valueIdx < size; valueIdx++)
     {
         pBiasGradients[valueIdx] += errorsArr[valueIdx];
-
+        
         size_t inputLayersCount = node.inputs.length;
         for (size_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
@@ -217,7 +210,7 @@ private void computeGradientsBPTTPhase1(MLPBackwardNode* node)
             auto gradients = toNativeDeviceArray2(node.gradients[ilidx]);
             assert(gradients);
             float[] gradientsArr = gradients.array;
-
+            
             for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
             {
                 size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);
@@ -229,7 +222,7 @@ private void computeGradientsBPTTPhase1(MLPBackwardNode* node)
 
 private void computeGradientsBPTTPhase2(MLPBackwardNode* node, in size_t internalIterationCount)
 {
-	bool hasGradients = node.hasGradients;
+    bool hasGradients = node.hasGradients;
     bool hasGradientSums = node.hasGradientSums;
     assert(hasGradients || hasGradientSums);
     auto errors = toNativeDeviceArray(node.errors);
@@ -237,11 +230,11 @@ private void computeGradientsBPTTPhase2(MLPBackwardNode* node, in size_t interna
     float[] errorsArr = errors.array;
     size_t size = errors.size;
     float by = internalIterationCount;
-
+    
     auto biasGradients = toNativeDeviceArray(node.biasGradients);
     assert(biasGradients);
     float[] pBiasGradients = biasGradients.array;
-
+    
     float[] pBiasGradientSums = null;
     if (hasGradientSums)
     {
@@ -249,13 +242,13 @@ private void computeGradientsBPTTPhase2(MLPBackwardNode* node, in size_t interna
         assert(biasGradientSums);
         pBiasGradientSums = biasGradientSums.array;
     }
-
+    
     for (size_t valueIdx = 0; valueIdx < size; valueIdx++)
     {
         pBiasGradients[valueIdx] += errorsArr[valueIdx];
         pBiasGradients[valueIdx] /= by;
         if (hasGradientSums) pBiasGradientSums[valueIdx] += pBiasGradients[valueIdx];
-
+        
         size_t inputLayersCount = node.inputs.length;
         for (size_t ilidx = 0; ilidx < inputLayersCount; ilidx++)
         {
@@ -271,7 +264,7 @@ private void computeGradientsBPTTPhase2(MLPBackwardNode* node, in size_t interna
                 auto gradientSums = toNativeDeviceArray2(node.gradientSums[ilidx]);
                 assert(gradientSums);
                 float[] gradientSumsArr = gradientSums.array;
-
+                
                 for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);
@@ -285,7 +278,7 @@ private void computeGradientsBPTTPhase2(MLPBackwardNode* node, in size_t interna
                 auto gradients = toNativeDeviceArray2(node.gradients[ilidx]);
                 assert(gradients);
                 float[] gradientsArr = gradients.array;
-
+                
                 for (size_t inputIndex = 0; inputIndex < inputSize; inputIndex++)
                 {
                     size_t gidx = getIndex2(inputIndex, valueIdx, inputSize);

@@ -36,12 +36,12 @@ class Layer
         return _size;
     }
 
-    @property ref Array!LayerBehavior behaviors()
+    @property LayerBehavior[] behaviors()
     {
         return _behaviors;
     }
 
-    @property ref Array!LayerDescription descriptions()
+    @property LayerDescription[] descriptions()
     {
         return _descriptions;
     }
@@ -64,20 +64,22 @@ class Layer
 			!takeOne(_outputConnections.connectedLayers(FlowDirection.twoWay)).empty;
 	}
 
-	auto inputLayers()
+    ForwardRange!Layer inputLayers()
 	{
 		return _inputConnections.connectedLayers(FlowDirection.oneWay)
             .chain(_inputConnections.connectedLayers(FlowDirection.twoWay))
             .chain(_outputConnections.connectedLayers(FlowDirection.twoWay))
-            .chain(_outputConnections.connectedLayers(FlowDirection.oneWayToSource));
+            .chain(_outputConnections.connectedLayers(FlowDirection.oneWayToSource))
+            .inputRangeObject;
 	}
 
-	auto outputLayers()
+    ForwardRange!Layer outputLayers()
 	{
         return _outputConnections.connectedLayers(FlowDirection.oneWay)
             .chain(_outputConnections.connectedLayers(FlowDirection.twoWay))
             .chain(_inputConnections.connectedLayers(FlowDirection.twoWay))
-            .chain(_inputConnections.connectedLayers(FlowDirection.oneWayToSource));
+            .chain(_inputConnections.connectedLayers(FlowDirection.oneWayToSource))
+            .inputRangeObject;
 	}
 
 	Layer getInputLayer(size_t connectionIndex)
@@ -96,11 +98,24 @@ class Layer
 
     private size_t _size;
 
-    private Array!LayerBehavior _behaviors;
+    private LayerBehavior[] _behaviors;
 
-    private Array!LayerDescription _descriptions;
+    private LayerDescription[] _descriptions;
 
     private LayerConnections _inputConnections;
 
     private LayerConnections _outputConnections;
+
+    override int opCmp(Object o) const
+    {
+        if (typeid(this) != typeid(o)) 
+        {
+            return typeid(this).opCmp(typeid(o));
+        }
+
+        size_t thisVal = cast(size_t)(cast(void*)this);
+        size_t oVal = cast(size_t)(cast(void*)o);
+
+        return thisVal < oVal ? -1 : thisVal > oVal ? 1 : 0;
+    }
 }
