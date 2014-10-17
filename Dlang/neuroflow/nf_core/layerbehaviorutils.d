@@ -15,7 +15,7 @@ if (is (T : LearningBehavior))
 	size_t[][T] result;
 	foreach (layer; layers)
 	{
-		foreach (b; layer[1].behaviors[])
+        foreach (b; layer[1].behaviors)
 		{
 			auto behavior = cast(T)(b);
 			if (behavior !is null)

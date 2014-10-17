@@ -15,6 +15,7 @@ import supervisedbatch;
 import std.datetime;
 import std.stdio;
 import dataarray;
+import nfhelpers;
 
 unittest
 {
@@ -260,7 +261,7 @@ void runner(string name, ComputationContext ctx, MLP mlp, SupervisedBatch batch,
             mlp.getWeights(weights);
             auto weightValues = new float[weights.size];
             weights.read(0, weights.size, &weightValues[0], 0);
-            assert(weightValues.sum!() != 0.0f);
+            assert(weightValues.nfSum != 0.0f);
             first = false;
 
             sw.start();
@@ -273,7 +274,7 @@ void runner(string name, ComputationContext ctx, MLP mlp, SupervisedBatch batch,
 
 	sw.stop();
 
-	writefln("%s:\nEllapsed: %s nsecs", name, sw.peek.nsecs);
+    writefln("%s:\nEllapsed: %s secs", name, to!double(sw.peek.nsecs) / 1_000_000_000.0);
 
     size_t bidx = maxIterations - 10;
     if (bidx < 0) bidx = 0;

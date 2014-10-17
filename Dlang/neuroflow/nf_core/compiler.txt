@@ -1,0 +1,5 @@
+﻿DMD:
+-O -inline -noboundscheck
+
+LDC2:
+-O -vectorize-loops -vectorize-slp -vectorize-slp-aggressive

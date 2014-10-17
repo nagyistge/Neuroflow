@@ -1,6 +1,7 @@
 import devicearraypool;
 import devicearray;
 import std.algorithm;
+import nfhelpers;
 
 struct DeviceArrayGroup
 {
@@ -39,7 +40,7 @@ struct DeviceArrayGroup
 
 	@property size_t size() 
 	{
-		return _arrays.filter!(a => a).map!(a => a.size()).sum;
+		return _arrays.filter!(a => a).map!(a => a.size()).nfSum;
 	}
 
 	@property auto arrays() 
