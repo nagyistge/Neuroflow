@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="Neuroflow" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="msvc8" />
+      <Option virtualFolders="CMake Files\;CMake Files\CMake\;CMake Files\3rd_party\;CMake Files\neuroflow_core_slib\;CMake Files\neuroflow_core_tests\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="C:/GIT/Neuroflow/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 all" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="C:/GIT/Neuroflow/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 edit_cache" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="C:/GIT/Neuroflow/build" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 rebuild_cache" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="3rd_party">
+         <Option output="C:/GIT/Neuroflow/build/3rd_party/3rd_party.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/3rd_party" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 3rd_party" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="3rd_party/fast">
+         <Option output="C:/GIT/Neuroflow/build/3rd_party/3rd_party.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/3rd_party" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 3rd_party/fast" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\3rd_party\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="all_pch">
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 all_pch" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="all_unity">
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 all_unity" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="clean_cotire">
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean_cotire" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_slib">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_slib/neuroflow_core_slib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 neuroflow_core_slib" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_slib/fast">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_slib/neuroflow_core_slib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 neuroflow_core_slib/fast" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_slib_pch">
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 neuroflow_core_slib_pch" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_slib_unity">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_slib/neuroflow_core_slib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 neuroflow_core_slib_unity" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_slib_unity/fast">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_slib/neuroflow_core_slib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_slib" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 neuroflow_core_slib_unity/fast" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_slib\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_tests">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_tests/neuroflow_core_tests.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_tests" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/GIT/Neuroflow/neuroflow_core_slib" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 neuroflow_core_tests" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_tests/fast">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_tests/neuroflow_core_tests.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_tests" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/GIT/Neuroflow/neuroflow_core_slib" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 neuroflow_core_tests/fast" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_tests_pch">
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_tests" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 neuroflow_core_tests_pch" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_tests_unity">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_tests/neuroflow_core_tests.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_tests" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/GIT/Neuroflow/neuroflow_core_slib" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 neuroflow_core_tests_unity" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="neuroflow_core_tests_unity/fast">
+         <Option output="C:/GIT/Neuroflow/build/neuroflow_core_tests/neuroflow_core_tests.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="C:/GIT/Neuroflow/build/neuroflow_core_tests" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add directory="C:/GIT/Neuroflow/3rd_party" />
+            <Add directory="C:/GIT/Neuroflow/neuroflow_core_slib" />
+            <Add directory="C:/Program Files (x86)/AMD APP SDK/2.9/include" />
+            <Add directory="c:/boost_1_56_0" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 neuroflow_core_tests_unity/fast" />
+            <CompileFile command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f C:\GIT\Neuroflow\build\neuroflow_core_tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/computation_context.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/computation_context_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_cc_factory_adapter.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_computation_context.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_backward.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_forward.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_gradients_rtlr.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_data_array.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_data_array_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array2.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array_management.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array_pool.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_gradient_descent_learning.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_learning_impl_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_randomize_weights_uniform.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_utils.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array2_group.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array_group.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/gradient_descent_learning.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_behavior.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_connections.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_order_comparer.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_impl_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/mlp_backward_node.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/mlp_forward_node.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/multilayer_perceptron.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/neural_network_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_cc_factory_adapter.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_computation_context.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_compute_activation.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_data_array.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_data_array_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array2.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array_management.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array_pool.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_exec.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_gradient_descent_learning.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_kernel_name.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_learning_impl_factory.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_program.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_program_unit.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_randomize_weights_uniform.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_sizes.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_units.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_utils.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/random_generator.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/randomize_weights_uniform.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/rtlr.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/stdafx.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_batch.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_sample.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_sample_entry.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/version.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/computation_context_tests.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/data_array_tests.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/main.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/multilayer_perceptron_tests.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/utils_tests.cpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/3rd_party/cpplinq.hpp">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/activation_description.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cc_factory_adapter.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cc_init_pars.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/computation_context.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/computation_context_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/compute_activation.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/contexted.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_cc_factory_adapter.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_computation_context.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_backward.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_forward.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_compute_activation_gradients_rtlr.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_conv.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_data_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_data_array_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array2.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array_management.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_device_array_pool.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_gradient_descent_learning.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_learning_impl_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_nfdev.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_randomize_weights_uniform.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/cpp/cpp_utils.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/data_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/data_array_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array2.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array2_group.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array_group.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array_management.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_array_pool.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/device_info.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/enum_flags.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/equatable.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/equatable_ptr.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/error.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/finally.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/get_vector_size.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/gradient_descent_learning.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/initialize_learning.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_behavior.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_connections.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_description.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/layer_order_comparer.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_behavior.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_impl.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_impl_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_impl_of.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/learning_init_behavior.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/libs.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/mlp_backward_node.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/mlp_forward_node.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/mlp_init_pars.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/multilayer_perceptron.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/neural_network_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/nf.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/nf_helpers.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/nf_object.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/nfdev.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_cc_factory_adapter.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_cc_init_pars.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_computation_context.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_compute_activation.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_conv.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_data_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_data_array_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array2.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array_management.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_device_array_pool.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_error.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_exec.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_gradient_descent_learning.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_kernel_name.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_learning_impl_factory.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_nfdev.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_program.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_program_unit.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_randomize_weights_uniform.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_sizes.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_units.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/ocl/ocl_utils.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/random_generator.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/randomize_weights_uniform.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/row_numbered.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/rtlr.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/rtlr_computation_data.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/rtlr_layer_info.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/stdafx.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_batch.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_learning.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_learning_behavior.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_outputs.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_sample.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/supervised_sample_entry.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/training_node.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/typedefs.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/utils.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/version.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/weak_contexted.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/weighted_errors.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/weighted_inputs.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/stdafx.h">
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/CMake/cotire.cmake">
+          <Option virtualFolder="CMake Files\CMake\" />
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/CMake/FindOpenCL.cmake">
+          <Option virtualFolder="CMake Files\CMake\" />
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/3rd_party/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\3rd_party\" />
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_slib/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\neuroflow_core_slib\" />
+      </Unit>
+      <Unit filename="C:/GIT/Neuroflow/neuroflow_core_tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\neuroflow_core_tests\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

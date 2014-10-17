@@ -1,0 +1,10 @@
+C:/GIT/Neuroflow/build/3rd_party/CMakeFiles/3rd_party.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/all_pch.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/all_unity.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/clean_cotire.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/neuroflow_core_slib.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/neuroflow_core_slib_pch.dir
+C:/GIT/Neuroflow/build/neuroflow_core_slib/CMakeFiles/neuroflow_core_slib_unity.dir
+C:/GIT/Neuroflow/build/neuroflow_core_tests/CMakeFiles/neuroflow_core_tests.dir
+C:/GIT/Neuroflow/build/neuroflow_core_tests/CMakeFiles/neuroflow_core_tests_pch.dir
+C:/GIT/Neuroflow/build/neuroflow_core_tests/CMakeFiles/neuroflow_core_tests_unity.dir

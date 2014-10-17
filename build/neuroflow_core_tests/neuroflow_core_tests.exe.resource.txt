@@ -1,0 +1,1 @@
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "C:/GIT/Neuroflow/build/neuroflow_core_tests/neuroflow_core_tests.exe.embed.manifest"
