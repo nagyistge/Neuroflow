@@ -1,0 +1,1077 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="WFTestConsole.PussyDetectorTest" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:na="clr-namespace:Neuroflow.Activities;assembly=Neuroflow.Activities"
+ xmlns:nann="clr-namespace:Neuroflow.Activities.Networks.Neural;assembly=Neuroflow.Activities"
+ xmlns:nannc="clr-namespace:Neuroflow.Activities.Networks.Neural.Managed;assembly=Neuroflow.Activities"
+ xmlns:nannl="clr-namespace:Neuroflow.Activities.Networks.Neural.Learning;assembly=Neuroflow.Activities"
+ xmlns:nav="clr-namespace:Neuroflow.Activities.Vectors;assembly=Neuroflow.Activities"
+ xmlns:navb="clr-namespace:Neuroflow.Activities.Vectors.BatchingStrategies;assembly=Neuroflow.Activities"
+ xmlns:ncv="clr-namespace:Neuroflow.Core.Vectors;assembly=Neuroflow.Core"
+ xmlns:nnn="clr-namespace:Neuroflow.Networks.Neural;assembly=Neuroflow.Networks"
+ xmlns:nnnl="clr-namespace:Neuroflow.Networks.Neural.Learning;assembly=Neuroflow.Networks"
+ xmlns:p="clr-namespace:PussyDetector;assembly=PussyDetector"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Neuroflow.Activities</x:String>
+      <x:String>Neuroflow.Activities.Networks.Neural</x:String>
+      <x:String>Neuroflow.Activities.Networks.Neural.Managed</x:String>
+      <x:String>Neuroflow.Activities.Networks.Neural.Learning</x:String>
+      <x:String>Neuroflow.Activities.Vectors</x:String>
+      <x:String>Neuroflow.Activities.Vectors.BatchingStrategies</x:String>
+      <x:String>Neuroflow.Core</x:String>
+      <x:String>Neuroflow.Core.Computations</x:String>
+      <x:String>Neuroflow.Core.Vectors</x:String>
+      <x:String>Neuroflow.Networks.Neural</x:String>
+      <x:String>Neuroflow.Networks.Neural.Learning</x:String>
+      <x:String>PussyDetector</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities.Debugger</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>Neuroflow.Activities</AssemblyReference>
+      <AssemblyReference>Neuroflow.Core</AssemblyReference>
+      <AssemblyReference>Neuroflow.Networks</AssemblyReference>
+      <AssemblyReference>PussyDetector</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <na:ComputationContext>
+    <na:ComputationContext.Body>
+      <Sequence DisplayName="Main">
+        <Sequence DisplayName="Create Training">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+          </Sequence.Variables>
+          <na:Experiment>
+            <na:Experiment.Branches>
+              <na:ExperimentBranch DisplayName="FF" IsActive="True">
+                <na:ExperimentBranch.Body>
+                  <Sequence>
+                    <Sequence DisplayName="Create Providers">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+                        <Variable x:TypeArguments="x:Int32" Name="sampleSize" />
+                      </Sequence.Variables>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[sampleSize]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">80</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_1</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[trainingProvider]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleTrainingProvider(sampleSize)]</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_2</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleValidationProvider(sampleSize)]</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_3</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
+                    </Sequence>
+                    <Sequence DisplayName="Create Network">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="sco:Collection(nnnl:LearningRule)" Name="rules" />
+                      </Sequence.Variables>
+                      <nannl:NewSignChangesRule DisplayName="SignChanges" IsInitialized="True">
+                        <nannl:NewSignChangesRule.ActivityWithResultProperties>
+                          <na:ActivityWithResultValue x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nannl:NewWeightDecay DisplayName="WeightDecay" IsInitialized="True">
+                                <nannl:NewWeightDecay.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="Cutoff" ForProperty="True" Name="Cutoff" PropertyType="InArgument(x:Double)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Double">2</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="Factor" ForProperty="True" Name="Factor" PropertyType="InArgument(x:Double)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Double">-0.0001</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nannl:NewWeightDecay.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewWeightDecay_1</sap2010:WorkflowViewState.IdRef>
+                              </nannl:NewWeightDecay>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" IsInitialized="True">
+                                <nav:NewIterationRepeatPars.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nav:NewIterationRepeatPars.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewIterationRepeatPars_1</sap2010:WorkflowViewState.IdRef>
+                              </nav:NewIterationRepeatPars>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                        </nannl:NewSignChangesRule.ActivityWithResultProperties>
+                        <nannl:NewSignChangesRule.InArgumentProperties>
+                          <na:InArgumentValue x:Key="MinStepSize" ForProperty="True" Name="MinStepSize" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">1E-05</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="MaxStepSize" ForProperty="True" Name="MaxStepSize" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">0.001</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="StochasticAdaptiveStateUpdate" ForProperty="True" Name="StochasticAdaptiveStateUpdate" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="Momentum" ForProperty="True" Name="Momentum" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">0.25</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="UseSmoothing" ForProperty="True" Name="UseSmoothing" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="Mode" ForProperty="True" Name="Mode" PropertyType="InArgument(nnnl:LearningMode)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="nnnl:LearningMode">[LearningMode.Stochastic]</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                        </nannl:NewSignChangesRule.InArgumentProperties>
+                        <sap2010:WorkflowViewState.IdRef>NewSignChangesRule_1</sap2010:WorkflowViewState.IdRef>
+                      </nannl:NewSignChangesRule>
+                      <nannl:NewLearningRuleCollection DisplayName="Create Rules" Result="[rules]">
+                        <nannl:NewLearningRuleCollection.CreateItemActivities>
+                          <nannl:NewNoisedWeightInitializationRule DisplayName="NoisedWeightInitialization" IsInitialized="True">
+                            <nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                              <na:InArgumentValue x:Key="Noise" ForProperty="True" Name="Noise" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.3</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                            <sap2010:WorkflowViewState.IdRef>NewNoisedWeightInitializationRule_1</sap2010:WorkflowViewState.IdRef>
+                          </nannl:NewNoisedWeightInitializationRule>
+                          <nannl:NewAlopexBRule DisplayName="AlopexB" IsInitialized="True">
+                            <nannl:NewAlopexBRule.ActivityWithResultProperties>
+                              <na:ActivityWithResultValue Activity="{x:Null}" x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)" />
+                              <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                                <na:ActivityWithResultValue.Activity>
+                                  <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" IsInitialized="True">
+                                    <nav:NewIterationRepeatPars.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                      <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nav:NewIterationRepeatPars.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewIterationRepeatPars_2</sap2010:WorkflowViewState.IdRef>
+                                  </nav:NewIterationRepeatPars>
+                                </na:ActivityWithResultValue.Activity>
+                              </na:ActivityWithResultValue>
+                            </nannl:NewAlopexBRule.ActivityWithResultProperties>
+                            <nannl:NewAlopexBRule.InArgumentProperties>
+                              <na:InArgumentValue x:Key="Eta" ForProperty="True" Name="Eta" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.001</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="Gamma" ForProperty="True" Name="Gamma" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.005</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="Lambda" ForProperty="True" Name="Lambda" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.005</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </nannl:NewAlopexBRule.InArgumentProperties>
+                            <sap2010:WorkflowViewState.IdRef>NewAlopexBRule_1</sap2010:WorkflowViewState.IdRef>
+                          </nannl:NewAlopexBRule>
+                        </nannl:NewLearningRuleCollection.CreateItemActivities>
+                        <sap2010:WorkflowViewState.IdRef>NewLearningRuleCollection_1</sap2010:WorkflowViewState.IdRef>
+                      </nannl:NewLearningRuleCollection>
+                      <nann:NewStandardMultilayerNeuralNetwork DisplayName="Standard Multilayer NN" IsInitialized="True" Result="[network]">
+                        <nann:NewStandardMultilayerNeuralNetwork.ActivityWithResultProperties>
+                          <na:ActivityWithResultValue x:Key="HiddenLayers" ActivityResultType="sco:Collection(nnn:Layer)" ForProperty="True" Name="HiddenLayers" PropertyType="Activity(sco:Collection(nnn:Layer))">
+                            <na:ActivityWithResultValue.Activity>
+                              <nann:NewLayerCollection DisplayName="LayerCollection">
+                                <nann:NewLayerCollection.CreateItemActivities>
+                                  <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                    <nann:NewActivationLayer.ActivityWithResultProperties>
+                                      <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" IsInitialized="True">
+                                            <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                              <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                                <na:InArgumentValue.InArgument>
+                                                  <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                                </na:InArgumentValue.InArgument>
+                                              </na:InArgumentValue>
+                                            </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                            <sap2010:WorkflowViewState.IdRef>NewSigmoidActivationFunction_1</sap2010:WorkflowViewState.IdRef>
+                                          </nann:NewSigmoidActivationFunction>
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                      <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_1" />
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                    </nann:NewActivationLayer.ActivityWithResultProperties>
+                                    <nann:NewActivationLayer.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">300</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nann:NewActivationLayer.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewActivationLayer_1</sap2010:WorkflowViewState.IdRef>
+                                  </nann:NewActivationLayer>
+                                  <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                    <nann:NewActivationLayer.ActivityWithResultProperties>
+                                      <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" IsInitialized="True">
+                                            <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                              <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                                <na:InArgumentValue.InArgument>
+                                                  <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                                </na:InArgumentValue.InArgument>
+                                              </na:InArgumentValue>
+                                            </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                            <sap2010:WorkflowViewState.IdRef>NewSigmoidActivationFunction_2</sap2010:WorkflowViewState.IdRef>
+                                          </nann:NewSigmoidActivationFunction>
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                      <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_2" />
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                    </nann:NewActivationLayer.ActivityWithResultProperties>
+                                    <nann:NewActivationLayer.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">200</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nann:NewActivationLayer.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewActivationLayer_2</sap2010:WorkflowViewState.IdRef>
+                                  </nann:NewActivationLayer>
+                                </nann:NewLayerCollection.CreateItemActivities>
+                                <sap2010:WorkflowViewState.IdRef>NewLayerCollection_1</sap2010:WorkflowViewState.IdRef>
+                              </nann:NewLayerCollection>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="OutputLayer" ActivityResultType="nnn:Layer" ForProperty="True" Name="OutputLayer" PropertyType="Activity(nnn:Layer)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                <nann:NewActivationLayer.ActivityWithResultProperties>
+                                  <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                    <na:ActivityWithResultValue.Activity>
+                                      <nann:NewLinearActivationFunction DisplayName="LinearActivationFunction" IsInitialized="True">
+                                        <nann:NewLinearActivationFunction.InArgumentProperties>
+                                          <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                            <na:InArgumentValue.InArgument>
+                                              <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                            </na:InArgumentValue.InArgument>
+                                          </na:InArgumentValue>
+                                        </nann:NewLinearActivationFunction.InArgumentProperties>
+                                        <sap2010:WorkflowViewState.IdRef>NewLinearActivationFunction_1</sap2010:WorkflowViewState.IdRef>
+                                      </nann:NewLinearActivationFunction>
+                                    </na:ActivityWithResultValue.Activity>
+                                  </na:ActivityWithResultValue>
+                                  <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                    <na:ActivityWithResultValue.Activity>
+                                      <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_3" />
+                                    </na:ActivityWithResultValue.Activity>
+                                  </na:ActivityWithResultValue>
+                                </nann:NewActivationLayer.ActivityWithResultProperties>
+                                <nann:NewActivationLayer.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">[trainingProvider.OutputInterfaceLength]</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nann:NewActivationLayer.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewActivationLayer_3</sap2010:WorkflowViewState.IdRef>
+                              </nann:NewActivationLayer>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="InitParameters" ActivityResultType="nnn:NNInitParameters" ForProperty="True" Name="InitParameters" PropertyType="Activity(nnn:NNInitParameters)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nannc:NewManagedNNInitParameters DisplayName="ManagedNNInitParameters" IsInitialized="True">
+                                <nannc:NewManagedNNInitParameters.ActivityWithResultProperties>
+                                  <na:ActivityWithResultValue Activity="{x:Null}" x:Key="RecurrentOptions" ActivityResultType="nnn:RecurrentOptions" ForProperty="True" Name="RecurrentOptions" PropertyType="Activity(nnn:RecurrentOptions)" />
+                                </nannc:NewManagedNNInitParameters.ActivityWithResultProperties>
+                                <nannc:NewManagedNNInitParameters.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="RunParallel" ForProperty="True" Name="RunParallel" PropertyType="InArgument(x:Boolean)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nannc:NewManagedNNInitParameters.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewManagedNNInitParameters_1</sap2010:WorkflowViewState.IdRef>
+                              </nannc:NewManagedNNInitParameters>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                        </nann:NewStandardMultilayerNeuralNetwork.ActivityWithResultProperties>
+                        <nann:NewStandardMultilayerNeuralNetwork.InArgumentProperties>
+                          <na:InArgumentValue x:Key="InputSize" ForProperty="True" Name="InputSize" PropertyType="InArgument(x:Int32)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Int32">[trainingProvider.InputInterfaceLength]</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                        </nann:NewStandardMultilayerNeuralNetwork.InArgumentProperties>
+                        <sap2010:WorkflowViewState.IdRef>NewStandardMultilayerNeuralNetwork_1</sap2010:WorkflowViewState.IdRef>
+                      </nann:NewStandardMultilayerNeuralNetwork>
+                      <sap2010:WorkflowViewState.IdRef>Sequence_2</sap2010:WorkflowViewState.IdRef>
+                    </Sequence>
+                    <sap2010:WorkflowViewState.IdRef>Sequence_3</sap2010:WorkflowViewState.IdRef>
+                  </Sequence>
+                </na:ExperimentBranch.Body>
+                <sap2010:WorkflowViewState.IdRef>ExperimentBranch_1</sap2010:WorkflowViewState.IdRef>
+              </na:ExperimentBranch>
+              <na:ExperimentBranch DisplayName="Recurrent" IsActive="False">
+                <na:ExperimentBranch.Body>
+                  <Sequence>
+                    <Sequence DisplayName="Create Providers">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+                        <Variable x:TypeArguments="x:Int32" Name="sampleSize" />
+                        <Variable x:TypeArguments="x:Int32" Name="subSampleSize" />
+                        <Variable x:TypeArguments="x:Int32" Name="numOfIts" />
+                      </Sequence.Variables>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[numOfIts]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_4</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[sampleSize]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">80</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_5</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[subSampleSize]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">20</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_6</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[trainingProvider]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleTrainingProvider(sampleSize, subSampleSize, numOfIts)]</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_7</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <Assign>
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleValidationProvider(sampleSize, subSampleSize, numOfIts)]</InArgument>
+                        </Assign.Value>
+                        <sap2010:WorkflowViewState.IdRef>Assign_8</sap2010:WorkflowViewState.IdRef>
+                      </Assign>
+                      <sap2010:WorkflowViewState.IdRef>Sequence_4</sap2010:WorkflowViewState.IdRef>
+                    </Sequence>
+                    <Sequence DisplayName="Create Network">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="sco:Collection(nnnl:LearningRule)" Name="rules" />
+                      </Sequence.Variables>
+                      <nannl:NewSignChangesRule DisplayName="SignChanges" IsInitialized="True">
+                        <nannl:NewSignChangesRule.ActivityWithResultProperties>
+                          <na:ActivityWithResultValue x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nannl:NewWeightDecay DisplayName="WeightDecay" IsInitialized="True">
+                                <nannl:NewWeightDecay.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="Cutoff" ForProperty="True" Name="Cutoff" PropertyType="InArgument(x:Double)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Double">2</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="Factor" ForProperty="True" Name="Factor" PropertyType="InArgument(x:Double)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Double">-0.0001</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nannl:NewWeightDecay.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewWeightDecay_2</sap2010:WorkflowViewState.IdRef>
+                              </nannl:NewWeightDecay>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" IsInitialized="True">
+                                <nav:NewIterationRepeatPars.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                  <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nav:NewIterationRepeatPars.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewIterationRepeatPars_3</sap2010:WorkflowViewState.IdRef>
+                              </nav:NewIterationRepeatPars>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                        </nannl:NewSignChangesRule.ActivityWithResultProperties>
+                        <nannl:NewSignChangesRule.InArgumentProperties>
+                          <na:InArgumentValue x:Key="MinStepSize" ForProperty="True" Name="MinStepSize" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">1E-07</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="MaxStepSize" ForProperty="True" Name="MaxStepSize" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">0.0001</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="StochasticAdaptiveStateUpdate" ForProperty="True" Name="StochasticAdaptiveStateUpdate" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="Momentum" ForProperty="True" Name="Momentum" PropertyType="InArgument(x:Double)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Double">0.8</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="UseSmoothing" ForProperty="True" Name="UseSmoothing" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="Mode" ForProperty="True" Name="Mode" PropertyType="InArgument(nnnl:LearningMode)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="nnnl:LearningMode">[LearningMode.Stochastic]</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                          <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                        </nannl:NewSignChangesRule.InArgumentProperties>
+                        <sap2010:WorkflowViewState.IdRef>NewSignChangesRule_2</sap2010:WorkflowViewState.IdRef>
+                      </nannl:NewSignChangesRule>
+                      <nannl:NewLearningRuleCollection DisplayName="Create Rules" Result="[rules]">
+                        <nannl:NewLearningRuleCollection.CreateItemActivities>
+                          <nannl:NewNoisedWeightInitializationRule DisplayName="NoisedWeightInitialization" IsInitialized="True">
+                            <nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                              <na:InArgumentValue x:Key="Noise" ForProperty="True" Name="Noise" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.3</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                            <sap2010:WorkflowViewState.IdRef>NewNoisedWeightInitializationRule_2</sap2010:WorkflowViewState.IdRef>
+                          </nannl:NewNoisedWeightInitializationRule>
+                          <nannl:NewAlopexBRule DisplayName="AlopexB" IsInitialized="True">
+                            <nannl:NewAlopexBRule.ActivityWithResultProperties>
+                              <na:ActivityWithResultValue Activity="{x:Null}" x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)" />
+                              <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                                <na:ActivityWithResultValue.Activity>
+                                  <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" IsInitialized="True">
+                                    <nav:NewIterationRepeatPars.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                      <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nav:NewIterationRepeatPars.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewIterationRepeatPars_4</sap2010:WorkflowViewState.IdRef>
+                                  </nav:NewIterationRepeatPars>
+                                </na:ActivityWithResultValue.Activity>
+                              </na:ActivityWithResultValue>
+                            </nannl:NewAlopexBRule.ActivityWithResultProperties>
+                            <nannl:NewAlopexBRule.InArgumentProperties>
+                              <na:InArgumentValue x:Key="Eta" ForProperty="True" Name="Eta" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.001</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="Gamma" ForProperty="True" Name="Gamma" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.005</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="Lambda" ForProperty="True" Name="Lambda" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.005</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                              <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </nannl:NewAlopexBRule.InArgumentProperties>
+                            <sap2010:WorkflowViewState.IdRef>NewAlopexBRule_2</sap2010:WorkflowViewState.IdRef>
+                          </nannl:NewAlopexBRule>
+                        </nannl:NewLearningRuleCollection.CreateItemActivities>
+                        <sap2010:WorkflowViewState.IdRef>NewLearningRuleCollection_2</sap2010:WorkflowViewState.IdRef>
+                      </nannl:NewLearningRuleCollection>
+                      <nann:NewStandardMultilayerNeuralNetwork DisplayName="Standard Multilayer NN" IsInitialized="True" Result="[network]">
+                        <nann:NewStandardMultilayerNeuralNetwork.ActivityWithResultProperties>
+                          <na:ActivityWithResultValue x:Key="HiddenLayers" ActivityResultType="sco:Collection(nnn:Layer)" ForProperty="True" Name="HiddenLayers" PropertyType="Activity(sco:Collection(nnn:Layer))">
+                            <na:ActivityWithResultValue.Activity>
+                              <nann:NewLayerCollection DisplayName="LayerCollection">
+                                <nann:NewLayerCollection.CreateItemActivities>
+                                  <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                    <nann:NewActivationLayer.ActivityWithResultProperties>
+                                      <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" IsInitialized="True">
+                                            <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                              <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                                <na:InArgumentValue.InArgument>
+                                                  <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                                </na:InArgumentValue.InArgument>
+                                              </na:InArgumentValue>
+                                            </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                            <sap2010:WorkflowViewState.IdRef>NewSigmoidActivationFunction_3</sap2010:WorkflowViewState.IdRef>
+                                          </nann:NewSigmoidActivationFunction>
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                      <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_4" />
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                    </nann:NewActivationLayer.ActivityWithResultProperties>
+                                    <nann:NewActivationLayer.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">90</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nann:NewActivationLayer.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewActivationLayer_4</sap2010:WorkflowViewState.IdRef>
+                                  </nann:NewActivationLayer>
+                                  <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                    <nann:NewActivationLayer.ActivityWithResultProperties>
+                                      <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" IsInitialized="True">
+                                            <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                              <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                                <na:InArgumentValue.InArgument>
+                                                  <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                                </na:InArgumentValue.InArgument>
+                                              </na:InArgumentValue>
+                                            </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                            <sap2010:WorkflowViewState.IdRef>NewSigmoidActivationFunction_4</sap2010:WorkflowViewState.IdRef>
+                                          </nann:NewSigmoidActivationFunction>
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                      <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                        <na:ActivityWithResultValue.Activity>
+                                          <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_5" />
+                                        </na:ActivityWithResultValue.Activity>
+                                      </na:ActivityWithResultValue>
+                                    </nann:NewActivationLayer.ActivityWithResultProperties>
+                                    <nann:NewActivationLayer.InArgumentProperties>
+                                      <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                        <na:InArgumentValue.InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">50</InArgument>
+                                        </na:InArgumentValue.InArgument>
+                                      </na:InArgumentValue>
+                                    </nann:NewActivationLayer.InArgumentProperties>
+                                    <sap2010:WorkflowViewState.IdRef>NewActivationLayer_5</sap2010:WorkflowViewState.IdRef>
+                                  </nann:NewActivationLayer>
+                                </nann:NewLayerCollection.CreateItemActivities>
+                                <sap2010:WorkflowViewState.IdRef>NewLayerCollection_2</sap2010:WorkflowViewState.IdRef>
+                              </nann:NewLayerCollection>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="OutputLayer" ActivityResultType="nnn:Layer" ForProperty="True" Name="OutputLayer" PropertyType="Activity(nnn:Layer)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nann:NewActivationLayer DisplayName="ActivationLayer" IsInitialized="True">
+                                <nann:NewActivationLayer.ActivityWithResultProperties>
+                                  <na:ActivityWithResultValue x:Key="function" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="function" PropertyType="Activity(nnn:ActivationFunction)">
+                                    <na:ActivityWithResultValue.Activity>
+                                      <nann:NewLinearActivationFunction DisplayName="LinearActivationFunction" IsInitialized="True">
+                                        <nann:NewLinearActivationFunction.InArgumentProperties>
+                                          <na:InArgumentValue x:Key="alpha" ForProperty="False" Name="alpha" PropertyType="InArgument(x:Double)">
+                                            <na:InArgumentValue.InArgument>
+                                              <InArgument x:TypeArguments="x:Double">1.05</InArgument>
+                                            </na:InArgumentValue.InArgument>
+                                          </na:InArgumentValue>
+                                        </nann:NewLinearActivationFunction.InArgumentProperties>
+                                        <sap2010:WorkflowViewState.IdRef>NewLinearActivationFunction_2</sap2010:WorkflowViewState.IdRef>
+                                      </nann:NewLinearActivationFunction>
+                                    </na:ActivityWithResultValue.Activity>
+                                  </na:ActivityWithResultValue>
+                                  <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                    <na:ActivityWithResultValue.Activity>
+                                      <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_6" />
+                                    </na:ActivityWithResultValue.Activity>
+                                  </na:ActivityWithResultValue>
+                                </nann:NewActivationLayer.ActivityWithResultProperties>
+                                <nann:NewActivationLayer.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="size" ForProperty="False" Name="size" PropertyType="InArgument(x:Int32)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Int32">[trainingProvider.OutputInterfaceLength]</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nann:NewActivationLayer.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewActivationLayer_6</sap2010:WorkflowViewState.IdRef>
+                              </nann:NewActivationLayer>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                          <na:ActivityWithResultValue x:Key="InitParameters" ActivityResultType="nnn:NNInitParameters" ForProperty="True" Name="InitParameters" PropertyType="Activity(nnn:NNInitParameters)">
+                            <na:ActivityWithResultValue.Activity>
+                              <nannc:NewManagedNNInitParameters DisplayName="ManagedNNInitParameters" IsInitialized="True">
+                                <nannc:NewManagedNNInitParameters.ActivityWithResultProperties>
+                                  <na:ActivityWithResultValue x:Key="RecurrentOptions" ActivityResultType="nnn:RecurrentOptions" ForProperty="True" Name="RecurrentOptions" PropertyType="Activity(nnn:RecurrentOptions)">
+                                    <na:ActivityWithResultValue.Activity>
+                                      <nann:NewRecurrentOptions DisplayName="RecurrentOptions" IsInitialized="True">
+                                        <nann:NewRecurrentOptions.InArgumentProperties>
+                                          <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                            <na:InArgumentValue.InArgument>
+                                              <InArgument x:TypeArguments="x:Int32">[CType(trainingProvider, FullSampleProvider).MaxIterationLength]</InArgument>
+                                            </na:InArgumentValue.InArgument>
+                                          </na:InArgumentValue>
+                                          <na:InArgumentValue x:Key="isFullRecurrent" ForProperty="False" Name="isFullRecurrent" PropertyType="InArgument(x:Boolean)">
+                                            <na:InArgumentValue.InArgument>
+                                              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                            </na:InArgumentValue.InArgument>
+                                          </na:InArgumentValue>
+                                        </nann:NewRecurrentOptions.InArgumentProperties>
+                                        <sap2010:WorkflowViewState.IdRef>NewRecurrentOptions_1</sap2010:WorkflowViewState.IdRef>
+                                      </nann:NewRecurrentOptions>
+                                    </na:ActivityWithResultValue.Activity>
+                                  </na:ActivityWithResultValue>
+                                </nannc:NewManagedNNInitParameters.ActivityWithResultProperties>
+                                <nannc:NewManagedNNInitParameters.InArgumentProperties>
+                                  <na:InArgumentValue x:Key="RunParallel" ForProperty="True" Name="RunParallel" PropertyType="InArgument(x:Boolean)">
+                                    <na:InArgumentValue.InArgument>
+                                      <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                                    </na:InArgumentValue.InArgument>
+                                  </na:InArgumentValue>
+                                </nannc:NewManagedNNInitParameters.InArgumentProperties>
+                                <sap2010:WorkflowViewState.IdRef>NewManagedNNInitParameters_2</sap2010:WorkflowViewState.IdRef>
+                              </nannc:NewManagedNNInitParameters>
+                            </na:ActivityWithResultValue.Activity>
+                          </na:ActivityWithResultValue>
+                        </nann:NewStandardMultilayerNeuralNetwork.ActivityWithResultProperties>
+                        <nann:NewStandardMultilayerNeuralNetwork.InArgumentProperties>
+                          <na:InArgumentValue x:Key="InputSize" ForProperty="True" Name="InputSize" PropertyType="InArgument(x:Int32)">
+                            <na:InArgumentValue.InArgument>
+                              <InArgument x:TypeArguments="x:Int32">[trainingProvider.InputInterfaceLength]</InArgument>
+                            </na:InArgumentValue.InArgument>
+                          </na:InArgumentValue>
+                        </nann:NewStandardMultilayerNeuralNetwork.InArgumentProperties>
+                        <sap2010:WorkflowViewState.IdRef>NewStandardMultilayerNeuralNetwork_2</sap2010:WorkflowViewState.IdRef>
+                      </nann:NewStandardMultilayerNeuralNetwork>
+                      <sap2010:WorkflowViewState.IdRef>Sequence_5</sap2010:WorkflowViewState.IdRef>
+                    </Sequence>
+                    <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
+                  </Sequence>
+                </na:ExperimentBranch.Body>
+                <sap2010:WorkflowViewState.IdRef>ExperimentBranch_2</sap2010:WorkflowViewState.IdRef>
+              </na:ExperimentBranch>
+            </na:Experiment.Branches>
+            <sap2010:WorkflowViewState.IdRef>Experiment_1</sap2010:WorkflowViewState.IdRef>
+          </na:Experiment>
+          <nannl:NewUnorderedTraining DisplayName="UnorderedTraining" IsInitialized="True" Result="[training]">
+            <nannl:NewUnorderedTraining.ActivityWithResultProperties>
+              <na:ActivityWithResultValue x:Key="network" ActivityResultType="nnn:NeuralNetwork" ForProperty="False" Name="network" PropertyType="Activity(nnn:NeuralNetwork)">
+                <na:ActivityWithResultValue.Activity>
+                  <mva:VisualBasicValue x:TypeArguments="nnn:NeuralNetwork" ExpressionText="network" sap2010:WorkflowViewState.IdRef="VisualBasicValue`1_7" />
+                </na:ActivityWithResultValue.Activity>
+              </na:ActivityWithResultValue>
+            </nannl:NewUnorderedTraining.ActivityWithResultProperties>
+            <sap2010:WorkflowViewState.IdRef>NewUnorderedTraining_1</sap2010:WorkflowViewState.IdRef>
+          </nannl:NewUnorderedTraining>
+          <sap2010:WorkflowViewState.IdRef>Sequence_7</sap2010:WorkflowViewState.IdRef>
+        </Sequence>
+        <nannl:TrainingLoop Condition="[gIterationNo &lt;&gt; 6666666666666]">
+          <nannl:TrainingLoop.Body>
+            <ActivityAction x:TypeArguments="x:Int32">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="x:Int32" Name="iterationNo" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Training Iteration Sequence">
+                <nannl:TrainingIteration DisplayName="Training Iteration" Result="[trainingResult]" Training="[training]">
+                  <nannl:TrainingIteration.GetNextBatch>
+                    <ActivityFunc x:TypeArguments="nnn:NeuralVectorFlowBatch">
+                      <ActivityFunc.Result>
+                        <DelegateOutArgument x:TypeArguments="nnn:NeuralVectorFlowBatch" Name="batchResult" />
+                      </ActivityFunc.Result>
+                      <nannl:UnorderedProviderBasedBatcher BatchSize="50" DisplayName="Unordered Provider Based Batcher" LastResult="[trainingResult]" Provider="[trainingProvider]" ReinitializationFrequency="1000" Result="[batchResult]" UseCache="True">
+                        <nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                          <navb:NewGaussianBatchingStrategyFactory DisplayName="GaussianBatchingStrategy" IsInitialized="True">
+                            <navb:NewGaussianBatchingStrategyFactory.InArgumentProperties>
+                              <na:InArgumentValue x:Key="stdDev" ForProperty="False" Name="stdDev" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">1</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </navb:NewGaussianBatchingStrategyFactory.InArgumentProperties>
+                            <sap2010:WorkflowViewState.IdRef>NewGaussianBatchingStrategyFactory_1</sap2010:WorkflowViewState.IdRef>
+                          </navb:NewGaussianBatchingStrategyFactory>
+                        </nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                        <sap2010:WorkflowViewState.IdRef>UnorderedProviderBasedBatcher_1</sap2010:WorkflowViewState.IdRef>
+                      </nannl:UnorderedProviderBasedBatcher>
+                    </ActivityFunc>
+                  </nannl:TrainingIteration.GetNextBatch>
+                  <sap2010:WorkflowViewState.IdRef>TrainingIteration_1</sap2010:WorkflowViewState.IdRef>
+                </nannl:TrainingIteration>
+                <nannl:ValidationIteration DisplayName="Validation Iteration" EveryNthIteration="1" Result="[validationResult]" Training="[training]">
+                  <nannl:ValidationIteration.GetNextBatch>
+                    <ActivityFunc x:TypeArguments="nnn:NeuralVectorFlowBatch">
+                      <ActivityFunc.Result>
+                        <DelegateOutArgument x:TypeArguments="nnn:NeuralVectorFlowBatch" Name="batchResult" />
+                      </ActivityFunc.Result>
+                      <nannl:UnorderedProviderBasedBatcher LastResult="{x:Null}" BatchSize="50" DisplayName="Unordered Provider Based Batcher" Provider="[trainingProvider]" ReinitializationFrequency="1000" Result="[batchResult]" UseCache="True">
+                        <nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                          <navb:NewMonteCarloBatchingStrategyFactory DisplayName="MonteCarloBatchingStrategy" IsInitialized="True" sap2010:WorkflowViewState.IdRef="NewMonteCarloBatchingStrategyFactory_1" />
+                        </nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                        <sap2010:WorkflowViewState.IdRef>UnorderedProviderBasedBatcher_2</sap2010:WorkflowViewState.IdRef>
+                      </nannl:UnorderedProviderBasedBatcher>
+                    </ActivityFunc>
+                  </nannl:ValidationIteration.GetNextBatch>
+                  <sap2010:WorkflowViewState.IdRef>ValidationIteration_1</sap2010:WorkflowViewState.IdRef>
+                </nannl:ValidationIteration>
+                <InvokeMethod DisplayName="TEMP TEST" MethodName="TestNetwork" TargetType="p:TestHelper">
+                  <InArgument x:TypeArguments="nnn:NeuralNetwork">[training.Network]</InArgument>
+                  <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</InArgument>
+                  <sap2010:WorkflowViewState.IdRef>InvokeMethod_1</sap2010:WorkflowViewState.IdRef>
+                </InvokeMethod>
+                <WriteLine Text="[iterationNo.ToString(&quot;0000&quot;) + &quot; - Training Result: &quot; + trainingResult.AverageError.ToString(&quot;0.000000&quot;) + &quot; Validation Result: &quot; + validationResult.AverageError.ToString(&quot;0.000000&quot;)]" sap2010:WorkflowViewState.IdRef="WriteLine_1" />
+                <Assign>
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[gIterationNo]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[iterationNo]</InArgument>
+                  </Assign.Value>
+                  <sap2010:WorkflowViewState.IdRef>Assign_9</sap2010:WorkflowViewState.IdRef>
+                </Assign>
+                <sap2010:WorkflowViewState.IdRef>Sequence_8</sap2010:WorkflowViewState.IdRef>
+              </Sequence>
+            </ActivityAction>
+          </nannl:TrainingLoop.Body>
+          <nannl:TrainingLoop.Variables>
+            <Variable x:TypeArguments="ncv:BatchExecutionResult" Name="trainingResult" />
+            <Variable x:TypeArguments="ncv:BatchExecutionResult" Name="validationResult" />
+          </nannl:TrainingLoop.Variables>
+          <sap2010:WorkflowViewState.IdRef>TrainingLoop_1</sap2010:WorkflowViewState.IdRef>
+        </nannl:TrainingLoop>
+        <sap2010:WorkflowViewState.IdRef>Sequence_9</sap2010:WorkflowViewState.IdRef>
+      </Sequence>
+    </na:ComputationContext.Body>
+    <na:ComputationContext.Variables>
+      <Variable x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider" Name="trainingProvider" />
+      <Variable x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider" Name="validationProvider" />
+      <Variable x:TypeArguments="nnnl:Training" Name="training" />
+      <Variable x:TypeArguments="x:Int32" Name="gIterationNo" />
+    </na:ComputationContext.Variables>
+    <sap2010:WorkflowViewState.IdRef>ComputationContext_1</sap2010:WorkflowViewState.IdRef>
+    <sads:DebugSymbol.Symbol>d2lDOlxVc2Vyc1x1bmJvcm5jaGlra2VuXERvY3VtZW50c1xWaXN1YWwgU3R1ZGlvIDExXFByb2plY3RzXE5ldXJvZmxvd1xXRlRlc3RDb25zb2xlXFB1c3N5RGV0ZWN0b3JUZXN0LnhhbWyxAUcDlQcbAgEBSQeLBxICAQJKCcAGFAIBLcEGCYkHHgIBA04LtAYbAgEztQYLvgYoAgEuwQYnwQZOAgErxwYPgQcaAgEEUA+tAyUDAYQBrgMPsQYlAgE0tQZjtQZvAgEvuQYTuQafAQIBMcgGEeAGKwIBHeEGEfAGLQIBEfEGEfUGIAIBDPYGEfYGvgICAQr3BhH/BhoCAQVSE6oDHgMBhQGwAxOuBh4CATXIBm7IBnoCASnIBlLIBmQCASfOBhfcBj0CAR7hBooB4QaWAQIBG+EGbOEGgAECARnnBhfsBj0CARLzBljzBmwCAQ/yBkPyBlUCAQ32BiH2Bo0CAgEL/AY7/AZIAgEI+QY8+QZKAgEGUxV0IAMBvAF1FagDIAMBhgGxAxXmAyACAW/nAxWsBiACATbOBtABzgbWAQIBJs4GhQHOBpcBAgEkzgahAc4GtQECASLOBkbOBkoCASHOBt4BzgbtAQIBH+cGyAHnBs4BAgEY5waZAecGrQECARbnBlznBmACARXnBtYB5wblAQIBE1gXYCADAcUBYRdpIAMBwQFqF3IgAwG9AXkX0gEyAwGsAdMBF58COQMBnQGgAhemA0EDAYcBuAMXwAMgAwGAAcEDF8kDIAIBfMoDF9IDIAIBeNMDF9sDIAIBdNwDF+QDIAIBcOsDF8QEMgIBX8UEF5EFOQIBUJIFF6oGQQIBN9AGG9kGRQMBHhDpBhvpBs8BAwESEF1BXUMDAcgBWkJaTgMBxgFmYGafAQMBxAFjYWNzAwHCAW9gb6EBAwHAAWxhbHUDAb4ByAFHyAFLAwG0AcMBT8MBaAMBswHNAUXNAUYDAbIBvgFHvgFMAwGxAbQBR7QBTAMBsAGqAUaqAUsDAa8BuQFGuQFKAwGuAa8BRq8BSwMBrQF9H5ABNgMBuAGVAR+jATwDAbUB0wFa0wFjAwGeAdUBG+gBRQMBqAHpARucAjIDAZ8BoQNFoQNsAwGKAaACgQGgAowBAwGIAaQCH+YCOQMBkgHrAh+JAzkDAY0BjgMfmgM+AwGLAb0DQb0DQgMBgwG6A0K6A0wDAYEBxgNBxgNDAgF/wwNCwwNOAgF9zwNBzwNDAgF7zANCzANRAgF52ANg2AO4AQIBd9UDYdUDcwIBdeEDYOEDugECAXPeA2HeA3UCAXG6BEe6BEsCAWe1BE+1BGgCAWa/BEW/BEYCAWWwBEewBEwCAWSmBEemBEwCAWOcBEacBEsCAWKrBEarBEkCAWGhBEahBEwCAWDvAx+CBDYCAWuHBB+VBDwCAWjFBFrFBGMCAVHHBBvaBEUCAVvbBBuOBTICAVKlBkWlBmwCATqSBYEBkgWMAQIBOJYFH9gFOQIBRd0FH/sFOQIBQIAGH54GPgIBO9QGStQGSwMBHhGLAU+LAVMDAbsBhgFOhgFVAwG6AYEBToEBTwMBuQGeAU2eAU4DAbcBmQFNmQFOAwG2Ad4BS94BTwMBqwHjAUnjAUoDAaoB2QFK2QFNAwGpAZICS5ICTwMBpAGNAkqNAk8DAaMBlwJJlwJKAwGiAYMCSoMCTwMBoQGIAkqIAk8DAaAB7gEj/AFAAwGlAaYCI8QCPQMBmAHFAiPjAj0DAZMBhANNhAN1AwGOAe8CJ/gCSgMBkAH9Aif9AsEBAwGPAZUDT5UDVAMBjAH9A0/9A1MCAW74A074A1UCAW3zA07zA08CAWyQBE2QBE4CAWqLBE2LBE4CAWnQBEvQBE8CAV7VBEnVBEoCAV3LBErLBE0CAVyEBUuEBU8CAVf/BEr/BE8CAVaJBUmJBUoCAVX1BEr1BE8CAVT6BEr6BE8CAVPgBCPuBEACAViYBSO2BT0CAUu3BSPVBT0CAUb2BU32BXUCAUHhBSfqBUoCAUPvBSfvBcEBAgFCmQZPmQZUAgE8hAYnkgZCAgE99wFR9wFSAwGnAfIBUfIBUgMBpgG/AlG/AlQDAZkBqgIrswJPAwGbAbgCK7gCxQEDAZoB3gJR3gJUAwGUAckCK9ICTwMBlgHXAivXAsUBAwGVAfMCVvMCWgMBkQHpBFHpBFICAVrkBFHkBFICAVmxBVGxBVMCAUycBSulBU8CAU6qBSuqBcUBAgFN0AVR0AVTAgFHuwUrxAVPAgFJyQUryQXFAQIBSOUFVuUFWgIBRIgGVYgGlQECAT+NBleNBlsCAT6uAlquAl4DAZwBzQJazQJeAwGXAaAFWqAFXgIBT78FWr8FXgIBSg==</sads:DebugSymbol.Symbol>
+  </na:ComputationContext>
+  <sap2010:WorkflowViewState.IdRef>WFTestConsole.PussyDetectorTest_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="496,384">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewWeightDecay_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewIterationRepeatPars_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewSignChangesRule_1" sap:VirtualizedContainerService.HintSize="474,214" />
+      <sap2010:ViewStateData Id="NewNoisedWeightInitializationRule_1" sap:VirtualizedContainerService.HintSize="332,36" />
+      <sap2010:ViewStateData Id="NewIterationRepeatPars_2" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewAlopexBRule_1" sap:VirtualizedContainerService.HintSize="332,170" />
+      <sap2010:ViewStateData Id="NewLearningRuleCollection_1" sap:VirtualizedContainerService.HintSize="474,281">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewSigmoidActivationFunction_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_1" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_1" sap:VirtualizedContainerService.HintSize="329,186" />
+      <sap2010:ViewStateData Id="NewSigmoidActivationFunction_2" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_2" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_2" sap:VirtualizedContainerService.HintSize="329,186" />
+      <sap2010:ViewStateData Id="NewLayerCollection_1" sap:VirtualizedContainerService.HintSize="343,447" />
+      <sap2010:ViewStateData Id="NewLinearActivationFunction_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_3" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_3" sap:VirtualizedContainerService.HintSize="343,186" />
+      <sap2010:ViewStateData Id="NewManagedNNInitParameters_1" sap:VirtualizedContainerService.HintSize="343,104" />
+      <sap2010:ViewStateData Id="NewStandardMultilayerNeuralNetwork_1" sap:VirtualizedContainerService.HintSize="474,886" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="496,1585">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="518,2133">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExperimentBranch_1" sap:VirtualizedContainerService.HintSize="540,2440" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="242,58" />
+      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="242,58" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="501,580">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewWeightDecay_2" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewIterationRepeatPars_3" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewSignChangesRule_2" sap:VirtualizedContainerService.HintSize="479,214" />
+      <sap2010:ViewStateData Id="NewNoisedWeightInitializationRule_2" sap:VirtualizedContainerService.HintSize="332,36" />
+      <sap2010:ViewStateData Id="NewIterationRepeatPars_4" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewAlopexBRule_2" sap:VirtualizedContainerService.HintSize="332,193" />
+      <sap2010:ViewStateData Id="NewLearningRuleCollection_2" sap:VirtualizedContainerService.HintSize="479,304">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewSigmoidActivationFunction_3" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_4" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_4" sap:VirtualizedContainerService.HintSize="329,186" />
+      <sap2010:ViewStateData Id="NewSigmoidActivationFunction_4" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_5" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_5" sap:VirtualizedContainerService.HintSize="329,186">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="Math.IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewLayerCollection_2" sap:VirtualizedContainerService.HintSize="348,447" />
+      <sap2010:ViewStateData Id="NewLinearActivationFunction_2" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_6" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewActivationLayer_6" sap:VirtualizedContainerService.HintSize="348,186" />
+      <sap2010:ViewStateData Id="NewRecurrentOptions_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="NewManagedNNInitParameters_2" sap:VirtualizedContainerService.HintSize="348,125" />
+      <sap2010:ViewStateData Id="NewStandardMultilayerNeuralNetwork_2" sap:VirtualizedContainerService.HintSize="479,907" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="501,1629">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="523,2373">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExperimentBranch_2" sap:VirtualizedContainerService.HintSize="545,2440" />
+      <sap2010:ViewStateData Id="Experiment_1" sap:VirtualizedContainerService.HintSize="1138,2476" />
+      <sap2010:ViewStateData Id="VisualBasicValue`1_7" sap:VirtualizedContainerService.HintSize="289,55" />
+      <sap2010:ViewStateData Id="NewUnorderedTraining_1" sap:VirtualizedContainerService.HintSize="1138,97" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1160,2737">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="NewGaussianBatchingStrategyFactory_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="UnorderedProviderBasedBatcher_1" sap:VirtualizedContainerService.HintSize="343,102" />
+      <sap2010:ViewStateData Id="TrainingIteration_1" sap:VirtualizedContainerService.HintSize="383,203" />
+      <sap2010:ViewStateData Id="NewMonteCarloBatchingStrategyFactory_1" sap:VirtualizedContainerService.HintSize="200,36" />
+      <sap2010:ViewStateData Id="UnorderedProviderBasedBatcher_2" sap:VirtualizedContainerService.HintSize="343,102" />
+      <sap2010:ViewStateData Id="ValidationIteration_1" sap:VirtualizedContainerService.HintSize="383,203" />
+      <sap2010:ViewStateData Id="InvokeMethod_1" sap:VirtualizedContainerService.HintSize="383,130" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="383,61" />
+      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="383,58" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="405,939">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TrainingLoop_1" sap:VirtualizedContainerService.HintSize="1160,1085" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="1182,3986">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ComputationContext_1" sap:VirtualizedContainerService.HintSize="1196,4022" />
+      <sap2010:ViewStateData Id="WFTestConsole.PussyDetectorTest_1" sap:VirtualizedContainerService.HintSize="1236,4102" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
