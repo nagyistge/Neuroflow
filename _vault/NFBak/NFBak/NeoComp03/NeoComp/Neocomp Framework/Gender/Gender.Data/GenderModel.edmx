@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Item" EntityType="Model.Store.Item" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Pixels" Type="varbinary" Nullable="false" MaxLength="480" />
+          <Property Name="Mean" Type="float" Nullable="false" />
+          <Property Name="BelowMean" Type="float" Nullable="false" />
+          <Property Name="AboveMean" Type="float" Nullable="false" />
+          <Property Name="Gender" Type="bit" Nullable="false" />
+          <Property Name="IsTrainingPattern" Type="bit" Nullable="false" />
+          <Property Name="Rnd" Type="float" />
+        </EntityType>
+        <Function Name="DeleteAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="GenderEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Items" EntityType="Model.Item" />
+          <FunctionImport Name="DeleteAll" />
+        </EntityContainer>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pixels" Type="Binary" Nullable="false" MaxLength="480" FixedLength="false" />
+          <Property Name="Mean" Type="Double" Nullable="false" />
+          <Property Name="BelowMean" Type="Double" Nullable="false" />
+          <Property Name="AboveMean" Type="Double" Nullable="false" />
+          <Property Name="Gender" Type="Boolean" Nullable="false" />
+          <Property Name="IsTrainingPattern" Type="Boolean" Nullable="false" />
+          <Property Type="Double" Name="Rnd" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="GenderEntities">
+          <EntitySetMapping Name="Items"><EntityTypeMapping TypeName="Model.Item"><MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="Rnd" ColumnName="Rnd" />
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Pixels" ColumnName="Pixels" />
+            <ScalarProperty Name="Mean" ColumnName="Mean" />
+            <ScalarProperty Name="BelowMean" ColumnName="BelowMean" />
+            <ScalarProperty Name="AboveMean" ColumnName="AboveMean" />
+            <ScalarProperty Name="Gender" ColumnName="Gender" />
+            <ScalarProperty Name="IsTrainingPattern" ColumnName="IsTrainingPattern" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteAll" FunctionName="Model.Store.DeleteAll" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="GenderModel">
+        <EntityTypeShape EntityType="Model.Item" Width="1.5" PointX="0.75" PointY="0.75" Height="2.3648893229166665" IsExpanded="true" /></Diagram></Diagrams>
+  </Designer>
+</edmx:Edmx>

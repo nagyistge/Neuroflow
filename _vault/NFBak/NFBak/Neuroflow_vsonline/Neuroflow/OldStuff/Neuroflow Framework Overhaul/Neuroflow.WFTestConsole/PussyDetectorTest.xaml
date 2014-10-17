@@ -1,0 +1,643 @@
+﻿<Activity mc:Ignorable="sap" x:Class="Neuroflow.WFTestConsole.PussyDetectorTest" sap:VirtualizedContainerService.HintSize="1315,3367" mva:VisualBasic.Settings="Assembly references and imported namespaces for internal implementation" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:local="clr-namespace:Neuroflow.WFTestConsole" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="clr-namespace:Microsoft.VisualBasic;assembly=System" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:na="clr-namespace:Neuroflow.Activities;assembly=Neuroflow.Activities" xmlns:nann="clr-namespace:Neuroflow.Activities.Networks.Neural;assembly=Neuroflow.Activities" xmlns:nannl="clr-namespace:Neuroflow.Activities.Networks.Neural.Learning;assembly=Neuroflow.Activities" xmlns:nav="clr-namespace:Neuroflow.Activities.Vectors;assembly=Neuroflow.Activities" xmlns:navb="clr-namespace:Neuroflow.Activities.Vectors.BatchingStrategies;assembly=Neuroflow.Activities" xmlns:nc="clr-namespace:Neuroflow.Core;assembly=Neuroflow.Core" xmlns:ncc="clr-namespace:Neuroflow.Core.ComputationAPI;assembly=Neuroflow.Core" xmlns:ncv="clr-namespace:Neuroflow.Core.Vectors;assembly=Neuroflow.Core" xmlns:nn="clr-namespace:Neuroflow.Networks;assembly=Neuroflow.Networks" xmlns:nnn="clr-namespace:Neuroflow.Networks.Neural;assembly=Neuroflow.Networks" xmlns:nnnl="clr-namespace:Neuroflow.Networks.Neural.Learning;assembly=Neuroflow.Networks" xmlns:p="clr-namespace:PussyDetector;assembly=PussyDetector" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:s1="clr-namespace:System;assembly=System" xmlns:s2="clr-namespace:System;assembly=System.Xml" xmlns:s3="clr-namespace:System;assembly=System.Core" xmlns:s4="clr-namespace:System;assembly=System.ServiceModel" xmlns:sa="clr-namespace:System.Activities;assembly=System.Activities" xmlns:sad="clr-namespace:System.Activities.Debugger;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System" xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.ServiceModel" xmlns:scg2="clr-namespace:System.Collections.Generic;assembly=System.Core" xmlns:scg3="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sco1="clr-namespace:System.Collections.ObjectModel;assembly=System" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:sl="clr-namespace:System.Linq;assembly=System.Core" xmlns:st="clr-namespace:System.Text;assembly=mscorlib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <na:ComputationContext sad:XamlDebuggerXmlReader.FileName="C:\Users\unbornchikken\Documents\Visual Studio 2010\Projects\Neuroflow Framework Overhaul\Neuroflow.WFTestConsole\PussyDetectorTest.xaml" sap:VirtualizedContainerService.HintSize="1275,3327">
+    <na:ComputationContext.Body>
+      <Sequence sap:VirtualizedContainerService.HintSize="1261,3291">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg3:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <na:Experiment sap:VirtualizedContainerService.HintSize="1239,2039">
+          <na:Experiment.Branches>
+            <na:ExperimentBranch DisplayName="Feed Forward" sap:VirtualizedContainerService.HintSize="563,2003" IsActive="True">
+              <na:ExperimentBranch.Body>
+                <Sequence sap:VirtualizedContainerService.HintSize="541,1322">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg3:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Sequence DisplayName="Create Providers" sap:VirtualizedContainerService.HintSize="519,378">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">[sampleSize]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">50</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[trainingProvider]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleTrainingProvider(sampleSize)]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleValidationProvider(sampleSize)]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                  <Sequence DisplayName="Create Network and Training" sap:VirtualizedContainerService.HintSize="519,780">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="sco:Collection(nnnl:LearningRule)" Name="rules" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <nannl:NewLearningRuleCollection DisplayName="LearningRuleCollection" sap:VirtualizedContainerService.HintSize="497,325" Result="[rules]">
+                      <nannl:NewLearningRuleCollection.CreateItemActivities>
+                        <nannl:NewNoisedWeightInitializationRule DisplayName="NoisedWeightInitialization" sap:VirtualizedContainerService.HintSize="332,36" IsInitialized="True">
+                          <nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                            <na:InArgumentValue x:Key="Noise" ForProperty="True" Name="Noise" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.3</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                          </nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                        </nannl:NewNoisedWeightInitializationRule>
+                        <nannl:NewGradientDescentRule DisplayName="GradientDescent" sap:VirtualizedContainerService.HintSize="332,214" IsInitialized="True">
+                          <nannl:NewGradientDescentRule.ActivityWithResultProperties>
+                            <na:ActivityWithResultValue x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)">
+                              <na:ActivityWithResultValue.Activity>
+                                <nannl:NewWeightDecay DisplayName="WeightDecay" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                  <nannl:NewWeightDecay.InArgumentProperties>
+                                    <na:InArgumentValue x:Key="Cutoff" ForProperty="True" Name="Cutoff" PropertyType="InArgument(x:Double)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Double">2</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="Factor" ForProperty="True" Name="Factor" PropertyType="InArgument(x:Double)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Double">-0.0001</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                  </nannl:NewWeightDecay.InArgumentProperties>
+                                </nannl:NewWeightDecay>
+                              </na:ActivityWithResultValue.Activity>
+                            </na:ActivityWithResultValue>
+                            <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                              <na:ActivityWithResultValue.Activity>
+                                <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                  <nav:NewIterationRepeatPars.InArgumentProperties>
+                                    <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                  </nav:NewIterationRepeatPars.InArgumentProperties>
+                                </nav:NewIterationRepeatPars>
+                              </na:ActivityWithResultValue.Activity>
+                            </na:ActivityWithResultValue>
+                          </nannl:NewGradientDescentRule.ActivityWithResultProperties>
+                          <nannl:NewGradientDescentRule.InArgumentProperties>
+                            <na:InArgumentValue x:Key="StepSize" ForProperty="True" Name="StepSize" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.0001</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="Momentum" ForProperty="True" Name="Momentum" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.8</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="UseSmoothing" ForProperty="True" Name="UseSmoothing" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="Mode" ForProperty="True" Name="Mode" PropertyType="InArgument(nnnl:LearningMode)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="nnnl:LearningMode">[LearningMode.Stochastic]</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                          </nannl:NewGradientDescentRule.InArgumentProperties>
+                        </nannl:NewGradientDescentRule>
+                      </nannl:NewLearningRuleCollection.CreateItemActivities>
+                    </nannl:NewLearningRuleCollection>
+                    <na:Experiment sap:VirtualizedContainerService.HintSize="497,154">
+                      <na:Experiment.Branches>
+                        <na:ExperimentBranch sap:VirtualizedContainerService.HintSize="222,118" IsActive="False">
+                          <na:ExperimentBranch.Body>
+                            <nann:NewWiredNeuralNetwork DisplayName="Wired Neural Network" sap:VirtualizedContainerService.HintSize="200,51" IsInitialized="True" Result="[network]">
+                              <nann:NewWiredNeuralNetwork.ActivityWithResultProperties>
+                                <na:ActivityWithResultValue x:Key="nodeFactory" ActivityResultType="nc:IFactory(nnn:NeuralNode)" ForProperty="False" Name="nodeFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralNode))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <nann:NewActivationNeuronFactory DisplayName="ActivationNeuron" sap:VirtualizedContainerService.HintSize="353,163" IsInitialized="True">
+                                      <nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                        <na:ActivityWithResultValue x:Key="activationFunction" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="activationFunction" PropertyType="Activity(nnn:ActivationFunction)">
+                                          <na:ActivityWithResultValue.Activity>
+                                            <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                              <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                                <na:InArgumentValue x:Key="Alpha" ForProperty="True" Name="Alpha" PropertyType="InArgument(x:Double)">
+                                                  <na:InArgumentValue.InArgument>
+                                                    <InArgument x:TypeArguments="x:Double">1.75</InArgument>
+                                                  </na:InArgumentValue.InArgument>
+                                                </na:InArgumentValue>
+                                              </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                            </nann:NewSigmoidActivationFunction>
+                                          </na:ActivityWithResultValue.Activity>
+                                        </na:ActivityWithResultValue>
+                                        <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                          <na:ActivityWithResultValue.Activity>
+                                            <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                          </na:ActivityWithResultValue.Activity>
+                                        </na:ActivityWithResultValue>
+                                      </nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                    </nann:NewActivationNeuronFactory>
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                                <na:ActivityWithResultValue x:Key="collectorNodeFactory" ActivityResultType="nc:IFactory(nnn:NeuralNode)" ForProperty="False" Name="collectorNodeFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralNode))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <nann:NewActivationNeuronFactory DisplayName="ActivationNeuron" sap:VirtualizedContainerService.HintSize="353,163" IsInitialized="True">
+                                      <nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                        <na:ActivityWithResultValue x:Key="activationFunction" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="activationFunction" PropertyType="Activity(nnn:ActivationFunction)">
+                                          <na:ActivityWithResultValue.Activity>
+                                            <nann:NewLinearActivationFunction DisplayName="LinearActivationFunction" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                              <nann:NewLinearActivationFunction.InArgumentProperties>
+                                                <na:InArgumentValue x:Key="Alpha" ForProperty="True" Name="Alpha" PropertyType="InArgument(x:Double)">
+                                                  <na:InArgumentValue.InArgument>
+                                                    <InArgument x:TypeArguments="x:Double">1.75</InArgument>
+                                                  </na:InArgumentValue.InArgument>
+                                                </na:InArgumentValue>
+                                              </nann:NewLinearActivationFunction.InArgumentProperties>
+                                            </nann:NewLinearActivationFunction>
+                                          </na:ActivityWithResultValue.Activity>
+                                        </na:ActivityWithResultValue>
+                                        <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                          <na:ActivityWithResultValue.Activity>
+                                            <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                          </na:ActivityWithResultValue.Activity>
+                                        </na:ActivityWithResultValue>
+                                      </nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                    </nann:NewActivationNeuronFactory>
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                                <na:ActivityWithResultValue x:Key="connectionFactory" ActivityResultType="nc:IFactory(nnn:NeuralConnection)" ForProperty="False" Name="connectionFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralConnection))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <nann:NewSynapseFactory DisplayName="Synapse" sap:VirtualizedContainerService.HintSize="353,97" IsInitialized="True">
+                                      <nann:NewSynapseFactory.ActivityWithResultProperties>
+                                        <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                          <na:ActivityWithResultValue.Activity>
+                                            <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                          </na:ActivityWithResultValue.Activity>
+                                        </na:ActivityWithResultValue>
+                                      </nann:NewSynapseFactory.ActivityWithResultProperties>
+                                    </nann:NewSynapseFactory>
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                              </nann:NewWiredNeuralNetwork.ActivityWithResultProperties>
+                              <nann:NewWiredNeuralNetwork.InArgumentProperties>
+                                <na:InArgumentValue x:Key="inputInterfaceLength" ForProperty="False" Name="inputInterfaceLength" PropertyType="InArgument(x:Int32)">
+                                  <na:InArgumentValue.InArgument>
+                                    <InArgument x:TypeArguments="x:Int32">[trainingProvider.InputInterfaceLength]</InArgument>
+                                  </na:InArgumentValue.InArgument>
+                                </na:InArgumentValue>
+                                <na:InArgumentValue x:Key="outputInterfaceLength" ForProperty="False" Name="outputInterfaceLength" PropertyType="InArgument(x:Int32)">
+                                  <na:InArgumentValue.InArgument>
+                                    <InArgument x:TypeArguments="x:Int32">[trainingProvider.OutputInterfaceLength]</InArgument>
+                                  </na:InArgumentValue.InArgument>
+                                </na:InArgumentValue>
+                                <na:InArgumentValue x:Key="nodeCount" ForProperty="False" Name="nodeCount" PropertyType="InArgument(x:Int32)">
+                                  <na:InArgumentValue.InArgument>
+                                    <InArgument x:TypeArguments="x:Int32">28</InArgument>
+                                  </na:InArgumentValue.InArgument>
+                                </na:InArgumentValue>
+                                <na:InArgumentValue x:Key="recurrent" ForProperty="False" Name="recurrent" PropertyType="InArgument(x:Boolean)">
+                                  <na:InArgumentValue.InArgument>
+                                    <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                                  </na:InArgumentValue.InArgument>
+                                </na:InArgumentValue>
+                              </nann:NewWiredNeuralNetwork.InArgumentProperties>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg3:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </nann:NewWiredNeuralNetwork>
+                          </na:ExperimentBranch.Body>
+                        </na:ExperimentBranch>
+                        <na:ExperimentBranch sap:VirtualizedContainerService.HintSize="222,118" IsActive="True">
+                          <na:ExperimentBranch.Body>
+                            <local:CreateStandardMLNetwork FirstLayerNeuronCount="150" sap:VirtualizedContainerService.HintSize="200,22" InputInterfaceLength="[trainingProvider.InputInterfaceLength]" LearningRules="[rules]" OutputInterfaceLength="[trainingProvider.OutputInterfaceLength]" Result="[network]" SecondLayerNeuronCount="50" />
+                          </na:ExperimentBranch.Body>
+                        </na:ExperimentBranch>
+                      </na:Experiment.Branches>
+                    </na:Experiment>
+                    <nannl:NewUnorderedTraining DisplayName="UnorderedTraining" sap:VirtualizedContainerService.HintSize="497,97" IsInitialized="True" Result="[training]">
+                      <nannl:NewUnorderedTraining.ActivityWithResultProperties>
+                        <na:ActivityWithResultValue x:Key="network" ActivityResultType="nnn:NeuralNetwork" ForProperty="False" Name="network" PropertyType="Activity(nnn:NeuralNetwork)">
+                          <na:ActivityWithResultValue.Activity>
+                            <mva:VisualBasicValue x:TypeArguments="nnn:NeuralNetwork" ExpressionText="network" sap:VirtualizedContainerService.HintSize="289,55" />
+                          </na:ActivityWithResultValue.Activity>
+                        </na:ActivityWithResultValue>
+                      </nannl:NewUnorderedTraining.ActivityWithResultProperties>
+                    </nannl:NewUnorderedTraining>
+                  </Sequence>
+                </Sequence>
+              </na:ExperimentBranch.Body>
+            </na:ExperimentBranch>
+            <na:ExperimentBranch DisplayName="Recurrent" sap:VirtualizedContainerService.HintSize="593,2003" IsActive="False">
+              <na:ExperimentBranch.Body>
+                <Sequence sap:VirtualizedContainerService.HintSize="571,1936">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg3:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Sequence DisplayName="Create Providers" sap:VirtualizedContainerService.HintSize="549,574">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">[numOfIts]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">[sampleSize]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">120</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">[subSampleSize]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">20</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[trainingProvider]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleTrainingProvider(sampleSize, subSampleSize, numOfIts)]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign sap:VirtualizedContainerService.HintSize="242,58">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[DefaultProviders.CreateFullSampleValidationProvider(sampleSize, subSampleSize, numOfIts)]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                  <Sequence DisplayName="Create Network and Training" sap:VirtualizedContainerService.HintSize="549,1198">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="sco:Collection(nnnl:LearningRule)" Name="rules" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg3:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <nannl:NewLearningRuleCollection DisplayName="LearningRuleCollection" sap:VirtualizedContainerService.HintSize="527,325" Result="[rules]">
+                      <nannl:NewLearningRuleCollection.CreateItemActivities>
+                        <nannl:NewNoisedWeightInitializationRule DisplayName="NoisedWeightInitialization" sap:VirtualizedContainerService.HintSize="332,36" IsInitialized="True">
+                          <nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                            <na:InArgumentValue x:Key="Noise" ForProperty="True" Name="Noise" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.3</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                          </nannl:NewNoisedWeightInitializationRule.InArgumentProperties>
+                        </nannl:NewNoisedWeightInitializationRule>
+                        <nannl:NewGradientDescentRule DisplayName="GradientDescent" sap:VirtualizedContainerService.HintSize="332,214" IsInitialized="True">
+                          <nannl:NewGradientDescentRule.ActivityWithResultProperties>
+                            <na:ActivityWithResultValue x:Key="WeightDecay" ActivityResultType="nnnl:WeightDecay" ForProperty="True" Name="WeightDecay" PropertyType="Activity(nnnl:WeightDecay)">
+                              <na:ActivityWithResultValue.Activity>
+                                <nannl:NewWeightDecay DisplayName="WeightDecay" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                  <nannl:NewWeightDecay.InArgumentProperties>
+                                    <na:InArgumentValue x:Key="Cutoff" ForProperty="True" Name="Cutoff" PropertyType="InArgument(x:Double)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Double">2</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="Factor" ForProperty="True" Name="Factor" PropertyType="InArgument(x:Double)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Double">-0.0001</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                  </nannl:NewWeightDecay.InArgumentProperties>
+                                </nannl:NewWeightDecay>
+                              </na:ActivityWithResultValue.Activity>
+                            </na:ActivityWithResultValue>
+                            <na:ActivityWithResultValue x:Key="IterationRepeat" ActivityResultType="ncv:IterationRepeatPars" ForProperty="True" Name="IterationRepeat" PropertyType="Activity(ncv:IterationRepeatPars)">
+                              <na:ActivityWithResultValue.Activity>
+                                <nav:NewIterationRepeatPars DisplayName="IterationRepeatPars" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                  <nav:NewIterationRepeatPars.InArgumentProperties>
+                                    <na:InArgumentValue x:Key="minIterations" ForProperty="False" Name="minIterations" PropertyType="InArgument(x:Int32)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Int32">1</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                    <na:InArgumentValue x:Key="maxIterations" ForProperty="False" Name="maxIterations" PropertyType="InArgument(x:Int32)">
+                                      <na:InArgumentValue.InArgument>
+                                        <InArgument x:TypeArguments="x:Int32">5</InArgument>
+                                      </na:InArgumentValue.InArgument>
+                                    </na:InArgumentValue>
+                                  </nav:NewIterationRepeatPars.InArgumentProperties>
+                                </nav:NewIterationRepeatPars>
+                              </na:ActivityWithResultValue.Activity>
+                            </na:ActivityWithResultValue>
+                          </nannl:NewGradientDescentRule.ActivityWithResultProperties>
+                          <nannl:NewGradientDescentRule.InArgumentProperties>
+                            <na:InArgumentValue x:Key="StepSize" ForProperty="True" Name="StepSize" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.0001</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="Momentum" ForProperty="True" Name="Momentum" PropertyType="InArgument(x:Double)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Double">0.8</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="UseSmoothing" ForProperty="True" Name="UseSmoothing" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="Mode" ForProperty="True" Name="Mode" PropertyType="InArgument(nnnl:LearningMode)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="nnnl:LearningMode">[LearningMode.Stochastic]</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="IsEnabled" ForProperty="True" Name="IsEnabled" PropertyType="InArgument(x:Boolean)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                            <na:InArgumentValue x:Key="GroupID" ForProperty="True" Name="GroupID" PropertyType="InArgument(x:Int32)">
+                              <na:InArgumentValue.InArgument>
+                                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                              </na:InArgumentValue.InArgument>
+                            </na:InArgumentValue>
+                          </nannl:NewGradientDescentRule.InArgumentProperties>
+                        </nannl:NewGradientDescentRule>
+                      </nannl:NewLearningRuleCollection.CreateItemActivities>
+                    </nannl:NewLearningRuleCollection>
+                    <nann:NewWiredNeuralNetwork DisplayName="Wired Neural Network" sap:VirtualizedContainerService.HintSize="527,572" IsInitialized="True" Result="[network]">
+                      <nann:NewWiredNeuralNetwork.ActivityWithResultProperties>
+                        <na:ActivityWithResultValue x:Key="nodeFactory" ActivityResultType="nc:IFactory(nnn:NeuralNode)" ForProperty="False" Name="nodeFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralNode))">
+                          <na:ActivityWithResultValue.Activity>
+                            <nann:NewActivationNeuronFactory DisplayName="ActivationNeuron" sap:VirtualizedContainerService.HintSize="353,163" IsInitialized="True">
+                              <nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                <na:ActivityWithResultValue x:Key="activationFunction" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="activationFunction" PropertyType="Activity(nnn:ActivationFunction)">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <nann:NewSigmoidActivationFunction DisplayName="SigmoidActivationFunction" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                      <nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                        <na:InArgumentValue x:Key="Alpha" ForProperty="True" Name="Alpha" PropertyType="InArgument(x:Double)">
+                                          <na:InArgumentValue.InArgument>
+                                            <InArgument x:TypeArguments="x:Double">1.75</InArgument>
+                                          </na:InArgumentValue.InArgument>
+                                        </na:InArgumentValue>
+                                      </nann:NewSigmoidActivationFunction.InArgumentProperties>
+                                    </nann:NewSigmoidActivationFunction>
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                                <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                              </nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                            </nann:NewActivationNeuronFactory>
+                          </na:ActivityWithResultValue.Activity>
+                        </na:ActivityWithResultValue>
+                        <na:ActivityWithResultValue x:Key="collectorNodeFactory" ActivityResultType="nc:IFactory(nnn:NeuralNode)" ForProperty="False" Name="collectorNodeFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralNode))">
+                          <na:ActivityWithResultValue.Activity>
+                            <nann:NewActivationNeuronFactory DisplayName="ActivationNeuron" sap:VirtualizedContainerService.HintSize="353,163" IsInitialized="True">
+                              <nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                                <na:ActivityWithResultValue x:Key="activationFunction" ActivityResultType="nnn:ActivationFunction" ForProperty="False" Name="activationFunction" PropertyType="Activity(nnn:ActivationFunction)">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <nann:NewLinearActivationFunction DisplayName="LinearActivationFunction" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                                      <nann:NewLinearActivationFunction.InArgumentProperties>
+                                        <na:InArgumentValue x:Key="Alpha" ForProperty="True" Name="Alpha" PropertyType="InArgument(x:Double)">
+                                          <na:InArgumentValue.InArgument>
+                                            <InArgument x:TypeArguments="x:Double">1.75</InArgument>
+                                          </na:InArgumentValue.InArgument>
+                                        </na:InArgumentValue>
+                                      </nann:NewLinearActivationFunction.InArgumentProperties>
+                                    </nann:NewLinearActivationFunction>
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                                <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                              </nann:NewActivationNeuronFactory.ActivityWithResultProperties>
+                            </nann:NewActivationNeuronFactory>
+                          </na:ActivityWithResultValue.Activity>
+                        </na:ActivityWithResultValue>
+                        <na:ActivityWithResultValue x:Key="connectionFactory" ActivityResultType="nc:IFactory(nnn:NeuralConnection)" ForProperty="False" Name="connectionFactory" PropertyType="Activity(nc:IFactory(nnn:NeuralConnection))">
+                          <na:ActivityWithResultValue.Activity>
+                            <nann:NewSynapseFactory DisplayName="Synapse" sap:VirtualizedContainerService.HintSize="353,97" IsInitialized="True">
+                              <nann:NewSynapseFactory.ActivityWithResultProperties>
+                                <na:ActivityWithResultValue x:Key="learningRules" ActivityResultType="sco:Collection(nnnl:LearningRule)" ForProperty="False" Name="learningRules" PropertyType="Activity(sco:Collection(nnnl:LearningRule))">
+                                  <na:ActivityWithResultValue.Activity>
+                                    <mva:VisualBasicValue x:TypeArguments="sco:Collection(nnnl:LearningRule)" ExpressionText="rules" sap:VirtualizedContainerService.HintSize="289,55" />
+                                  </na:ActivityWithResultValue.Activity>
+                                </na:ActivityWithResultValue>
+                              </nann:NewSynapseFactory.ActivityWithResultProperties>
+                            </nann:NewSynapseFactory>
+                          </na:ActivityWithResultValue.Activity>
+                        </na:ActivityWithResultValue>
+                      </nann:NewWiredNeuralNetwork.ActivityWithResultProperties>
+                      <nann:NewWiredNeuralNetwork.InArgumentProperties>
+                        <na:InArgumentValue x:Key="inputInterfaceLength" ForProperty="False" Name="inputInterfaceLength" PropertyType="InArgument(x:Int32)">
+                          <na:InArgumentValue.InArgument>
+                            <InArgument x:TypeArguments="x:Int32">[trainingProvider.InputInterfaceLength]</InArgument>
+                          </na:InArgumentValue.InArgument>
+                        </na:InArgumentValue>
+                        <na:InArgumentValue x:Key="outputInterfaceLength" ForProperty="False" Name="outputInterfaceLength" PropertyType="InArgument(x:Int32)">
+                          <na:InArgumentValue.InArgument>
+                            <InArgument x:TypeArguments="x:Int32">[trainingProvider.OutputInterfaceLength]</InArgument>
+                          </na:InArgumentValue.InArgument>
+                        </na:InArgumentValue>
+                        <na:InArgumentValue x:Key="nodeCount" ForProperty="False" Name="nodeCount" PropertyType="InArgument(x:Int32)">
+                          <na:InArgumentValue.InArgument>
+                            <InArgument x:TypeArguments="x:Int32">75</InArgument>
+                          </na:InArgumentValue.InArgument>
+                        </na:InArgumentValue>
+                        <na:InArgumentValue x:Key="recurrent" ForProperty="False" Name="recurrent" PropertyType="InArgument(x:Boolean)">
+                          <na:InArgumentValue.InArgument>
+                            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                          </na:InArgumentValue.InArgument>
+                        </na:InArgumentValue>
+                      </nann:NewWiredNeuralNetwork.InArgumentProperties>
+                    </nann:NewWiredNeuralNetwork>
+                    <nannl:NewUnorderedTraining DisplayName="UnorderedTraining" sap:VirtualizedContainerService.HintSize="527,97" IsInitialized="True" Result="[training]">
+                      <nannl:NewUnorderedTraining.ActivityWithResultProperties>
+                        <na:ActivityWithResultValue x:Key="network" ActivityResultType="nnn:NeuralNetwork" ForProperty="False" Name="network" PropertyType="Activity(nnn:NeuralNetwork)">
+                          <na:ActivityWithResultValue.Activity>
+                            <mva:VisualBasicValue x:TypeArguments="nnn:NeuralNetwork" ExpressionText="network" sap:VirtualizedContainerService.HintSize="289,55" />
+                          </na:ActivityWithResultValue.Activity>
+                        </na:ActivityWithResultValue>
+                      </nannl:NewUnorderedTraining.ActivityWithResultProperties>
+                    </nannl:NewUnorderedTraining>
+                  </Sequence>
+                </Sequence>
+              </na:ExperimentBranch.Body>
+            </na:ExperimentBranch>
+          </na:Experiment.Branches>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg3:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </na:Experiment>
+        <WriteLine sap:VirtualizedContainerService.HintSize="1239,61" Text="[&quot;Conn Count: &quot; + network.Connections.Count.ToString + &quot; Node Count: &quot; + network.Nodes.Count.ToString]" />
+        <nannl:TrainingLoop Condition="[True]" sap:VirtualizedContainerService.HintSize="1239,987">
+          <nannl:TrainingLoop.Body>
+            <ActivityAction x:TypeArguments="x:Int32">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="x:Int32" Name="iterationNo" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Training Sequence" sap:VirtualizedContainerService.HintSize="405,841">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg3:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg3:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <nannl:TrainingIteration DisplayName="Training Iteration" sap:VirtualizedContainerService.HintSize="383,203" Result="[trainingResult]" Training="[training]">
+                  <nannl:TrainingIteration.GetNextBatch>
+                    <ActivityFunc x:TypeArguments="nnn:NeuralVectorFlowBatch">
+                      <ActivityFunc.Result>
+                        <DelegateOutArgument x:TypeArguments="nnn:NeuralVectorFlowBatch" Name="batchResult" />
+                      </ActivityFunc.Result>
+                      <nannl:UnorderedProviderBasedBatcher ReinitializationFrequency="{x:Null}" BatchSize="50" DisplayName="Unordered Provider Based Batcher" sap:VirtualizedContainerService.HintSize="343,102" LastResult="[trainingResult]" Provider="[trainingProvider]" Result="[batchResult]" UseCache="True">
+                        <nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                          <navb:NewGaussianBatchingStrategyFactory DisplayName="GaussianBatchingStrategy" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True">
+                            <navb:NewGaussianBatchingStrategyFactory.InArgumentProperties>
+                              <na:InArgumentValue x:Key="stdDev" ForProperty="False" Name="stdDev" PropertyType="InArgument(x:Double)">
+                                <na:InArgumentValue.InArgument>
+                                  <InArgument x:TypeArguments="x:Double">0.5</InArgument>
+                                </na:InArgumentValue.InArgument>
+                              </na:InArgumentValue>
+                            </navb:NewGaussianBatchingStrategyFactory.InArgumentProperties>
+                          </navb:NewGaussianBatchingStrategyFactory>
+                        </nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                      </nannl:UnorderedProviderBasedBatcher>
+                    </ActivityFunc>
+                  </nannl:TrainingIteration.GetNextBatch>
+                </nannl:TrainingIteration>
+                <nannl:ValidationIteration DisplayName="Validation Iteration" EveryNthIteration="1" sap:VirtualizedContainerService.HintSize="383,203" Result="[validationResult]" Training="[training]">
+                  <nannl:ValidationIteration.GetNextBatch>
+                    <ActivityFunc x:TypeArguments="nnn:NeuralVectorFlowBatch">
+                      <ActivityFunc.Result>
+                        <DelegateOutArgument x:TypeArguments="nnn:NeuralVectorFlowBatch" Name="batchResult" />
+                      </ActivityFunc.Result>
+                      <nannl:UnorderedProviderBasedBatcher LastResult="{x:Null}" ReinitializationFrequency="{x:Null}" BatchSize="50" DisplayName="Unordered Provider Based Batcher" sap:VirtualizedContainerService.HintSize="343,102" Provider="[validationProvider]" Result="[batchResult]" UseCache="True">
+                        <nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                          <navb:NewMonteCarloBatchingStrategyFactory DisplayName="MonteCarloBatchingStrategy" sap:VirtualizedContainerService.HintSize="200,36" IsInitialized="True" />
+                        </nannl:UnorderedProviderBasedBatcher.BatchingStrategy>
+                      </nannl:UnorderedProviderBasedBatcher>
+                    </ActivityFunc>
+                  </nannl:ValidationIteration.GetNextBatch>
+                </nannl:ValidationIteration>
+                <InvokeMethod DisplayName="TEMP TEST" sap:VirtualizedContainerService.HintSize="383,130" MethodName="TestNetwork" TargetType="p:TestHelper">
+                  <InArgument x:TypeArguments="nnn:NeuralNetwork">[network]</InArgument>
+                  <InArgument x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider">[validationProvider]</InArgument>
+                </InvokeMethod>
+                <WriteLine sap:VirtualizedContainerService.HintSize="383,61" Text="[iterationNo.ToString(&quot;0000&quot;) + &quot; - Training Result: &quot; + trainingResult.AverageError.ToString(&quot;0.000000&quot;) + &quot; Validation Result: &quot; + validationResult.AverageError.ToString(&quot;0.000000&quot;)]" />
+              </Sequence>
+            </ActivityAction>
+          </nannl:TrainingLoop.Body>
+          <nannl:TrainingLoop.Variables>
+            <Variable x:TypeArguments="ncv:BatchExecutionResult" Name="trainingResult" />
+            <Variable x:TypeArguments="ncv:BatchExecutionResult" Name="validationResult" />
+          </nannl:TrainingLoop.Variables>
+        </nannl:TrainingLoop>
+      </Sequence>
+    </na:ComputationContext.Body>
+    <na:ComputationContext.Variables>
+      <Variable x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider" Name="trainingProvider" />
+      <Variable x:TypeArguments="nnn:IUnorderedNeuralVectorFlowProvider" Name="validationProvider" />
+      <Variable x:TypeArguments="x:Int32" Name="sampleSize" />
+      <Variable x:TypeArguments="x:Int32" Name="subSampleSize" />
+      <Variable x:TypeArguments="x:Int32" Name="numOfIts" />
+      <Variable x:TypeArguments="nnn:NeuralNetwork" Name="network" />
+      <Variable x:TypeArguments="nnnl:Training" Name="training" />
+    </na:ComputationContext.Variables>
+  </na:ComputationContext>
+</Activity>
