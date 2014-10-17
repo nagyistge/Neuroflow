@@ -4,9 +4,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E29219AC-4F64-48EA-97D6-DF2B67AF6CAE}</ProjectGuid>
-    <Compiler>DMD2</Compiler>
+    <Compiler>GDC</Compiler>
     <PreferOneStepBuild>true</PreferOneStepBuild>
-    <UseDefaultCompiler>true</UseDefaultCompiler>
+    <UseDefaultCompiler>false</UseDefaultCompiler>
     <IncrementalLinking>true</IncrementalLinking>
     <ReleaseVersion>0.1.*</ReleaseVersion>
   </PropertyGroup>
@@ -14,16 +14,6 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug</OutputPath>
     <ObjectsDirectory>obj/Debug</ObjectsDirectory>
-    <LinkinThirdPartyLibraries>false</LinkinThirdPartyLibraries>
-    <UnittestMode>false</UnittestMode>
-    <OutputName>libnf_core</OutputName>
-    <Target>StaticLibrary</Target>
-    <Externalconsole>true</Externalconsole>
-    <DebugLevel>0</DebugLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release</OutputPath>
-    <ObjectsDirectory>obj/Release</ObjectsDirectory>
     <LinkinThirdPartyLibraries>false</LinkinThirdPartyLibraries>
     <UnittestMode>false</UnittestMode>
     <OutputName>libnf_core</OutputName>
@@ -42,68 +32,217 @@
     <DebugLevel>0</DebugLevel>
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\Release</OutputPath>
+    <ObjectsDirectory>obj/Release</ObjectsDirectory>
+    <LinkinThirdPartyLibraries>false</LinkinThirdPartyLibraries>
+    <UnittestMode>false</UnittestMode>
+    <OutputName>libnf_core</OutputName>
+    <Target>StaticLibrary</Target>
+    <Externalconsole>true</Externalconsole>
+    <DebugLevel>0</DebugLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="devicearray.d" />
-    <Compile Include="dataarray.d" />
-    <Compile Include="aliases.d" />
-    <Compile Include="dataarrayfactory.d" />
-    <Compile Include="devicearray2.d" />
-    <Compile Include="devicearray2group.d" />
-    <Compile Include="devicearraygroup.d" />
-    <Compile Include="devicearraymanagement.d" />
-    <Compile Include="devicearraypool.d" />
-    <Compile Include="ccinitpars.d" />
-    <Compile Include="computationcontext.d" />
-    <Compile Include="computationcontextfactory.d" />
-    <Compile Include="deviceinfo.d" />
-    <Compile Include="ccfactoryadapter.d" />
-    <Compile Include="main.d" />
-    <Compile Include="native\nccfactoryadapter.d" />
-    <Compile Include="native\ndevicearray.d" />
-    <Compile Include="native\ndevicearraypool.d" />
-    <Compile Include="native\ncomputationcontext.d" />
-    <Compile Include="native\ndataarray.d" />
-    <Compile Include="native\ndataarrayfactory.d" />
-    <Compile Include="native\ndevicearraymanagement.d" />
-    <Compile Include="native\ndevicearray2.d" />
-    <Compile Include="dataarray_ut.d" />
-    <Compile Include="computationcontext_ut.d" />
-    <Compile Include="utils.d" />
-    <Compile Include="supervisedbatch.d" />
-    <Compile Include="native\nutils.d" />
-    <Compile Include="supervisedsampleentry.d" />
-    <Compile Include="supervisedsample.d" />
-    <Compile Include="utils_ut.d" />
-    <Compile Include="mlp.d" />
-    <Compile Include="neuralnetworkfactory.d" />
-    <Compile Include="mlpinitpars.d" />
-    <Compile Include="layer.d" />
-    <Compile Include="layerbehavior.d" />
-    <Compile Include="layerdescription.d" />
-    <Compile Include="layerconnections.d" />
-    <Compile Include="learningbehavior.d" />
-    <Compile Include="supervisedlearningbehavior.d" />
-    <Compile Include="mlp_ut.d" />
-    <Compile Include="layerordercomparer.d" />
-    <Compile Include="activationdescription.d" />
-    <Compile Include="gradientdescentlearning.d" />
-    <Compile Include="learninginitbehavior.d" />
-    <Compile Include="randomizeweightsuniform.d" />
-    <Compile Include="native\ncomputeactivation.d" />
-    <Compile Include="native\nlearningimplfactory.d" />
-    <Compile Include="native\tonative.d" />
-    <Compile Include="computeactivation.d" />
-    <Compile Include="layerbehaviorutils.d" />
-    <Compile Include="learningimpl.d" />
-    <Compile Include="learningimplfactory.d" />
-    <Compile Include="mlpbackwardnode.d" />
-    <Compile Include="mlpforwardnode.d" />
-    <Compile Include="supervisedlearning.d" />
-    <Compile Include="supervisedoutputs.d" />
-    <Compile Include="trainingnode.d" />
+    <Compile Include="devicearray.d">
+      <LastGenOutput>obj/Release/devicearray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="dataarray.d">
+      <LastGenOutput>obj/Release/dataarray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="aliases.d">
+      <LastGenOutput>obj/Release/aliases.o</LastGenOutput>
+    </Compile>
+    <Compile Include="dataarrayfactory.d">
+      <LastGenOutput>obj/Release/dataarrayfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearray2.d">
+      <LastGenOutput>obj/Release/devicearray2.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearray2group.d">
+      <LastGenOutput>obj/Release/devicearray2group.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraygroup.d">
+      <LastGenOutput>obj/Release/devicearraygroup.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraymanagement.d">
+      <LastGenOutput>obj/Release/devicearraymanagement.o</LastGenOutput>
+    </Compile>
+    <Compile Include="devicearraypool.d">
+      <LastGenOutput>obj/Release/devicearraypool.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ccinitpars.d">
+      <LastGenOutput>obj/Release/ccinitpars.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computationcontext.d">
+      <LastGenOutput>obj/Release/computationcontext.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computationcontextfactory.d">
+      <LastGenOutput>obj/Release/computationcontextfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="deviceinfo.d">
+      <LastGenOutput>obj/Release/deviceinfo.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ccfactoryadapter.d">
+      <LastGenOutput>obj/Release/ccfactoryadapter.o</LastGenOutput>
+    </Compile>
+    <Compile Include="main.d">
+      <LastGenOutput>obj/Release/main.o</LastGenOutput>
+    </Compile>
+    <Compile Include="dataarray_ut.d">
+      <LastGenOutput>obj/Release/dataarray_ut.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computationcontext_ut.d">
+      <LastGenOutput>obj/Release/computationcontext_ut.o</LastGenOutput>
+    </Compile>
+    <Compile Include="utils.d">
+      <LastGenOutput>obj/Release/utils.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedbatch.d">
+      <LastGenOutput>obj/Release/supervisedbatch.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedsampleentry.d">
+      <LastGenOutput>obj/Release/supervisedsampleentry.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedsample.d">
+      <LastGenOutput>obj/Release/supervisedsample.o</LastGenOutput>
+    </Compile>
+    <Compile Include="utils_ut.d">
+      <LastGenOutput>obj/Release/utils_ut.o</LastGenOutput>
+    </Compile>
+    <Compile Include="mlp.d">
+      <LastGenOutput>obj/Release/mlp.o</LastGenOutput>
+    </Compile>
+    <Compile Include="neuralnetworkfactory.d">
+      <LastGenOutput>obj/Release/neuralnetworkfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="mlpinitpars.d">
+      <LastGenOutput>obj/Release/mlpinitpars.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layer.d">
+      <LastGenOutput>obj/Release/layer.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layerbehavior.d">
+      <LastGenOutput>obj/Release/layerbehavior.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layerdescription.d">
+      <LastGenOutput>obj/Release/layerdescription.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layerconnections.d">
+      <LastGenOutput>obj/Release/layerconnections.o</LastGenOutput>
+    </Compile>
+    <Compile Include="learningbehavior.d">
+      <LastGenOutput>obj/Release/learningbehavior.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedlearningbehavior.d">
+      <LastGenOutput>obj/Release/supervisedlearningbehavior.o</LastGenOutput>
+    </Compile>
+    <Compile Include="mlp_ut.d">
+      <LastGenOutput>obj/Release/mlp_ut.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layerordercomparer.d">
+      <LastGenOutput>obj/Release/layerordercomparer.o</LastGenOutput>
+    </Compile>
+    <Compile Include="activationdescription.d">
+      <LastGenOutput>obj/Release/activationdescription.o</LastGenOutput>
+    </Compile>
+    <Compile Include="gradientdescentlearning.d">
+      <LastGenOutput>obj/Release/gradientdescentlearning.o</LastGenOutput>
+    </Compile>
+    <Compile Include="learninginitbehavior.d">
+      <LastGenOutput>obj/Release/learninginitbehavior.o</LastGenOutput>
+    </Compile>
+    <Compile Include="randomizeweightsuniform.d">
+      <LastGenOutput>obj/Release/randomizeweightsuniform.o</LastGenOutput>
+    </Compile>
+    <Compile Include="computeactivation.d">
+      <LastGenOutput>obj/Release/computeactivation.o</LastGenOutput>
+    </Compile>
+    <Compile Include="layerbehaviorutils.d">
+      <LastGenOutput>obj/Release/layerbehaviorutils.o</LastGenOutput>
+    </Compile>
+    <Compile Include="learningimpl.d">
+      <LastGenOutput>obj/Release/learningimpl.o</LastGenOutput>
+    </Compile>
+    <Compile Include="learningimplfactory.d">
+      <LastGenOutput>obj/Release/learningimplfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="mlpbackwardnode.d">
+      <LastGenOutput>obj/Release/mlpbackwardnode.o</LastGenOutput>
+    </Compile>
+    <Compile Include="mlpforwardnode.d">
+      <LastGenOutput>obj/Release/mlpforwardnode.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedlearning.d">
+      <LastGenOutput>obj/Release/supervisedlearning.o</LastGenOutput>
+    </Compile>
+    <Compile Include="supervisedoutputs.d">
+      <LastGenOutput>obj/Release/supervisedoutputs.o</LastGenOutput>
+    </Compile>
+    <Compile Include="trainingnode.d">
+      <LastGenOutput>obj/Release/trainingnode.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nfhelpers.d">
+      <LastGenOutput>obj/Release/nfhelpers.o</LastGenOutput>
+    </Compile>
+    <Compile Include="rtlr.d">
+      <LastGenOutput>obj/Release/rtlr.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ncabackward.d">
+      <LastGenOutput>obj/Release/ncabackward.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ncaforward.d">
+      <LastGenOutput>obj/Release/ncaforward.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ncagradientsrtlr.d">
+      <LastGenOutput>obj/Release/ncagradientsrtlr.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nccfactoryadapter.d">
+      <LastGenOutput>obj/Release/nccfactoryadapter.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ncomputationcontext.d">
+      <LastGenOutput>obj/Release/ncomputationcontext.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ncomputeactivation.d">
+      <LastGenOutput>obj/Release/ncomputeactivation.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndataarray.d">
+      <LastGenOutput>obj/Release/ndataarray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndataarrayfactory.d">
+      <LastGenOutput>obj/Release/ndataarrayfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndevicearray.d">
+      <LastGenOutput>obj/Release/ndevicearray.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndevicearray2.d">
+      <LastGenOutput>obj/Release/ndevicearray2.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndevicearraymanagement.d">
+      <LastGenOutput>obj/Release/ndevicearraymanagement.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ndevicearraypool.d">
+      <LastGenOutput>obj/Release/ndevicearraypool.o</LastGenOutput>
+    </Compile>
+    <Compile Include="ngradientdescentlearningimpl.d">
+      <LastGenOutput>obj/Release/ngradientdescentlearningimpl.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nhelpers.d">
+      <LastGenOutput>obj/Release/nhelpers.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nlearningimplfactory.d">
+      <LastGenOutput>obj/Release/nlearningimplfactory.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nrandomizeweightsuniformimpl.d">
+      <LastGenOutput>obj/Release/nrandomizeweightsuniformimpl.o</LastGenOutput>
+    </Compile>
+    <Compile Include="nutils.d">
+      <LastGenOutput>obj/Release/nutils.o</LastGenOutput>
+    </Compile>
+    <Compile Include="tonative.d">
+      <LastGenOutput>obj/Release/tonative.o</LastGenOutput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ocl\" />
-    <Folder Include="native\" />
+    <None Include="compiler.txt" />
   </ItemGroup>
 </Project>

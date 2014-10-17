@@ -92,7 +92,7 @@ class MLP
 				.map!(l => 
 					  tuple(
 							l[0], 
-							l[1].behaviors[].map!(b => cast(SupervisedLearningBehavior)b).filter!(b => b !is null).takeOne))
+                            l[1].behaviors.map!(b => cast(SupervisedLearningBehavior)b).filter!(b => b !is null).takeOne))
 				.map!(t => LayerInfo(
 									 t[0], 
 									 !t[1].empty ? t[1].front.weightUpdateMode == SupervisedWeightUpdateMode.online : false,
@@ -777,7 +777,7 @@ class MLP
 	private ActivationDescription getActivationDesc(size_t layerIndex)
 	{
 		auto layer = _layers[layerIndex];
-		auto desc = layer[1].descriptions[]
+		auto desc = layer[1].descriptions
 			.map!(d => cast(ActivationDescription)d)
 			.filter!(d => d !is null)
 			.takeOne;

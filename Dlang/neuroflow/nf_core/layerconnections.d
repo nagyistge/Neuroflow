@@ -1,6 +1,7 @@
 ﻿import layer;
 import std.exception;
 import std.algorithm;
+import std.range;
 
 enum FlowDirection
 {
@@ -106,9 +107,9 @@ class LayerConnections
         _otherLayers.length = 0;
     }
 
-    auto connectedLayers(FlowDirection direction)
+    ForwardRange!Layer connectedLayers(FlowDirection direction)
     {
-        return _otherLayers.filter!(ol => ol.flowDirection == direction).map!(ol => ol.layer);
+        return _otherLayers.filter!(ol => ol.flowDirection == direction).map!(ol => ol.layer).inputRangeObject;
     }
     
     private OtherLayer[] _otherLayers;

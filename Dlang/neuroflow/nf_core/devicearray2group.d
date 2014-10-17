@@ -2,6 +2,7 @@ import devicearraypool;
 import devicearray2;
 import std.algorithm;
 public import aliases;
+import nfhelpers;
 
 struct DeviceArray2Group
 {
@@ -38,7 +39,7 @@ struct DeviceArray2Group
 
 	@property size_t size()
 	{
-		return _arrays.byValue.filter!(a => a).map!(a => a.size()).sum;
+		return _arrays.byValue.filter!(a => a).map!(a => a.size()).nfSum;
 	}
 
 	@property auto arrays()
